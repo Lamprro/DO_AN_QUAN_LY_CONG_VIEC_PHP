@@ -1,0 +1,241 @@
+[
+  {
+    "step": "login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo2@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "compiled Blade PHP syntax",
+    "files": 147
+  },
+  {
+    "step": "resume after helper route typo",
+    "correct_route": "/timers/{entry}/stop",
+    "application_change": false
+  },
+  {
+    "step": "Owner cannot stop another user clock",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/timers/01a14a7b-bf29-730f-ba22-4d3fb066ee02/stop",
+    "errors": []
+  },
+  {
+    "step": "own global stop after membership loss",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "actual ended_at persisted after membership loss",
+    "verified": true
+  },
+  {
+    "step": "restore fixture membership",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/members",
+    "errors": []
+  },
+  {
+    "step": "private project fixture",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a7c-872a-700f-bbb4-148928be8117",
+    "errors": []
+  },
+  {
+    "step": "Viewer workspace counts after hidden project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f",
+    "errors": []
+  },
+  {
+    "step": "only permitted project counted",
+    "verified": true
+  },
+  {
+    "step": "Viewer project list",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects?view=table",
+    "errors": []
+  },
+  {
+    "step": "table view scoped",
+    "verified": true
+  },
+  {
+    "step": "grouped role editor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/roles/create",
+    "errors": []
+  },
+  {
+    "step": "canonical permission values and human grouping",
+    "verified": true
+  },
+  {
+    "step": "source search real web GET",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/create?project_id=01a14a6f-0362-706c-b894-285091fe2f26&source_q=P0%20metadata",
+    "errors": []
+  },
+  {
+    "step": "source search bounded and scoped",
+    "verified": true,
+    "results": 1
+  },
+  {
+    "step": "searched child includes actual ancestor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/create?project_id=01a14a6f-0362-706c-b894-285091fe2f26&source_q=P0%20WORK%20B",
+    "errors": []
+  },
+  {
+    "step": "source child and group context retained",
+    "verified": true
+  },
+  {
+    "step": "advanced JSON native fallback save",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9533-73e0-92cc-65095fd7fdef",
+    "errors": []
+  },
+  {
+    "step": "advanced fallback created a draft",
+    "verified": true
+  },
+  {
+    "step": "conflict preview rolls all domain writes back",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9533-73e0-92cc-65095fd7fdef/preview",
+    "errors": [
+      "Khoảng giờ này trùng lịch bận của bạn."
+    ]
+  },
+  {
+    "step": "conflict invalid and no task/history/calendar/notification persisted",
+    "verified": true
+  },
+  {
+    "step": "new clean plan",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9c5c-726b-bdf4-a864e89bb782",
+    "errors": []
+  },
+  {
+    "step": "read propose native form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9c5c-726b-bdf4-a864e89bb782",
+    "errors": []
+  },
+  {
+    "step": "expected_status stays raw draft",
+    "verified": true
+  },
+  {
+    "step": "submit rendered propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9c5c-726b-bdf4-a864e89bb782",
+    "errors": []
+  },
+  {
+    "step": "read approve native form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9c5c-726b-bdf4-a864e89bb782",
+    "errors": []
+  },
+  {
+    "step": "expected_status stays raw proposed",
+    "verified": true
+  },
+  {
+    "step": "submit rendered approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9c5c-726b-bdf4-a864e89bb782",
+    "errors": []
+  },
+  {
+    "step": "approved clean plan preview",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9c5c-726b-bdf4-a864e89bb782/preview",
+    "errors": []
+  },
+  {
+    "step": "exact preview valid without durable writes",
+    "verified": true
+  },
+  {
+    "step": "apply rendered preview form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9c5c-726b-bdf4-a864e89bb782",
+    "errors": []
+  },
+  {
+    "step": "real apply created exactly one task",
+    "verified": true
+  },
+  {
+    "step": "duplicate apply same actual endpoint",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-9c5c-726b-bdf4-a864e89bb782",
+    "errors": []
+  },
+  {
+    "step": "no duplicate task or history",
+    "verified": true
+  },
+  {
+    "step": "create prechange snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-b754-70bc-97e9-77e4ccc86337",
+    "errors": []
+  },
+  {
+    "step": "open source for actual edit",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-0f58-7199-9fa3-afc8c5a9c5e7/edit",
+    "errors": []
+  },
+  {
+    "step": "actual source metadata update",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-0f58-7199-9fa3-afc8c5a9c5e7",
+    "errors": []
+  },
+  {
+    "step": "stale snapshot preview",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a7c-b754-70bc-97e9-77e4ccc86337/preview",
+    "errors": [
+      "Dữ liệu nguồn đã thay đổi. Tạo phiên bản mới để rà soát lại."
+    ]
+  },
+  {
+    "step": "stale source explained and rollback complete",
+    "verified": true
+  },
+  {
+    "step": "env including existing APP_KEY untouched",
+    "verified": true
+  },
+  {
+    "step": "foreign key check empty",
+    "verified": true
+  },
+  {
+    "step": "boundary complete",
+    "real_sessions": true,
+    "no_test_classes": true
+  }
+]

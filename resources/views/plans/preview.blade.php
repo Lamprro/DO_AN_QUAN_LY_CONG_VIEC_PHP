@@ -1,0 +1,13 @@
+<x-layout title="Xem trước áp dụng"><section class="card" data-page="plan-preview"><p class="eyebrow">Mô phỏng áp dụng · chưa lưu thay đổi</p><h1>{{ $plan->name }} · v{{ $plan->version_no }}</h1><p>Bạn đang xem trước các thay đổi. Chưa có công việc, lịch hay thông báo nào được lưu từ bước xem trước này.</p><a href="{{ route('workspaces.plans.show',[$workspace,$plan]) }}">Quay lại kế hoạch</a>
+@if(!$preview['valid'])<div class="notice errors" role="alert"><h2>Chưa thể áp dụng</h2><ul>@foreach($preview['errors'] as $error)<li>{{ $error }}</li>@endforeach</ul></div><p>Kiểm tra dữ liệu nguồn và quyền; nếu nguồn đã thay đổi, tạo phiên bản mới để rà soát.</p>
+@else
+<div class="notice success">Mô phỏng hợp lệ tại thời điểm kiểm tra. Áp dụng thật vẫn kiểm lại toàn bộ quyền, snapshot và xung đột.</div>@if(!empty($preview['base_active_label']))<p>Bản đang áp dụng sẽ được thay thế: <strong>{{ $preview['base_active_label'] }}</strong></p>@endif
+<h2>Công việc sẽ tạo / cập nhật</h2>
+@foreach($preview['tasks'] as $row)<p><strong>{{ $row['action']==='create'?'Tạo mới':'Cập nhật' }}</strong> · {{ $row['ref'] }} · {{ $row['title'] }}</p>
+@if($row['changes'])<details class="preview-changes"><summary>{{ count($row['changes']) }} trường thay đổi so với dữ liệu hiện tại</summary><dl class="diff-fields">@foreach($row['changes'] as $field=>$change)<dt>{{ ['title'=>'Tiêu đề','description'=>'Mô tả','task_type'=>'Loại','parent_task_id'=>'Nhóm cha','priority'=>'Ưu tiên','estimate_minutes'=>'Ước lượng (phút)','assignee_id'=>'Người thực hiện','reviewer_id'=>'Người duyệt','sort_order'=>'Thứ tự'][$field] }}</dt><dd>{{ $change['before'] }} → <strong>{{ $change['after'] }}</strong></dd>@endforeach</dl></details>@endif
+@endforeach
+<h2>Khung giờ sẽ tạo</h2>@forelse($preview['events'] as $event)<p>{{ $event['title'] }} · {{ $event['starts_at'] }} → {{ $event['ends_at'] }} · {{ $event['timezone'] }}</p>@empty<p>Không có khung giờ mới.</p>@endforelse
+<h2>Lịch tương lai của bản active có thể được thay</h2>@forelse($preview['replaced'] as $event)<p>{{ $event['title'] }} · {{ $event['starts_at'] }} UTC</p>@empty<p>Không có lịch bị thay.</p>@endforelse
+<p>Task đã bắt đầu, lịch đã qua và lịch có giờ thực tế được bảo toàn theo quy tắc. Bỏ dòng không xóa task/dependency cũ.</p>
+@if($plan->status->value==='approved')<form method="post" action="{{ route('workspaces.plans.action',[$workspace,$plan,'apply']) }}" data-form="plan-apply" data-confirm="Áp dụng thật phiên bản này vào task và lịch?">@csrf<input type="hidden" name="expected_status" value="approved"><button>Áp dụng thật kế hoạch</button></form>@else<p class="notice warning">Đây mới là mô phỏng. Quay lại để đề xuất và duyệt trước khi áp dụng thật.</p>@endif
+@endif</section></x-layout>

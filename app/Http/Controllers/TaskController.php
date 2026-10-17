@@ -7,12 +7,14 @@ use App\Enums\TaskStatus;
 use App\Http\Requests\TaskRequest;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
 use App\Services\TaskService;
 use App\Services\TaskTreeService;
 use App\Services\TaskWorkflowService;
 use App\Support\ProjectAccess;
+use App\Support\UiLabels;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -92,18 +94,37 @@ class TaskController extends Controller
         $all = $workspace->tasks()->where('project_id', $project?->id)->get();
         $activityType = $request->validate(['activity_type' => ['nullable', Rule::in(['COMMENT', 'HISTORY', 'ATTACHMENT'])]])['activity_type'] ?? null;
         $activities = $task->activities()->with('actor')->when($activityType, fn ($q) => $q->where('type', $activityType))->orderByDesc('created_at')->orderByDesc('id')->paginate(15)->withQueryString();
+        $historyPeople = User::whereIn('id', $workspace->members()->pluck('user_id'))->pluck('name', 'id')->all();
+        $historyTasks = $all->pluck('title', 'id')->all();
+        $activityHuman = function ($field, $value) use ($historyPeople, $historyTasks) {
+            if (in_array($field, ['assignee_id', 'reviewer_id', 'creator_id'], true)) {
+                return $value ? ($historyPeople[$value] ?? 'Không còn trong workspace') : 'Chưa phân công';
+            }
+            if (in_array($field, ['parent_task_id', 'predecessor_id', 'predecessor_task_id'], true)) {
+                return $value ? ($historyTasks[$value] ?? 'Không còn trong phạm vi') : 'Không có';
+            }
+            if ($value === null) {
+                return 'Chưa có';
+            }
+
+            return is_scalar($value) ? UiLabels::text($value) : json_encode($value, JSON_UNESCAPED_UNICODE);
+        };
         $dependencies = $task->incomingDependencies()->with('predecessor')->get();
         $blockers = $task->blockers()->with('reporter', 'resolver')->orderByDesc('created_at')->get();
         $candidates = $all->filter(fn ($t) => $t->id !== $task->id && $t->task_type->value !== 'GROUP' && ! $t->archived_at);
         $progress = app(TaskTreeService::class)->progress(app(TaskTreeService::class)->descendants($task, $all));
         $deletable = $task->status->value === 'TODO' && ! $task->started_at && ! $task->completed_at && ! $task->activities()->withTrashed()->exists();
+        $workflowUi = app(TaskWorkflowService::class)->availability($request->user(), $task);
         $statusOptions = app(TaskWorkflowService::class)->options($request->user(), $task);
 
-        return view('tasks.show', $this->context($request, $workspace, $project) + compact('task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'deletable'));
+        return view('tasks.show', $this->context($request, $workspace, $project) + compact('activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'workflowUi', 'deletable'));
     }
 
     public function edit(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
     {
+        if ($request->boolean('fresh')) {
+            $request->session()->forget('_old_input');
+        }
         $this->bound($workspace, $project, $task);
         $this->authorize('update', $task);
 

@@ -18,6 +18,7 @@ use App\Policies\ReportSnapshotPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\TaskPolicy;
 use App\Policies\WorkspacePolicy;
+use App\Services\AppShell;
 use App\Services\HttpAiProvider;
 use App\Services\NotificationService;
 use App\Services\SettingService;
@@ -52,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(CalendarEvent::class, CalendarEventPolicy::class);
         View::composer('components.layout', function ($view) {
             $user = auth()->user();
+            $view->with('shell', app(AppShell::class)->build(request()));
             $view->with('preferences', $user ? app(SettingService::class)->values($user) : config('work_management.settings_defaults'));
             $view->with('unreadNotifications', $user ? app(NotificationService::class)->visible($user)->whereNull('read_at')->count() : 0);
         });

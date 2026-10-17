@@ -5,12 +5,15 @@ namespace App\Models;
 use App\Enums\TaskPriority;
 use App\Enums\TaskStatus;
 use App\Enums\TaskType;
+use App\Models\Concerns\HasEditRevision;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Task extends DomainModel
 {
+    use HasEditRevision;
+
     protected $fillable = ['workspace_id', 'project_id', 'parent_task_id', 'task_type', 'group_label', 'sort_order', 'code', 'title', 'description', 'assignee_id', 'reviewer_id', 'created_by', 'status', 'priority', 'estimate_minutes', 'deadline_at', 'started_at', 'completed_at', 'archived_at'];
 
     protected $hidden = [];

@@ -28,15 +28,58 @@ class TaskWorkflowService
         });
     }
 
-    public function options(User $actor, Task $task): array
+    public function availability(User $actor, Task $task): array
     {
         if ($task->task_type->value === 'GROUP') {
-            return [];
+            return ['actions' => [], 'notices' => ['Trạng thái nhóm được tổng hợp từ công việc con.']];
         }
         $graph = ['TODO' => ['IN_PROGRESS', 'CANCELLED'], 'IN_PROGRESS' => ['REVIEW', 'CANCELLED'], 'REVIEW' => ['DONE', 'IN_PROGRESS', 'CANCELLED'], 'DONE' => ['TODO'], 'CANCELLED' => ['TODO']];
+        $actions = [];
         $from = $task->status->value;
+        foreach ($graph[$from] ?? [] as $to) {
+            $review = ($from === 'REVIEW' && in_array($to, ['DONE', 'IN_PROGRESS'], true)) || $from === 'DONE';
+            if (! ($review ? $this->policy->review($actor, $task) : $this->policy->execute($actor, $task))) {
+                continue;
+            }
+            $reason = $this->blockingReason($actor, $task, $to);
+            $label = match ($to) {
+                'TODO' => 'Mở lại','IN_PROGRESS' => $from === 'REVIEW' ? 'Yêu cầu sửa' : 'Bắt đầu thực hiện','REVIEW' => 'Nộp duyệt','DONE' => 'Duyệt hoàn thành','CANCELLED' => 'Hủy công việc'
+            };
+            $actions[] = ['status' => $to, 'label' => $label, 'enabled' => $reason === null, 'reason' => $reason, 'needs_reason' => in_array($to, ['TODO', 'CANCELLED'], true) || ($from === 'REVIEW' && $to === 'IN_PROGRESS')];
+        }
 
-        return array_values(array_filter($graph[$from] ?? [], fn ($to) => (($from === 'REVIEW' && in_array($to, ['DONE', 'IN_PROGRESS'], true)) || $from === 'DONE') ? $this->policy->review($actor, $task) : $this->policy->execute($actor, $task)));
+        return ['actions' => $actions, 'notices' => $actions ? [] : ['Bạn không có quyền thực hiện bước tiếp theo hoặc phạm vi hiện không cho phép sửa.']];
+    }
+
+    public function options(User $actor, Task $task): array
+    {
+        return array_column(array_values(array_filter($this->availability($actor, $task)['actions'], fn ($a) => $a['enabled'])), 'status');
+    }
+
+    private function blockingReason(User $actor, Task $task, string $to): ?string
+    {
+        if (in_array($to, ['IN_PROGRESS', 'REVIEW', 'DONE'], true)) {
+            if ($task->blockers()->where('status', 'open')->exists()) {
+                return 'Cần giải quyết blocker đang mở trước.';
+            }
+            foreach ($task->incomingDependencies()->with('predecessor')->get() as $edge) {
+                $pre = $edge->predecessor;
+                if ($pre->status->value !== 'DONE' || ! $pre->completed_at || $pre->completed_at->addMinutes($edge->lag_minutes)->isFuture()) {
+                    return 'Chờ '.$pre->code.' hoàn thành và đủ thời gian FS ('.$edge->lag_minutes.' phút).';
+                }
+            }
+        }
+        if ($to === 'REVIEW' && ! $task->reviewer_id && $task->workspace->owner_id !== $actor->id) {
+            return 'Cần phân công người duyệt trước khi nộp duyệt.';
+        }
+        if (in_array($to, ['TODO', 'CANCELLED'], true) && $task->outgoingDependencies()->whereHas('successor', fn ($q) => $q->whereNotIn('status', ['TODO', 'CANCELLED']))->exists()) {
+            return 'Task sau đã bắt đầu; xử lý dependency trước khi mở lại/hủy.';
+        }
+        if ($task->timeEntries()->whereNull('ended_at')->exists()) {
+            return 'Hãy dừng timer đang chạy trước khi chuyển trạng thái.';
+        }
+
+        return null;
     }
 
     public function status(User $actor, Task $task, array $data): void
@@ -65,25 +108,8 @@ class TaskWorkflowService
                     $this->fail('reason', 'Cần ghi lý do hủy, mở lại hoặc yêu cầu sửa.');
                 }
             }
-            if (in_array($to, ['IN_PROGRESS', 'REVIEW', 'DONE'], true)) {
-                if ($task->blockers()->where('status', 'open')->exists()) {
-                    $this->fail('status', 'Cần giải quyết blocker đang mở trước.');
-                }
-                foreach ($task->incomingDependencies()->with('predecessor')->get() as $edge) {
-                    $pre = $edge->predecessor;
-                    if ($pre->status->value !== 'DONE' || ! $pre->completed_at || $pre->completed_at->addMinutes($edge->lag_minutes)->isFuture()) {
-                        $this->fail('status', 'Dependency chưa hoàn tất hoặc chưa đủ thời gian chờ FS.');
-                    }
-                }
-            }
-            if ($to === 'REVIEW' && ! $task->reviewer_id && $task->workspace->owner_id !== $actor->id) {
-                $this->fail('status', 'Cần phân công người duyệt trước khi nộp duyệt.');
-            }
-            if (in_array($to, ['TODO', 'CANCELLED'], true) && $task->outgoingDependencies()->whereHas('successor', fn ($q) => $q->whereNotIn('status', ['TODO', 'CANCELLED']))->exists()) {
-                $this->fail('status', 'Task sau đã bắt đầu; cần xử lý dependency trước khi mở lại/hủy.');
-            }
-            if ($task->timeEntries()->whereNull('ended_at')->exists()) {
-                $this->fail('status', 'Hãy kết thúc timer đang chạy trước khi chuyển trạng thái.');
+            if ($blocked = $this->blockingReason($actor, $task, $to)) {
+                $this->fail('status', $blocked);
             }
             $values = ['status' => $to, 'completed_at' => $to === 'DONE' ? now() : null];
             $values['started_at'] = $to === 'TODO' ? null : ($task->started_at ?? ($to === 'CANCELLED' ? null : now()));

@@ -1,5 +1,5 @@
 <x-layout :title="$task->title"><section class="card" data-page="task-show" data-task-id="{{ $task->id }}"><a href="{{ route($routePrefix.'.index',$routeParams) }}">Danh sách công việc</a><h1>{{ $task->code }} — {{ $task->title }}</h1>
-<p>{{ $task->task_type->value }} · {{ $task->status->value }} · {{ $task->priority->value }}
+<p>{{ \App\Support\UiLabels::text($task->task_type->value) }} · {{ \App\Support\UiLabels::text($task->status->value) }} · {{ \App\Support\UiLabels::text($task->priority->value) }}
 @if($task->archived_at) · Đã lưu trữ
 @endif</p>
 <p style="white-space:pre-wrap">{{ $task->description }}</p><p>Người tạo: {{ $task->creator->name }}</p><p>Thực hiện: {{ $task->assignee?->name ?? 'Chưa phân công' }} · Duyệt: {{ $task->reviewer?->name ?? 'Chưa phân công' }}</p>

@@ -1,5 +1,7 @@
 > Cập nhật chỉ đạo mới 17/10/2026: chủ dự án yêu cầu hoàn thiện tất cả, bỏ dừng duyệt từng phần. Trạng thái hiện tại xem DELIVERY_STATUS.md và verification/final; các mục chi tiết phía dưới ghi lịch sử theo từng lần làm.
 
+**Cập nhật P0 17/10/2026:** đã có app shell, forms/mobile, workflow/timer, F01 edit revisions, F03 visual plan editor và F02 diff/preview. Đọc [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) và hợp đồng P0 tại đầu FRONTEND_HANDOFF.md. Các đoạn trước nâng cấp bên dưới là nhật ký.
+
 # Tiến độ triển khai theo từng phần
 
 Ngày cập nhật: 17/10/2026.

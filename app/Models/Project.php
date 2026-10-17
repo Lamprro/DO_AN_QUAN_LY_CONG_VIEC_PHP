@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Enums\ProjectStatus;
+use App\Models\Concerns\HasEditRevision;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends DomainModel
 {
+    use HasEditRevision;
+
     protected $fillable = ['workspace_id', 'parent_project_id', 'name', 'description', 'created_by', 'status', 'start_date', 'deadline', 'archived_at', 'github_connection_id', 'github_config'];
 
     protected $hidden = [];

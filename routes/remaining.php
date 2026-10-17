@@ -20,3 +20,5 @@ Route::post('/planning-ai', [PlanningAiController::class, 'store'])->middleware(
 Route::post('/plans/{plan}/schedule', [PlanController::class, 'schedule'])->withoutScopedBindings()->whereUuid('plan')->name('plans.schedule');
 Route::get('/projects/{project}/github', [GithubIntegrationController::class, 'show'])->name('projects.github.show');
 Route::post('/projects/{project}/github', [GithubIntegrationController::class, 'save'])->name('projects.github.save');
+
+Route::get('/plans/{plan}/preview', [PlanController::class, 'preview'])->withoutScopedBindings()->whereUuid('plan')->name('plans.preview');

@@ -7,6 +7,7 @@ use App\Http\Requests\WorkspaceRequest;
 use App\Models\Workspace;
 use App\Services\MemberService;
 use App\Services\WorkspaceService;
+use App\Support\ProjectAccess;
 use App\Support\WorkspaceAccess;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,6 +43,15 @@ class WorkspaceController extends Controller
     {
         $this->authorize('view', $workspace);
         $workspace->load('owner')->loadCount('members', 'roles', 'projects', 'tasks');
+        $visible = app(ProjectAccess::class)->visible($request->user(), $workspace)->get();
+        $workspace->setAttribute('projects_count', $visible->count());
+        $taskProjects = $visible->filter(fn ($p) => app(ProjectAccess::class)->allows($request->user(), $p, 'task.view'))->pluck('id');
+        $workspace->setAttribute('tasks_count', $workspace->tasks()->where(function ($q) use ($taskProjects, $workspace, $request) {
+            $q->whereIn('project_id', $taskProjects);
+            if ($workspace->kind->value === 'personal' && $workspace->owner_id === $request->user()->id) {
+                $q->orWhereNull('project_id');
+            }
+        })->count());
 
         return view('workspaces.show', ['workspace' => $workspace, 'membership' => $access->membership($request->user(), $workspace), 'transferCandidates' => $workspace->owner_id === $request->user()->id ? $workspace->members()->with('user')->where('status', 'active')->where('user_id', '!=', $request->user()->id)->whereHas('user', fn ($q) => $q->where('status', 'active'))->get() : collect()]);
     }

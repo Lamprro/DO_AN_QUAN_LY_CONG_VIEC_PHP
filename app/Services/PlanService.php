@@ -223,6 +223,7 @@ class PlanService
                 $this->fail('Phiên bản đang áp dụng đã thay đổi.');
             }
             $payload = $this->validate($plan->data['payload'], $plan->workspace->timezone);
+            $order = array_flip(array_column($payload['tasks'], 'ref'));
             $map = [];
             $pending = $payload['tasks'];
             if ($active) {
@@ -250,7 +251,11 @@ class PlanService
                         $this->fail('Chỉ chỉnh task chưa bắt đầu, chưa lưu trữ.');
                     }
                     $values = array_intersect_key($row, array_flip(['title', 'description', 'task_type', 'priority', 'estimate_minutes', 'assignee_id', 'reviewer_id']));
+                    $values['sort_order'] = $order[$row['ref']];
                     $values['parent_task_id'] = empty($row['parent_ref']) ? null : $map[$row['parent_ref']];
+                    if ($task) {
+                        $values['expected_revision'] = $task->revision;
+                    }
                     $task = app(TaskService::class)->save($actor, $plan->workspace, $plan->project, $values, $task);
                     $map[$row['ref']] = $task->id;
                     unset($pending[$key]);

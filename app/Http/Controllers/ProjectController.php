@@ -18,7 +18,7 @@ class ProjectController extends Controller
     public function index(Request $request, Workspace $workspace)
     {
         $this->authorize('view', $workspace);
-        $filters = $request->validate(['q' => ['nullable', 'string', 'max:180'], 'status' => ['nullable', Rule::enum(ProjectStatus::class)], 'archived' => ['nullable', Rule::in(['active', 'archived', 'all'])], 'sort' => ['nullable', Rule::in(['name', 'created_at', 'deadline'])], 'direction' => ['nullable', Rule::in(['asc', 'desc'])]]);
+        $filters = $request->validate(['view' => ['nullable', Rule::in(['cards', 'table'])], 'q' => ['nullable', 'string', 'max:180'], 'status' => ['nullable', Rule::enum(ProjectStatus::class)], 'archived' => ['nullable', Rule::in(['active', 'archived', 'all'])], 'sort' => ['nullable', Rule::in(['name', 'created_at', 'deadline'])], 'direction' => ['nullable', Rule::in(['asc', 'desc'])]]);
         $query = $this->access->visible($request->user(), $workspace)->withCount('tasks');
         $archive = $filters['archived'] ?? 'active';
         if ($archive !== 'all') {
@@ -26,6 +26,12 @@ class ProjectController extends Controller
         }
         $projects = $query->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->where('name', 'like', '%'.$filters['q'].'%'))->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
             ->orderBy($filters['sort'] ?? 'created_at', $filters['direction'] ?? 'desc')->orderBy('id')->paginate(12)->withQueryString();
+
+        foreach ($projects as $listed) {
+            if (! $this->access->allows($request->user(), $listed, 'task.view')) {
+                $listed->setAttribute('tasks_count', null);
+            }
+        }
 
         return view('projects.index', compact('workspace', 'projects', 'filters') + ['canCreate' => $this->access->canCreate($request->user(), $workspace)]);
     }
@@ -55,6 +61,9 @@ class ProjectController extends Controller
     {
         $this->authorize('view', $project);
         $project->load('creator')->loadCount('members', 'tasks');
+        if (! $this->access->allows($request->user(), $project, 'task.view')) {
+            $project->setAttribute('tasks_count', null);
+        }
         $parent = $project->parent && $request->user()->can('view', $project->parent) ? $project->parent : null;
         $children = $this->access->visible($request->user(), $workspace)->where('parent_project_id', $project->id)->get();
 
@@ -63,6 +72,9 @@ class ProjectController extends Controller
 
     public function edit(Request $request, Workspace $workspace, Project $project)
     {
+        if ($request->boolean('fresh')) {
+            $request->session()->forget('_old_input');
+        }
         $this->authorize('update', $project);
 
         return view('projects.edit', $this->form($request, $workspace, $project));

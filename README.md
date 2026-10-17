@@ -1,3 +1,7 @@
+> Tài liệu phát triển tiếp: [Cải thiện UI/UX và chức năng](docs/UI_UX_FUNCTIONAL_IMPROVEMENTS.md), gồm backlog theo màn hình, ưu tiên và tiêu chí nghiệm thu.
+
+Vòng P0 đã triển khai: [hiện trạng và flow](docs/P0_IMPLEMENTATION.md), [bàn giao FE mới](docs/FRONTEND_HANDOFF.md), [minh chứng kiểm tra trực tiếp](docs/verification/p0/README.md). Khi cập nhật chạy migration thêm revision; giữ DB/.env/APP_KEY hiện tại.
+
 > Bản bàn giao đầy đủ backend MVC/Blade: xem [trạng thái hiện tại](docs/DELIVERY_STATUS.md), [cài/chạy](docs/DEPLOYMENT.md), [bàn giao FE](docs/FRONTEND_HANDOFF.md) và [minh chứng cuối](docs/verification/final/README.md). Chỉ đạo mới cho phép hoàn thiện toàn bộ, các ghi chú dừng duyệt phía dưới là lịch sử.
 
 # Hệ thống quản lý công việc — Laravel MVC

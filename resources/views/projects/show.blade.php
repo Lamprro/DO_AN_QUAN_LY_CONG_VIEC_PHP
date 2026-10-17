@@ -1,13 +1,13 @@
 <x-layout :title="$project->name"><section class="card" data-page="project-show" data-project-id="{{ $project->id }}">
 <a href="{{ route('workspaces.projects.index',$workspace) }}">Danh sách project</a><h1>{{ $project->name }}</h1>
-<p>{{ $project->status->value }}
+<p>{{ \App\Support\UiLabels::text($project->status->value) }}
 @if($project->archived_at) · Đã lưu trữ
 @endif</p><p style="white-space:pre-wrap">{{ $project->description }}</p>
 <p>Ngày bắt đầu: {{ $project->start_date?->format('d/m/Y') ?? 'Chưa có' }} · Hạn: {{ $project->deadline?->format('d/m/Y') ?? 'Chưa có' }}</p>
-<p>Người tạo: {{ $project->creator->name }} · {{ $project->members_count }} membership · {{ $project->tasks_count }} task</p>
+<p>Người tạo: {{ $project->creator->name }} · {{ $project->members_count }} membership · {{ $project->tasks_count ?? 'Không có quyền xem' }} task</p>
 @if($parent)<p>Project cha: <a href="{{ route('workspaces.projects.show',[$workspace,$parent]) }}">{{ $parent->name }}</a></p>
 @endif
-<div class="actions">
+<p class="notice">Quyền project con độc lập. Lưu trữ project ngăn sửa công việc, lịch và kế hoạch. Trạng thái Hoàn thành/Đã hủy ngăn ghi các dữ liệu này; nội dung vẫn được đọc theo quyền hiện tại.</p><div class="actions">
 @if(app(\App\Support\ProjectAccess::class)->allows(auth()->user(),$project,'integration.view'))<a href="{{ route('workspaces.projects.github.show',[$workspace,$project]) }}">GitHub logs</a>
 @endif
 @if(app(\App\Services\PlanService::class)->allowed(auth()->user(),$workspace,$project ?? null))<a href="{{ route('workspaces.plans.index',[$workspace,'project_id'=>($project ?? null)?->id]) }}">Kế hoạch</a>

@@ -17,7 +17,7 @@ class ProjectRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['name' => ['required', 'string', 'max:180'], 'description' => ['nullable', 'string', 'max:20000'],
+        return ['expected_revision' => [$this->route('project') ? 'required' : 'prohibited', 'integer', 'min:1'], 'name' => ['required', 'string', 'max:180'], 'description' => ['nullable', 'string', 'max:20000'],
             'status' => ['required', Rule::enum(ProjectStatus::class)], 'start_date' => ['nullable', 'date_format:Y-m-d'],
             'deadline' => ['nullable', 'date_format:Y-m-d'], 'parent_project_id' => ['nullable', 'uuid', Rule::exists('projects', 'id')->where('workspace_id', $this->route('workspace')->id)]];
     }

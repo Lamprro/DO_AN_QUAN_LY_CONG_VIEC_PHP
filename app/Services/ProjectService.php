@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\User;
 use App\Models\Workspace;
+use App\Support\EditRevision;
 use App\Support\ProjectAccess;
 use App\Support\WorkspaceAccess;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,7 @@ class ProjectService
             if ($project) {
                 $project = $workspace->projects()->lockForUpdate()->findOrFail($project->id);
                 Gate::forUser($actor)->authorize('update', $project);
+                EditRevision::check($project, $data);
             } else {
                 abort_unless($this->access->canCreate($actor, $workspace), 403);
             }

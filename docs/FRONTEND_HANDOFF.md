@@ -1,6 +1,45 @@
 # Bàn giao FE — Laravel MVC / Blade
 
-Cập nhật 17/10/2026. Phần 1–5 đã duyệt; phần 6 Dashboard/report, queue và nền AI có backend/Blade chạy thật, chờ duyệt. Chưa triển khai phần 7. Các bổ sung theo từng phần nằm cuối tài liệu; hợp đồng phần 4 thay thế giới hạn cũ của phần 3. FE chủ yếu phát triển giao diện trên form hiện có; backend chịu trách nhiệm logic/database/phân quyền.
+## Bàn giao P0 hiện tại — đọc trước các ghi chú lịch sử
+
+P0 đã triển khai. Đọc [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) để xem phạm vi, flow hàm và giới hạn; [verification/p0/README.md](verification/p0/README.md) để xem bằng chứng. Backlog UI_UX_FUNCTIONAL_IMPROVEMENTS.md vẫn chứa mô tả **trước nâng cấp**; P1/P2 chưa tự động thành chức năng đã làm.
+
+### File FE chính và trách nhiệm
+
+| File | Hợp đồng cần giữ |
+|---|---|
+| components/layout.blade.php + AppShell::build | shell.workspaces/workspace/project/menu/breadcrumbs/timer/timerTaskVisible; menu đã lọc quyền; không dựng link task khi timerTaskVisible=false |
+| public/css/p0-ui.css | Token :root/theme và các lớp card/actions/status-pill/form-grid/mobile-data-table/editor/diff; loaded sau shell.css |
+| public/js/app-ui.js | Native submit, CSRF, named submitter, error link, menu, dirty-form, mật khẩu/timezone/file và elapsed clock; đừng nạp lại form-confirm.js để tránh hỏi hai lần |
+| tasks/_form, projects/_form | Hidden expected_revision bắt buộc khi sửa; không gửi revision để tự tăng. Giữ old input khi stale. ?fresh=1 là thao tác bỏ bản nhập để xem DB mới |
+| tasks/workflow + TaskWorkflowService::availability | workflowUi.actions/notices; button status raw enum, expected_status, reason; enabled/reason là trình bày, service vẫn kiểm lại |
+| plans/create, editor-task + plan-editor.js | Thao tác cây/FS/slot/ref; không đổi DOM rồi báo đã lưu khi chưa POST; template cũng phải dùng source results mới |
+| plans/show/preview + PlanReviewService | Diff so parent và preview so DB là hai loại; preview không lưu nghiệp vụ; apply phải POST lại expected_status=approved |
+
+### Form contract mới
+
+- Task/Project edit: `_token`, `_method` theo route hiện có, `expected_revision` nguyên dương từ bản form đã mở. Không tự retry bằng revision mới nếu server báo stale; giữ nội dung cho người dùng đối chiếu.
+- Project list: `view=cards|table`, q/status/archived/sort/direction và page giữ trên query string. View chỉ đổi cách trình bày dữ liệu phân trang từ server.
+- Plan POST: `_token`, `name`, `project_id` nullable cho personal, `base_id` cho revision. `input_mode=editor`, `editor_enabled=1`, `payload` là JSON schema1 do JS đóng gói; editor fields không gửi hàng nghìn input name để tránh max_input_vars. Legacy chỉ payload vẫn tương thích. JSON nâng cao dùng `input_mode=json`, `json_payload` hoặc payload. Chế độ editor không JS bị báo rõ; có thể chọn JSON nâng cao để gửi native.
+- Plan source GET: cùng route workspaces.plans.create, `source_q` ≤200 ký tự, `source_selected[]` ≤100 UUID. Không có endpoint API mới. Kết quả HTML chứa #plan-editor-data. Giữ draft hiện tại khi thay choices; không dùng fetch này để lưu.
+- Giới hạn editor:100 task,300 FS,300 slot, cây3 tầng, text JSON≤120000 ký tự; server là nguồn kiểm cuối. Ref không đổi khi rename/reorder; array position được apply thành sort_order. Không ghép bằng title.
+- Schema/field errors: `editor.tasks.N.field`, `editor.dependencies.N.field`, `editor.slots.N.field` theo payload nhận lại. Lỗi ref được hiển thị trong summary/row; không gắn index DOM cũ sau sắp xếp. Nguồn/assignee/reviewer ngoài quyền hoặc source không còn TODO sẽ bị server từ chối.
+- GET `workspaces.plans.preview` `/workspaces/{workspace}/plans/{plan}/preview`: cần plan.apply+plan.approve và đúng scope. Preview hợp lệ không bảo đảm lần POST sau vẫn hợp lệ; không lưu valid flag ở client làm điều kiện bỏ recheck.
+- DTO preview: valid, errors, tasks[{ref,title,action,changes}], events[{title,starts_at,ends_at,timezone}], replaced[{title,starts_at}], base_active_label. Không dùng UUID mô phỏng làm đường dẫn thật; UUID task tạo trong preview đã rollback.
+- Phân biệt plan.status raw enum, applied_at, is_active. Hiển thị tiếng Việt chỉ trên label, không dịch `value`, `data-ai-status`, expected_status hoặc field enum khi gửi form.
+- Native workflow button `name=status value=IN_PROGRESS|REVIEW|...`; khi disable submit button phải giữ named submitter trong POST. Không tự bật nút mà guard server đã disabled khi Back/Forward.
+- Timer stop luôn route authorized, chỉ entry của chính actor; thanh toàn cục không được lộ task.title/code/scope/link nếu mất quyền. Tính giờ hiển thị không tự ghi TimeEntry.
+
+### Luồng FE cần làm đẹp tiếp
+
+Login → workspace picker → project → task list/tree → task detail → workflow/timer/blocker → plan editor → lưu draft → diff → propose → approve → preview → apply. Các link/form/Blade đã có. FE có thể đổi typography, spacing, bố cục/component, mobile và empty/loading/error presentation; giữ permission predicates, field names, old input, CSRF, private download và validation.
+
+Không gọi service/provider/SQL trong Blade mới, không chuyển quyền thành CSS ẩn, không dựng báo cáo/actual giả từ estimate. Hạng mục Calendar drag, Kanban, autosave, email/AI/network vẫn theo P1/P2/KEY của backlog. Rà soát afterCommit/side effect nếu thay đường apply vì preview đang mô phỏng chính service trong transaction rollback.
+
+
+Cập nhật 17/10/2026: các module backend/Blade trong phạm vi bàn giao đã được triển khai, gồm Plan/version/duyệt–apply, replanning/assistance qua queue, local scheduling, timer và GitHub logs. AI/provider và dịch vụ ngoài chờ key/cấu hình thật. Đọc [DELIVERY_STATUS.md](DELIVERY_STATUS.md) và mục **Bàn giao cuối** phía dưới để biết hợp đồng hiện tại. Những mục ghi theo phần2–6 là lịch sử tại thời điểm triển khai, không phải trạng thái thiếu chức năng hiện nay.
+
+Kế hoạch nâng cấp tiếp theo: [UI/UX và chức năng chi tiết](UI_UX_FUNCTIONAL_IMPROVEMENTS.md), có ưu tiên P0/P1/P2, yêu cầu từng màn hình, phần cần bổ sung backend/database và flow nghiệm thu thật. P0 đã triển khai trong vòng hiện tại; P1/P2 vẫn là backlog, chưa phải chức năng mới đã làm. FE tiếp tục Laravel MVC/Blade trên form hiện có; backend chịu trách nhiệm logic/database/phân quyền.
 
 ## Bắt đầu
 

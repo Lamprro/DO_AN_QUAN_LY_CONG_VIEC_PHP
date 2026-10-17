@@ -1,0 +1,94 @@
+[
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe vendor/bin/pint app/Http/Controllers/PlanController.php app/Http/Controllers/ProjectController.php app/Http/Controllers/RoleController.php app/Http/Controllers/TaskController.php app/Http/Controllers/WorkspaceController.php app/Http/Requests/ProjectRequest.php app/Http/Requests/TaskRequest.php app/Models/Concerns/HasEditRevision.php app/Models/Project.php app/Models/Task.php app/Providers/AppServiceProvider.php app/Services/AppShell.php app/Services/PlanEditorData.php app/Services/PlanReviewService.php app/Services/PlanService.php app/Services/ProjectService.php app/Services/TaskService.php app/Services/TaskWorkflowService.php app/Support/EditRevision.php app/Support/UiLabels.php",
+    "exit_code": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"fixed\",\"files\":[{\"path\":\"app\\\\Http\\\\Controllers\\\\RoleController.php\",\"fixers\":[\"statement_indentation\"]}]}"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:cache",
+    "exit_code": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "step": "all source and compiled Blade PHP syntax",
+    "files": 319,
+    "passed": true
+  },
+  {
+    "step": "command",
+    "command": "node --check public/js/app-ui.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "node --check public/js/plan-editor.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe D:/Composer/composer.phar validate --no-check-publish",
+    "exit_code": 0,
+    "output": "./composer.json is valid\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan migrate:status",
+    "exit_code": 0,
+    "output": "\n  Migration name ...................................................................................... Batch / Status  \n  0001_01_01_000000_create_users_table ....................................................................... [1] Ran  \n  0001_01_01_000001_create_cache_table ....................................................................... [1] Ran  \n  0001_01_01_000002_create_jobs_table ........................................................................ [1] Ran  \n  2026_10_17_000001_create_user_settings_table ............................................................... [1] Ran  \n  2026_10_17_000002_create_workspaces_table .................................................................. [1] Ran  \n  2026_10_17_000003_create_roles_table ....................................................................... [1] Ran  \n  2026_10_17_000004_create_workspace_members_table ........................................................... [1] Ran  \n  2026_10_17_000005_create_integration_connections_table ..................................................... [1] Ran  \n  2026_10_17_000006_create_projects_table .................................................................... [1] Ran  \n  2026_10_17_000007_create_project_members_table ............................................................. [1] Ran  \n  2026_10_17_000008_create_tasks_table ....................................................................... [1] Ran  \n  2026_10_17_000009_create_task_dependencies_table ........................................................... [1] Ran  \n  2026_10_17_000010_create_task_blockers_table ............................................................... [1] Ran  \n  2026_10_17_000011_create_ai_runs_table ..................................................................... [1] Ran  \n  2026_10_17_000012_create_ai_calls_table .................................................................... [1] Ran  \n  2026_10_17_000013_create_plans_table ....................................................................... [1] Ran  \n  2026_10_17_000014_create_calendar_events_table ............................................................. [1] Ran  \n  2026_10_17_000015_create_time_entries_table ................................................................ [1] Ran  \n  2026_10_17_000016_create_task_activities_table ............................................................. [1] Ran  \n  2026_10_17_000017_create_notifications_table ............................................................... [1] Ran  \n  2026_10_17_000018_create_report_snapshots_table ............................................................ [1] Ran  \n  2026_10_17_000019_create_github_logs_table ................................................................. [1] Ran  \n  2026_10_17_000020_add_edit_revisions ....................................................................... [2] Ran  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan config:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan optimize:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Clearing cached bootstrap files.  \n\n  config ................................................................................................. 3.28ms DONE\n  cache ................................................................................................. 28.50ms DONE\n  compiled ............................................................................................... 2.69ms DONE\n  events ................................................................................................. 1.27ms DONE\n  routes ................................................................................................. 1.90ms DONE\n  views ................................................................................................. 92.54ms DONE\n\n"
+  },
+  {
+    "step": "command",
+    "command": "git diff --check",
+    "exit_code": 2,
+    "output": " \\App\\Support\\UiLabels::text($project->status->value) }} · {{ $project->tasks_count ?? 'Không có quyền xem' }} task \nresources/views/projects/index.blade.php:24: trailing whitespace.\n+@if($project->archived_at) · Đã lưu trữ \nresources/views/tasks/workflow.blade.php:7: trailing whitespace.\n+@csrf \nresources/views/tasks/workflow.blade.php:11: trailing whitespace.\n+@foreach($workflowUi['actions'] as $action)<div><button type=\"submit\" name=\"status\" value=\"{{ $action['status'] }}\" data-reason=\"{{ $action['needs_reason']?'1':'0' }}\" \nresources/views/tasks/workflow.blade.php:20: trailing whitespace.\n+@csrf \nresources/views/tasks/workflow.blade.php:33: trailing whitespace.\n+@foreach($blockers as $blocker)<article data-blocker-id=\"{{ $blocker->id }}\"><p>{{ $blocker->reason }} · {{ \\App\\Support\\UiLabels::text($blocker->status->value) }}</p><small>Báo bởi {{ $blocker->reporter?->name }} · {{ $blocker->created_at->setTimezone($workspace->timezone)->format('d/m/Y H:i') }} \nresources/views/tasks/workflow.blade.php:34: trailing whitespace.\n+@if($blocker->resolved_at) · xử lý bởi {{ $blocker->resolver?->name }} \nresources/views/tasks/workflow.blade.php:37: trailing whitespace.\n+@csrf \nresources/views/tasks/workflow.blade.php:54: trailing whitespace.\n+@foreach(['COMMENT'=>'Bình luận','HISTORY'=>'Lịch sử hệ thống','ATTACHMENT'=>'Tệp đính kèm'] as $value=>$label)<option value=\"{{ $value }}\" \nresources/views/tasks/workflow.blade.php:61: trailing whitespace.\n+@csrf \nresources/views/tasks/workflow.blade.php:65: trailing whitespace.\n+@csrf \nresources/views/tasks/workflow.blade.php:73: trailing whitespace.\n+@csrf \nwarning: in the working copy of 'README.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/DELIVERY_STATUS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/FRONTEND_HANDOFF.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/IMPLEMENTATION_PROGRESS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/ai-runs/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/ai-runs/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/input.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/layout.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/textarea.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/timezone-select.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/members/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/plans/create.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/plans/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/plans/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/project-members/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/roles/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/tree-node.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/workflow.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/welcome.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/workspaces/show.blade.php', CRLF will be replaced by LF the next time Git touches it\n"
+  },
+  {
+    "step": "fixed whitespace reported by git diff check",
+    "files": 2,
+    "logic_changed": false
+  },
+  {
+    "step": "command",
+    "command": "git diff --check",
+    "exit_code": 0,
+    "output": "warning: in the working copy of 'README.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/DELIVERY_STATUS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/FRONTEND_HANDOFF.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/IMPLEMENTATION_PROGRESS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/ai-runs/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/ai-runs/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/input.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/layout.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/textarea.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/timezone-select.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/members/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/plans/create.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/plans/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/plans/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/project-members/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/roles/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/tree-node.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/workflow.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/welcome.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/workspaces/show.blade.php', CRLF will be replaced by LF the next time Git touches it\n"
+  },
+  {
+    "step": "real browser SQL read-back",
+    "plans": 3,
+    "metadata_task": {
+      "title": "P0 metadata after stale check",
+      "status": "IN_PROGRESS",
+      "revision": 4
+    },
+    "timers_ended": 1,
+    "fk_errors": 0,
+    "env_preserved": true
+  },
+  {
+    "step": "delivery checks complete",
+    "test_classes_added": false
+  }
+]

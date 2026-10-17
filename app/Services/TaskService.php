@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
+use App\Support\EditRevision;
 use App\Support\ProjectAccess;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -30,6 +31,7 @@ class TaskService
                 if ($task) {
                     $task = $workspace->tasks()->where('project_id', $project?->id)->lockForUpdate()->findOrFail($task->id);
                     Gate::forUser($actor)->authorize('update', $task);
+                    EditRevision::check($task, $data);
                 } else {
                     abort_unless($this->policy->projectWritable($project) && $this->policy->scope($actor, $workspace, $project, 'task.create'), 403);
                 }

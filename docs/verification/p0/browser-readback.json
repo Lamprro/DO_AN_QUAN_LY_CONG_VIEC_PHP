@@ -1,0 +1,181 @@
+{
+  "browser_created_plans": [
+    {
+      "id": "01a14a70-896d-712a-82f9-7538e4d467ca",
+      "name": "P0 Browser — kế hoạch soạn bằng giao diện",
+      "status": "draft",
+      "applied_at": null,
+      "payload": {
+        "schema_version": 1,
+        "tasks": [
+          {
+            "ref": "work1",
+            "task_id": null,
+            "title": "Nhóm việc từ UI",
+            "description": null,
+            "task_type": "GROUP",
+            "parent_ref": null,
+            "priority": "medium",
+            "estimate_minutes": null,
+            "assignee_id": null,
+            "reviewer_id": null
+          },
+          {
+            "ref": "w_2",
+            "task_id": null,
+            "title": "Việc B từ trình duyệt",
+            "description": null,
+            "task_type": "WORK",
+            "parent_ref": "work1",
+            "priority": "medium",
+            "estimate_minutes": 30,
+            "assignee_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+            "reviewer_id": "01a147ea-079c-7064-8116-a09b61116d5b"
+          },
+          {
+            "ref": "w_1",
+            "task_id": null,
+            "title": "Việc A đã đổi tên, giữ nguyên ref",
+            "description": null,
+            "task_type": "WORK",
+            "parent_ref": "work1",
+            "priority": "medium",
+            "estimate_minutes": 45,
+            "assignee_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+            "reviewer_id": "01a147ea-079c-7064-8116-a09b61116d5b"
+          }
+        ],
+        "dependencies": [
+          {
+            "predecessor": "w_1",
+            "successor": "w_2",
+            "lag_minutes": 0
+          }
+        ],
+        "slots": [
+          {
+            "task_ref": "w_1",
+            "starts_at": "2027-04-12T08:00",
+            "ends_at": "2027-04-12T08:45"
+          },
+          {
+            "task_ref": "w_2",
+            "starts_at": "2027-04-12T08:45",
+            "ends_at": "2027-04-12T09:15"
+          }
+        ]
+      }
+    },
+    {
+      "id": "01a14a7d-ec86-724e-a43d-329ffd2578e4",
+      "name": "P0 Browser — tìm nguồn giữ bản nhập",
+      "status": "draft",
+      "applied_at": null,
+      "payload": {
+        "schema_version": 1,
+        "dependencies": [],
+        "slots": [],
+        "tasks": [
+          {
+            "ref": "work1",
+            "task_id": null,
+            "title": "Bản nhập vẫn giữ sau tìm kiếm",
+            "description": null,
+            "task_type": "GROUP",
+            "parent_ref": null,
+            "priority": "medium",
+            "estimate_minutes": null,
+            "assignee_id": null,
+            "reviewer_id": null
+          },
+          {
+            "ref": "w_1",
+            "task_id": null,
+            "title": "Nhóm cấp hai qua UI",
+            "description": null,
+            "task_type": "GROUP",
+            "parent_ref": "work1",
+            "priority": "medium",
+            "estimate_minutes": null,
+            "assignee_id": null,
+            "reviewer_id": null
+          },
+          {
+            "ref": "w_2",
+            "task_id": null,
+            "title": "Công việc tầng ba",
+            "description": null,
+            "task_type": "WORK",
+            "parent_ref": "w_1",
+            "priority": "medium",
+            "estimate_minutes": 30,
+            "assignee_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+            "reviewer_id": "01a147ea-079c-7064-8116-a09b61116d5b"
+          }
+        ]
+      }
+    },
+    {
+      "id": "01a14a7f-5840-7247-8ed9-b840c9c192fd",
+      "name": "P0 Browser — nguồn tìm kiếm cho dòng mới",
+      "status": "draft",
+      "applied_at": null,
+      "payload": {
+        "schema_version": 1,
+        "dependencies": [],
+        "slots": [],
+        "tasks": [
+          {
+            "ref": "work1",
+            "task_id": null,
+            "title": "Công việc mới từ UI P0",
+            "description": null,
+            "task_type": "WORK",
+            "parent_ref": null,
+            "priority": "medium",
+            "estimate_minutes": 60,
+            "assignee_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+            "reviewer_id": null
+          },
+          {
+            "ref": "w_1",
+            "task_id": "01a14a7c-aea3-7367-b0b2-3d68352d7b1c",
+            "title": "P0 native protocol task",
+            "description": null,
+            "task_type": "WORK",
+            "parent_ref": null,
+            "priority": "medium",
+            "estimate_minutes": 30,
+            "assignee_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+            "reviewer_id": "01a147ea-079c-7064-8116-a09b61116d5b"
+          }
+        ]
+      }
+    }
+  ],
+  "native_button_task": {
+    "title": "P0 metadata after stale check",
+    "status": "IN_PROGRESS",
+    "revision": 4
+  },
+  "stopped_member_timer": [
+    {
+      "id": "01a14a7b-bf29-730f-ba22-4d3fb066ee02",
+      "task_id": "01a14a7b-b194-710b-8783-47a4bde4fe45",
+      "started_at": "2026-10-17 15:29:46",
+      "ended_at": "2026-10-17 15:30:35"
+    }
+  ],
+  "browser_observations": {
+    "menu_open_focused_first_link": true,
+    "escape_returns_focus": "nav-toggle",
+    "viewport_width": 319,
+    "document_width_at_task": 304,
+    "source_search_preserved_typed_title": true,
+    "new_row_source_picker_matches_query_after_fix": true,
+    "three_level_tree_saved": true
+  },
+  "fk_errors": [],
+  "env_preserved": true,
+  "no_test_classes_added": true
+}

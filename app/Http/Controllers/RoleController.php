@@ -13,6 +13,20 @@ use Illuminate\View\View;
 
 class RoleController extends Controller
 {
+    private function groups(array $permissions): array
+    {
+        $modules = ['workspace' => 'Workspace', 'project' => 'Project', 'task' => 'Công việc', 'calendar' => 'Lịch', 'plan' => 'Kế hoạch', 'report' => 'Báo cáo', 'integration' => 'Tích hợp'];
+        $actions = ['view' => 'Xem', 'create' => 'Tạo', 'update' => 'Sửa', 'archive' => 'Lưu trữ', 'manage_members' => 'Quản lý thành viên', 'manage_roles' => 'Quản lý vai trò', 'assign' => 'Phân công', 'review' => 'Duyệt công việc', 'comment' => 'Bình luận', 'attach' => 'Đính kèm tệp', 'delete' => 'Xóa', 'approve' => 'Duyệt kế hoạch', 'apply' => 'Áp dụng kế hoạch'];
+        $result = [];
+        foreach ($permissions as $permission) {
+            [$module,$action] = explode('.', $permission, 2);
+            $label = $modules[$module] ?? $module;
+            $result[$label][] = ['value' => $permission, 'label' => $actions[$action] ?? $action];
+        }
+
+        return $result;
+    }
+
     public function index(Workspace $workspace): View
     {
         $this->authorize('manageRoles', $workspace);
@@ -24,7 +38,7 @@ class RoleController extends Controller
     {
         $this->authorize('manageRoles', $workspace);
 
-        return view('roles.create', ['workspace' => $workspace, 'permissionCatalog' => $access->permissions($request->user(), $workspace)]);
+        return view('roles.create', ['workspace' => $workspace, 'permissionCatalog' => $access->permissions($request->user(), $workspace), 'permissionGroups' => $this->groups($access->permissions($request->user(), $workspace))]);
     }
 
     public function store(RoleRequest $request, Workspace $workspace, RoleService $service): RedirectResponse
@@ -38,7 +52,7 @@ class RoleController extends Controller
     {
         $this->authorize('update', $role);
 
-        return view('roles.edit', ['workspace' => $workspace, 'role' => $role, 'permissionCatalog' => $access->permissions($request->user(), $workspace)]);
+        return view('roles.edit', ['workspace' => $workspace, 'role' => $role, 'permissionCatalog' => $access->permissions($request->user(), $workspace), 'permissionGroups' => $this->groups($access->permissions($request->user(), $workspace))]);
     }
 
     public function update(RoleRequest $request, Workspace $workspace, Role $role, RoleService $service): RedirectResponse

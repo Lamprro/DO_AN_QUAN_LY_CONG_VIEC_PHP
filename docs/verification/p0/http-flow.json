@@ -1,0 +1,427 @@
+[
+  {
+    "step": "compiled Blade syntax checked",
+    "files": 129
+  },
+  {
+    "step": "login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo2@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo5@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create workspace",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f",
+    "errors": []
+  },
+  {
+    "step": "create project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "tab B opens project editor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/edit",
+    "errors": []
+  },
+  {
+    "step": "initial revision field present",
+    "verified": true
+  },
+  {
+    "step": "tab A saves project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "stale B project save",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/edit",
+    "errors": []
+  },
+  {
+    "step": "stale project refused, input preserved",
+    "verified": true
+  },
+  {
+    "step": "open fresh project state",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/edit?fresh=1",
+    "errors": []
+  },
+  {
+    "step": "create metadata task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-0f58-7199-9fa3-afc8c5a9c5e7",
+    "errors": []
+  },
+  {
+    "step": "tab B opens task editor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-0f58-7199-9fa3-afc8c5a9c5e7/edit",
+    "errors": []
+  },
+  {
+    "step": "A metadata save first",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-0f58-7199-9fa3-afc8c5a9c5e7",
+    "errors": []
+  },
+  {
+    "step": "B metadata save stale",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-0f58-7199-9fa3-afc8c5a9c5e7/edit",
+    "errors": []
+  },
+  {
+    "step": "task revision and old input preserved",
+    "verified": true
+  },
+  {
+    "step": "fresh task restores latest value",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-0f58-7199-9fa3-afc8c5a9c5e7/edit?fresh=1",
+    "errors": []
+  },
+  {
+    "step": "visual plan editor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/create?project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "no JSON/UUID required as main interface",
+    "verified": true
+  },
+  {
+    "step": "editor inline validation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/create?project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "field error maps to stable row and input kept",
+    "verified": true
+  },
+  {
+    "step": "malformed editor draft fallback",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/create?project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "malformed draft retained without 500",
+    "verified": true
+  },
+  {
+    "step": "save plan from editor contract",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-23c3-7327-b85a-cc192326f9c2",
+    "errors": []
+  },
+  {
+    "step": "draft only, no task/event writes",
+    "verified": true
+  },
+  {
+    "step": "preview draft through real apply simulation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-23c3-7327-b85a-cc192326f9c2/preview",
+    "errors": []
+  },
+  {
+    "step": "preview valid and fully rolled back",
+    "verified": true,
+    "counts": {
+      "tasks": 86,
+      "projects": 15,
+      "plans": 16,
+      "task_dependencies": 5,
+      "calendar_events": 40,
+      "task_activities": 171,
+      "notifications": 25,
+      "time_entries": 4
+    }
+  },
+  {
+    "step": "plan propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-23c3-7327-b85a-cc192326f9c2",
+    "errors": []
+  },
+  {
+    "step": "plan approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-23c3-7327-b85a-cc192326f9c2",
+    "errors": []
+  },
+  {
+    "step": "approved preview has real apply form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-23c3-7327-b85a-cc192326f9c2/preview",
+    "errors": []
+  },
+  {
+    "step": "preview still no persisted changes",
+    "verified": true
+  },
+  {
+    "step": "apply plan",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-23c3-7327-b85a-cc192326f9c2",
+    "errors": []
+  },
+  {
+    "step": "real apply tree dependency and order",
+    "verified": true
+  },
+  {
+    "step": "replay apply stays idempotent",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-23c3-7327-b85a-cc192326f9c2",
+    "errors": []
+  },
+  {
+    "step": "apply replay creates no duplicates",
+    "verified": true
+  },
+  {
+    "step": "revision draft",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-3a38-734a-b9b3-4ce3b36d998a",
+    "errors": []
+  },
+  {
+    "step": "human readable revision diff",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-3a38-734a-b9b3-4ce3b36d998a",
+    "errors": []
+  },
+  {
+    "step": "diff shows before after by task identity",
+    "verified": true
+  },
+  {
+    "step": "preview existing task update",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-3a38-734a-b9b3-4ce3b36d998a/preview",
+    "errors": []
+  },
+  {
+    "step": "existing revisions/history not persisted by preview",
+    "verified": true
+  },
+  {
+    "step": "revision propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-3a38-734a-b9b3-4ce3b36d998a",
+    "errors": []
+  },
+  {
+    "step": "revision approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-3a38-734a-b9b3-4ce3b36d998a",
+    "errors": []
+  },
+  {
+    "step": "revision apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-3a38-734a-b9b3-4ce3b36d998a",
+    "errors": []
+  },
+  {
+    "step": "real revision reuses UUID and increments edit revision",
+    "verified": true
+  },
+  {
+    "step": "create blocker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "blocked task action explains blocker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "blocked start is unavailable",
+    "verified": true
+  },
+  {
+    "step": "forged blocked start still refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "blocked task remains TODO",
+    "verified": true
+  },
+  {
+    "step": "resolve blocker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "start real work",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "start real HTTP timer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "global timer on a different page",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "global clock uses server start time",
+    "verified": true
+  },
+  {
+    "step": "timer blocks review action",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "running clock explained before submit",
+    "verified": true
+  },
+  {
+    "step": "global timer stop through native form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "real timer ended",
+    "verified": true
+  },
+  {
+    "step": "workflow REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "workflow DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "successor may start after FS completed",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32e3-70c6-95fd-a657ee4fddf4",
+    "errors": []
+  },
+  {
+    "step": "real FS successor started",
+    "verified": true
+  },
+  {
+    "step": "invite Viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/members",
+    "errors": []
+  },
+  {
+    "step": "Viewer accepts",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f",
+    "errors": []
+  },
+  {
+    "step": "project Viewer membership",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/members",
+    "errors": []
+  },
+  {
+    "step": "Viewer task and shell",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-32da-7025-9253-cc2d770c60f0",
+    "errors": []
+  },
+  {
+    "step": "Viewer cannot see write/admin controls",
+    "verified": true
+  },
+  {
+    "step": "Viewer cannot open plan editor",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/create?project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "Viewer cannot simulate privileged apply",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/plans/01a14a6f-3a38-734a-b9b3-4ce3b36d998a/preview",
+    "errors": []
+  },
+  {
+    "step": "outsider cannot open workspace",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f",
+    "errors": []
+  },
+  {
+    "step": "missing task expected revision rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14a6f-0f58-7199-9fa3-afc8c5a9c5e7/edit",
+    "errors": []
+  },
+  {
+    "step": "missing revision cannot bypass guard",
+    "verified": true
+  },
+  {
+    "step": "migration did not modify existing task rows",
+    "verified": true
+  },
+  {
+    "step": "APP_KEY/env unchanged",
+    "verified": true
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "P0 COMPLETE",
+    "real_http": true,
+    "no_test_classes": true
+  }
+]

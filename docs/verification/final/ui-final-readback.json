@@ -1,0 +1,89 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "member login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "real GitHub history on Task Blade",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c/tasks/01a14a19-f15d-70c9-9cf8-2517d6a340eb",
+    "errors": []
+  },
+  {
+    "step": "linked commit rendered with safe labels",
+    "verified": true
+  },
+  {
+    "step": "real timer history on Task Blade",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c/tasks/01a14a19-f14c-7045-8ebf-f283075c1707",
+    "errors": []
+  },
+  {
+    "step": "timer and plan link rendered",
+    "verified": true
+  },
+  {
+    "step": "applied plan page",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-7e40-73fb-8e2e-015549860037",
+    "errors": []
+  },
+  {
+    "step": "already applied has no apply action form",
+    "verified": true
+  },
+  {
+    "step": "set review member Viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "Viewer plan index",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans?project_id=01a14a19-dbb0-7349-a6c4-c5e424fc088c",
+    "errors": []
+  },
+  {
+    "step": "Viewer sees no create or AI action",
+    "verified": true
+  },
+  {
+    "step": "Viewer plan detail",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-7e40-73fb-8e2e-015549860037",
+    "errors": []
+  },
+  {
+    "step": "Viewer sees no edit version or schedule",
+    "verified": true
+  },
+  {
+    "step": "restore Member project role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "all latest compiled Blade files pass syntax",
+    "verified": true,
+    "count": 137
+  },
+  {
+    "step": "FK read-back",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "source_delta_verified": true
+  }
+]

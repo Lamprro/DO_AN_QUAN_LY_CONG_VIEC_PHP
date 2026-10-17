@@ -1,0 +1,270 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create Rollback after first slot insert",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-1c47-7395-97f4-0f0c1bbb3972",
+    "errors": []
+  },
+  {
+    "step": "stored draft Rollback after first slot insert",
+    "verified": true
+  },
+  {
+    "step": "action propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-1c47-7395-97f4-0f0c1bbb3972",
+    "errors": []
+  },
+  {
+    "step": "action approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-1c47-7395-97f4-0f0c1bbb3972",
+    "errors": []
+  },
+  {
+    "step": "action apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Khoảng giờ này trùng lịch bận của bạn."
+    ]
+  },
+  {
+    "step": "all writes rolled back after one slot would insert",
+    "verified": true
+  },
+  {
+    "step": "FS schedule invalid rejected before draft",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Slot successor phải sau slot predecessor và đủ lag FS."
+    ]
+  },
+  {
+    "step": "FS no partial draft",
+    "verified": true
+  },
+  {
+    "step": "GROUP estimate zero rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Chỉ WORK có ước lượng."
+    ]
+  },
+  {
+    "step": "zero estimate GROUP no write",
+    "verified": true
+  },
+  {
+    "step": "create Rejected proposal",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-3219-7173-9a7b-d3e32bc5746e",
+    "errors": []
+  },
+  {
+    "step": "stored draft Rejected proposal",
+    "verified": true
+  },
+  {
+    "step": "action propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-3219-7173-9a7b-d3e32bc5746e",
+    "errors": []
+  },
+  {
+    "step": "action reject",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-3219-7173-9a7b-d3e32bc5746e",
+    "errors": []
+  },
+  {
+    "step": "reject keeps reason and no business mutation",
+    "verified": true
+  },
+  {
+    "step": "register member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "invite member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/members",
+    "errors": []
+  },
+  {
+    "step": "accept invitation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289",
+    "errors": []
+  },
+  {
+    "step": "project membership",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c/members",
+    "errors": []
+  },
+  {
+    "step": "create Member draft",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-4cf8-721e-964d-5e4b6e02457d",
+    "errors": []
+  },
+  {
+    "step": "stored draft Member draft",
+    "verified": true
+  },
+  {
+    "step": "Member cannot propose own draft",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-4cf8-721e-964d-5e4b6e02457d/propose",
+    "errors": []
+  },
+  {
+    "step": "Member cannot approve own draft",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-4cf8-721e-964d-5e4b6e02457d/approve",
+    "errors": []
+  },
+  {
+    "step": "action propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-4cf8-721e-964d-5e4b6e02457d",
+    "errors": []
+  },
+  {
+    "step": "action approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-4cf8-721e-964d-5e4b6e02457d",
+    "errors": []
+  },
+  {
+    "step": "action apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-4cf8-721e-964d-5e4b6e02457d",
+    "errors": []
+  },
+  {
+    "step": "member starts own WORK",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "member timer start",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "suspend member while clock running",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/members",
+    "errors": []
+  },
+  {
+    "step": "suspended member task hidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c/tasks/01a14a20-5d51-72b5-a773-1cf647b7671f",
+    "errors": []
+  },
+  {
+    "step": "own clock accessible without hidden task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "timer page hides lost task title",
+    "verified": true
+  },
+  {
+    "step": "owner cannot stop member clock",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/timers/01a14a20-63d8-7193-8b7e-53ba18dbb5a4/stop",
+    "errors": []
+  },
+  {
+    "step": "member can stop own clock after membership loss",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "revoked stop persisted actual time",
+    "verified": true
+  },
+  {
+    "step": "restore member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/members",
+    "errors": []
+  },
+  {
+    "step": "Member cannot manage integration",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c/github",
+    "errors": []
+  },
+  {
+    "step": "Member cannot mutate applied payload via unexpected action",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-4cf8-721e-964d-5e4b6e02457d/overwrite",
+    "errors": []
+  },
+  {
+    "step": "create Final browser revision current snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-7e40-73fb-8e2e-015549860037",
+    "errors": []
+  },
+  {
+    "step": "stored draft Final browser revision current snapshot",
+    "verified": true
+  },
+  {
+    "step": "action propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-7e40-73fb-8e2e-015549860037",
+    "errors": []
+  },
+  {
+    "step": "action approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-7e40-73fb-8e2e-015549860037",
+    "errors": []
+  },
+  {
+    "step": "action apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-7e40-73fb-8e2e-015549860037",
+    "errors": []
+  },
+  {
+    "step": "action apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-7e40-73fb-8e2e-015549860037",
+    "errors": []
+  },
+  {
+    "step": "new guards preserve real success and idempotency",
+    "verified": true
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "no_test_classes": true
+  }
+]

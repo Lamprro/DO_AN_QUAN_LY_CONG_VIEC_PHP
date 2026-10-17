@@ -1,0 +1,481 @@
+[
+  {
+    "step": "guest redirected to login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": []
+  },
+  {
+    "step": "login with seed owner form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "register member through Blade form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "registration database read-back",
+    "user": {
+      "id": "01a14804-2f7e-7193-87c9-b801f0d9fd01",
+      "email": "phase2.member.1792209594@example.test",
+      "status": "active"
+    },
+    "personal_workspace": [
+      {
+        "id": "01a14804-2f83-739f-95bd-5c455ff06364",
+        "kind": "personal",
+        "status": "active",
+        "role": "Owner"
+      }
+    ],
+    "settings": [
+      {
+        "settings": "{\"language\":\"vi\",\"theme\":\"system\",\"notifications\":{\"in_app\":true,\"email\":false,\"telegram\":false}}"
+      }
+    ]
+  },
+  {
+    "step": "register outsider",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create workspace through real form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "workspace database read-back",
+    "workspace": [
+      {
+        "id": "01a14804-35da-70e4-9c7e-553213e17fd3",
+        "name": "Phase2 HTTP Review 1792209594",
+        "owner_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+        "kind": "team"
+      }
+    ],
+    "roles": [
+      {
+        "id": "01a14804-35e0-7060-ae8f-6e5678273050",
+        "name": "Manager",
+        "is_system": 1
+      },
+      {
+        "id": "01a14804-35e0-7060-ae8f-6e567888f775",
+        "name": "Member",
+        "is_system": 1
+      },
+      {
+        "id": "01a14804-35de-71ac-8842-9789216d3885",
+        "name": "Owner",
+        "is_system": 1
+      },
+      {
+        "id": "01a14804-35e1-711c-9712-2f8da122fc45",
+        "name": "Viewer",
+        "is_system": 1
+      }
+    ],
+    "members": [
+      {
+        "user_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "step": "CSRF missing rejected",
+    "http": 419,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "database after missing CSRF",
+    "created_count": [
+      {
+        "n": 0
+      }
+    ]
+  },
+  {
+    "step": "workspace form validation errors",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/create",
+    "errors": [
+      "Vui lòng nhập tên.",
+      "Múi giờ không hợp lệ."
+    ]
+  },
+  {
+    "step": "rename workspace",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "outsider cannot access workspace",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "member cannot access before invitation",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "create delegated role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles",
+    "errors": []
+  },
+  {
+    "step": "rename custom role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles",
+    "errors": []
+  },
+  {
+    "step": "system Owner role edit rejected",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles/01a14804-35de-71ac-8842-9789216d3885/edit",
+    "errors": []
+  },
+  {
+    "step": "foreign role nested binding rejected",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles/01a147ea-0b22-73a9-9e65-2d6e076846f8/edit",
+    "errors": []
+  },
+  {
+    "step": "owner role cannot be assigned by invitation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/members",
+    "errors": [
+      "Vai trò Owner chỉ được cấp qua chức năng chuyển chủ sở hữu."
+    ]
+  },
+  {
+    "step": "issue invitation through real form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/members",
+    "errors": []
+  },
+  {
+    "step": "membership not created before acceptance",
+    "count": [
+      {
+        "n": 0
+      }
+    ]
+  },
+  {
+    "step": "wrong email invitation acceptance rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Hãy đăng nhập bằng đúng email nhận lời mời."
+    ]
+  },
+  {
+    "step": "view invitation as intended recipient",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/invitations/[TOKEN]",
+    "errors": []
+  },
+  {
+    "step": "accept invitation through real form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "replay consumed invitation rejected",
+    "http": 410,
+    "url": "http://127.0.0.1:8123/invitations/[TOKEN]/accept",
+    "errors": []
+  },
+  {
+    "step": "membership accepted once",
+    "membership": {
+      "id": "01a14804-52fb-726b-a780-59d6b03c8e1a",
+      "user_id": "01a14804-2f7e-7193-87c9-b801f0d9fd01",
+      "status": "active",
+      "role_id": "01a14804-415e-7392-8b97-79895a8660e8"
+    },
+    "count": [
+      {
+        "n": 1
+      }
+    ]
+  },
+  {
+    "step": "delegated actor cannot grant higher permission",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles/create",
+    "errors": [
+      "Không được cấp quyền vượt quá quyền hiện có của bạn."
+    ]
+  },
+  {
+    "step": "database after escalation attempt",
+    "roles": []
+  },
+  {
+    "step": "delegated actor can grant subset role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles",
+    "errors": []
+  },
+  {
+    "step": "delete unused custom role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles",
+    "errors": []
+  },
+  {
+    "step": "delete assigned role rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Vai trò đang được gán cho thành viên; không thể xóa."
+    ]
+  },
+  {
+    "step": "assigned role remains",
+    "roles": [
+      {
+        "id": "01a14804-415e-7392-8b97-79895a8660e8"
+      }
+    ]
+  },
+  {
+    "step": "suspend member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/members",
+    "errors": []
+  },
+  {
+    "step": "suspended session blocked by middleware",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "reactivate member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/members",
+    "errors": []
+  },
+  {
+    "step": "reactivated member can access again",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "owner membership cannot be removed",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Không được sửa owner hoặc tự đổi vai trò của mình qua chức năng này."
+    ]
+  },
+  {
+    "step": "owner protected read-back",
+    "member": [
+      {
+        "status": "active",
+        "role_id": "01a14804-35de-71ac-8842-9789216d3885"
+      }
+    ]
+  },
+  {
+    "step": "create revocable invite",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/members",
+    "errors": []
+  },
+  {
+    "step": "revoke invitation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/members",
+    "errors": []
+  },
+  {
+    "step": "revoked link gone",
+    "http": 410,
+    "url": "http://127.0.0.1:8123/invitations/[TOKEN]",
+    "errors": []
+  },
+  {
+    "step": "remove member keeps history row",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/members",
+    "errors": []
+  },
+  {
+    "step": "membership left read-back",
+    "rows": [
+      {
+        "id": "01a14804-52fb-726b-a780-59d6b03c8e1a",
+        "status": "left"
+      }
+    ]
+  },
+  {
+    "step": "removed member session blocked",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "reinvite former member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/members",
+    "errors": []
+  },
+  {
+    "step": "rejoin through real form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "rejoin reused membership",
+    "rows": [
+      {
+        "id": "01a14804-52fb-726b-a780-59d6b03c8e1a",
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "step": "change profile name",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": []
+  },
+  {
+    "step": "second session login before password change",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "change password through real profile form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": []
+  },
+  {
+    "step": "other session invalidated after password change",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": []
+  },
+  {
+    "step": "old password no longer logs in",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": [
+      "Email, mật khẩu không đúng hoặc tài khoản không hoạt động."
+    ]
+  },
+  {
+    "step": "new password logs in",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": []
+  },
+  {
+    "step": "owner cannot leave without transfer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Owner phải chuyển chủ sở hữu trước khi rời workspace."
+    ]
+  },
+  {
+    "step": "transfer ownership through actual form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3",
+    "errors": []
+  },
+  {
+    "step": "ownership transfer database read-back",
+    "workspace": [
+      {
+        "owner_id": "01a14804-2f7e-7193-87c9-b801f0d9fd01"
+      }
+    ],
+    "members": [
+      {
+        "user_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+        "status": "active",
+        "role": "Manager"
+      },
+      {
+        "user_id": "01a14804-2f7e-7193-87c9-b801f0d9fd01",
+        "status": "active",
+        "role": "Owner"
+      }
+    ]
+  },
+  {
+    "step": "former owner no longer manages roles",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles",
+    "errors": []
+  },
+  {
+    "step": "new owner manages roles",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-35da-70e4-9c7e-553213e17fd3/roles",
+    "errors": []
+  },
+  {
+    "step": "create empty disposable workspace",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14804-9694-73b3-88b0-62cebe1a1945",
+    "errors": []
+  },
+  {
+    "step": "delete empty disposable workspace through form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "disposable workspace deletion database read-back",
+    "workspace": []
+  },
+  {
+    "step": "logout",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": []
+  },
+  {
+    "step": "profile after logout redirected to login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": []
+  },
+  {
+    "step": "final foreign key check",
+    "rows": []
+  },
+  {
+    "step": "walkthrough complete",
+    "workspace_id": "01a14804-35da-70e4-9c7e-553213e17fd3",
+    "member_email": "phase2.member.1792209594@example.test"
+  }
+]

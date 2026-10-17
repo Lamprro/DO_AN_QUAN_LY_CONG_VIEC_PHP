@@ -1,0 +1,50 @@
+[
+  {
+    "step": "workspace schema has no archived_at; removed only invalid no-op attribute reference",
+    "verified": true,
+    "columns": [
+      "id",
+      "name",
+      "kind",
+      "owner_id",
+      "timezone",
+      "created_at",
+      "updated_at"
+    ]
+  },
+  {
+    "step": "archive actual project through its form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb",
+    "errors": []
+  },
+  {
+    "step": "actual project archive still forbids calendar edit",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372/edit",
+    "errors": []
+  },
+  {
+    "step": "restore actual project through form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb",
+    "errors": []
+  },
+  {
+    "step": "calendar edit available after project restore",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372/edit",
+    "errors": []
+  },
+  {
+    "step": "real scope checks retained",
+    "verified": true
+  },
+  {
+    "step": "foreign keys final",
+    "verified": true
+  },
+  {
+    "step": "Schema and project scope final verification complete"
+  }
+]

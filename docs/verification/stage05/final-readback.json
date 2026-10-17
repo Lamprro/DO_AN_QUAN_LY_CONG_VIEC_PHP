@@ -1,0 +1,90 @@
+[
+  {
+    "step": "browser update persisted and event scope/UTC retained",
+    "verified": true,
+    "event": {
+      "id": "01a1492e-84fd-71d0-8fa8-e951e14238af",
+      "title": "P5 Browser Review Meeting",
+      "description": "Đã tạo và cập nhật qua form Blade; chờ duyệt phần 5.",
+      "starts_at": "2026-12-07 08:00:00",
+      "ends_at": "2026-12-07 09:00:00",
+      "event_type": "MEETING",
+      "is_busy": 1,
+      "source": "manual"
+    }
+  },
+  {
+    "step": "browser marked exactly one of two status notices read",
+    "verified": true,
+    "notifications": [
+      {
+        "id": "01a1492e-4968-70aa-8c7e-cfa61d3f8a93",
+        "read_at": null,
+        "deliveries": "[{\"channel\":\"in_app\",\"status\":\"sent\",\"attempts\":1,\"sent_at\":\"2026-10-17T09:25:32+00:00\",\"last_error\":null}]"
+      },
+      {
+        "id": "01a1492e-52b3-7029-b0f6-159f618ea10b",
+        "read_at": "2026-10-17 09:33:10",
+        "deliveries": "[{\"channel\":\"in_app\",\"status\":\"sent\",\"attempts\":1,\"sent_at\":\"2026-10-17T09:25:35+00:00\",\"last_error\":null}]"
+      }
+    ]
+  },
+  {
+    "step": "inbox final server render",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/notifications",
+    "errors": []
+  },
+  {
+    "step": "persisted unread badge matches browser",
+    "verified": true
+  },
+  {
+    "step": "final timeline",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/timeline?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "timeline still displays real slot, bar and task link",
+    "verified": true
+  },
+  {
+    "step": "final edit form hidden scope contract",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372/edit",
+    "errors": []
+  },
+  {
+    "step": "immutable scope selects disabled but hidden fields submitted",
+    "verified": true
+  },
+  {
+    "step": "calendar final privacy projection",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "calendar retains privacy and shared entries",
+    "verified": true
+  },
+  {
+    "step": "all actors restored active and worker timezone restored",
+    "verified": true
+  },
+  {
+    "step": "no new test classes",
+    "verified": true
+  },
+  {
+    "step": "FK final read-back",
+    "verified": true
+  },
+  {
+    "step": "Stage 5 final read-back complete",
+    "workspace_id": "01a1492c-68e5-729b-8df8-6e4900a93d04",
+    "project_id": "01a1492c-6ce4-737a-9cb7-39e9a48b30fb",
+    "active_slot_id": "01a14930-59ec-7355-ace6-a6c4f669b372"
+  }
+]

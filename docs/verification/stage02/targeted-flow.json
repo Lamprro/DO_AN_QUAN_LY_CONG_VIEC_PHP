@@ -1,0 +1,158 @@
+[
+  {
+    "step": "duplicate registration rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/register",
+    "errors": [
+      "Email đã được sử dụng."
+    ]
+  },
+  {
+    "step": "login review outsider",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "personal workspace invite rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Workspace cá nhân không nhận thêm thành viên."
+    ]
+  },
+  {
+    "step": "personal workspace deletion rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Không được xóa workspace cá nhân."
+    ]
+  },
+  {
+    "step": "personal workspace retained",
+    "workspace": [
+      {
+        "id": "01a14804-32ea-7055-ad5d-22001ccc267a",
+        "kind": "personal"
+      }
+    ]
+  },
+  {
+    "step": "wrong current password rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": [
+      "Mật khẩu hiện tại không đúng."
+    ]
+  },
+  {
+    "step": "array password inputs rejected without server error",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": [
+      "Mật khẩu hiện tại phải là chuỗi.",
+      "Mật khẩu phải là chuỗi."
+    ]
+  },
+  {
+    "step": "array current_password on email change rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": [
+      "Mật khẩu hiện tại phải là chuỗi."
+    ]
+  },
+  {
+    "step": "invalid credential changes not persisted",
+    "unchanged": true
+  },
+  {
+    "step": "email change with current password",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": []
+  },
+  {
+    "step": "email update database read-back",
+    "user": [
+      {
+        "id": "01a14804-32e5-70b7-abe6-3d969512c3a8",
+        "email": "phase2.changed.1792210007@example.test",
+        "email_verified_at": null,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "step": "disabled user existing session blocked",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": []
+  },
+  {
+    "step": "disabled user session ended",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": []
+  },
+  {
+    "step": "bad login attempt 1",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": [
+      "Email, mật khẩu không đúng hoặc tài khoản không hoạt động."
+    ]
+  },
+  {
+    "step": "bad login attempt 2",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": [
+      "Email, mật khẩu không đúng hoặc tài khoản không hoạt động."
+    ]
+  },
+  {
+    "step": "bad login attempt 3",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": [
+      "Email, mật khẩu không đúng hoặc tài khoản không hoạt động."
+    ]
+  },
+  {
+    "step": "bad login attempt 4",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": [
+      "Email, mật khẩu không đúng hoặc tài khoản không hoạt động."
+    ]
+  },
+  {
+    "step": "bad login attempt 5",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": [
+      "Email, mật khẩu không đúng hoặc tài khoản không hoạt động."
+    ]
+  },
+  {
+    "step": "bad login attempt 6",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": [
+      "Đăng nhập sai nhiều lần. Thử lại sau 56 giây."
+    ]
+  },
+  {
+    "step": "login limiter reached",
+    "attempts": 6
+  },
+  {
+    "step": "foreign key check",
+    "rows": []
+  },
+  {
+    "step": "targeted walkthrough complete"
+  }
+]

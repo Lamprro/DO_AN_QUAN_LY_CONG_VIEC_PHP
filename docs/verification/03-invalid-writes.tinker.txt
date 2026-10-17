@@ -1,0 +1,18 @@
+$task = App\Models\Task::where('code', 'FLOW-001')->firstOrFail();
+$next = App\Models\Task::where('code', 'FLOW-002')->firstOrFail();
+try { App\Models\Task::create(['workspace_id' => $task->workspace_id, 'project_id' => $task->project_id, 'code' => $task->code, 'title' => 'Duplicate code', 'created_by' => $task->created_by]); dump('DUPLICATE INSERT COMPLETED'); } catch (Throwable $e) { dump(['operation' => 'duplicate task code', 'exception' => get_class($e), 'message' => $e->getMessage()]); }
+try { $task->update(['estimate_minutes' => -5]); dump('NEGATIVE ESTIMATE UPDATE COMPLETED'); } catch (Throwable $e) { dump(['operation' => 'negative estimate', 'exception' => get_class($e), 'message' => $e->getMessage()]); }
+$task->refresh();
+try { $task->parent->update(['parent_task_id' => $task->id]); dump('TASK CYCLE UPDATE COMPLETED'); } catch (Throwable $e) { dump(['operation' => 'task parent cycle', 'exception' => get_class($e), 'message' => $e->getMessage()]); }
+try { App\Models\TaskDependency::create(['predecessor_task_id' => $next->id, 'successor_task_id' => $task->id]); dump('DEPENDENCY CYCLE INSERT COMPLETED'); } catch (Throwable $e) { dump(['operation' => 'dependency cycle', 'exception' => get_class($e), 'message' => $e->getMessage()]); }
+$member = App\Models\WorkspaceMember::where('workspace_id', $task->workspace_id)->firstOrFail();
+$foreignRole = App\Models\Role::where('workspace_id', '!=', $task->workspace_id)->firstOrFail();
+try { $member->update(['role_id' => $foreignRole->id]); dump('FOREIGN ROLE UPDATE COMPLETED'); } catch (Throwable $e) { dump(['operation' => 'role from another workspace', 'exception' => get_class($e), 'message' => $e->getMessage()]); }
+$event = $task->calendarEvents()->firstOrFail();
+try { $event->update(['ends_at' => '2020-01-01 00:00:00']); dump('INVALID EVENT RANGE UPDATE COMPLETED'); } catch (Throwable $e) { dump(['operation' => 'event end before start', 'exception' => get_class($e), 'message' => $e->getMessage()]); }
+$history = $task->activities()->where('type', 'HISTORY')->firstOrFail();
+try { $history->update(['content' => 'tampered']); dump('HISTORY UPDATE COMPLETED'); } catch (Throwable $e) { dump(['operation' => 'modify history', 'exception' => get_class($e), 'message' => $e->getMessage()]); }
+try { $history->delete(); dump('HISTORY DELETE COMPLETED'); } catch (Throwable $e) { dump(['operation' => 'delete history', 'exception' => get_class($e), 'message' => $e->getMessage()]); }
+$comment = $task->activities()->where('type', 'COMMENT')->firstOrFail();
+$comment->delete();
+dump(['soft_deleted_comment' => DB::table('task_activities')->where('id',$comment->id)->first(['id','type','deleted_at']), 'history_after_attempts' => DB::table('task_activities')->where('id',$history->id)->first(['id','type','content','deleted_at']), 'estimate_after_attempts' => DB::table('tasks')->where('id',$task->id)->value('estimate_minutes')]);

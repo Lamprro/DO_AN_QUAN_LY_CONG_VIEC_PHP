@@ -1,0 +1,90 @@
+> Cập nhật chỉ đạo mới 17/10/2026: chủ dự án yêu cầu hoàn thiện tất cả, bỏ dừng duyệt từng phần. Trạng thái hiện tại xem DELIVERY_STATUS.md và verification/final; các mục chi tiết phía dưới ghi lịch sử theo từng lần làm.
+
+# Tiến độ triển khai theo từng phần
+
+Ngày cập nhật: 17/10/2026.
+
+Chủ dự án yêu cầu: làm xong từng phần, dừng giải thích flow để duyệt rồi mới tiếp tục. Blade/form chạy thật do backend chuẩn bị; AI frontend tiếp tục thiết kế giao diện. Các key/tích hợp thật cấu hình sau.
+
+| Phần | Nội dung | Trạng thái |
+|---|---|---|
+| 1 | Database V3, UUID, model/quan hệ/casts, enum/config, seed, xác minh flow trực tiếp và bàn giao FE | Đã triển khai, chủ dự án đã duyệt |
+| 2 | Auth, profile, workspace, role, member, invitation TTL; policy/request/controller và Blade MVC | Đã triển khai, chủ dự án đã duyệt. Redis/SMTP thật chưa kiểm tra |
+| 3 | Project, project membership, CRUD task và truy vấn tìm/lọc/sort/phân trang | Đã triển khai, chủ dự án đã duyệt |
+| 4 | Cây task, trạng thái/review, dependency/blocker, activity/file và tiến độ | Đã triển khai và xác minh HTTP/browser/file/DB local; chủ dự án đã duyệt |
+| 5 | Calendar/Timeline, settings, thông báo | Đã triển khai và xác minh HTTP/browser/DB local; chủ dự án đã duyệt |
+| 6 | Dashboard/report, queue và nền AI | Đã triển khai, HTTP/browser/SQLite/worker; provider ngoài chờ key |
+| 7 | AI planning, phiên bản, xem/sửa/duyệt/áp dụng plan | Đã có workflow, form/Blade, schema/snapshot/transaction; provider ngoài chờ key |
+| 8 | Replanning, trợ lý blocker, tích hợp được chọn | Đã có queue/context/plan version, local schedule/impact, timer và GitHub signed logs; network ngoài chờ cấu hình |
+| 9 | Xác minh hệ thống, cài trên máy khác, hồ sơ minh chứng | Đã có flow HTTP/DB/browser/worker và cài source/DB riêng trên máy hiện tại; máy thứ hai chưa kiểm |
+| 10 | Hoàn thiện gói nộp và diễn tập bảo vệ | Có source ZIP, hướng dẫn, tiêu chí/kịch bản; video/bảo vệ/đóng góp thật do nhóm hoàn tất |
+
+## Phạm vi đã hoàn thành ở phần 1
+
+- Đồng bộ fast-forward các báo cáo đã được push ở chat khác; giữ nguyên các tệp trong docs/reports.
+- 20 bảng nghiệp vụ và 61 FK theo V3; user/session UUID, thêm hai generated columns phục vụ unique active plan và timer.
+- 20 model, relationship, casts và enum dùng chung; query scope workspace không thay thế authorization.
+- Observer bảo vệ tham chiếu cùng workspace/project, chu trình, giá trị số/ngày, lịch TASK_BLOCK, plan group và history.
+- Seeder lặp lại được và dữ liệu demo ghi nhãn mô phỏng; không gọi dịch vụ ngoài.
+- Database chạy kiểm tra là SQLite `database/work_management.sqlite`; database khởi tạo `database/database.sqlite` được giữ nguyên. `.env` local trỏ sang database mới.
+- README, schema manifest, file flow/database và file bàn giao FE. MySQL/MariaDB chưa được kiểm thử bằng server thật.
+
+Kết quả kiểm tra cập nhật tại `STAGE_01_DATABASE.md`. Không tự ghi “đã hoàn thành dự án” từ việc hoàn tất schema; chức năng HTTP và phân quyền người dùng vẫn ở phần sau.
+
+## Chỉ đạo mới về xác minh
+
+Không thêm lớp test; chạy flow thật và lưu thao tác/dữ liệu/lỗi đọc lại. Hai lớp test mới đã được gỡ. Xem docs/verification/README.md và AGENTS.md. Phần 1 đã duyệt. Phần 2 đã được duyệt. Phần 3 đã duyệt. Phần 4 đã duyệt; phần 5 dừng chờ chủ dự án duyệt, chưa sang phần 6.
+
+## Phần 2 đã thực hiện
+
+- Session auth, profile/mật khẩu và thu hồi phiên khác; Requests/middleware/policies.
+- Workspace cá nhân khi đăng ký, workspace team, 4 role mặc định, role tùy chỉnh chống vượt quyền.
+- Member active/suspended/left, mời/nhận/thu hồi/hết hạn; transfer Owner và xóa workspace trống.
+- Blade có form/action/CSRF và CSS cơ bản để FE tiếp tục giao diện.
+- Predis đã cài; file cache TTL local tường minh, mail log. Không coi Redis/SMTP thật là đã kiểm tra.
+- Xác minh HTTP thật, SQL đọc lại, thao tác browser; không thêm test class. Xem STAGE_02_AUTH_WORKSPACE.md và verification/stage02/README.md.
+
+## Phần 3 đã thực hiện
+
+- Project CRUD/cha-con, project member riêng, policy không thừa kế quyền xuống project con.
+- CRUD metadata Task WORK/TODO và Task personal, mã unique, phân công và reviewer đủ quyền.
+- Tìm/lọc/sort whitelist/phân trang; archive/restore, bảo vệ xóa khi có dữ liệu.
+- Blade, điều hướng, form xác nhận và cập nhật FRONTEND_HANDOFF.md.
+- HTTP + browser + SQL read-back thật; xem STAGE_03_PROJECT_TASK.md và verification/stage03/README.md.
+- Không thêm migrations/test class; chưa triển khai flow phần 4.
+
+## Phần 4 đã thực hiện
+
+- Cây GROUP/WORK/MILESTONE, parent/order, max-depth và tiến độ WORK lá.
+- State machine/review, reason/stale guard, FS/lag và blocker, history nguyên tử.
+- COMMENT ownership/soft-delete, ATTACHMENT private với strict MIME/extension/container và download authorization.
+- Blade workflow/tree/activity/upload và cập nhật hợp đồng FE, helper server ZIP/upload limits.
+- Xác minh HTTP/SQLite/file bytes/browser; xem STAGE_04_TASK_WORKFLOW.md và verification/stage04/README.md.
+- Không thêm migration/test class, chưa sang phần 5.
+
+
+## Phần 5 đã thực hiện
+
+- Calendar CRUD5 loại, UTC/timezone/DST/all-day, conflict cùng người xuyên workspace, version/scope guards và private free/busy projection.
+- Calendar tháng/tuần/danh sách và Timeline từ TASK_BLOCK thực, thanh tỷ lệ/link task, query range có giới hạn và policy hiện tại.
+- User settings whitelist/default, theme cơ bản, giờ mặc định config read-only; không bật external channel.
+- In-app notification từ giao task/đổi assignee/status/comment, preference/recipient scope, dedupe, inbox unread/read-all và badge.
+- Blade native form, data contract và docs/STAGE_05_CALENDAR_NOTIFICATIONS.md + FRONTEND_HANDOFF.md.
+- Kiểm tra HTTP/CSRF/browser/SQL thật, logs lỗi ban đầu và xác minh tiếp sau sửa ở docs/verification/stage05. Không thêm test class, không reset dữ liệu/key/migration.
+- **Dừng ở phần 5 chờ duyệt, không tự sang phần 6.**
+
+
+## Phần 6 đã thực hiện
+
+- Dashboard theo quyền, WORK/current inventory, kỳ UTC, status/overdue/blocker/progress/workload, planned từ lịch được phép xem và actual từ phiên ended.
+- Snapshot cố định/own + current-source authorization, danh sách phân trang, print Blade, CSV stream/chống formula injection.
+- AiRun request report-only, context số liệu/config, idempotency và database job nguyên tử; worker/AiCall, quyền kiểm tra lại, cancel/retry3 lượt và stale-recovery command.
+- Provider interface/DTO và UnconfiguredAiProvider; mặc định AI tắt, báo lỗi thật, không có dữ liệu sinh giả. Chưa triển khai provider mạng/Plan phần7.
+- Blade/form thật + FRONTEND_HANDOFF.md; flow chi tiết STAGE_06_REPORT_QUEUE_AI.md.
+- Minh chứng verification/stage06: HTTP/browser/worker và SQL; có nguồn actual phiên thật3 giây chuẩn bị qua model vì chưa có timer UI, ghi rõ giới hạn. Không TestCase/mocks/reset/key/migration.
+- **Phần 1–5 đã duyệt; phần 6 dừng chờ duyệt. Không tự sang phần7.**
+
+
+## Lượt hoàn thiện sau phần 6
+
+Đã tiếp tục toàn bộ theo chỉ đạo mới. Xem DELIVERY_STATUS.md, DEPLOYMENT.md, PLAN_PAYLOAD.md, AI_PROVIDER_CONTRACT.md, DEMO_AND_CRITERIA.md và verification/final. Không dừng chờ duyệt.

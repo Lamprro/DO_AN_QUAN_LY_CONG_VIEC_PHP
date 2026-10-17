@@ -1,0 +1,235 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create workspace",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04",
+    "errors": []
+  },
+  {
+    "step": "create project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb",
+    "errors": []
+  },
+  {
+    "step": "register worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "invite worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/members",
+    "errors": []
+  },
+  {
+    "step": "accept worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04",
+    "errors": []
+  },
+  {
+    "step": "project member worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/members",
+    "errors": []
+  },
+  {
+    "step": "register reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "invite reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/members",
+    "errors": []
+  },
+  {
+    "step": "accept reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04",
+    "errors": []
+  },
+  {
+    "step": "project member reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/members",
+    "errors": []
+  },
+  {
+    "step": "outsider login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "assign task real form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/tasks/01a1492c-916f-70e4-b155-1b2a1f0f86b4",
+    "errors": []
+  },
+  {
+    "step": "assignment creates exactly one notification",
+    "verified": true,
+    "notifications": [
+      {
+        "id": "01a1492c-917b-7371-83bc-8084ca272e6b",
+        "recipient_id": "01a1492c-713b-703a-ae6f-d5973638fdce",
+        "type": "task.created",
+        "deliveries": "[{\"channel\":\"in_app\",\"status\":\"sent\",\"attempts\":1,\"sent_at\":\"2026-10-17T09:23:40+00:00\",\"last_error\":null}]",
+        "read_at": null
+      }
+    ]
+  },
+  {
+    "step": "worker inbox",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/notifications",
+    "errors": []
+  },
+  {
+    "step": "inbox and unread badge reflect persisted assignment",
+    "verified": true
+  },
+  {
+    "step": "mark one read",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "read_at changes without changing deliveries",
+    "verified": true
+  },
+  {
+    "step": "foreign recipient cannot mark read",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/notifications/01a1492c-917b-7371-83bc-8084ca272e6b/read",
+    "errors": []
+  },
+  {
+    "step": "mark unread",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "mark unread persisted",
+    "verified": true
+  },
+  {
+    "step": "settings actual form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/settings",
+    "errors": []
+  },
+  {
+    "step": "strict settings persisted",
+    "verified": true,
+    "settings": {
+      "language": "vi",
+      "theme": "dark",
+      "notifications": {
+        "in_app": false,
+        "email": false,
+        "telegram": false
+      }
+    }
+  },
+  {
+    "step": "dark setting applied to shell",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/settings",
+    "errors": []
+  },
+  {
+    "step": "theme hook actually rendered",
+    "verified": true
+  },
+  {
+    "step": "comment while in-app disabled",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/tasks/01a1492c-916f-70e4-b155-1b2a1f0f86b4",
+    "errors": []
+  },
+  {
+    "step": "disabled preference prevents new worker notification",
+    "verified": true
+  },
+  {
+    "step": "reject nested preference injection",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/settings",
+    "errors": [
+      "Notifications phải là danh sách."
+    ]
+  },
+  {
+    "step": "reject privilege injection",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/settings",
+    "errors": [
+      "Không được gửi trường quyền trong thao tác này."
+    ]
+  },
+  {
+    "step": "reject external channel enable",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/settings",
+    "errors": [
+      "Notifications.email không hợp lệ."
+    ]
+  },
+  {
+    "step": "invalid settings left row unchanged",
+    "verified": true
+  },
+  {
+    "step": "enable in-app",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/settings",
+    "errors": []
+  },
+  {
+    "step": "comment enabled",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/tasks/01a1492c-916f-70e4-b155-1b2a1f0f86b4",
+    "errors": []
+  },
+  {
+    "step": "enabled preference produces one row",
+    "verified": true
+  },
+  {
+    "step": "metadata save same assignment",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/tasks/01a1492c-916f-70e4-b155-1b2a1f0f86b4",
+    "errors": []
+  },
+  {
+    "step": "metadata update does not duplicate assignment notice",
+    "verified": true
+  },
+  {
+    "step": "create event P5 secret BUSY",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Participants phải là danh sách.",
+      "Participants tối đa 20 phần tử."
+    ]
+  },
+  {
+    "step": "event persisted P5 secret BUSY",
+    "verified": false
+  }
+]

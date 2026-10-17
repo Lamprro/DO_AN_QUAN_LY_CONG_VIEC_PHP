@@ -1,0 +1,8 @@
+<x-layout :title="$event->title"><section class="card" data-page="calendar-show" data-event-id="{{ $event->id }}"><a href="{{ route('workspaces.calendar.index',$workspace) }}">Về lịch</a><h1>{{ $event->title }}</h1><p style="white-space:pre-wrap">{{ $event->description }}</p>
+<p>{{ $event->starts_at->setTimezone($timezone)->format('d/m/Y H:i') }} → {{ $event->ends_at->setTimezone($timezone)->format('d/m/Y H:i') }} · {{ $timezone }}</p>
+<p>{{ $event->event_type->value }} · {{ $event->status->value }} · {{ $event->visibility->value }} · {{ $event->is_busy?'Bận':'Không chiếm giờ' }}</p>
+@if($event->all_day)<p>Cả ngày trong {{ $event->timezone }}: {{ $event->starts_at->setTimezone($event->timezone)->format('Y-m-d') }} → {{ $event->ends_at->setTimezone($event->timezone)->format('Y-m-d') }} (không gồm ngày cuối).</p>@endif
+@if($event->task)<p>Task: <a href="{{ route($event->project_id?'workspaces.projects.tasks.show':'workspaces.tasks.show',$event->project_id?[$workspace,$event->project,$event->task]:[$workspace,$event->task]) }}">{{ $event->task->code }}</a></p>@endif
+<p>Người tham gia tham khảo: {{ count($event->participants ?? []) }}. Trạng thái lịch không thay đổi trạng thái task hoặc giờ thực tế.</p>
+@can('update',$event)<a class="button" href="{{ route('workspaces.calendar.edit',[$workspace,$event]) }}">Sửa sự kiện</a>@endcan
+@can('delete',$event)<form method="POST" action="{{ route('workspaces.calendar.destroy',[$workspace,$event]) }}" data-form="calendar-delete" data-confirm="Xóa sự kiện này?">@csrf @method('DELETE')<input type="hidden" name="version" value="{{ $version }}"><button type="submit" class="danger">Xóa sự kiện</button></form>@endcan</section></x-layout>

@@ -1,0 +1,13 @@
+[
+  {
+    "step": "source archive extracted",
+    "directory": "C:\\Users\\maiva\\.codex\\.chatgpt-projects\\g-p-6ac9f1ab7ff88191b43033b8bc45d9d6\\output\\release-validation-1792245203\\project",
+    "files": 501,
+    "contains_env": false,
+    "contains_live_db": false
+  },
+  {
+    "step": "copy installed dependencies for isolated check",
+    "note": "Uses already installed vendor on same host; not a fresh network download or second physical computer."
+  }
+]

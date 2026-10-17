@@ -1,0 +1,1 @@
+<x-layout title="Lời mời không còn hiệu lực"><section class="card" data-page="error-410"><h1>410 — Lời mời không còn hiệu lực</h1><p>Liên kết đã hết hạn, bị thu hồi hoặc đã được sử dụng.</p><a href="{{ route('home') }}">Về trang chính</a></section></x-layout>

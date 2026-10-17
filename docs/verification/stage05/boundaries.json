@@ -1,0 +1,86 @@
+[
+  {
+    "step": "guest calendar redirects to login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": []
+  },
+  {
+    "step": "calendar CSRF required",
+    "http": 419,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar",
+    "errors": []
+  },
+  {
+    "step": "create active timeline work",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/tasks/01a14930-55b3-7297-a943-9ba56009398a",
+    "errors": []
+  },
+  {
+    "step": "create event P5 Active Timeline Slot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 Active Timeline Slot",
+    "verified": true
+  },
+  {
+    "step": "timeline with calculated bars",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/timeline?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "timeline bar and task navigation visible",
+    "verified": true
+  },
+  {
+    "step": "load event edit",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372/edit",
+    "errors": []
+  },
+  {
+    "step": "save event 01a14930-59ec-7355-ace6-a6c4f669b372",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Khoảng giờ này trùng lịch bận của bạn."
+    ]
+  },
+  {
+    "step": "reschedule conflict rolls back",
+    "verified": true
+  },
+  {
+    "step": "reassign real task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/tasks/01a14930-55b3-7297-a943-9ba56009398a",
+    "errors": []
+  },
+  {
+    "step": "new assignee receives exactly one notice",
+    "verified": true
+  },
+  {
+    "step": "load event edit",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372/edit",
+    "errors": []
+  },
+  {
+    "step": "save event 01a14930-59ec-7355-ace6-a6c4f669b372",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Chọn WORK đang mở được giao cho bạn và có quyền cập nhật trong đúng phạm vi."
+    ]
+  },
+  {
+    "step": "old assignee cannot reschedule",
+    "verified": false
+  }
+]

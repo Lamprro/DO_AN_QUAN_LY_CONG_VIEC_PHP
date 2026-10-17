@@ -1,0 +1,1725 @@
+{
+  "version": 3,
+  "tables": {
+    "users": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "name",
+        "type": "varchar",
+        "length": 120
+      },
+      {
+        "flag": "UQ",
+        "name": "email",
+        "type": "varchar",
+        "length": 255
+      },
+      {
+        "flag": "HASH",
+        "name": "password",
+        "type": "varchar",
+        "length": 255
+      },
+      {
+        "flag": "",
+        "name": "timezone",
+        "type": "varchar",
+        "length": 64
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 20
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "workspaces": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "name",
+        "type": "varchar",
+        "length": 160
+      },
+      {
+        "flag": "",
+        "name": "kind",
+        "type": "varchar",
+        "length": 20
+      },
+      {
+        "flag": "FK",
+        "name": "owner_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "timezone",
+        "type": "varchar",
+        "length": 64
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "roles": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "name",
+        "type": "varchar",
+        "length": 100
+      },
+      {
+        "flag": "",
+        "name": "permissions",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "is_system",
+        "type": "boolean",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "created_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "workspace_members": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "user_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "role_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 20
+      },
+      {
+        "flag": "",
+        "name": "joined_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "projects": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "parent_project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "name",
+        "type": "varchar",
+        "length": 180
+      },
+      {
+        "flag": "NULL",
+        "name": "description",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "created_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "NULL",
+        "name": "start_date",
+        "type": "date",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "deadline",
+        "type": "date",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "archived_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "github_connection_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "github_config",
+        "type": "json",
+        "length": null
+      }
+    ],
+    "project_members": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_member_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "role_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 20
+      },
+      {
+        "flag": "",
+        "name": "joined_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "tasks": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "parent_task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "task_type",
+        "type": "varchar",
+        "length": 20
+      },
+      {
+        "flag": "NULL",
+        "name": "group_label",
+        "type": "varchar",
+        "length": 120
+      },
+      {
+        "flag": "",
+        "name": "sort_order",
+        "type": "integer",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "code",
+        "type": "varchar",
+        "length": 40
+      },
+      {
+        "flag": "",
+        "name": "title",
+        "type": "varchar",
+        "length": 200
+      },
+      {
+        "flag": "NULL",
+        "name": "description",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "assignee_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "reviewer_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "created_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "priority",
+        "type": "varchar",
+        "length": 16
+      },
+      {
+        "flag": "NULL",
+        "name": "estimate_minutes",
+        "type": "integer",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "deadline_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "started_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "completed_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "archived_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "task_dependencies": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "predecessor_task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "successor_task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "dependency_type",
+        "type": "varchar",
+        "length": 4
+      },
+      {
+        "flag": "",
+        "name": "lag_minutes",
+        "type": "integer",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "task_blockers": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "reported_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "reason",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 20
+      },
+      {
+        "flag": "FK?",
+        "name": "resolved_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "resolved_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "calendar_events": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "user_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "plan_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "event_type",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "title",
+        "type": "varchar",
+        "length": 200
+      },
+      {
+        "flag": "NULL",
+        "name": "description",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "starts_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "ends_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "timezone",
+        "type": "varchar",
+        "length": 64
+      },
+      {
+        "flag": "",
+        "name": "all_day",
+        "type": "boolean",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "is_busy",
+        "type": "boolean",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "visibility",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "NULL",
+        "name": "participants",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "integration_connection_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "external_id",
+        "type": "varchar",
+        "length": 255
+      },
+      {
+        "flag": "",
+        "name": "source",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "time_entries": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "user_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "calendar_event_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "started_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "ended_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "note",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "ai_runs": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "requested_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "operation",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "trigger_type",
+        "type": "varchar",
+        "length": 40
+      },
+      {
+        "flag": "",
+        "name": "user_prompt",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "context_snapshot",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "UQ",
+        "name": "idempotency_key",
+        "type": "varchar",
+        "length": 100
+      },
+      {
+        "flag": "NULL",
+        "name": "started_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "finished_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "error_message",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "ai_calls": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "ai_run_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "step_key",
+        "type": "varchar",
+        "length": 60
+      },
+      {
+        "flag": "",
+        "name": "attempt_no",
+        "type": "integer",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "provider",
+        "type": "varchar",
+        "length": 40
+      },
+      {
+        "flag": "",
+        "name": "model",
+        "type": "varchar",
+        "length": 100
+      },
+      {
+        "flag": "",
+        "name": "request_payload",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "response_payload",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "input_tokens",
+        "type": "integer",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "output_tokens",
+        "type": "integer",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "NULL",
+        "name": "error_message",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "started_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "finished_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "plans": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "plan_group_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "parent_plan_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "version_no",
+        "type": "integer",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "ai_run_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "name",
+        "type": "varchar",
+        "length": 180
+      },
+      {
+        "flag": "",
+        "name": "data",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "is_active",
+        "type": "boolean",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "validation_errors",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "change_summary",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "created_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "reviewed_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "reviewed_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "applied_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "integration_connections": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "user_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "provider",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "account_ref",
+        "type": "varchar",
+        "length": 255
+      },
+      {
+        "flag": "SECRET",
+        "name": "credentials_encrypted",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "scopes",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 20
+      },
+      {
+        "flag": "NULL",
+        "name": "expires_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "notifications": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "recipient_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "type",
+        "type": "varchar",
+        "length": 60
+      },
+      {
+        "flag": "",
+        "name": "title",
+        "type": "varchar",
+        "length": 200
+      },
+      {
+        "flag": "",
+        "name": "body",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "UQ",
+        "name": "dedupe_key",
+        "type": "varchar",
+        "length": 200
+      },
+      {
+        "flag": "",
+        "name": "deliveries",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "read_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "report_snapshots": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "workspace_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "subject_user_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "generated_by",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "ai_run_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "scope",
+        "type": "varchar",
+        "length": 20
+      },
+      {
+        "flag": "",
+        "name": "period_start",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "period_end",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "metrics_json",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "ai_commentary",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "storage_key",
+        "type": "varchar",
+        "length": 512
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "task_activities": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "actor_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "type",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "NULL",
+        "name": "event_type",
+        "type": "varchar",
+        "length": 60
+      },
+      {
+        "flag": "NULL",
+        "name": "content",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "data",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "plan_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "source",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "deleted_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "github_logs": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "project_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK?",
+        "name": "task_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "integration_connection_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "delivery_id",
+        "type": "varchar",
+        "length": 255
+      },
+      {
+        "flag": "",
+        "name": "event_type",
+        "type": "varchar",
+        "length": 60
+      },
+      {
+        "flag": "",
+        "name": "repository_external_id",
+        "type": "varchar",
+        "length": 100
+      },
+      {
+        "flag": "NULL",
+        "name": "external_object_id",
+        "type": "varchar",
+        "length": 100
+      },
+      {
+        "flag": "NULL",
+        "name": "actor_external_id",
+        "type": "varchar",
+        "length": 100
+      },
+      {
+        "flag": "NULL",
+        "name": "summary",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "url",
+        "type": "varchar",
+        "length": 512
+      },
+      {
+        "flag": "",
+        "name": "payload",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "status",
+        "type": "varchar",
+        "length": 24
+      },
+      {
+        "flag": "",
+        "name": "attempt_count",
+        "type": "integer",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "error_message",
+        "type": "text",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "occurred_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "received_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "NULL",
+        "name": "processed_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ],
+    "user_settings": [
+      {
+        "flag": "PK",
+        "name": "id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "FK",
+        "name": "user_id",
+        "type": "uuid",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "settings",
+        "type": "json",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": null
+      },
+      {
+        "flag": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": null
+      }
+    ]
+  },
+  "foreign_keys": {
+    "user_settings": {
+      "user_id": "users"
+    },
+    "workspaces": {
+      "owner_id": "users"
+    },
+    "roles": {
+      "workspace_id": "workspaces",
+      "created_by": "users"
+    },
+    "workspace_members": {
+      "workspace_id": "workspaces",
+      "user_id": "users",
+      "role_id": "roles"
+    },
+    "integration_connections": {
+      "workspace_id": "workspaces",
+      "user_id": "users"
+    },
+    "projects": {
+      "workspace_id": "workspaces",
+      "parent_project_id": "projects",
+      "created_by": "users",
+      "github_connection_id": "integration_connections"
+    },
+    "project_members": {
+      "project_id": "projects",
+      "workspace_member_id": "workspace_members",
+      "role_id": "roles"
+    },
+    "tasks": {
+      "workspace_id": "workspaces",
+      "project_id": "projects",
+      "parent_task_id": "tasks",
+      "assignee_id": "users",
+      "reviewer_id": "users",
+      "created_by": "users"
+    },
+    "task_dependencies": {
+      "predecessor_task_id": "tasks",
+      "successor_task_id": "tasks"
+    },
+    "task_blockers": {
+      "task_id": "tasks",
+      "reported_by": "users",
+      "resolved_by": "users"
+    },
+    "ai_runs": {
+      "workspace_id": "workspaces",
+      "project_id": "projects",
+      "requested_by": "users"
+    },
+    "ai_calls": {
+      "ai_run_id": "ai_runs"
+    },
+    "plans": {
+      "parent_plan_id": "plans",
+      "workspace_id": "workspaces",
+      "project_id": "projects",
+      "ai_run_id": "ai_runs",
+      "created_by": "users",
+      "reviewed_by": "users"
+    },
+    "calendar_events": {
+      "user_id": "users",
+      "workspace_id": "workspaces",
+      "project_id": "projects",
+      "task_id": "tasks",
+      "plan_id": "plans",
+      "integration_connection_id": "integration_connections"
+    },
+    "time_entries": {
+      "task_id": "tasks",
+      "user_id": "users",
+      "calendar_event_id": "calendar_events"
+    },
+    "task_activities": {
+      "task_id": "tasks",
+      "actor_id": "users",
+      "plan_id": "plans"
+    },
+    "notifications": {
+      "workspace_id": "workspaces",
+      "recipient_id": "users",
+      "task_id": "tasks",
+      "project_id": "projects"
+    },
+    "report_snapshots": {
+      "workspace_id": "workspaces",
+      "project_id": "projects",
+      "subject_user_id": "users",
+      "generated_by": "users",
+      "ai_run_id": "ai_runs"
+    },
+    "github_logs": {
+      "project_id": "projects",
+      "task_id": "tasks",
+      "integration_connection_id": "integration_connections"
+    }
+  },
+  "unique": {
+    "users": [
+      [
+        "email"
+      ]
+    ],
+    "user_settings": [
+      [
+        "user_id"
+      ]
+    ],
+    "roles": [
+      [
+        "workspace_id",
+        "name"
+      ]
+    ],
+    "workspace_members": [
+      [
+        "workspace_id",
+        "user_id"
+      ]
+    ],
+    "project_members": [
+      [
+        "project_id",
+        "workspace_member_id"
+      ]
+    ],
+    "tasks": [
+      [
+        "workspace_id",
+        "code"
+      ]
+    ],
+    "task_dependencies": [
+      [
+        "predecessor_task_id",
+        "successor_task_id"
+      ]
+    ],
+    "ai_runs": [
+      [
+        "idempotency_key"
+      ]
+    ],
+    "ai_calls": [
+      [
+        "ai_run_id",
+        "step_key",
+        "attempt_no"
+      ]
+    ],
+    "plans": [
+      [
+        "plan_group_id",
+        "version_no"
+      ]
+    ],
+    "calendar_events": [
+      [
+        "integration_connection_id",
+        "external_id"
+      ]
+    ],
+    "notifications": [
+      [
+        "dedupe_key"
+      ]
+    ],
+    "github_logs": [
+      [
+        "integration_connection_id",
+        "delivery_id",
+        "project_id"
+      ]
+    ]
+  },
+  "indexes": {
+    "tasks": [
+      [
+        "workspace_id",
+        "project_id",
+        "status"
+      ],
+      [
+        "assignee_id",
+        "deadline_at"
+      ],
+      [
+        "parent_task_id",
+        "sort_order"
+      ]
+    ],
+    "projects": [
+      [
+        "workspace_id",
+        "status"
+      ]
+    ],
+    "workspace_members": [
+      [
+        "user_id",
+        "status"
+      ]
+    ],
+    "calendar_events": [
+      [
+        "user_id",
+        "starts_at"
+      ],
+      [
+        "task_id",
+        "starts_at"
+      ]
+    ],
+    "task_activities": [
+      [
+        "task_id",
+        "type",
+        "created_at",
+        "id"
+      ]
+    ],
+    "notifications": [
+      [
+        "recipient_id",
+        "read_at",
+        "created_at"
+      ]
+    ],
+    "plans": [
+      [
+        "workspace_id",
+        "project_id",
+        "status"
+      ]
+    ],
+    "ai_runs": [
+      [
+        "workspace_id",
+        "status"
+      ]
+    ],
+    "report_snapshots": [
+      [
+        "workspace_id",
+        "period_start"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+Final Stage 4 technical checks. Business verification uses the real HTTP/browser/SQLite/filesystem evidence separately.
+
+> php vendor/bin/pint app/Services/TaskService.php app/Services/TaskHistory.php app/Services/TaskTreeService.php app/Services/TaskWorkflowService.php app/Services/TaskAttachmentService.php app/Services/ProjectService.php app/Policies/TaskPolicy.php app/Http/Requests/TaskRequest.php app/Http/Requests/TaskActionRequest.php app/Http/Controllers/TaskController.php app/Http/Controllers/TaskWorkflowController.php app/Rules/AttachmentFormat.php config/tasks.php config/filesystems.php routes/task_workflow.php routes/web.php lang/vi/validation.php
+{"tool":"pint","result":"fixed","files":[{"path":"app\\Services\\TaskWorkflowService.php","fixers":["line_ending","unary_operator_spaces","whitespace_after_comma_in_array","braces_position","not_operator_with_successor_space","single_line_empty_body"]},{"path":"app\\Policies\\TaskPolicy.php","fixers":["method_argument_space","fully_qualified_strict_types","line_ending","unary_operator_spaces","whitespace_after_comma_in_array","braces_position","not_operator_with_successor_space","single_line_empty_body","ordered_imports"]},{"path":"lang\\vi\\validation.php","fixers":["line_ending","whitespace_after_comma_in_array","binary_operator_spaces"]}]}Exit code: 0
+
+> php vendor/bin/pint --test app/Services/TaskService.php app/Services/TaskHistory.php app/Services/TaskTreeService.php app/Services/TaskWorkflowService.php app/Services/TaskAttachmentService.php app/Services/ProjectService.php app/Policies/TaskPolicy.php app/Http/Requests/TaskRequest.php app/Http/Requests/TaskActionRequest.php app/Http/Controllers/TaskController.php app/Http/Controllers/TaskWorkflowController.php app/Rules/AttachmentFormat.php config/tasks.php config/filesystems.php routes/task_workflow.php routes/web.php lang/vi/validation.php
+{"tool":"pint","result":"passed"}Exit code: 0
+
+Source PHP lint: 141 files passed.
+
+> php D:/Composer/composer.phar validate --no-check-publish
+./composer.json is valid
+Exit code: 0
+
+> php artisan view:cache --no-ansi
+
+
+   INFO  Blade templates cached successfully.  
+
+Exit code: 0
+
+Compiled Blade PHP lint: 100 files passed.
+
+> php artisan route:cache --no-ansi
+
+   INFO  Routes cached successfully.  
+
+Exit code: 0
+
+> php artisan config:cache --no-ansi
+
+   INFO  Configuration cached successfully.  
+
+Exit code: 0
+
+> php artisan optimize:clear --no-ansi
+
+   INFO  Clearing cached bootstrap files.  
+
+  config ................................................................................................. 3.45ms DONE
+  cache ................................................................................................. 31.78ms DONE
+  compiled ............................................................................................... 4.51ms DONE
+  events ................................................................................................. 1.00ms DONE
+  routes ................................................................................................. 1.55ms DONE
+  views ................................................................................................. 70.82ms DONE
+
+Exit code: 0
+
+Laravel route:list exported 87 routes to routes.json.
+
+> git diff --check
+warning: in the working copy of 'README.md', CRLF will be replaced by LF the next time Git touches it
+Exit code: 0
+
+FK errors: []
+
+No PHPUnit/TestCase/mocks added or executed. Pint --test only checks formatting. ZIP/upload checks were performed on the real local PHP server.

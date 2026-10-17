@@ -1,0 +1,21 @@
+array:11 [
+  "database" => "D:/HeThong_PhanTichTaiChinh/DO_AN_QUAN_LY_CONG_VIEC_PHP/database/work_management.sqlite"
+  "workspace" => "01a147ef-90eb-7320-995b-56bb59aa4a36"
+  "project" => "01a147ef-90f8-723e-befa-0c8b12860645"
+  "task" => array:4 [
+    "id" => "01a147ef-9104-714d-a617-82a1938302f5"
+    "code" => "FLOW-001"
+    "title" => "Persisted update from live flow"
+    "status" => App\Enums\TaskStatus {#8027
+      +name: "IN_PROGRESS"
+      +value: "IN_PROGRESS"
+    }
+  ]
+  "parent" => "FLOW-GROUP"
+  "assignee" => "demo1@example.test"
+  "blocker_status" => "resolved"
+  "dependency" => "01a147ef-9112-718e-9f6c-c648c7789702"
+  "calendar_event" => "01a147ef-911e-73c7-a27f-248137485cbc"
+  "comment" => "01a147ef-9122-72f1-a25b-cda345b9e12a"
+  "history" => "01a147ef-9126-728f-ba60-3ca46a2a9e63"
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:17

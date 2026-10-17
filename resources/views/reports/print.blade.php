@@ -1,0 +1,1 @@
+<x-layout title="In báo cáo"><section class="card" data-page="report-print"><h1>Báo cáo {{ $metrics['workspace_name'] }}</h1><p>Dùng chức năng in của trình duyệt (Ctrl+P). Số liệu từ bản báo cáo đã lưu.</p><a href="{{ route('workspaces.reports.show',[$workspace,$snapshot]) }}">Về bản báo cáo</a></section>@include('reports._metrics')</x-layout>

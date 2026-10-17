@@ -1,0 +1,1 @@
+<x-layout title="Không có quyền"><section class="card" data-page="error-403"><h1>403 — Không có quyền</h1><p>Bạn không có quyền thực hiện thao tác này.</p><a href="{{ route('home') }}">Về trang chính</a></section></x-layout>

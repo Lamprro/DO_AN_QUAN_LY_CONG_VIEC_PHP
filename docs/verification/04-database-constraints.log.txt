@@ -1,0 +1,69 @@
+array:3 [
+  "operation" => "second active plan"
+  "exception" => "Illuminate\Database\UniqueConstraintViolationException"
+  "message" => "SQLSTATE[23000]: Integrity constraint violation: 19 UNIQUE constraint failed: plans.active_group_key (Connection: sqlite, Database: D:/HeThong_PhanTichTaiChinh/DO_AN_QUAN_LY_CONG_VIEC_PHP/database/work_management.sqlite, SQL: insert into "plans" ("status", "is_active", "version_no", "workspace_id", "project_id", "plan_group_id", "name", "data", "applied_at", "id", "created_at") values (approved, 1, 4, 01a147ef-90eb-7320-995b-56bb59aa4a36, 01a147ef-90f8-723e-befa-0c8b12860645, 8cde2dc5-b545-5b56-bf87-003128198c91, Storage constraint review (not approval workflow), {"schema_version":1,"verification":"direct_database_only"}, 2026-10-17 03:40:35, 01a147f2-7ab5-71b8-9c63-02fb96ddaf61, 2026-10-17 03:40:35))"
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:11
+array:3 [
+  0 => {#7823
+    +"version_no": 1
+    +"status": "draft"
+    +"is_active": 0
+    +"active_group_key": null
+  }
+  1 => {#7828
+    +"version_no": 2
+    +"status": "draft"
+    +"is_active": 0
+    +"active_group_key": null
+  }
+  2 => {#7835
+    +"version_no": 3
+    +"status": "approved"
+    +"is_active": 1
+    +"active_group_key": "8cde2dc5-b545-5b56-bf87-003128198c91"
+  }
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:13
+array:3 [
+  "operation" => "second running timer"
+  "exception" => "Illuminate\Database\UniqueConstraintViolationException"
+  "message" => "SQLSTATE[23000]: Integrity constraint violation: 19 UNIQUE constraint failed: time_entries.running_user_key (Connection: sqlite, Database: D:/HeThong_PhanTichTaiChinh/DO_AN_QUAN_LY_CONG_VIEC_PHP/database/work_management.sqlite, SQL: insert into "time_entries" ("task_id", "user_id", "started_at", "id", "updated_at", "created_at") values (01a147ef-9104-714d-a617-82a1938302f5, 01a147ea-079c-7064-8116-a09b61116d5b, 2026-10-17 03:40:35, 01a147f2-7abf-720b-9ebd-752734cd843b, 2026-10-17 03:40:35, 2026-10-17 03:40:35))"
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:19
+{#7812
+  +"id": "01a147f2-7abb-72a8-8ee5-63e2515c85ee"
+  +"started_at": "2026-10-17 03:39:35"
+  +"ended_at": null
+  +"running_user_key": "01a147ea-079c-7064-8116-a09b61116d5b"
+} // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:21
+{#7844
+  +"id": "01a147f2-7abb-72a8-8ee5-63e2515c85ee"
+  +"ended_at": "2026-10-17 03:40:35"
+  +"running_user_key": null
+} // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:23
+array:4 [
+  "connection_status" => "disabled"
+  "plaintext_present_in_database" => false
+  "serialized_fields" => array:8 [
+    0 => "status"
+    1 => "scopes"
+    2 => "workspace_id"
+    3 => "account_ref"
+    4 => "provider"
+    5 => "id"
+    6 => "updated_at"
+    7 => "created_at"
+  ]
+  "decrypted_fixture_value" => "not-real-fixture-token"
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:26
+array:3 [
+  "operation" => "invalid raw SQL foreign key"
+  "exception" => "Illuminate\Database\QueryException"
+  "message" => "SQLSTATE[23000]: Integrity constraint violation: 19 FOREIGN KEY constraint failed (Connection: sqlite, Database: D:/HeThong_PhanTichTaiChinh/DO_AN_QUAN_LY_CONG_VIEC_PHP/database/work_management.sqlite, SQL: insert into "workspace_members" ("id", "workspace_id", "user_id", "role_id", "status", "joined_at") values (f9430ac7-9a52-48d5-82e8-955d742d2298, baa18306-6703-41e2-baac-edda050bf054, 01a147ea-079c-7064-8116-a09b61116d5b, 01a147ea-0b22-73a9-9e65-2d6e076846f8, active, 2026-10-17 03:40:35))"
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:31
+array:2 [
+  "foreign_key_check" => []
+  "persisted_task" => {#7835
+    +"code": "FLOW-001"
+    +"title": "Persisted update from live flow"
+    +"estimate_minutes": 45
+  }
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:33

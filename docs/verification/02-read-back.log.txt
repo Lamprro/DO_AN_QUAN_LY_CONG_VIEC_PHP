@@ -1,0 +1,27 @@
+{#6811
+  +"id": "01a147ef-9104-714d-a617-82a1938302f5"
+  +"code": "FLOW-001"
+  +"title": "Persisted update from live flow"
+  +"status": "IN_PROGRESS"
+  +"estimate_minutes": 45
+  +"project": "Review Database Flow"
+  +"workspace": "Review Flow - Stage 01"
+  +"assignee": "demo1@example.test"
+} // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:1
+array:4 [
+  "child_codes" => array:2 [
+    0 => "FLOW-001"
+    1 => "FLOW-002"
+  ]
+  "calendar_task_code" => "FLOW-001"
+  "blocker" => "resolved"
+  "activities" => array:2 [
+    0 => "COMMENT"
+    1 => "HISTORY"
+  ]
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:3
+array:3 [
+  "foreign_key_check" => []
+  "domain_tables" => 20
+  "domain_foreign_keys" => 61
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:4

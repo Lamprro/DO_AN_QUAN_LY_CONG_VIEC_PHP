@@ -1,0 +1,272 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create workspace",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481",
+    "errors": []
+  },
+  {
+    "step": "create project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d",
+    "errors": []
+  },
+  {
+    "step": "register worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "invite worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/members",
+    "errors": []
+  },
+  {
+    "step": "accept worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481",
+    "errors": []
+  },
+  {
+    "step": "project member worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/members",
+    "errors": []
+  },
+  {
+    "step": "register reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "invite reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/members",
+    "errors": []
+  },
+  {
+    "step": "accept reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481",
+    "errors": []
+  },
+  {
+    "step": "project member reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/members",
+    "errors": []
+  },
+  {
+    "step": "outsider login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create P6 GROUP",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-d41c-7144-b18b-00bb7fa1eee6",
+    "errors": []
+  },
+  {
+    "step": "task exists P6 GROUP",
+    "verified": true
+  },
+  {
+    "step": "create P6 Work A",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-d8e6-727c-a87a-7d4fbb6872da",
+    "errors": []
+  },
+  {
+    "step": "task exists P6 Work A",
+    "verified": true
+  },
+  {
+    "step": "create P6 Work B",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-dc90-703b-838a-4c571cdb42d8",
+    "errors": []
+  },
+  {
+    "step": "task exists P6 Work B",
+    "verified": true
+  },
+  {
+    "step": "create P6 Work Unknown",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-e06e-701a-8dc2-25bdcd91a54b",
+    "errors": []
+  },
+  {
+    "step": "task exists P6 Work Unknown",
+    "verified": true
+  },
+  {
+    "step": "create P6 Cancelled",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-e40c-7138-8472-42dc8afb7a55",
+    "errors": []
+  },
+  {
+    "step": "task exists P6 Cancelled",
+    "verified": true
+  },
+  {
+    "step": "create P6 Milestone",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-e73a-7216-b571-bb7d386ca27a",
+    "errors": []
+  },
+  {
+    "step": "task exists P6 Milestone",
+    "verified": true
+  },
+  {
+    "step": "cancel actual task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create slot P6 Public A",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/calendar/01a149ff-eede-736c-a3f5-af2cc5728435",
+    "errors": []
+  },
+  {
+    "step": "create slot P6 Public B",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/calendar/01a149ff-f249-707e-ba06-63afdb751aed",
+    "errors": []
+  },
+  {
+    "step": "create slot P6 Private B",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/calendar/01a149ff-f52f-7178-a795-4b95c47fe65a",
+    "errors": []
+  },
+  {
+    "step": "status A IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "status A REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "status A DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "dashboard real form and current metrics",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/dashboard?from=2026-10-01&to=2026-11-01&project_id=01a149ff-a982-70a4-ad68-56f774575e1d&subject_user_id=&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "WORK only inventory",
+    "verified": true
+  },
+  {
+    "step": "snapshot real POST",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a00-032c-7133-8c8d-7a93ce386fff",
+    "errors": []
+  },
+  {
+    "step": "server metrics match known data",
+    "verified": true,
+    "inventory": {
+      "work_count": 4,
+      "status_counts": {
+        "TODO": 2,
+        "IN_PROGRESS": 0,
+        "REVIEW": 0,
+        "DONE": 1,
+        "CANCELLED": 1
+      },
+      "overdue": 1,
+      "open_blockers": 0,
+      "blocked_tasks": 0,
+      "estimate_minutes": 180,
+      "estimate_unknown": 1,
+      "progress": {
+        "method": "count",
+        "total": 3,
+        "done": 1,
+        "percent": 33.3,
+        "work_count": 3
+      }
+    },
+    "period": {
+      "completed_work": 1,
+      "planned_minutes": 120,
+      "actual_minutes": null,
+      "running_entries_excluded": 0
+    }
+  },
+  {
+    "step": "no GROUP/MILESTONE/cancel estimate double count",
+    "verified": true
+  },
+  {
+    "step": "private calendar source excluded for Owner",
+    "verified": true
+  },
+  {
+    "step": "member sees live dashboard",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/dashboard?from=2026-10-01&to=2026-11-01&project_id=01a149ff-a982-70a4-ad68-56f774575e1d&subject_user_id=&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "member cannot create snapshot",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports",
+    "errors": []
+  },
+  {
+    "step": "another recipient cannot view snapshot",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a00-032c-7133-8c8d-7a93ce386fff",
+    "errors": []
+  },
+  {
+    "step": "outside workspace cannot view dashboard",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/dashboard?from=2026-10-01&to=2026-11-01&project_id=01a149ff-a982-70a4-ad68-56f774575e1d&subject_user_id=&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "print view",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a00-032c-7133-8c8d-7a93ce386fff/print",
+    "errors": []
+  },
+  {
+    "step": "CSV real export",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a00-032c-7133-8c8d-7a93ce386fff/export",
+    "errors": []
+  },
+  {
+    "step": "CSV prevents formula evaluation",
+    "verified": false
+  }
+]

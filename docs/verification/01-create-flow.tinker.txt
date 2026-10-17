@@ -1,0 +1,17 @@
+$owner = App\Models\User::where('email', 'demo1@example.test')->firstOrFail();
+$workspace = App\Models\Workspace::firstOrCreate(['name' => 'Review Flow - Stage 01', 'owner_id' => $owner->id], ['kind' => 'team']);
+$role = App\Models\Role::firstOrCreate(['workspace_id' => $workspace->id, 'name' => 'Owner'], ['permissions' => config('permissions.defaults.Owner'), 'is_system' => true, 'created_by' => $owner->id]);
+$member = App\Models\WorkspaceMember::firstOrCreate(['workspace_id' => $workspace->id, 'user_id' => $owner->id], ['role_id' => $role->id, 'joined_at' => now()]);
+$project = App\Models\Project::firstOrCreate(['workspace_id' => $workspace->id, 'name' => 'Review Database Flow'], ['created_by' => $owner->id, 'status' => 'active']);
+App\Models\ProjectMember::firstOrCreate(['project_id' => $project->id, 'workspace_member_id' => $member->id], ['role_id' => $role->id, 'joined_at' => now()]);
+$group = App\Models\Task::firstOrCreate(['workspace_id' => $workspace->id, 'code' => 'FLOW-GROUP'], ['project_id' => $project->id, 'created_by' => $owner->id, 'title' => 'Review foundation graph', 'task_type' => 'GROUP']);
+$task = App\Models\Task::firstOrCreate(['workspace_id' => $workspace->id, 'code' => 'FLOW-001'], ['project_id' => $project->id, 'parent_task_id' => $group->id, 'created_by' => $owner->id, 'assignee_id' => $owner->id, 'title' => 'Create from live Artisan flow', 'estimate_minutes' => 45]);
+$task->update(['title' => 'Persisted update from live flow', 'status' => 'IN_PROGRESS', 'started_at' => now()]);
+$next = App\Models\Task::firstOrCreate(['workspace_id' => $workspace->id, 'code' => 'FLOW-002'], ['project_id' => $project->id, 'parent_task_id' => $group->id, 'created_by' => $owner->id, 'title' => 'Successor work']);
+$dependency = App\Models\TaskDependency::firstOrCreate(['predecessor_task_id' => $task->id, 'successor_task_id' => $next->id]);
+$blocker = App\Models\TaskBlocker::firstOrCreate(['task_id' => $task->id, 'reason' => 'Manual review of blocker persistence'], ['reported_by' => $owner->id]);
+$blocker->update(['status' => 'resolved', 'resolved_by' => $owner->id, 'resolved_at' => now()]);
+$event = App\Models\CalendarEvent::firstOrCreate(['task_id' => $task->id, 'title' => 'Live flow task slot'], ['workspace_id' => $workspace->id, 'project_id' => $project->id, 'user_id' => $owner->id, 'event_type' => 'TASK_BLOCK', 'starts_at' => '2026-10-26 02:00:00', 'ends_at' => '2026-10-26 03:00:00', 'is_busy' => true, 'visibility' => 'project']);
+$comment = App\Models\TaskActivity::firstOrCreate(['task_id' => $task->id, 'type' => 'COMMENT', 'content' => 'Actual persisted review comment'], ['actor_id' => $owner->id]);
+$history = App\Models\TaskActivity::firstOrCreate(['task_id' => $task->id, 'type' => 'HISTORY', 'event_type' => 'manual_database_review'], ['actor_id' => $owner->id, 'source' => 'system', 'data' => ['verification' => 'stage_01_live_flow']]);
+dump(['database' => DB::connection()->getDatabaseName(), 'workspace' => $workspace->id, 'project' => $project->id, 'task' => $task->fresh()->only(['id','code','title','status']), 'parent' => $task->fresh()->parent->code, 'assignee' => $task->fresh()->assignee->email, 'blocker_status' => $blocker->fresh()->status->value, 'dependency' => $dependency->id, 'calendar_event' => $event->id, 'comment' => $comment->id, 'history' => $history->id]);

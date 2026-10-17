@@ -1,0 +1,208 @@
+[
+  {
+    "step": "old assignee reschedule truly left original UTC values",
+    "verified": true
+  },
+  {
+    "step": "restore task assignment",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/tasks/01a14930-55b3-7297-a943-9ba56009398a",
+    "errors": []
+  },
+  {
+    "step": "event content escaped",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372",
+    "errors": []
+  },
+  {
+    "step": "event description escaped",
+    "verified": true
+  },
+  {
+    "step": "change display timezone via profile",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": []
+  },
+  {
+    "step": "event renders in UTC",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372",
+    "errors": []
+  },
+  {
+    "step": "same instant different timezone",
+    "verified": true
+  },
+  {
+    "step": "restore display timezone",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/profile",
+    "errors": []
+  },
+  {
+    "step": "create workspace-only custom role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/roles",
+    "errors": []
+  },
+  {
+    "step": "workspace role view-only",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/members",
+    "errors": []
+  },
+  {
+    "step": "project calendar via independent project permissions",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "workspace-only content hidden but project slot shown",
+    "verified": true
+  },
+  {
+    "step": "project permission allows event form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": []
+  },
+  {
+    "step": "create form remains available through project rights",
+    "verified": true
+  },
+  {
+    "step": "restore workspace Manager",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/members",
+    "errors": []
+  },
+  {
+    "step": "create event P5 Secret Task Slot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14931-3563-7012-aab6-9fe452598671",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 Secret Task Slot",
+    "verified": true
+  },
+  {
+    "step": "private task block hidden from timeline",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/timeline?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "timeline private block no ID/title",
+    "verified": true
+  },
+  {
+    "step": "busy conflicts across workspaces",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b21-713f-be50-1dc2ce5e2520/calendar/create",
+    "errors": [
+      "Khoảng giờ này trùng lịch bận của bạn."
+    ]
+  },
+  {
+    "step": "cross-workspace conflict inserted nothing",
+    "verified": true
+  },
+  {
+    "step": "version for scope/type guard",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372/edit",
+    "errors": []
+  },
+  {
+    "step": "type change denied",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Không chuyển phạm vi, task hoặc loại của sự kiện đã tạo."
+    ]
+  },
+  {
+    "step": "type/task relation unchanged",
+    "verified": true
+  },
+  {
+    "step": "too many participants",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Participants tối đa 20 phần tử.",
+      "Participants.0 bị trùng.",
+      "Participants.1 bị trùng.",
+      "Participants.2 bị trùng.",
+      "Participants.3 bị trùng."
+    ]
+  },
+  {
+    "step": "too many participants no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "TASK_BLOCK all-day",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Khung làm task cần giờ bắt đầu/kết thúc cụ thể."
+    ]
+  },
+  {
+    "step": "TASK_BLOCK all-day no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "archive project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb",
+    "errors": []
+  },
+  {
+    "step": "archived project event edit forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a14930-59ec-7355-ace6-a6c4f669b372/edit",
+    "errors": []
+  },
+  {
+    "step": "archived project create forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar",
+    "errors": []
+  },
+  {
+    "step": "restore project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb",
+    "errors": []
+  },
+  {
+    "step": "browser form persisted real UTC row",
+    "verified": true,
+    "event": [
+      {
+        "id": "01a1492e-84fd-71d0-8fa8-e951e14238af",
+        "starts_at": "2026-12-07 08:00:00",
+        "ends_at": "2026-12-07 09:00:00",
+        "is_busy": 1,
+        "source": "manual"
+      }
+    ]
+  },
+  {
+    "step": "FK integrity after boundary flows",
+    "verified": true
+  },
+  {
+    "step": "Stage 5 boundaries complete",
+    "workspace_id": "01a1492c-68e5-729b-8df8-6e4900a93d04",
+    "project_id": "01a1492c-6ce4-737a-9cb7-39e9a48b30fb"
+  }
+]

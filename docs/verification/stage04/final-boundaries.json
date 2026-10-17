@@ -1,0 +1,176 @@
+[
+  {
+    "step": "natural FS minute elapsed",
+    "verified": true,
+    "observed_epoch": 1792226791,
+    "ready_epoch": 1792226562
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "real one minute lag now permits start",
+    "verified": true
+  },
+  {
+    "step": "stored start after lag threshold",
+    "verified": true
+  },
+  {
+    "step": "dependency foreign project rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": [
+      "Chọn WORK/MILESTONE chưa lưu trữ cùng phạm vi."
+    ]
+  },
+  {
+    "step": "foreign dependency not written",
+    "verified": true
+  },
+  {
+    "step": "blocker id under wrong task rejected",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4/blockers/01a14903-a520-735d-a239-8378f87ca96d",
+    "errors": []
+  },
+  {
+    "step": "workflow CSRF missing",
+    "http": 419,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4/status",
+    "errors": []
+  },
+  {
+    "step": "status TODO to DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Chuyển trạng thái không hợp lệ."
+    ]
+  },
+  {
+    "step": "invalid direct TODO to DONE transition denied",
+    "verified": true
+  },
+  {
+    "step": "GROUP cannot archive before active children",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-35af-736f-ba32-801c2fa936e5",
+    "errors": [
+      "Hãy lưu trữ task con trước khi lưu trữ GROUP."
+    ]
+  },
+  {
+    "step": "GROUP remains active",
+    "verified": true
+  },
+  {
+    "step": "archive bottom-up",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-3b6d-71ce-8b8c-4107648b5e13",
+    "errors": []
+  },
+  {
+    "step": "archive bottom-up",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-40f2-729d-ab89-6a52a36bf665",
+    "errors": []
+  },
+  {
+    "step": "archive bottom-up",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-3874-729e-bf0a-d59a9f95032c",
+    "errors": []
+  },
+  {
+    "step": "archive bottom-up",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-35af-736f-ba32-801c2fa936e5",
+    "errors": []
+  },
+  {
+    "step": "cannot restore child before archived parent",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-3b6d-71ce-8b8c-4107648b5e13/restore",
+    "errors": []
+  },
+  {
+    "step": "restore top-down",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-35af-736f-ba32-801c2fa936e5",
+    "errors": []
+  },
+  {
+    "step": "restore top-down",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-3874-729e-bf0a-d59a9f95032c",
+    "errors": []
+  },
+  {
+    "step": "restore top-down",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-3b6d-71ce-8b8c-4107648b5e13",
+    "errors": []
+  },
+  {
+    "step": "restore top-down",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14909-40f2-729d-ab89-6a52a36bf665",
+    "errors": []
+  },
+  {
+    "step": "personal task workflow fixture",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b21-713f-be50-1dc2ce5e2520/tasks/01a1490a-b840-7129-841d-070f71d9c43a",
+    "errors": []
+  },
+  {
+    "step": "personal status IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "personal state persisted IN_PROGRESS",
+    "verified": true
+  },
+  {
+    "step": "personal status REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "personal state persisted REVIEW",
+    "verified": true
+  },
+  {
+    "step": "personal status DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "personal state persisted DONE",
+    "verified": true
+  },
+  {
+    "step": "personal tree page",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b21-713f-be50-1dc2ce5e2520/tasks/tree",
+    "errors": []
+  },
+  {
+    "step": "final FK check",
+    "verified": true
+  },
+  {
+    "step": "all final boundaries complete",
+    "workspace_id": "01a14903-52da-70c8-9043-ffdc3072377a",
+    "project_id": "01a14903-560f-736d-bc79-b18f61ef8850",
+    "task_id": "01a14904-5baa-7366-855f-8f0c4809fcc4"
+  }
+]

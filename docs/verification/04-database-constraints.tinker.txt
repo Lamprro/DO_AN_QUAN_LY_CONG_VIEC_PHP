@@ -1,0 +1,18 @@
+$task = App\Models\Task::where('code','FLOW-001')->firstOrFail();
+$groupId = Ramsey\Uuid\Uuid::uuid5(Ramsey\Uuid\Uuid::NAMESPACE_URL, 'stage01-direct-plan-constraint')->toString();
+$attrs = ['workspace_id' => $task->workspace_id, 'project_id' => $task->project_id, 'plan_group_id' => $groupId, 'name' => 'Storage constraint review (not approval workflow)', 'data' => ['schema_version' => 1, 'verification' => 'direct_database_only']];
+App\Models\Plan::firstOrCreate(['plan_group_id'=>$groupId,'version_no'=>1], $attrs);
+App\Models\Plan::firstOrCreate(['plan_group_id'=>$groupId,'version_no'=>2], $attrs);
+App\Models\Plan::firstOrCreate(['plan_group_id'=>$groupId,'version_no'=>3], array_merge($attrs,['status'=>'approved','is_active'=>true,'applied_at'=>now()]));
+try { App\Models\Plan::create(array_merge($attrs,['version_no'=>4,'status'=>'approved','is_active'=>true,'applied_at'=>now()])); dump('SECOND ACTIVE INSERT COMPLETED'); } catch(Throwable $e) { dump(['operation'=>'second active plan', 'exception'=>get_class($e), 'message'=>$e->getMessage()]); }
+dump(DB::table('plans')->where('plan_group_id',$groupId)->get(['version_no','status','is_active','active_group_key'])->all());
+$timer = App\Models\TimeEntry::create(['task_id'=>$task->id,'user_id'=>$task->assignee_id,'started_at'=>now()->subMinute()]);
+try { App\Models\TimeEntry::create(['task_id'=>$task->id,'user_id'=>$task->assignee_id,'started_at'=>now()]); dump('SECOND TIMER INSERT COMPLETED'); } catch(Throwable $e) { dump(['operation'=>'second running timer', 'exception'=>get_class($e), 'message'=>$e->getMessage()]); }
+dump(DB::table('time_entries')->where('id',$timer->id)->first(['id','started_at','ended_at','running_user_key']));
+$timer->update(['ended_at'=>now()]);
+dump(DB::table('time_entries')->where('id',$timer->id)->first(['id','ended_at','running_user_key']));
+$connection = App\Models\IntegrationConnection::firstOrCreate(['workspace_id'=>$task->workspace_id,'account_ref'=>'manual-storage-review'],['provider'=>'github','status'=>'disabled','credentials_encrypted'=>['access_token'=>'not-real-fixture-token'],'scopes'=>[]]);
+$raw = DB::table('integration_connections')->where('id',$connection->id)->value('credentials_encrypted');
+dump(['connection_status'=>$connection->status->value,'plaintext_present_in_database'=>str_contains($raw,'not-real-fixture-token'),'serialized_fields'=>array_keys($connection->toArray()),'decrypted_fixture_value'=>$connection->fresh()->credentials_encrypted['access_token']]);
+try { DB::table('workspace_members')->insert(['id'=>(string)Str::uuid(),'workspace_id'=>(string)Str::uuid(),'user_id'=>$task->created_by,'role_id'=>App\Models\Role::first()->id,'status'=>'active','joined_at'=>now()]); dump('INVALID FK INSERT COMPLETED'); } catch(Throwable $e) { dump(['operation'=>'invalid raw SQL foreign key','exception'=>get_class($e),'message'=>$e->getMessage()]); }
+dump(['foreign_key_check'=>DB::select('PRAGMA foreign_key_check'),'persisted_task'=>DB::table('tasks')->where('id',$task->id)->first(['code','title','estimate_minutes'])]);

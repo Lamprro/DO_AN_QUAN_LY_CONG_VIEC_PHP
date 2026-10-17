@@ -1,0 +1,5 @@
+<x-layout title="Lời mời workspace"><section class="card narrow" data-page="invitation-show"><h1>Lời mời tham gia workspace</h1><p>Workspace: <strong>{{ $invitation['workspace_name'] }}</strong></p><p>Email nhận: {{ $invitation['email'] }}</p><p>Vai trò: {{ $invitation['role_name'] }}</p><p>Hết hạn: {{ \Carbon\CarbonImmutable::createFromTimestamp($invitation['expires_at'])->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y H:i') }}</p>
+@auth
+@if(mb_strtolower(auth()->user()->email) === $invitation['email'])<form action="{{ route('invitations.accept',$token) }}" method="POST" data-form="invitation-accept">@csrf<button type="submit">Chấp nhận lời mời</button></form>@else<p class="error">Bạn đang đăng nhập bằng email khác. Hãy đăng xuất và đăng nhập đúng email nhận lời mời.</p>@endif
+@else<p>Đăng nhập hoặc đăng ký bằng đúng email nhận lời mời.</p><div class="actions"><a class="button" href="{{ route('login') }}">Đăng nhập</a><a href="{{ route('register') }}">Đăng ký</a></div>@endauth
+</section></x-layout>

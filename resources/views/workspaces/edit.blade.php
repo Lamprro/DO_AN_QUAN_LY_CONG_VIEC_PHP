@@ -1,0 +1,1 @@
+<x-layout title="Sửa workspace"><section class="card narrow"><h1>Sửa workspace</h1><form action="{{ route('workspaces.update',$workspace) }}" method="POST" data-form="workspace-edit">@csrf @method('PATCH') @include('workspaces._form')</form></section></x-layout>

@@ -1,0 +1,1 @@
+<x-layout title="Thao tác quá nhanh"><section class="card" data-page="error-429"><h1>429 — Thao tác quá nhanh</h1><p>Vui lòng chờ trước khi thử lại.</p><a href="{{ route('home') }}">Về trang chính</a></section></x-layout>

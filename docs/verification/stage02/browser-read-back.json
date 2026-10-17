@@ -1,0 +1,30 @@
+{
+  "id": "01a14800-59dd-705f-9db7-b4ad96f57b13",
+  "name": "Review Phase 2 Browser",
+  "kind": "team",
+  "owner_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+  "roles": [
+    {
+      "name": "Manager",
+      "is_system": 1
+    },
+    {
+      "name": "Member",
+      "is_system": 1
+    },
+    {
+      "name": "Owner",
+      "is_system": 1
+    },
+    {
+      "name": "Viewer",
+      "is_system": 1
+    }
+  ],
+  "members": [
+    {
+      "user_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+      "status": "active"
+    }
+  ]
+}

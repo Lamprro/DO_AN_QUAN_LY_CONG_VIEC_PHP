@@ -1,0 +1,18 @@
+{
+  "project": {
+    "id": "01a14815-df34-700b-973b-b4e9e52559f7",
+    "name": "Review Phase 3 Browser",
+    "workspace_id": "01a14800-59dd-705f-9db7-b4ad96f57b13",
+    "status": "draft"
+  },
+  "task": {
+    "id": "01a14816-2cb4-72ce-850d-b3639a729691",
+    "workspace_id": "01a14800-59dd-705f-9db7-b4ad96f57b13",
+    "project_id": "01a14815-df34-700b-973b-b4e9e52559f7",
+    "code": "BROWSER-P3-001",
+    "title": "CRUD Task — đã sửa qua Blade",
+    "status": "TODO",
+    "task_type": "WORK",
+    "estimate_minutes": 75
+  }
+}

@@ -1,0 +1,171 @@
+[
+  {
+    "step": "login for focused verification",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login for focused verification",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login for focused verification",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "assign qualified reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "qualified reviewer persisted",
+    "verified": true
+  },
+  {
+    "step": "reject new grant to Viewer reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d/edit",
+    "errors": [
+      "Chọn người đang hoạt động và có quyền xem task trong phạm vi này."
+    ]
+  },
+  {
+    "step": "invalid reviewer grant not persisted",
+    "verified": true
+  },
+  {
+    "step": "Vietnamese numeric validation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/create",
+    "errors": [
+      "Ước lượng thời gian không được nhỏ hơn 0."
+    ]
+  },
+  {
+    "step": "Vietnamese prohibited field validation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/create",
+    "errors": [
+      "Không được gửi trường trạng thái trong thao tác này."
+    ]
+  },
+  {
+    "step": "literal zero search",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks?q=0&sort=title&direction=asc",
+    "errors": []
+  },
+  {
+    "step": "literal zero search matches database",
+    "verified": true
+  },
+  {
+    "step": "project member from another project rejected",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-f496-7077-9b80-a86c95be5db9/members/01a14813-ee8f-700e-b113-0c0064ee80d4",
+    "errors": []
+  },
+  {
+    "step": "create role with create but no project view",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/roles",
+    "errors": []
+  },
+  {
+    "step": "assign limited workspace role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/members",
+    "errors": []
+  },
+  {
+    "step": "create form requires project view as well as create",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/create",
+    "errors": []
+  },
+  {
+    "step": "direct project creation same boundary",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects",
+    "errors": []
+  },
+  {
+    "step": "no orphan project created",
+    "verified": true
+  },
+  {
+    "step": "restore workspace Viewer role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/members",
+    "errors": []
+  },
+  {
+    "step": "create delegated project role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/roles",
+    "errors": []
+  },
+  {
+    "step": "assign delegate in project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "delegated project management allowed",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/members",
+    "errors": []
+  },
+  {
+    "step": "delegate cannot grant Manager",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Không được cấp hoặc quản lý vai trò vượt quyền hiện có trong project."
+    ]
+  },
+  {
+    "step": "target Viewer role preserved",
+    "verified": true
+  },
+  {
+    "step": "delegate cannot change own project role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Không sửa quyền Owner workspace hoặc chính mình qua quản lý project."
+    ]
+  },
+  {
+    "step": "restore project Member role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "deletion blocked for existing history",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/tasks/01a147ea-0b40-73fc-9424-59b4f64fd3e3",
+    "errors": [
+      "Task có dữ liệu liên quan; hãy dùng lưu trữ."
+    ]
+  },
+  {
+    "step": "historical task retained",
+    "verified": true
+  },
+  {
+    "step": "final FK integrity",
+    "verified": true
+  },
+  {
+    "step": "targeted walkthrough complete"
+  }
+]

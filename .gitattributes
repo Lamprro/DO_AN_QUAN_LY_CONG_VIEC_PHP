@@ -9,3 +9,6 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+# Raw Artisan logs retain terminal whitespace as evidence.
+docs/verification/**/*.txt whitespace=-blank-at-eol

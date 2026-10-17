@@ -1,0 +1,77 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "cancel review project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "cancelled project read still allowed",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "cancelled project task edit forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d/edit",
+    "errors": []
+  },
+  {
+    "step": "cancelled project task POST forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks",
+    "errors": []
+  },
+  {
+    "step": "cancelled project task archive forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d/archive",
+    "errors": []
+  },
+  {
+    "step": "cancelled project invalid writes absent",
+    "verified": true
+  },
+  {
+    "step": "reopen project to draft",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "task edit allowed after reopen",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d/edit",
+    "errors": []
+  },
+  {
+    "step": "create project Phase3 Completed Empty 1792211059",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a1481a-9503-72b3-8193-395f9bb1c186",
+    "errors": []
+  },
+  {
+    "step": "completed project blocks task create",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a1481a-9503-72b3-8193-395f9bb1c186/tasks/create",
+    "errors": []
+  },
+  {
+    "step": "activity-only deletion not exercised",
+    "reason": "No pre-existing fixture without other related data"
+  },
+  {
+    "step": "final FK check",
+    "verified": true
+  },
+  {
+    "step": "closed-project walkthrough complete"
+  }
+]

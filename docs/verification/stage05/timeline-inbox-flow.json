@@ -1,0 +1,263 @@
+[
+  {
+    "step": "Resume after adding task navigation to Timeline rows"
+  },
+  {
+    "step": "Timeline actual task blocks",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/timeline?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "timeline uses persisted task block",
+    "verified": true
+  },
+  {
+    "step": "week view",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=week&date=2026-12-07",
+    "errors": []
+  },
+  {
+    "step": "week has 7 day headings",
+    "verified": true
+  },
+  {
+    "step": "month view",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=month&date=2026-12-07",
+    "errors": []
+  },
+  {
+    "step": "month has 31 day headings",
+    "verified": true
+  },
+  {
+    "step": "oversized date range invalid",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=month&date=2026-12-07",
+    "errors": [
+      "Phạm vi phải tăng, tối đa 93 ngày; ngày kết thúc không bao gồm."
+    ]
+  },
+  {
+    "step": "version before concurrent stale form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-649b-737b-83df-998f393a0316/edit",
+    "errors": []
+  },
+  {
+    "step": "load event edit",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-649b-737b-83df-998f393a0316/edit",
+    "errors": []
+  },
+  {
+    "step": "save event 01a1492d-649b-737b-83df-998f393a0316",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-649b-737b-83df-998f393a0316",
+    "errors": []
+  },
+  {
+    "step": "stale update rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Lịch đã thay đổi; tải lại trước khi lưu."
+    ]
+  },
+  {
+    "step": "stale form left row unchanged",
+    "verified": true
+  },
+  {
+    "step": "Member calendar.delete permission enforced",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-649b-737b-83df-998f393a0316",
+    "errors": []
+  },
+  {
+    "step": "load event edit",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-6157-724f-9232-35ed14ea2762/edit",
+    "errors": []
+  },
+  {
+    "step": "save event 01a1492d-6157-724f-9232-35ed14ea2762",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-6157-724f-9232-35ed14ea2762",
+    "errors": []
+  },
+  {
+    "step": "create event P5 released slot reused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492e-33de-71e9-b094-68a52bccd0cf",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 released slot reused",
+    "verified": true
+  },
+  {
+    "step": "cancelled default hidden",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "cancelled event omitted by default",
+    "verified": true
+  },
+  {
+    "step": "cancelled explicit included",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=list&from=2026-12-07&to=2026-12-14&include_cancelled=1",
+    "errors": []
+  },
+  {
+    "step": "cancelled event opt-in",
+    "verified": true
+  },
+  {
+    "step": "create event P5 owner disposable",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492e-3b72-72df-99ab-b3b9883bce57",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 owner disposable",
+    "verified": true
+  },
+  {
+    "step": "owner delete form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492e-3b72-72df-99ab-b3b9883bce57",
+    "errors": []
+  },
+  {
+    "step": "owner deletes own event",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar",
+    "errors": []
+  },
+  {
+    "step": "event deleted",
+    "verified": true
+  },
+  {
+    "step": "status IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "status persisted IN_PROGRESS",
+    "verified": true
+  },
+  {
+    "step": "status REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "status persisted REVIEW",
+    "verified": true
+  },
+  {
+    "step": "status DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "status persisted DONE",
+    "verified": true
+  },
+  {
+    "step": "review request recipient persisted",
+    "verified": true
+  },
+  {
+    "step": "load event edit",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-7080-70f9-9b3b-276129bbd030/edit",
+    "errors": []
+  },
+  {
+    "step": "save event 01a1492d-7080-70f9-9b3b-276129bbd030",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-7080-70f9-9b3b-276129bbd030",
+    "errors": []
+  },
+  {
+    "step": "closed task schedule can be cancelled without changing task or actual",
+    "verified": true
+  },
+  {
+    "step": "no-op status retry",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "same status retry no notification duplication",
+    "verified": true
+  },
+  {
+    "step": "suspend project reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "revoked project inbox hides historical titles",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/notifications",
+    "errors": []
+  },
+  {
+    "step": "revoked inbox and unread badge safe",
+    "verified": true
+  },
+  {
+    "step": "revoked project cannot mutate old inbox row",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/notifications/01a1492c-a3f3-73ff-80ad-c2ddd2eff02a/read",
+    "errors": []
+  },
+  {
+    "step": "restore project reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "mark all visible read",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/notifications",
+    "errors": []
+  },
+  {
+    "step": "mark-all persisted while deliveries retained",
+    "verified": true
+  },
+  {
+    "step": "notification dedupe keys unique",
+    "verified": true
+  },
+  {
+    "step": "no external channel falsely sent",
+    "verified": true
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "Stage 5 real HTTP walkthrough complete",
+    "workspace_id": "01a1492c-68e5-729b-8df8-6e4900a93d04",
+    "project_id": "01a1492c-6ce4-737a-9cb7-39e9a48b30fb",
+    "task_id": "01a1492c-916f-70e4-b155-1b2a1f0f86b4"
+  }
+]

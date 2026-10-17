@@ -1,0 +1,1 @@
+<x-layout title="Sửa vai trò"><section class="card"><h1>Sửa vai trò: {{ $role->name }}</h1><form action="{{ route('workspaces.roles.update',[$workspace,$role]) }}" method="POST" data-form="role-edit">@csrf @method('PATCH') @include('roles._form')</form></section></x-layout>

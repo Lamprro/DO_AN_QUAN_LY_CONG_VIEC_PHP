@@ -1,0 +1,1 @@
+<x-layout title="Tạo workspace"><section class="card narrow"><h1>Tạo workspace nhóm</h1><form action="{{ route('workspaces.store') }}" method="POST" data-form="workspace-create">@csrf @include('workspaces._form')</form></section></x-layout>

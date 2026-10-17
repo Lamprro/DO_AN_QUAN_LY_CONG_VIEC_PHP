@@ -1,0 +1,56 @@
+Final technical checks for Stage 3; real HTTP/browser evidence is stored separately.
+
+An earlier formatting check found TaskController still needed another Pint pass; fixed and verified before this final pass.
+
+PHP source lint: 132 files passed.
+
+> php vendor/bin/pint --test app/Support/ProjectAccess.php app/Policies/ProjectPolicy.php app/Policies/TaskPolicy.php app/Http/Requests/ProjectRequest.php app/Http/Requests/ProjectMemberRequest.php app/Http/Requests/TaskRequest.php app/Services/ProjectService.php app/Services/ProjectMemberService.php app/Services/TaskService.php app/Http/Controllers/ProjectController.php app/Http/Controllers/ProjectMemberController.php app/Http/Controllers/TaskController.php app/Models/Project.php app/Providers/AppServiceProvider.php routes/web.php lang/vi/validation.php
+{"tool":"pint","result":"passed"}Exit code: 0
+
+> php D:/Composer/composer.phar validate --no-check-publish
+./composer.json is valid
+Exit code: 0
+
+> php artisan view:cache --no-ansi
+
+
+   INFO  Blade templates cached successfully.  
+
+Exit code: 0
+
+Compiled Blade PHP lint: 97 files passed.
+
+> php artisan route:cache --no-ansi
+
+   INFO  Routes cached successfully.  
+
+Exit code: 0
+
+> php artisan config:cache --no-ansi
+
+   INFO  Configuration cached successfully.  
+
+Exit code: 0
+
+> php artisan optimize:clear --no-ansi
+
+   INFO  Clearing cached bootstrap files.  
+
+  config ................................................................................................. 2.69ms DONE
+  cache ................................................................................................. 26.82ms DONE
+  compiled ............................................................................................... 2.47ms DONE
+  events ................................................................................................. 0.73ms DONE
+  routes ................................................................................................. 1.42ms DONE
+  views ................................................................................................. 67.45ms DONE
+
+Exit code: 0
+
+Laravel route:list exported 63 routes to routes.json.
+
+> git diff --check
+warning: in the working copy of 'README.md', CRLF will be replaced by LF the next time Git touches it
+Exit code: 0
+
+Final FK errors: []
+
+No PHPUnit/TestCase/mocks added or executed. Pint --test only checks formatting.

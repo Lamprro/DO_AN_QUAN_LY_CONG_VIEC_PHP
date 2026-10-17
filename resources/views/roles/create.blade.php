@@ -1,0 +1,1 @@
+<x-layout title="Tạo vai trò"><section class="card"><h1>Tạo vai trò</h1><form action="{{ route('workspaces.roles.store',$workspace) }}" method="POST" data-form="role-create">@csrf @include('roles._form')</form></section></x-layout>

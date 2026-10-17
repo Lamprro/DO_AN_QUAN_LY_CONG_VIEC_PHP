@@ -1,0 +1,1 @@
+<!doctype html><html lang="vi"><body><h1>Lời mời tham gia workspace</h1><p>Bạn được mời vào {{ $invitation['workspace_name'] }} với vai trò {{ $invitation['role_name'] }}.</p><p><a href="{{ $acceptUrl }}">Xem và chấp nhận lời mời</a></p><p>Hãy đăng nhập bằng {{ $invitation['email'] }}. Liên kết có thời hạn và chỉ dùng một lần.</p></body></html>

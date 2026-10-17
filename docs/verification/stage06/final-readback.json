@@ -1,0 +1,104 @@
+[
+  {
+    "step": "browser saved a real frozen snapshot",
+    "verified": true
+  },
+  {
+    "step": "browser request processed by worker and honestly failed",
+    "verified": true,
+    "run": {
+      "status": "failed",
+      "error_message": "AI đang tắt; chưa gọi nhà cung cấp và chưa tạo nhận xét AI."
+    }
+  },
+  {
+    "step": "final workspace with report navigation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481",
+    "errors": []
+  },
+  {
+    "step": "final project with report navigation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d",
+    "errors": []
+  },
+  {
+    "step": "new AI list filters render",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs?status=failed&created_from=2026-10-17&created_to=2026-10-18",
+    "errors": []
+  },
+  {
+    "step": "status filter excludes cancelled and preserves visible failed runs",
+    "verified": true
+  },
+  {
+    "step": "report list date filter",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports?created_from=2026-10-17&created_to=2026-10-18",
+    "errors": []
+  },
+  {
+    "step": "Member cannot open AI creation form",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/create?from=2026-10-01&to=2026-11-01&project_id=01a149ff-a982-70a4-ad68-56f774575e1d&subject_user_id=&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "Member cannot post AI requests",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs",
+    "errors": []
+  },
+  {
+    "step": "no unauthorized run",
+    "verified": true
+  },
+  {
+    "step": "another requester cannot read AI context",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-f608-72f4-b2d6-21ca68976aa1",
+    "errors": []
+  },
+  {
+    "step": "cross workspace AI URL denied",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/ai-runs/01a14a01-bbb1-7041-8c21-afa67ec251aa",
+    "errors": []
+  },
+  {
+    "step": "cross workspace report URL denied",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/reports/01a14a00-032c-7133-8c8d-7a93ce386fff",
+    "errors": []
+  },
+  {
+    "step": "AI CSRF required",
+    "http": 419,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs",
+    "errors": []
+  },
+  {
+    "step": "initial report still byte-identical",
+    "verified": true,
+    "sha256": "e0d9396113e667b2095ebcb3212bd70951cbeeaaafc90c949faab47fd0546cb7"
+  },
+  {
+    "step": "captured real actual entry still reads 0.05 minutes",
+    "verified": true
+  },
+  {
+    "step": "review scope restored, actual session ended, no test-generated timer running",
+    "verified": true
+  },
+  {
+    "step": "FK final check",
+    "verified": true
+  },
+  {
+    "step": "Stage 6 final read-back complete",
+    "workspace_id": "01a149ff-a550-736a-908c-4867444f4481",
+    "actual_snapshot_id": "01a14a05-969c-72aa-897e-2fb67ab9cb67"
+  }
+]

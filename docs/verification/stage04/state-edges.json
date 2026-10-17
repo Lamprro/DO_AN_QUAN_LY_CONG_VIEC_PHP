@@ -1,0 +1,199 @@
+[
+  {
+    "step": "create P4 Cancel and reopen",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a1490d-e62b-7271-9bc5-8a83fcaea8a5",
+    "errors": []
+  },
+  {
+    "step": "status TODO to CANCELLED",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Cần ghi lý do hủy, mở lại hoặc yêu cầu sửa."
+    ]
+  },
+  {
+    "step": "cancel requires reason",
+    "verified": true
+  },
+  {
+    "step": "status TODO to CANCELLED",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "cancel with reason",
+    "verified": true
+  },
+  {
+    "step": "status CANCELLED to TODO",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Cần ghi lý do hủy, mở lại hoặc yêu cầu sửa."
+    ]
+  },
+  {
+    "step": "reopen requires reason",
+    "verified": true
+  },
+  {
+    "step": "status CANCELLED to TODO",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "reopen cancelled task",
+    "verified": true
+  },
+  {
+    "step": "reopen clears execution timestamps",
+    "verified": true
+  },
+  {
+    "step": "status DONE to TODO",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "reviewer reopens completed milestone",
+    "verified": true
+  },
+  {
+    "step": "completion timestamp cleared",
+    "verified": true
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "milestone follow full workflow IN_PROGRESS",
+    "verified": true
+  },
+  {
+    "step": "status IN_PROGRESS to REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "milestone follow full workflow REVIEW",
+    "verified": true
+  },
+  {
+    "step": "status REVIEW to DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "milestone follow full workflow DONE",
+    "verified": true
+  },
+  {
+    "step": "add removable dependency",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a1490d-e62b-7271-9bc5-8a83fcaea8a5",
+    "errors": []
+  },
+  {
+    "step": "duplicate dependency rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a1490d-e62b-7271-9bc5-8a83fcaea8a5",
+    "errors": [
+      "Dependency đã tồn tại."
+    ]
+  },
+  {
+    "step": "one dependency row",
+    "verified": true
+  },
+  {
+    "step": "remove dependency through actual form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a1490d-e62b-7271-9bc5-8a83fcaea8a5",
+    "errors": []
+  },
+  {
+    "step": "dependency removed and audit retained",
+    "verified": true
+  },
+  {
+    "step": "report and resolve blocker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a1490d-e62b-7271-9bc5-8a83fcaea8a5",
+    "errors": []
+  },
+  {
+    "step": "blocker resolved",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "blocker status persisted resolved",
+    "verified": true
+  },
+  {
+    "step": "blocker open",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "blocker status persisted open",
+    "verified": true
+  },
+  {
+    "step": "blocker resolved",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "blocker status persisted resolved",
+    "verified": true
+  },
+  {
+    "step": "create P4 Reviewer required",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a1490e-12c7-7287-bd3a-c66c88ac53d1",
+    "errors": []
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "start without reviewer allowed",
+    "verified": true
+  },
+  {
+    "step": "status IN_PROGRESS to REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Cần phân công người duyệt trước khi nộp duyệt."
+    ]
+  },
+  {
+    "step": "worker cannot submit without reviewer",
+    "verified": true
+  },
+  {
+    "step": "FK integrity",
+    "verified": true
+  },
+  {
+    "step": "state edge verification complete"
+  }
+]

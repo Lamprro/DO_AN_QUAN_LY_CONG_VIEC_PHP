@@ -1,0 +1,1 @@
+<x-layout title="Phiên đã hết hạn"><section class="card" data-page="error-419"><h1>419 — Phiên đã hết hạn</h1><p>Hãy tải lại trang để lấy mã bảo vệ form mới rồi thực hiện lại.</p><a href="{{ route('home') }}">Về trang chính</a></section></x-layout>

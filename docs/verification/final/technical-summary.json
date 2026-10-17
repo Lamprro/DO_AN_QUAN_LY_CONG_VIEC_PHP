@@ -1,0 +1,11 @@
+{
+  "php_sources": 183,
+  "compiled_views": 126,
+  "routes": 128,
+  "fk_errors": [],
+  "duplicate_active_plan_groups": [],
+  "duplicate_running_timers": [],
+  "pending_ai_jobs": 0,
+  "new_test_classes": 0,
+  "test_suite_executed": false
+}

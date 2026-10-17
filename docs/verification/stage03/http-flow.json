@@ -1,0 +1,621 @@
+[
+  {
+    "step": "seed owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "register member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "register viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create workspace",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855",
+    "errors": []
+  },
+  {
+    "step": "invite workspace member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/members",
+    "errors": []
+  },
+  {
+    "step": "accept workspace member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855",
+    "errors": []
+  },
+  {
+    "step": "invite workspace viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/members",
+    "errors": []
+  },
+  {
+    "step": "accept workspace viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855",
+    "errors": []
+  },
+  {
+    "step": "create project Phase3 Parent 1792210619",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "creator project membership read-back",
+    "verified": true,
+    "project": [
+      {
+        "id": "01a14813-e91e-739a-9846-cd8fef7cf1bc",
+        "name": "Phase3 Parent 1792210619",
+        "status": "draft",
+        "created_by": "01a147ea-079c-7064-8116-a09b61116d5b"
+      }
+    ]
+  },
+  {
+    "step": "workspace membership alone does not allow project",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "project list hides unassigned project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects",
+    "errors": []
+  },
+  {
+    "step": "project hidden from member list",
+    "verified": true
+  },
+  {
+    "step": "add project member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/members",
+    "errors": []
+  },
+  {
+    "step": "add project viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/members",
+    "errors": []
+  },
+  {
+    "step": "explicit member can view project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "create project Phase3 Child 1792210619",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-f496-7077-9b80-a86c95be5db9",
+    "errors": []
+  },
+  {
+    "step": "child project does not inherit membership",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-f496-7077-9b80-a86c95be5db9",
+    "errors": []
+  },
+  {
+    "step": "cross-workspace project binding",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "reject project parent cycle",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/edit",
+    "errors": [
+      "Không được tạo chu trình cha/con."
+    ]
+  },
+  {
+    "step": "cycle did not update project",
+    "verified": true,
+    "errors": true
+  },
+  {
+    "step": "invalid project date range",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/edit",
+    "errors": [
+      "Deadline không được trước ngày bắt đầu."
+    ]
+  },
+  {
+    "step": "project metadata update",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "project metadata persisted",
+    "verified": true
+  },
+  {
+    "step": "viewer cannot edit project",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/edit",
+    "errors": []
+  },
+  {
+    "step": "member cannot manage project members",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/members",
+    "errors": []
+  },
+  {
+    "step": "reject owner role grant",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Owner dành cho chủ workspace; chọn role khác."
+    ]
+  },
+  {
+    "step": "owner grant rejected in DB",
+    "verified": true
+  },
+  {
+    "step": "suspend project member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "suspended member current session forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "reactivate project member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "member active again",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "suspend workspace membership",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/members",
+    "errors": []
+  },
+  {
+    "step": "workspace suspension overrides project active",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "restore workspace membership",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/members",
+    "errors": []
+  },
+  {
+    "step": "create and assign task via Blade",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "task database read-back including UTC conversion",
+    "verified": true,
+    "task": {
+      "id": "01a14814-12c7-7172-ba05-d8032074b35d",
+      "code": "P3-1792210619",
+      "title": "Phase3 Flow 03 task",
+      "assignee_id": "01a14813-d2e4-7212-b1c7-2a033d76fa43",
+      "reviewer_id": "01a14813-d65c-7381-baf1-c30bbefc4c4b",
+      "status": "TODO",
+      "task_type": "WORK",
+      "deadline_at": "2026-10-22 03:30:00"
+    }
+  },
+  {
+    "step": "foreign project task binding",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-f496-7077-9b80-a86c95be5db9/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "project task hidden from personal namespace",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "viewer reads task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "viewer cannot edit task",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d/edit",
+    "errors": []
+  },
+  {
+    "step": "viewer cannot create task",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/create",
+    "errors": []
+  },
+  {
+    "step": "duplicate code validation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/create",
+    "errors": [
+      "Code đã được sử dụng."
+    ]
+  },
+  {
+    "step": "duplicate code not created",
+    "verified": true
+  },
+  {
+    "step": "invalid estimate input",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/create",
+    "errors": [
+      "The estimate minutes field must be at least 0."
+    ]
+  },
+  {
+    "step": "reject direct status bypass",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/create",
+    "errors": [
+      "The trạng thái field is prohibited."
+    ]
+  },
+  {
+    "step": "invalid task writes absent",
+    "verified": true
+  },
+  {
+    "step": "unprivileged member cannot reassign task",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "member edits metadata without assign fields",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "metadata update preserves assignment/status",
+    "verified": true
+  },
+  {
+    "step": "escaped description rendering",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "untrusted HTML escaped",
+    "verified": true
+  },
+  {
+    "step": "task CSRF rejection",
+    "http": 419,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks",
+    "errors": []
+  },
+  {
+    "step": "foreign assignee rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d/edit",
+    "errors": [
+      "Chọn người đang hoạt động và có quyền xem task trong phạm vi này."
+    ]
+  },
+  {
+    "step": "foreign assignee not persisted",
+    "verified": true
+  },
+  {
+    "step": "create auto-code pagination row 0",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-2b66-7260-8551-2801d555cd6b",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 1",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-2e11-7114-b680-51350eb7d267",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 2",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-30b8-70c6-9865-b7026f4c74c4",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 3",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-335c-71e7-a851-ceb08f88a6ab",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 4",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-35f6-72b5-823f-ed23f22cc3f4",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 5",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-38a6-72ea-b05a-f9f2b54ba680",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 6",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-3b77-705a-a417-c5ad11b0c2cc",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 7",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-3e13-7231-aa73-555947452832",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 8",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-40b9-705f-8cea-36c0882fedf9",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 9",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-4371-70ae-b802-612639b3ad40",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 10",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-4612-70ae-be22-62a8250ebc66",
+    "errors": []
+  },
+  {
+    "step": "create auto-code pagination row 11",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-488e-71ad-96b7-3dc59a6690a6",
+    "errors": []
+  },
+  {
+    "step": "automatic task codes unique",
+    "verified": true,
+    "count": 13
+  },
+  {
+    "step": "task filtered sorted page 1",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks?q=Flow+03&status=TODO&sort=title&direction=asc&per_page=10",
+    "errors": []
+  },
+  {
+    "step": "pagination preserves filter query",
+    "verified": true,
+    "visible_rows": 10
+  },
+  {
+    "step": "task filtered sorted page 2",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks?q=Flow+03&status=TODO&sort=title&direction=asc&per_page=10&page=2",
+    "errors": []
+  },
+  {
+    "step": "page 2 has 3 rows",
+    "verified": true
+  },
+  {
+    "step": "priority urgent filter",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks?priority=urgent",
+    "errors": []
+  },
+  {
+    "step": "priority filter returns edited task only",
+    "verified": true
+  },
+  {
+    "step": "reject arbitrary sort SQL",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks?priority=urgent",
+    "errors": [
+      "Sort không hợp lệ."
+    ]
+  },
+  {
+    "step": "archive task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "archive persisted",
+    "verified": true
+  },
+  {
+    "step": "archived task edit forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d/edit",
+    "errors": []
+  },
+  {
+    "step": "restore task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "project completion with unfinished tasks rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/edit",
+    "errors": [
+      "Chưa thể hoàn tất project khi còn task hoặc project con chưa hoàn tất/hủy."
+    ]
+  },
+  {
+    "step": "project not marked complete",
+    "verified": true
+  },
+  {
+    "step": "delete nonempty project rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": [
+      "Project có dữ liệu liên quan; hãy dùng lưu trữ."
+    ]
+  },
+  {
+    "step": "nonempty project retained",
+    "verified": true
+  },
+  {
+    "step": "archive project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "archived project task create forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/create",
+    "errors": []
+  },
+  {
+    "step": "archived project member management forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/members",
+    "errors": []
+  },
+  {
+    "step": "archived project existing task edit forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d/edit",
+    "errors": []
+  },
+  {
+    "step": "restore project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "errors": []
+  },
+  {
+    "step": "create project Phase3 Disposable 1792210619",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14814-626e-722a-9de8-76c2ac3b967d",
+    "errors": []
+  },
+  {
+    "step": "delete empty draft project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects",
+    "errors": []
+  },
+  {
+    "step": "draft project physically deleted",
+    "verified": true
+  },
+  {
+    "step": "delete untouched TODO task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks",
+    "errors": []
+  },
+  {
+    "step": "draft task physically deleted",
+    "verified": true
+  },
+  {
+    "step": "personal task create without project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b21-713f-be50-1dc2ce5e2520/tasks/01a14814-6a2f-70e9-8296-236198350de5",
+    "errors": []
+  },
+  {
+    "step": "personal task edit",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b21-713f-be50-1dc2ce5e2520/tasks/01a14814-6a2f-70e9-8296-236198350de5",
+    "errors": []
+  },
+  {
+    "step": "personal task scope persisted",
+    "verified": true
+  },
+  {
+    "step": "personal task deletion",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b21-713f-be50-1dc2ce5e2520/tasks",
+    "errors": []
+  },
+  {
+    "step": "remove project member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "left project member no access",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "rejoin project member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/members",
+    "errors": []
+  },
+  {
+    "step": "rejoin reused membership UUID",
+    "verified": true
+  },
+  {
+    "step": "project member allowed after rejoin",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14813-d974-73a4-af76-5894453b0855/projects/01a14813-e91e-739a-9846-cd8fef7cf1bc/tasks/01a14814-12c7-7172-ba05-d8032074b35d",
+    "errors": []
+  },
+  {
+    "step": "final foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "walkthrough complete",
+    "workspace_id": "01a14813-d974-73a4-af76-5894453b0855",
+    "project_id": "01a14813-e91e-739a-9846-cd8fef7cf1bc",
+    "task_id": "01a14814-12c7-7172-ba05-d8032074b35d"
+  }
+]

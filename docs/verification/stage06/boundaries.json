@@ -1,0 +1,246 @@
+[
+  {
+    "step": "guest dashboard requires login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/login",
+    "errors": []
+  },
+  {
+    "step": "report CSRF required",
+    "http": 419,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports",
+    "errors": []
+  },
+  {
+    "step": "CLI existing TimeEntry model start",
+    "exit_code": 0
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-8d92-71da-a489-69177ae1411e",
+    "errors": []
+  },
+  {
+    "step": "running actual entry is not invented as elapsed work",
+    "verified": true
+  },
+  {
+    "step": "existing TaskWorkflow prevents cancellation while timer running",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Hãy kết thúc timer đang chạy trước khi chuyển trạng thái."
+    ]
+  },
+  {
+    "step": "task still TODO under running guard",
+    "verified": true
+  },
+  {
+    "step": "CLI existing TimeEntry model end",
+    "exit_code": 0
+  },
+  {
+    "step": "real elapsed interval, no clock changes",
+    "verified": true,
+    "entry_id": "01a14a05-89c0-71cd-938a-9ccad7a45819",
+    "seconds": 3.0
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-969c-72aa-897e-2fb67ab9cb67",
+    "errors": []
+  },
+  {
+    "step": "actual report matches existing model interval",
+    "verified": true,
+    "actual": 0.05,
+    "expected": 0.05
+  },
+  {
+    "step": "cancel task after ended real session",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-9d11-71d4-9150-377e61bfdead",
+    "errors": []
+  },
+  {
+    "step": "cancel removes plan/estimate but retains measured actual",
+    "verified": true
+  },
+  {
+    "step": "restore task after cancellation verification",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create blocker through existing flow",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-dc90-703b-838a-4c571cdb42d8",
+    "errors": []
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-a782-7216-a678-ae28dc7fffc3",
+    "errors": []
+  },
+  {
+    "step": "blocker metric from real source",
+    "verified": true
+  },
+  {
+    "step": "resolve existing blocker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-dc90-703b-838a-4c571cdb42d8",
+    "errors": []
+  },
+  {
+    "step": "blocker snapshot stays fixed after resolve",
+    "verified": true
+  },
+  {
+    "step": "archive unestimated task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-e06e-701a-8dc2-25bdcd91a54b",
+    "errors": []
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-b18d-73ae-943b-ca6bdc2d20e2",
+    "errors": []
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-b4b6-7081-9100-f11f24cde71d",
+    "errors": []
+  },
+  {
+    "step": "archive filter and progress rule are explicit",
+    "verified": true
+  },
+  {
+    "step": "restore unestimated task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-e06e-701a-8dc2-25bdcd91a54b",
+    "errors": []
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-bb8a-7076-8b40-b71293616dfa",
+    "errors": []
+  },
+  {
+    "step": "current assignee filter",
+    "verified": true
+  },
+  {
+    "step": "foreign subject rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Chọn thành viên đang hoạt động trong workspace."
+    ]
+  },
+  {
+    "step": "reverse dates rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Kỳ phải tăng, tối đa một năm; ngày cuối không bao gồm."
+    ]
+  },
+  {
+    "step": "too long period rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Kỳ phải tăng, tối đa một năm; ngày cuối không bao gồm."
+    ]
+  },
+  {
+    "step": "invalid requests created no rows",
+    "verified": true
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-c839-72b0-8afc-6f783dab45dc",
+    "errors": []
+  },
+  {
+    "step": "create role keeping reports but revoking calendar view",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/roles",
+    "errors": []
+  },
+  {
+    "step": "apply restricted project role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "old report with calendar source denied after permission change",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-c839-72b0-8afc-6f783dab45dc",
+    "errors": []
+  },
+  {
+    "step": "list excludes no-longer-readable snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports",
+    "errors": []
+  },
+  {
+    "step": "no protected ID leaked from own report list",
+    "verified": true
+  },
+  {
+    "step": "save boundary snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-d54a-71ca-9643-612ce15cbc12",
+    "errors": []
+  },
+  {
+    "step": "new permitted report omits calendar sources",
+    "verified": true
+  },
+  {
+    "step": "restore Manager project role",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "restored role reopens unchanged snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a05-c839-72b0-8afc-6f783dab45dc",
+    "errors": []
+  },
+  {
+    "step": "original baseline snapshot unchanged",
+    "verified": true
+  },
+  {
+    "step": "FK integrity after live source updates",
+    "verified": true
+  },
+  {
+    "step": "Stage 6 boundary walkthrough complete",
+    "workspace_id": "01a149ff-a550-736a-908c-4867444f4481",
+    "time_entry_id": "01a14a05-89c0-71cd-938a-9ccad7a45819",
+    "actual_minutes": 0.05
+  }
+]

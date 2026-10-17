@@ -1,0 +1,31 @@
+{
+  "browser_task": {
+    "id": "01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "code": "T-01M54G8PWM5ZK8DXBJN932CF52",
+    "title": "P4 Comment File",
+    "status": "DONE",
+    "started_at": "2026-10-17 08:48:22",
+    "completed_at": "2026-10-17 08:48:53"
+  },
+  "status_history": [
+    {
+      "actor_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+      "event_type": "task.status_changed",
+      "data": "{\"from\":\"TODO\",\"to\":\"IN_PROGRESS\",\"reason\":null}",
+      "created_at": "2026-10-17 08:48:22"
+    },
+    {
+      "actor_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+      "event_type": "task.status_changed",
+      "data": "{\"from\":\"IN_PROGRESS\",\"to\":\"REVIEW\",\"reason\":null}",
+      "created_at": "2026-10-17 08:48:47"
+    },
+    {
+      "actor_id": "01a147ea-079c-7064-8116-a09b61116d5b",
+      "event_type": "task.status_changed",
+      "data": "{\"from\":\"REVIEW\",\"to\":\"DONE\",\"reason\":null}",
+      "created_at": "2026-10-17 08:48:53"
+    }
+  ],
+  "foreign_key_errors": []
+}

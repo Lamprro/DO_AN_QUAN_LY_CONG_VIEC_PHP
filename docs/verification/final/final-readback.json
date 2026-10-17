@@ -1,0 +1,87 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "store final report from HTTP timer data",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/reports/01a14a26-e5da-71e8-9e71-87d0066813aa",
+    "errors": []
+  },
+  {
+    "step": "report includes elapsed HTTP timers",
+    "verified": true,
+    "actual_minutes": 0.11,
+    "period_metrics": {
+      "completed_work": 1,
+      "planned_minutes": 0,
+      "actual_minutes": 0.11,
+      "running_entries_excluded": 0
+    }
+  },
+  {
+    "step": "final report CSV export",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/reports/01a14a26-e5da-71e8-9e71-87d0066813aa/export",
+    "errors": []
+  },
+  {
+    "step": "final report print Blade",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/reports/01a14a26-e5da-71e8-9e71-87d0066813aa/print",
+    "errors": []
+  },
+  {
+    "step": "active final plan detail",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a20-7e40-73fb-8e2e-015549860037",
+    "errors": []
+  },
+  {
+    "step": "browser draft is real, active version immutable mapping",
+    "verified": true
+  },
+  {
+    "step": "secondary login",
+    "http": 200,
+    "url": "http://127.0.0.1:8124/workspaces",
+    "errors": []
+  },
+  {
+    "step": "enable local signed boundary fixture",
+    "http": 200,
+    "url": "http://127.0.0.1:8124/workspaces",
+    "errors": []
+  },
+  {
+    "step": "signed malformed ID gets 422 with no log",
+    "verified": true,
+    "http": 422
+  },
+  {
+    "step": "disable connection after signed boundary",
+    "http": 200,
+    "url": "http://127.0.0.1:8124/workspaces",
+    "errors": []
+  },
+  {
+    "step": "main environment integrations remain disabled",
+    "verified": true
+  },
+  {
+    "step": "all current final FKs valid",
+    "verified": true
+  },
+  {
+    "step": "no pending AI jobs",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "external_provider_called": false,
+    "csrf_session_http_database": true
+  }
+]

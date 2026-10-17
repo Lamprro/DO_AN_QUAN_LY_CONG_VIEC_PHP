@@ -1,0 +1,116 @@
+[
+  {
+    "step": "create P4 Timed Predecessor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14906-1af3-725a-a477-4947fbab9aef",
+    "errors": []
+  },
+  {
+    "step": "create P4 Timed Successor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14906-1e00-70d2-bf86-eab31fdb9e3f",
+    "errors": []
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "timed prerequisite IN_PROGRESS",
+    "verified": true
+  },
+  {
+    "step": "status IN_PROGRESS to REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "timed prerequisite REVIEW",
+    "verified": true
+  },
+  {
+    "step": "status REVIEW to DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "timed prerequisite DONE",
+    "verified": true
+  },
+  {
+    "step": "one minute FS dependency",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14906-1e00-70d2-bf86-eab31fdb9e3f",
+    "errors": []
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Dependency chưa hoàn tất hoặc chưa đủ thời gian chờ FS."
+    ]
+  },
+  {
+    "step": "real lag blocks immediately",
+    "verified": true
+  },
+  {
+    "step": "multipart upload valid TXT",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "private file metadata and bytes stored",
+    "verified": true,
+    "original_name": "phase4-flow.txt",
+    "size": 62,
+    "sha256": "f06753f87e7c16ee3a5e56cad3ccdd20731c53b5cdbd9adac2247692dfc7b248"
+  },
+  {
+    "step": "authorized Viewer downloads exact bytes",
+    "verified": true,
+    "http": 200,
+    "nosniff": "nosniff",
+    "content_disposition": "attachment; filename=phase4-flow.txt"
+  },
+  {
+    "step": "upload Viewer forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4/attachments",
+    "errors": []
+  },
+  {
+    "step": "PHP filename rejected despite text content",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": [
+      "File không đúng loại tệp cho phép.",
+      "File không đúng phần mở rộng cho phép."
+    ]
+  },
+  {
+    "step": "PNG with text bytes rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "over 5MB rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": [
+      "File tối đa 5120 KB.",
+      "File không đúng loại tệp cho phép."
+    ]
+  },
+  {
+    "step": "invalid files created no attachment rows",
+    "verified": false
+  }
+]

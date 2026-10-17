@@ -1,0 +1,494 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "outsider login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create final workspace",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289",
+    "errors": []
+  },
+  {
+    "step": "create project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c",
+    "errors": []
+  },
+  {
+    "step": "plan create Blade",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/create?project_id=01a14a19-dbb0-7349-a6c4-c5e424fc088c",
+    "errors": []
+  },
+  {
+    "step": "create draft Final manual plan",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-e060-7206-bc99-769ceae44679",
+    "errors": []
+  },
+  {
+    "step": "draft persisted Final manual plan",
+    "verified": true
+  },
+  {
+    "step": "draft does not mutate tasks/calendar",
+    "verified": true
+  },
+  {
+    "step": "cannot apply draft",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Chuyển trạng thái không hợp lệ."
+    ]
+  },
+  {
+    "step": "invalid transition preserved draft",
+    "verified": true
+  },
+  {
+    "step": "outsider denied plan",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-e060-7206-bc99-769ceae44679",
+    "errors": []
+  },
+  {
+    "step": "plan CSRF required",
+    "http": 419,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-e060-7206-bc99-769ceae44679/propose",
+    "errors": []
+  },
+  {
+    "step": "plan propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-e060-7206-bc99-769ceae44679",
+    "errors": []
+  },
+  {
+    "step": "plan approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-e060-7206-bc99-769ceae44679",
+    "errors": []
+  },
+  {
+    "step": "approval has no task changes",
+    "verified": true
+  },
+  {
+    "step": "plan apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-e060-7206-bc99-769ceae44679",
+    "errors": []
+  },
+  {
+    "step": "applied active",
+    "verified": true,
+    "status": "approved"
+  },
+  {
+    "step": "applied task tree and dependency",
+    "verified": true
+  },
+  {
+    "step": "plan calendar events persisted",
+    "verified": true
+  },
+  {
+    "step": "plan apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-e060-7206-bc99-769ceae44679",
+    "errors": []
+  },
+  {
+    "step": "double apply is idempotent",
+    "verified": true
+  },
+  {
+    "step": "impact shows FS wait",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plan-impact?project_id=01a14a19-dbb0-7349-a6c4-c5e424fc088c",
+    "errors": []
+  },
+  {
+    "step": "timeline real events",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c/timeline?view=list&from=2027-01-04&to=2027-01-05",
+    "errors": []
+  },
+  {
+    "step": "create draft Final revision",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-fb87-739c-99be-9eabdd02cc37",
+    "errors": []
+  },
+  {
+    "step": "draft persisted Final revision",
+    "verified": true
+  },
+  {
+    "step": "plan propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-fb87-739c-99be-9eabdd02cc37",
+    "errors": []
+  },
+  {
+    "step": "plan approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-fb87-739c-99be-9eabdd02cc37",
+    "errors": []
+  },
+  {
+    "step": "plan apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a19-fb87-739c-99be-9eabdd02cc37",
+    "errors": []
+  },
+  {
+    "step": "one active version, no duplicate tasks",
+    "verified": true
+  },
+  {
+    "step": "old calendar retained cancelled",
+    "verified": true
+  },
+  {
+    "step": "create draft Final stale",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a1a-08b7-7178-9676-83a0f85caca2",
+    "errors": []
+  },
+  {
+    "step": "draft persisted Final stale",
+    "verified": true
+  },
+  {
+    "step": "plan propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a1a-08b7-7178-9676-83a0f85caca2",
+    "errors": []
+  },
+  {
+    "step": "plan approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a1a-08b7-7178-9676-83a0f85caca2",
+    "errors": []
+  },
+  {
+    "step": "metadata update through form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c/tasks/01a14a19-f14c-7045-8ebf-f283075c1707",
+    "errors": []
+  },
+  {
+    "step": "plan apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Dữ liệu nguồn đã thay đổi. Tạo phiên bản mới để rà soát lại."
+    ]
+  },
+  {
+    "step": "stale application rejected with no partial writes",
+    "verified": true
+  },
+  {
+    "step": "create draft Final conflict rollback",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a1a-1885-7031-a08c-d5a9e7b6511f",
+    "errors": []
+  },
+  {
+    "step": "draft persisted Final conflict rollback",
+    "verified": true
+  },
+  {
+    "step": "plan propose",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a1a-1885-7031-a08c-d5a9e7b6511f",
+    "errors": []
+  },
+  {
+    "step": "plan approve",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a1a-1885-7031-a08c-d5a9e7b6511f",
+    "errors": []
+  },
+  {
+    "step": "plan apply",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Khoảng giờ này trùng lịch bận của bạn."
+    ]
+  },
+  {
+    "step": "calendar conflict rolls back all writes",
+    "verified": true
+  },
+  {
+    "step": "cycle rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Dependency có vòng lặp."
+    ]
+  },
+  {
+    "step": "cycle no plan write",
+    "verified": true
+  },
+  {
+    "step": "untrusted status rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Tasks.0 phải là danh sách."
+    ]
+  },
+  {
+    "step": "status injection no plan write",
+    "verified": true
+  },
+  {
+    "step": "create draft Final scheduler base",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a1a-2b08-73de-8350-01692c281943",
+    "errors": []
+  },
+  {
+    "step": "draft persisted Final scheduler base",
+    "verified": true
+  },
+  {
+    "step": "schedule new version",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/plans/01a14a1a-2e06-7233-99c5-fb32dcb1a079",
+    "errors": []
+  },
+  {
+    "step": "local scheduler creates draft slots only",
+    "verified": true,
+    "slots": [
+      {
+        "task_ref": "a",
+        "starts_at": "2027-02-01T08:00",
+        "ends_at": "2027-02-01T08:30"
+      },
+      {
+        "task_ref": "a",
+        "starts_at": "2027-02-01T08:30",
+        "ends_at": "2027-02-01T09:00"
+      },
+      {
+        "task_ref": "b",
+        "starts_at": "2027-02-01T09:30",
+        "ends_at": "2027-02-01T10:00"
+      }
+    ]
+  },
+  {
+    "step": "start Work A",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "timer start HTTP",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "duplicate timer refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Bạn đang có timer khác. Hãy dừng timer trước."
+    ]
+  },
+  {
+    "step": "one running timer",
+    "verified": true
+  },
+  {
+    "step": "cannot submit while clock running",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Hãy kết thúc timer đang chạy trước khi chuyển trạng thái."
+    ]
+  },
+  {
+    "step": "status guard keeps IN_PROGRESS",
+    "verified": true
+  },
+  {
+    "step": "stop timer HTTP",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "ended real elapsed session",
+    "verified": true,
+    "started": "2026-10-17 13:43:13",
+    "ended": "2026-10-17 13:43:18"
+  },
+  {
+    "step": "outsider cannot stop foreign timer",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/timers/01a14a1a-3403-7312-b674-ffa457bf570f/stop",
+    "errors": []
+  },
+  {
+    "step": "submit review",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "approve work",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "lag still blocks successor start",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Dependency chưa hoàn tất hoặc chưa đủ thời gian chờ FS."
+    ]
+  },
+  {
+    "step": "FS lag preserved successor TODO",
+    "verified": true
+  },
+  {
+    "step": "dashboard actual from timer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/dashboard?project_id=01a14a19-dbb0-7349-a6c4-c5e424fc088c&from=2026-01-01&to=2027-01-01",
+    "errors": []
+  },
+  {
+    "step": "enqueue planning",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/ai-runs/01a14a1a-55ac-71a6-9a23-0dd5b15ad966",
+    "errors": []
+  },
+  {
+    "step": "idempotent planning",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/ai-runs/01a14a1a-55ac-71a6-9a23-0dd5b15ad966",
+    "errors": []
+  },
+  {
+    "step": "only one run for token planning",
+    "verified": true
+  },
+  {
+    "step": "enqueue replanning",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/ai-runs/01a14a1a-5cdd-71c4-b4f5-c7a256f65719",
+    "errors": []
+  },
+  {
+    "step": "idempotent replanning",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/ai-runs/01a14a1a-5cdd-71c4-b4f5-c7a256f65719",
+    "errors": []
+  },
+  {
+    "step": "only one run for token replanning",
+    "verified": true
+  },
+  {
+    "step": "enqueue assistance",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/ai-runs/01a14a1a-6516-7029-8e03-bb4ef3b91787",
+    "errors": []
+  },
+  {
+    "step": "idempotent assistance",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/ai-runs/01a14a1a-6516-7029-8e03-bb4ef3b91787",
+    "errors": []
+  },
+  {
+    "step": "only one run for token assistance",
+    "verified": true
+  },
+  {
+    "step": "actual worker drain",
+    "exit_code": 0,
+    "output": "  2026-10-17 13:43:28 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-17 13:43:28 App\\Jobs\\ProcessAiRun ............................................................. 84.61ms DONE\n  2026-10-17 13:43:28 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-17 13:43:28 App\\Jobs\\ProcessAiRun ............................................................. 27.09ms DONE\n  2026-10-17 13:43:28 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-17 13:43:28 App\\Jobs\\ProcessAiRun ............................................................. 19.91ms DONE\n"
+  },
+  {
+    "step": "worker finished",
+    "verified": true
+  },
+  {
+    "step": "AI disabled gives truthful failure",
+    "verified": true
+  },
+  {
+    "step": "AI disabled gives truthful failure",
+    "verified": true
+  },
+  {
+    "step": "AI disabled gives truthful failure",
+    "verified": true
+  },
+  {
+    "step": "AI disabled never mutates business",
+    "verified": true
+  },
+  {
+    "step": "AI list handles all operations",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/ai-runs",
+    "errors": []
+  },
+  {
+    "step": "integration Blade",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/projects/01a14a19-dbb0-7349-a6c4-c5e424fc088c/github",
+    "errors": []
+  },
+  {
+    "step": "save disabled GitHub config",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "integration disabled persisted",
+    "verified": true
+  },
+  {
+    "step": "unsigned disabled hook cannot write",
+    "http": 503,
+    "url": "http://127.0.0.1:8123/hooks/github/01a14a19-dbb0-7349-a6c4-c5e424fc088c",
+    "errors": []
+  },
+  {
+    "step": "no foreign key errors",
+    "verified": true
+  },
+  {
+    "step": "FINAL COMPLETE",
+    "workspace_id": "01a14a19-d83e-72ff-8a43-3761cf21a289",
+    "project_id": "01a14a19-dbb0-7349-a6c4-c5e424fc088c",
+    "real_http": true,
+    "no_test_classes": true
+  }
+]

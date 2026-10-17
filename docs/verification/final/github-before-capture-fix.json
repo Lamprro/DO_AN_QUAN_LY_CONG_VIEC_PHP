@@ -1,0 +1,36 @@
+[
+  {
+    "step": "secondary local server login",
+    "http": 200,
+    "url": "http://127.0.0.1:8124/workspaces",
+    "errors": []
+  },
+  {
+    "step": "enable review connection via actual config route",
+    "http": 200,
+    "url": "http://127.0.0.1:8124/workspaces",
+    "errors": []
+  },
+  {
+    "step": "secret encrypted at rest",
+    "verified": true
+  },
+  {
+    "step": "hook response",
+    "http": 403,
+    "delivery_id": "d3eee7a2-4fd5-4dfa-a88a-546942ac1f30"
+  },
+  {
+    "step": "unsigned webhook rejected",
+    "verified": true
+  },
+  {
+    "step": "hook response",
+    "http": 500,
+    "delivery_id": "d3eee7a2-4fd5-4dfa-a88a-546942ac1f30"
+  },
+  {
+    "step": "signed local delivery accepted",
+    "verified": false
+  }
+]

@@ -1,0 +1,294 @@
+[
+  {
+    "step": "Resume after helper field corrected to participants[]; no application bypass or database reset"
+  },
+  {
+    "step": "create event P5 secret BUSY",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-6157-724f-9232-35ed14ea2762",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 secret BUSY",
+    "verified": true
+  },
+  {
+    "step": "UTC persisted and busy derived server-side",
+    "verified": true,
+    "event": {
+      "starts_at": "2026-12-07 02:00:00",
+      "ends_at": "2026-12-07 03:00:00",
+      "is_busy": 1,
+      "user_id": "01a1492c-713b-703a-ae6f-d5973638fdce"
+    }
+  },
+  {
+    "step": "create event P5 overlapping NOTE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-649b-737b-83df-998f393a0316",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 overlapping NOTE",
+    "verified": true
+  },
+  {
+    "step": "create event P5 extra capacity",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-6763-71fd-856f-13a1bd3019a2",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 extra capacity",
+    "verified": true
+  },
+  {
+    "step": "EXTRA_AVAILABLE cannot erase busy",
+    "verified": true
+  },
+  {
+    "step": "busy overlap",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Khoảng giờ này trùng lịch bận của bạn."
+    ]
+  },
+  {
+    "step": "busy overlap no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "create event P5 adjacent meeting",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-6d6c-71c7-a09a-7cb591659e73",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 adjacent meeting",
+    "verified": true
+  },
+  {
+    "step": "create event P5 task block",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-7080-70f9-9b3b-276129bbd030",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 task block",
+    "verified": true
+  },
+  {
+    "step": "calendar task history persisted",
+    "verified": true
+  },
+  {
+    "step": "another assignee task block",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Chọn WORK đang mở được giao cho bạn và có quyền cập nhật trong đúng phạm vi."
+    ]
+  },
+  {
+    "step": "another assignee task block no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "task block missing task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Chọn WORK đang mở được giao cho bạn và có quyền cập nhật trong đúng phạm vi."
+    ]
+  },
+  {
+    "step": "task block missing task no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "NOTE with task",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Chỉ TASK_BLOCK nhận task."
+    ]
+  },
+  {
+    "step": "NOTE with task no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "project details workspace publication",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Lịch thuộc project chỉ chia sẻ trong project hoặc để riêng tư."
+    ]
+  },
+  {
+    "step": "project details workspace publication no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "foreign participant",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Người tham gia phải đang hoạt động, có quyền xem task trong phạm vi."
+    ]
+  },
+  {
+    "step": "foreign participant no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "negative time range",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Kết thúc phải sau bắt đầu, tối đa 93 ngày. Ngày kết thúc all-day không bao gồm."
+    ]
+  },
+  {
+    "step": "negative time range no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "timezone invalid",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Múi giờ không hợp lệ."
+    ]
+  },
+  {
+    "step": "timezone invalid no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "owner spoof",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Không được gửi trường user id trong thao tác này."
+    ]
+  },
+  {
+    "step": "owner spoof no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "spring DST gap",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Giờ không tồn tại trong múi giờ này (DST)."
+    ]
+  },
+  {
+    "step": "spring DST gap no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "fall DST repeated hour",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/create",
+    "errors": [
+      "Giờ bị lặp do DST; chọn giờ khác hoặc nhập theo UTC."
+    ]
+  },
+  {
+    "step": "fall DST repeated hour no row",
+    "verified": true,
+    "has_error": true
+  },
+  {
+    "step": "create event P5 all day",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-9159-7193-9788-c5c7524952d4",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 all day",
+    "verified": true
+  },
+  {
+    "step": "all-day end-exclusive UTC",
+    "verified": true
+  },
+  {
+    "step": "create event P5 midnight",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-94a5-7140-bfc8-e5644a26e580",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 midnight",
+    "verified": true
+  },
+  {
+    "step": "create event P5 shared workspace note",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-9776-7346-b37f-c0ecb25b4f63",
+    "errors": []
+  },
+  {
+    "step": "event persisted P5 shared workspace note",
+    "verified": true
+  },
+  {
+    "step": "owner calendar sees only freebusy for private",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "private titles IDs descriptions absent; busy interval present",
+    "verified": true
+  },
+  {
+    "step": "Owner cannot open private event",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-6157-724f-9232-35ed14ea2762",
+    "errors": []
+  },
+  {
+    "step": "Owner cannot edit another owner shared event",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar/01a1492d-9776-7346-b37f-c0ecb25b4f63/edit",
+    "errors": []
+  },
+  {
+    "step": "outsider workspace calendar denied",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/calendar?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "cross workspace event ID denied",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/calendar/01a1492d-6157-724f-9232-35ed14ea2762",
+    "errors": []
+  },
+  {
+    "step": "Timeline actual task blocks",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a1492c-68e5-729b-8df8-6e4900a93d04/projects/01a1492c-6ce4-737a-9cb7-39e9a48b30fb/timeline?view=list&from=2026-12-07&to=2026-12-14",
+    "errors": []
+  },
+  {
+    "step": "timeline uses persisted task block",
+    "verified": false
+  }
+]

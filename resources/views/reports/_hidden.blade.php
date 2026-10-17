@@ -1,0 +1,1 @@
+@foreach(['from','to','project_id','subject_user_id','include_archived'] as $key)<input type="hidden" name="{{ $key }}" value="{{ is_bool($filters[$key]??null)?(int)$filters[$key]:($filters[$key]??'') }}">@endforeach

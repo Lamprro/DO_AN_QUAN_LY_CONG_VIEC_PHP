@@ -1,0 +1,14 @@
+[
+  {
+    "step": "before natural TTL expiry",
+    "http": 200,
+    "observed_at": 1792209825,
+    "expires_at": 1792209885
+  },
+  {
+    "step": "after natural TTL expiry",
+    "http": 410,
+    "observed_at": 1792209949,
+    "expires_at": 1792209885
+  }
+]

@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('workspaces', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name', 160);
+            $table->string('kind', 20)->default('team');
+            $table->foreignUuid('owner_id')->constrained('users')->restrictOnDelete();
+            $table->string('timezone', 64)->default('Asia/Ho_Chi_Minh');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('workspaces');
+    }
+};

@@ -1,0 +1,8 @@
+<x-layout title="Cấu hình"><section class="card" data-page="settings-edit"><h1>Cấu hình cá nhân</h1>
+<form method="POST" action="{{ route('settings.update') }}" data-form="settings-update">@csrf @method('PATCH')
+<label for="language">Ngôn ngữ ưu tiên</label><select id="language" name="language">@foreach(['vi'=>'Tiếng Việt','en'=>'English'] as $key=>$text)<option value="{{ $key }}" @selected(old('language',$settings['language'])===$key)>{{ $text }}</option>@endforeach</select>
+<p class="muted">Ngôn ngữ ưu tiên được lưu; giao diện hiện dùng tiếng Việt.</p>
+<label for="theme">Giao diện</label><select id="theme" name="theme">@foreach(['system'=>'Theo thiết bị','light'=>'Sáng','dark'=>'Tối'] as $key=>$text)<option value="{{ $key }}" @selected(old('theme',$settings['theme'])===$key)>{{ $text }}</option>@endforeach</select>
+<input type="hidden" name="notifications[in_app]" value="0"><label><input type="checkbox" name="notifications[in_app]" value="1" @checked(old('notifications.in_app',$settings['notifications']['in_app']))> Nhận thông báo trong ứng dụng</label>
+<p>Email và Telegram chưa cấu hình, hiện đang tắt.</p><button type="submit">Lưu cấu hình</button></form></section>
+<section class="card"><h2>Khung giờ mặc định từ hệ thống</h2><p>{{ $schedule['timezone'] }} · Các thứ ISO: {{ implode(', ',$schedule['weekdays']) }} · Slot {{ $schedule['slot_minutes'] }} phút</p>@foreach($schedule['windows'] as $window)<p>{{ $window['start'] }}–{{ $window['end'] }}</p>@endforeach<p>Giờ mặc định do backend cấp. EXTRA_AVAILABLE bổ sung thời gian rảnh nhưng không ghi đè lịch bận.</p><a href="{{ route('profile.edit') }}">Đổi múi giờ trong hồ sơ</a></section></x-layout>

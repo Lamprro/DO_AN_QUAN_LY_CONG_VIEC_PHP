@@ -1,0 +1,62 @@
+[
+  {
+    "step": "resolve policy action open",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resolver policy DB open",
+    "verified": true
+  },
+  {
+    "step": "resolve policy action resolved",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resolver policy DB resolved",
+    "verified": true
+  },
+  {
+    "step": "Viewer cannot resolve",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a1490d-e62b-7271-9bc5-8a83fcaea8a5/blockers/01a1490e-0755-7382-8309-5ef68823089a",
+    "errors": []
+  },
+  {
+    "step": "Unicode filename upload",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "Unicode file exact download",
+    "verified": true,
+    "http": 200
+  },
+  {
+    "step": "remove Unicode file",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "DONE view final smoke",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "DONE hides metadata edit and invalid physical delete",
+    "verified": true
+  },
+  {
+    "step": "final FK integrity",
+    "verified": true
+  },
+  {
+    "step": "final smoke complete"
+  }
+]

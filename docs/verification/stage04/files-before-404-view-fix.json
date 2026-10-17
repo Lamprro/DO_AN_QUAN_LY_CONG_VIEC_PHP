@@ -1,0 +1,212 @@
+[
+  {
+    "step": "remove earlier disguised PNG through real endpoint",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "strict rejection bad.png",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": [
+      "Nội dung tệp không khớp phần mở rộng được phép."
+    ]
+  },
+  {
+    "step": "error displayed for bad.png",
+    "verified": true
+  },
+  {
+    "step": "strict rejection bad.php",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": [
+      "Nội dung tệp không khớp phần mở rộng được phép."
+    ]
+  },
+  {
+    "step": "error displayed for bad.php",
+    "verified": true
+  },
+  {
+    "step": "strict rejection fake.docx",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": [
+      "Nội dung tệp không khớp phần mở rộng được phép."
+    ]
+  },
+  {
+    "step": "error displayed for fake.docx",
+    "verified": true
+  },
+  {
+    "step": "strict rejection oversize.txt",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": [
+      "File tối đa 5120 KB."
+    ]
+  },
+  {
+    "step": "error displayed for oversize.txt",
+    "verified": true
+  },
+  {
+    "step": "invalid files created no rows",
+    "verified": true
+  },
+  {
+    "step": "valid upload final.txt",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "file row exists final.txt",
+    "verified": true
+  },
+  {
+    "step": "byte-for-byte authorized download final.txt",
+    "verified": true,
+    "http": 200,
+    "sha256": "3985cef246e237f2ae37da18df0a135106ab3f195ac0dff8b237fea7602ad039",
+    "nosniff": "nosniff"
+  },
+  {
+    "step": "cross-task attachment scope final.txt",
+    "verified": true
+  },
+  {
+    "step": "uploader removes final.txt",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "removed download blocked final.txt",
+    "verified": true
+  },
+  {
+    "step": "audit bytes retained final.txt",
+    "verified": true
+  },
+  {
+    "step": "valid upload tiny.png",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "file row exists tiny.png",
+    "verified": true
+  },
+  {
+    "step": "byte-for-byte authorized download tiny.png",
+    "verified": true,
+    "http": 200,
+    "sha256": "e74e9fd86d08e40097a568efa4f482fa02252b744de740f32df7ee28f2935257",
+    "nosniff": "nosniff"
+  },
+  {
+    "step": "cross-task attachment scope tiny.png",
+    "verified": true
+  },
+  {
+    "step": "uploader removes tiny.png",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "removed download blocked tiny.png",
+    "verified": true
+  },
+  {
+    "step": "audit bytes retained tiny.png",
+    "verified": true
+  },
+  {
+    "step": "valid upload fixture.docx",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "file row exists fixture.docx",
+    "verified": true
+  },
+  {
+    "step": "byte-for-byte authorized download fixture.docx",
+    "verified": true,
+    "http": 200,
+    "sha256": "ffcee6260128cb3a2300d7d8dbfe46b84c7c36a2fcad364808c56cfa5f46d230",
+    "nosniff": "nosniff"
+  },
+  {
+    "step": "cross-task attachment scope fixture.docx",
+    "verified": true
+  },
+  {
+    "step": "uploader removes fixture.docx",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "removed download blocked fixture.docx",
+    "verified": true
+  },
+  {
+    "step": "audit bytes retained fixture.docx",
+    "verified": true
+  },
+  {
+    "step": "valid upload fixture.xlsx",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "file row exists fixture.xlsx",
+    "verified": true
+  },
+  {
+    "step": "byte-for-byte authorized download fixture.xlsx",
+    "verified": true,
+    "http": 200,
+    "sha256": "39c8eac2014d0e7d7e2d85d582e1cfa2c6d25421d1d99997074b39e3cbaa89fb",
+    "nosniff": "nosniff"
+  },
+  {
+    "step": "cross-task attachment scope fixture.xlsx",
+    "verified": true
+  },
+  {
+    "step": "uploader removes fixture.xlsx",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "removed download blocked fixture.xlsx",
+    "verified": true
+  },
+  {
+    "step": "audit bytes retained fixture.xlsx",
+    "verified": true
+  },
+  {
+    "step": "Viewer upload still forbidden",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4/attachments",
+    "errors": []
+  },
+  {
+    "step": "private disk route unavailable",
+    "http": 500,
+    "url": "http://127.0.0.1:8123/storage/task-files/01a14904-5baa-7366-855f-8f0c4809fcc4/0cfd2201-a3d7-43ac-8c8a-f83c77689080.xlsx",
+    "errors": []
+  }
+]

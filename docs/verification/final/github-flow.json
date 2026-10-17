@@ -1,0 +1,88 @@
+[
+  {
+    "step": "secondary local server login",
+    "http": 200,
+    "url": "http://127.0.0.1:8124/workspaces",
+    "errors": []
+  },
+  {
+    "step": "enable review connection via actual config route",
+    "http": 200,
+    "url": "http://127.0.0.1:8124/workspaces",
+    "errors": []
+  },
+  {
+    "step": "secret encrypted at rest",
+    "verified": true
+  },
+  {
+    "step": "hook response",
+    "http": 403,
+    "delivery_id": "a36f6c7a-c707-4220-945f-1330180f9125"
+  },
+  {
+    "step": "unsigned webhook rejected",
+    "verified": true
+  },
+  {
+    "step": "hook response",
+    "http": 204,
+    "delivery_id": "a36f6c7a-c707-4220-945f-1330180f9125"
+  },
+  {
+    "step": "signed local delivery accepted",
+    "verified": true
+  },
+  {
+    "step": "hook response",
+    "http": 204,
+    "delivery_id": "a36f6c7a-c707-4220-945f-1330180f9125"
+  },
+  {
+    "step": "duplicate delivery accepted idempotently",
+    "verified": true
+  },
+  {
+    "step": "one log and one linked immutable activity",
+    "verified": true
+  },
+  {
+    "step": "commit never changes task status",
+    "verified": true
+  },
+  {
+    "step": "hook response",
+    "http": 422,
+    "delivery_id": "f537abf0-db76-441d-bcfc-bda08e63d38f"
+  },
+  {
+    "step": "foreign repository rejected",
+    "verified": true
+  },
+  {
+    "step": "disable review connection after verification",
+    "http": 200,
+    "url": "http://127.0.0.1:8124/workspaces",
+    "errors": []
+  },
+  {
+    "step": "hook response",
+    "http": 403,
+    "delivery_id": "37b6c0be-8d63-4266-8e30-1e78c833c8a4"
+  },
+  {
+    "step": "disabled connection rejects signed webhook",
+    "verified": true
+  },
+  {
+    "step": "no FK errors",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "real_github_network": false,
+    "local_signed_data": true,
+    "secret_logged": false,
+    "connection_restored_disabled": true
+  }
+]

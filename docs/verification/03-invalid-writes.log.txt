@@ -1,0 +1,54 @@
+array:3 [
+  "operation" => "duplicate task code"
+  "exception" => "Illuminate\Database\UniqueConstraintViolationException"
+  "message" => "SQLSTATE[23000]: Integrity constraint violation: 19 UNIQUE constraint failed: tasks.workspace_id, tasks.code (Connection: sqlite, Database: D:/HeThong_PhanTichTaiChinh/DO_AN_QUAN_LY_CONG_VIEC_PHP/database/work_management.sqlite, SQL: insert into "tasks" ("task_type", "sort_order", "status", "priority", "workspace_id", "project_id", "code", "title", "created_by", "id", "updated_at", "created_at") values (WORK, 0, TODO, medium, 01a147ef-90eb-7320-995b-56bb59aa4a36, 01a147ef-90f8-723e-befa-0c8b12860645, FLOW-001, Duplicate code, 01a147ea-079c-7064-8116-a09b61116d5b, 01a147f0-252c-71ad-9929-4706e90dd1d9, 2026-10-17 03:38:02, 2026-10-17 03:38:02))"
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:7
+array:3 [
+  "operation" => "negative estimate"
+  "exception" => "Illuminate\Validation\ValidationException"
+  "message" => "Giá trị không được âm."
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:13
+array:3 [
+  "operation" => "task parent cycle"
+  "exception" => "Illuminate\Validation\ValidationException"
+  "message" => "Không được tạo chu trình cha/con."
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:20
+array:3 [
+  "operation" => "dependency cycle"
+  "exception" => "Illuminate\Validation\ValidationException"
+  "message" => "Dependency không được tạo chu trình."
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:26
+array:3 [
+  "operation" => "role from another workspace"
+  "exception" => "Illuminate\Validation\ValidationException"
+  "message" => "Dữ liệu phải thuộc cùng workspace."
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:34
+array:3 [
+  "operation" => "event end before start"
+  "exception" => "Illuminate\Validation\ValidationException"
+  "message" => "Thời điểm kết thúc phải sau thời điểm bắt đầu."
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:41
+array:3 [
+  "operation" => "modify history"
+  "exception" => "Illuminate\Validation\ValidationException"
+  "message" => "Lịch sử hệ thống không được chỉnh sửa."
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:48
+array:3 [
+  "operation" => "delete history"
+  "exception" => "Illuminate\Validation\ValidationException"
+  "message" => "Lịch sử hệ thống không được xóa."
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:54
+array:3 [
+  "soft_deleted_comment" => {#7955
+    +"id": "01a147ef-9122-72f1-a25b-cda345b9e12a"
+    +"type": "COMMENT"
+    +"deleted_at": "2026-10-17 03:38:02"
+  }
+  "history_after_attempts" => {#7977
+    +"id": "01a147ef-9126-728f-ba60-3ca46a2a9e63"
+    +"type": "HISTORY"
+    +"content": null
+    +"deleted_at": null
+  }
+  "estimate_after_attempts" => 45
+] // vendor\psy\psysh\src\ExecutionClosure.php(41) : eval()'d code:58

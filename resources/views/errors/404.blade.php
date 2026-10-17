@@ -1,0 +1,1 @@
+<x-layout title="Không tìm thấy"><section class="card" data-page="error-404"><h1>404 — Không tìm thấy</h1><p>Dữ liệu không tồn tại trong phạm vi yêu cầu.</p><a href="{{ route('home') }}">Về trang chính</a></section></x-layout>

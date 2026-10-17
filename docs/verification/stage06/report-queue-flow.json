@@ -1,0 +1,323 @@
+[
+  {
+    "step": "Resume CSV actual response",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a00-032c-7133-8c8d-7a93ce386fff/export",
+    "errors": []
+  },
+  {
+    "step": "CSV quoting parsed correctly and formula-safe",
+    "verified": true
+  },
+  {
+    "step": "snapshot unsupported PATCH",
+    "http": 405,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a00-032c-7133-8c8d-7a93ce386fff",
+    "errors": []
+  },
+  {
+    "step": "client metrics injection rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Không được gửi trường metrics json trong thao tác này."
+    ]
+  },
+  {
+    "step": "injection no snapshot",
+    "verified": true
+  },
+  {
+    "step": "clipped period snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a01-a5e1-71ac-a86a-556041a94336",
+    "errors": []
+  },
+  {
+    "step": "UTC half-open clipping correct",
+    "verified": true,
+    "period": {
+      "from": "2026-10-20",
+      "to": "2026-10-21",
+      "start_utc": "2026-10-19T17:00:00+00:00",
+      "end_utc": "2026-10-20T17:00:00+00:00"
+    }
+  },
+  {
+    "step": "change source estimate through task form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a149ff-a982-70a4-ad68-56f774575e1d/tasks/01a149ff-dc90-703b-838a-4c571cdb42d8",
+    "errors": []
+  },
+  {
+    "step": "snapshot JSON byte-for-byte unchanged after source mutation",
+    "verified": true
+  },
+  {
+    "step": "CSV export unchanged after source mutation",
+    "verified": true
+  },
+  {
+    "step": "new snapshot reflects new data",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/reports/01a14a01-ad53-7145-b416-d35481fe4d9d",
+    "errors": []
+  },
+  {
+    "step": "new estimate 240",
+    "verified": true
+  },
+  {
+    "step": "create separate private project",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a14a01-b02e-73d7-9d51-f844ceed3648",
+    "errors": []
+  },
+  {
+    "step": "create secret work",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/projects/01a14a01-b02e-73d7-9d51-f844ceed3648/tasks/01a14a01-b394-7363-b74e-d29c97b2f681",
+    "errors": []
+  },
+  {
+    "step": "aggregate scoped by current project permissions",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/dashboard?from=2026-10-01&to=2026-11-01",
+    "errors": []
+  },
+  {
+    "step": "hidden project name and task absent",
+    "verified": true
+  },
+  {
+    "step": "explicit forbidden project",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/dashboard?from=2026-10-01&to=2026-11-01&project_id=01a14a01-b02e-73d7-9d51-f844ceed3648",
+    "errors": []
+  },
+  {
+    "step": "cross workspace filter project",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/dashboard?from=2026-10-01&to=2026-11-01&project_id=01a147ea-0b32-7009-9dd6-550d5d557ff5",
+    "errors": []
+  },
+  {
+    "step": "AI request form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/create?from=2026-10-01&to=2026-11-01&project_id=01a149ff-a982-70a4-ad68-56f774575e1d&subject_user_id=&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "queue AI report request",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-bbb1-7041-8c21-afa67ec251aa",
+    "errors": []
+  },
+  {
+    "step": "AiRun and queue job committed, no synchronous provider call",
+    "verified": true
+  },
+  {
+    "step": "repeat same submission",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-bbb1-7041-8c21-afa67ec251aa",
+    "errors": []
+  },
+  {
+    "step": "idempotency reused run and single job",
+    "verified": true
+  },
+  {
+    "step": "same token different request rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Mã gửi đã dùng cho nội dung khác. Mở form mới để tạo yêu cầu khác."
+    ]
+  },
+  {
+    "step": "different payload did not enqueue",
+    "verified": true
+  },
+  {
+    "step": "worker consumes unconfigured request",
+    "exit_code": 0,
+    "worker_output": "  2026-10-17 13:16:32 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-17 13:16:32 App\\Jobs\\ProcessAiRun ............................................................. 76.25ms DONE\n"
+  },
+  {
+    "step": "worker consumes unconfigured request worker exited",
+    "verified": true
+  },
+  {
+    "step": "honest terminal error and call audit, no fabricated tokens/result",
+    "verified": true,
+    "run": {
+      "status": "failed",
+      "error_message": "AI đang tắt; chưa gọi nhà cung cấp và chưa tạo nhận xét AI.",
+      "started_at": "2026-10-17 13:16:32",
+      "finished_at": "2026-10-17 13:16:32"
+    },
+    "calls": [
+      {
+        "attempt_no": 1,
+        "status": "failed",
+        "input_tokens": null,
+        "output_tokens": null,
+        "response_payload": null
+      }
+    ]
+  },
+  {
+    "step": "AI failed status Blade",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-bbb1-7041-8c21-afa67ec251aa",
+    "errors": []
+  },
+  {
+    "step": "error visible and no success text",
+    "verified": true
+  },
+  {
+    "step": "user retry 2",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-bbb1-7041-8c21-afa67ec251aa",
+    "errors": []
+  },
+  {
+    "step": "retry worker 2",
+    "exit_code": 0,
+    "worker_output": "  2026-10-17 13:16:35 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-17 13:16:35 App\\Jobs\\ProcessAiRun ............................................................. 62.63ms DONE\n"
+  },
+  {
+    "step": "retry worker 2 worker exited",
+    "verified": true
+  },
+  {
+    "step": "global attempt bounded 2",
+    "verified": true
+  },
+  {
+    "step": "user retry 3",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-bbb1-7041-8c21-afa67ec251aa",
+    "errors": []
+  },
+  {
+    "step": "retry worker 3",
+    "exit_code": 0,
+    "worker_output": "  2026-10-17 13:16:38 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-17 13:16:38 App\\Jobs\\ProcessAiRun ............................................................ 124.29ms DONE\n"
+  },
+  {
+    "step": "retry worker 3 worker exited",
+    "verified": true
+  },
+  {
+    "step": "global attempt bounded 3",
+    "verified": true
+  },
+  {
+    "step": "retry after global cap rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Chỉ thử lại yêu cầu lỗi còn lượt xử lý (tối đa 3 lượt)."
+    ]
+  },
+  {
+    "step": "no job beyond cap",
+    "verified": true
+  },
+  {
+    "step": "AI request form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/create?from=2026-10-01&to=2026-11-01&project_id=01a149ff-a982-70a4-ad68-56f774575e1d&subject_user_id=&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "queue AI report request",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-e720-73e2-a560-684f5409a950",
+    "errors": []
+  },
+  {
+    "step": "cancel queued through form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-e720-73e2-a560-684f5409a950",
+    "errors": []
+  },
+  {
+    "step": "cancelled job no-op",
+    "exit_code": 0,
+    "worker_output": "  2026-10-17 13:16:43 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-17 13:16:43 App\\Jobs\\ProcessAiRun ............................................................. 18.50ms DONE\n"
+  },
+  {
+    "step": "cancelled job no-op worker exited",
+    "verified": true
+  },
+  {
+    "step": "cancelled run has no provider attempt",
+    "verified": true
+  },
+  {
+    "step": "AI request form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/create?from=2026-10-01&to=2026-11-01&project_id=01a149ff-a982-70a4-ad68-56f774575e1d&subject_user_id=&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "queue AI report request",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-f608-72f4-b2d6-21ca68976aa1",
+    "errors": []
+  },
+  {
+    "step": "revoke project while queued",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "worker rechecks revoked permission",
+    "exit_code": 0,
+    "worker_output": "  2026-10-17 13:16:46 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-17 13:16:46 App\\Jobs\\ProcessAiRun ............................................................. 36.24ms DONE\n"
+  },
+  {
+    "step": "worker rechecks revoked permission worker exited",
+    "verified": true
+  },
+  {
+    "step": "revoked request failed before provider attempt",
+    "verified": true
+  },
+  {
+    "step": "revoked requester cannot open stored context",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a149ff-a550-736a-908c-4867444f4481/ai-runs/01a14a01-f608-72f4-b2d6-21ca68976aa1",
+    "errors": []
+  },
+  {
+    "step": "restore project membership",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "AI foundation did not mutate business or create plan",
+    "verified": true
+  },
+  {
+    "step": "expected domain errors acknowledged, queue empty and no failed_jobs increment",
+    "verified": true
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "Stage 6 HTTP worker walkthrough complete",
+    "workspace_id": "01a149ff-a550-736a-908c-4867444f4481",
+    "project_id": "01a149ff-a982-70a4-ad68-56f774575e1d",
+    "snapshot_id": "01a14a00-032c-7133-8c8d-7a93ce386fff",
+    "run_id": "01a14a01-bbb1-7041-8c21-afa67ec251aa"
+  }
+]

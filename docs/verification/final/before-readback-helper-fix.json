@@ -1,0 +1,14 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "store final report from HTTP timer data",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a19-d83e-72ff-8a43-3761cf21a289/reports/01a14a26-9dd0-723e-be04-a41ffdbaabdf",
+    "errors": []
+  }
+]

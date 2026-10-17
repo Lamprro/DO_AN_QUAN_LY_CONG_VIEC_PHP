@@ -1,0 +1,8 @@
+Illuminate\Support\Facades\URL::forceRootUrl('http://127.0.0.1:8123');
+$owner = App\Models\User::where('email','demo1@example.test')->firstOrFail();
+$workspace = App\Models\Workspace::where('name','Review Phase 2 Browser')->firstOrFail();
+$role = $workspace->roles()->where('name','Viewer')->firstOrFail();
+config(['workspace.invitation_ttl_minutes'=>1,'workspace.send_invitation_mail'=>false]);
+$result = app(App\Services\InvitationService::class)->issue($owner,$workspace,['email'=>'phase2.expiry@example.test','role_id'=>$role->id]);
+file_put_contents(storage_path('app/private/stage02-review/expiry.json'),json_encode(['url'=>$result['url'],'expires_at'=>$result['record']['expires_at']]));
+dump(['invitation_id'=>$result['record']['id'],'expires_at'=>$result['record']['expires_at'],'store'=>config('workspace.invitation_store'),'ttl_seconds'=>$result['record']['expires_at']-now()->timestamp]);

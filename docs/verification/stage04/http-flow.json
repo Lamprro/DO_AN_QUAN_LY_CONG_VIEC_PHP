@@ -1,0 +1,499 @@
+[
+  {
+    "step": "owner login",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create workspace",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a",
+    "errors": []
+  },
+  {
+    "step": "create project Phase4 Workflow 1792226315",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850",
+    "errors": []
+  },
+  {
+    "step": "register worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "workspace invite worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/members",
+    "errors": []
+  },
+  {
+    "step": "accept invite worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a",
+    "errors": []
+  },
+  {
+    "step": "project membership worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/members",
+    "errors": []
+  },
+  {
+    "step": "register reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "workspace invite reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/members",
+    "errors": []
+  },
+  {
+    "step": "accept invite reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a",
+    "errors": []
+  },
+  {
+    "step": "project membership reviewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/members",
+    "errors": []
+  },
+  {
+    "step": "register viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "workspace invite viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/members",
+    "errors": []
+  },
+  {
+    "step": "accept invite viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a",
+    "errors": []
+  },
+  {
+    "step": "project membership viewer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/members",
+    "errors": []
+  },
+  {
+    "step": "create P4 Group",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-7e74-70ff-a5e3-02cc0d764bb0",
+    "errors": []
+  },
+  {
+    "step": "create P4 Nested",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8195-72a4-8f7b-cf9870536cc6",
+    "errors": []
+  },
+  {
+    "step": "create P4 Predecessor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8488-739c-8d9d-833ebe761fcb",
+    "errors": []
+  },
+  {
+    "step": "create P4 Successor",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-87ae-7309-b4c0-039c8bf55238",
+    "errors": []
+  },
+  {
+    "step": "create P4 Milestone",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8ab1-702a-9d1a-ee348894b3f4",
+    "errors": []
+  },
+  {
+    "step": "tree and create history read-back",
+    "verified": true,
+    "tasks": [
+      {
+        "id": "01a14903-7e74-70ff-a5e3-02cc0d764bb0",
+        "parent_task_id": null,
+        "task_type": "GROUP",
+        "status": "TODO",
+        "estimate_minutes": null
+      },
+      {
+        "id": "01a14903-8195-72a4-8f7b-cf9870536cc6",
+        "parent_task_id": "01a14903-7e74-70ff-a5e3-02cc0d764bb0",
+        "task_type": "GROUP",
+        "status": "TODO",
+        "estimate_minutes": null
+      },
+      {
+        "id": "01a14903-8488-739c-8d9d-833ebe761fcb",
+        "parent_task_id": "01a14903-8195-72a4-8f7b-cf9870536cc6",
+        "task_type": "WORK",
+        "status": "TODO",
+        "estimate_minutes": 60
+      },
+      {
+        "id": "01a14903-87ae-7309-b4c0-039c8bf55238",
+        "parent_task_id": "01a14903-7e74-70ff-a5e3-02cc0d764bb0",
+        "task_type": "WORK",
+        "status": "TODO",
+        "estimate_minutes": 60
+      },
+      {
+        "id": "01a14903-8ab1-702a-9d1a-ee348894b3f4",
+        "parent_task_id": "01a14903-7e74-70ff-a5e3-02cc0d764bb0",
+        "task_type": "MILESTONE",
+        "status": "TODO",
+        "estimate_minutes": null
+      }
+    ]
+  },
+  {
+    "step": "tree page",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/tree",
+    "errors": []
+  },
+  {
+    "step": "maximum depth rejects fourth level",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/create",
+    "errors": [
+      "Cha phải là GROUP chưa lưu trữ, cùng workspace/project."
+    ]
+  },
+  {
+    "step": "cycle tree rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-7e74-70ff-a5e3-02cc0d764bb0/edit",
+    "errors": [
+      "Không được tạo chu trình cha/con."
+    ]
+  },
+  {
+    "step": "cycle rollback",
+    "verified": true
+  },
+  {
+    "step": "non-WORK estimate rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/create",
+    "errors": [
+      "Chỉ WORK lá có ước lượng; hãy để trống cho GROUP/MILESTONE."
+    ]
+  },
+  {
+    "step": "dependency added",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-87ae-7309-b4c0-039c8bf55238",
+    "errors": []
+  },
+  {
+    "step": "dependency cycle rejected",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8488-739c-8d9d-833ebe761fcb",
+    "errors": [
+      "Dependency không được tạo chu trình."
+    ]
+  },
+  {
+    "step": "dependency cycle absent",
+    "verified": true
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Dependency chưa hoàn tất hoặc chưa đủ thời gian chờ FS."
+    ]
+  },
+  {
+    "step": "FS blocks successor before predecessor DONE",
+    "verified": true
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8488-739c-8d9d-833ebe761fcb/status",
+    "errors": []
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "worker starts assigned task",
+    "verified": true
+  },
+  {
+    "step": "GROUP derived IN_PROGRESS",
+    "verified": true
+  },
+  {
+    "step": "report blocker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8488-739c-8d9d-833ebe761fcb",
+    "errors": []
+  },
+  {
+    "step": "status IN_PROGRESS to REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Cần giải quyết blocker đang mở trước."
+    ]
+  },
+  {
+    "step": "blocker stops submit REVIEW",
+    "verified": true
+  },
+  {
+    "step": "verification helper corrected",
+    "detail": "The HTML hidden status field is now explicitly submitted; no application bypass."
+  },
+  {
+    "step": "resolve blocker through form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8488-739c-8d9d-833ebe761fcb",
+    "errors": []
+  },
+  {
+    "step": "blocker resolution database",
+    "verified": true
+  },
+  {
+    "step": "status IN_PROGRESS to REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "submit review",
+    "verified": true
+  },
+  {
+    "step": "REVIEW metadata locked",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8488-739c-8d9d-833ebe761fcb/edit",
+    "errors": []
+  },
+  {
+    "step": "status REVIEW to DONE",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14903-8488-739c-8d9d-833ebe761fcb/status",
+    "errors": []
+  },
+  {
+    "step": "status REVIEW to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "reviewer requests revision",
+    "verified": true
+  },
+  {
+    "step": "status IN_PROGRESS to REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resubmit review",
+    "verified": true
+  },
+  {
+    "step": "status REVIEW to DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "reviewer approves",
+    "verified": true
+  },
+  {
+    "step": "completed timestamp stored",
+    "verified": true
+  },
+  {
+    "step": "status DONE to TODO",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Trạng thái đã thay đổi; hãy tải lại trang trước khi thao tác."
+    ]
+  },
+  {
+    "step": "stale expected status rejected",
+    "verified": true
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "successor starts after FS done",
+    "verified": true
+  },
+  {
+    "step": "status DONE to TODO",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": [
+      "Task sau đã bắt đầu; cần xử lý dependency trước khi mở lại/hủy."
+    ]
+  },
+  {
+    "step": "cannot reopen prerequisite with active successor",
+    "verified": true
+  },
+  {
+    "step": "status IN_PROGRESS to REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "submit successor",
+    "verified": true
+  },
+  {
+    "step": "status REVIEW to DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "approve successor",
+    "verified": true
+  },
+  {
+    "step": "status TODO to IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "milestone starts",
+    "verified": true
+  },
+  {
+    "step": "status IN_PROGRESS to REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "milestone submits",
+    "verified": true
+  },
+  {
+    "step": "status REVIEW to DONE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "milestone approves",
+    "verified": true
+  },
+  {
+    "step": "GROUP status becomes DONE",
+    "verified": true
+  },
+  {
+    "step": "progress tree after completion",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/tree",
+    "errors": []
+  },
+  {
+    "step": "WORK progress 100 percent",
+    "verified": true
+  },
+  {
+    "step": "create P4 Comment File",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "comment added",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "comment escaped in HTML",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "script comment escaped",
+    "verified": true
+  },
+  {
+    "step": "another actor cannot edit comment",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4/comments/01a14904-5eca-7109-aed3-ddcdbaf70ca8",
+    "errors": []
+  },
+  {
+    "step": "author edits comment",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "author deletes comment",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4",
+    "errors": []
+  },
+  {
+    "step": "comment soft deleted",
+    "verified": true
+  },
+  {
+    "step": "HISTORY cannot be edited through comments endpoint",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4/comments/01a14904-5bae-70a9-8379-d779d577c022",
+    "errors": []
+  },
+  {
+    "step": "HISTORY cannot be deleted through comments endpoint",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14903-52da-70c8-9043-ffdc3072377a/projects/01a14903-560f-736d-bc79-b18f61ef8850/tasks/01a14904-5baa-7366-855f-8f0c4809fcc4/comments/01a14904-5bae-70a9-8379-d779d577c022",
+    "errors": []
+  },
+  {
+    "step": "final foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "core walkthrough complete",
+    "workspace_id": "01a14903-52da-70c8-9043-ffdc3072377a",
+    "project_id": "01a14903-560f-736d-bc79-b18f61ef8850",
+    "task_id": "01a14904-5baa-7366-855f-8f0c4809fcc4"
+  }
+]

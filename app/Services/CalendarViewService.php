@@ -18,13 +18,13 @@ class CalendarViewService
 
     public function range(Request $request): array
     {
-        $data = $request->validate(['view' => ['sometimes', 'in:month,week,list'], 'date' => ['sometimes', 'date_format:Y-m-d'],
+        $data = $request->validate(['view' => ['sometimes', 'in:day,month,week,list'], 'date' => ['sometimes', 'date_format:Y-m-d'],
             'from' => ['nullable', 'required_with:to', 'date_format:Y-m-d'], 'to' => ['nullable', 'required_with:from', 'date_format:Y-m-d'], 'include_cancelled' => ['sometimes', 'boolean']]);
         $timezone = $request->user()->timezone;
         $date = isset($data['date']) ? CarbonImmutable::createFromFormat('!Y-m-d', $data['date'], $timezone) : CarbonImmutable::now($timezone)->startOfDay();
         $mode = $data['view'] ?? 'week';
         $start = $mode === 'month' ? $date->startOfMonth() : ($mode === 'week' ? $date->startOfWeek() : $date);
-        $end = $mode === 'month' ? $start->addMonth() : $start->addDays($mode === 'week' ? 7 : 30);
+        $end = $mode === 'month' ? $start->addMonth() : $start->addDays($mode === 'day' ? 1 : ($mode === 'week' ? 7 : 30));
         if (! empty($data['from'])) {
             $start = CarbonImmutable::createFromFormat('!Y-m-d', $data['from'], $timezone);
             $end = CarbonImmutable::createFromFormat('!Y-m-d', $data['to'], $timezone);
@@ -38,6 +38,40 @@ class CalendarViewService
         }
 
         return ['mode' => $mode, 'timezone' => $timezone, 'start' => $start, 'end' => $end, 'days' => $days, 'includeCancelled' => (bool) ($data['include_cancelled'] ?? false)];
+    }
+
+    public function presentation(Request $request, array $range): array
+    {
+        $base = $request->only('view', 'project_id', 'include_cancelled');
+        $base['view'] = $range['mode'];
+        $link = function ($date, $from = null, $to = null) use ($request, $base) {
+            return $request->url().'?'.http_build_query(array_filter($base + ['date' => $date, 'from' => $from, 'to' => $to], fn ($v) => $v !== null && $v !== ''));
+        };
+        if ($request->filled('from')) {
+            $days = count($range['days']);
+            $previous = $range['start']->subDays($days);
+            $next = $range['end'];
+            $prev = $link($previous->toDateString(), $previous->toDateString(), $range['start']->toDateString());
+            $nextUrl = $link($next->toDateString(), $next->toDateString(), $next->addDays($days)->toDateString());
+        } else {
+            $previous = match ($range['mode']) {
+                'month' => $range['start']->subMonth(),'week' => $range['start']->subWeek(),'day' => $range['start']->subDay(),default => $range['start']->subDays(30)
+            };
+            $next = match ($range['mode']) {
+                'month' => $range['start']->addMonth(),'week' => $range['start']->addWeek(),'day' => $range['start']->addDay(),default => $range['end']
+            };
+            $prev = $link($previous->toDateString());
+            $nextUrl = $link($next->toDateString());
+        }
+        $now = CarbonImmutable::now($range['timezone']);
+        $span = $range['end']->timestamp - $range['start']->timestamp;
+        $ticks = [];
+        foreach ($range['days'] as $day) {
+            $d = CarbonImmutable::parse($day, $range['timezone']);
+            $ticks[] = ['date' => $day, 'label' => $d->format('d/m'), 'offset' => round(($d->timestamp - $range['start']->timestamp) * 100 / $span, 4), 'today' => $day === $now->toDateString()];
+        }
+
+        return ['previous' => $prev, 'next' => $nextUrl, 'today' => $link($now->toDateString()), 'todayDate' => $now->toDateString(), 'ticks' => $ticks, 'nowPercent' => $now->gte($range['start']) && $now->lt($range['end']) ? round(($now->timestamp - $range['start']->timestamp) * 100 / $span, 4) : null];
     }
 
     public function rows(User $actor, Workspace $workspace, array $range, ?Project $project = null): array
@@ -64,7 +98,7 @@ class CalendarViewService
                 continue;
             }
             $rows[] = ['id' => $canView ? $event->id : null, 'title' => $canView ? $event->title : 'Bận (riêng tư)',
-                'description' => $canView ? $event->description : null, 'owner' => $event->user->name,
+                'description' => $canView ? $event->description : null, 'owner' => $canView ? $event->user->name : null,
                 'type' => $canView ? $event->event_type->value : 'BUSY', 'status' => $canView ? $event->status->value : null,
                 'starts_at' => $event->starts_at->setTimezone($range['timezone']), 'ends_at' => $event->ends_at->setTimezone($range['timezone']),
                 'all_day' => $event->all_day, 'is_busy' => $event->is_busy,

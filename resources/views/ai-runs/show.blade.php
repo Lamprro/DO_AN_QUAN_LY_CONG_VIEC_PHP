@@ -1,4 +1,7 @@
-<x-layout title="Trạng thái yêu cầu AI"><section class="card" data-page="ai-run-show" data-run-id="{{ $run->id }}"><h1>Trạng thái yêu cầu AI</h1><p data-ai-status="{{ $run->status->value }}">{{ \App\Support\UiLabels::text($run->status->value) }}</p><p style="white-space:pre-wrap">{{ $run->user_prompt }}</p><p>Bắt đầu: {{ $run->started_at?->setTimezone(auth()->user()->timezone)->format('d/m/Y H:i:s')??'Chưa bắt đầu' }} · Kết thúc: {{ $run->finished_at?->setTimezone(auth()->user()->timezone)->format('d/m/Y H:i:s')??'Chưa kết thúc' }}</p>
+<x-layout title="Trạng thái yêu cầu AI"><section class="card" data-page="ai-run-show" data-run-id="{{ $run->id }}"><h1>{{ \App\Support\UiLabels::text($run->operation) }}</h1>
+@include('ai-runs._configuration')<p>Đã dùng {{ $calls->count() }}/{{ config('ai.max_attempts') }} lượt; còn {{ max(0,config('ai.max_attempts')-$calls->count()) }} lượt thử. Thử lại dùng context cũ; dữ liệu mới cần yêu cầu mới.</p>
+@if(in_array($run->status->value,['queued','running'],true))<p role="status">Chưa có kết quả hoàn tất. Có thể làm mới trang hoặc hủy theo quyền; không tự gửi yêu cầu mới. Nếu chờ lâu, kiểm tra worker queue.</p>
+@endif<p data-ai-status="{{ $run->status->value }}">{{ \App\Support\UiLabels::text($run->status->value) }}</p><p style="white-space:pre-wrap">{{ $run->user_prompt }}</p><p>Bắt đầu: {{ $run->started_at?->setTimezone(auth()->user()->timezone)->format('d/m/Y H:i:s')??'Chưa bắt đầu' }} · Kết thúc: {{ $run->finished_at?->setTimezone(auth()->user()->timezone)->format('d/m/Y H:i:s')??'Chưa kết thúc' }}</p>
 @if($run->error_message)<div class="notice errors" role="alert">{{ $run->error_message }}</div>
 @endif
 <p><a href="{{ route('workspaces.ai-runs.show',[$workspace,$run]) }}">Làm mới trạng thái</a> · <a href="{{ route('workspaces.ai-runs.index',$workspace) }}">Danh sách</a></p>
@@ -11,7 +14,7 @@
 @endif
 @endcan</section>
 <section class="card"><h2>Các lượt xử lý</h2>
-@forelse($calls as $call)<article data-call-id="{{ $call->id }}"><p>Lượt {{ $call->attempt_no }} · {{ $call->provider }} / {{ $call->model }} · {{ $call->status->value }}</p>
+@forelse($calls as $call)<article data-call-id="{{ $call->id }}"><p>Lượt {{ $call->attempt_no }} · {{ $call->provider }} / {{ $call->model }} · {{ \App\Support\UiLabels::text($call->status) }}</p>
 @if($call->error_message)<p>{{ $call->error_message }}</p>
 @endif
 @if($run->status->value==='succeeded' && $call->status->value==='succeeded')<h3>Nhận xét từ AI</h3><p style="white-space:pre-wrap">{{ $call->response_payload['text']??'' }}</p>

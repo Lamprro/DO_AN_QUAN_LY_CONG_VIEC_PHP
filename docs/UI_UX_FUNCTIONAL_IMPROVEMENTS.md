@@ -1,5 +1,7 @@
 # Kế hoạch cải thiện UI/UX và chức năng
 
+**18/10/2026 — Đợt D/P1 quan sát đã triển khai.** Xem [P1_OBSERVATION.md](P1_OBSERVATION.md) và bàn giao FE mới nhất. P0 giữ nguyên; đợt E/F04–F10 và P2 còn là backlog. Các mô tả “chưa có/cần bổ sung” của bản kế hoạch gốc là lịch sử trước nâng cấp.
+
 > Cập nhật 17/10/2026: vòng P0 đã triển khai, xem [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) và [bàn giao FE](FRONTEND_HANDOFF.md). Bảng “hiện trạng” và các câu “chưa có/cần bổ sung” trong bản kế hoạch gốc bên dưới mô tả **trước vòng P0**. F01/F02/F03 nay có mã và minh chứng; P1/P2/KEY còn là backlog. Preview dùng đường apply thật trong transaction rồi rollback, không lưu thay đổi nghiệp vụ (không phải hàm chỉ SELECT).
 
 Ngày lập: 17/10/2026. Áp dụng cho source Laravel MVC hiện tại tại `D:\HeThong_PhanTichTaiChinh\DO_AN_QUAN_LY_CONG_VIEC_PHP`. Đây là tài liệu đề xuất và giao việc tiếp theo, **không phải danh sách tính năng đã triển khai thêm**. Các nhận xét hiện trạng dựa trên Blade, CSS, controller/service và tài liệu bàn giao trong repo; không coi đây là kết quả một đợt nghiên cứu người dùng hoặc kiểm tra tải thực tế.

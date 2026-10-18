@@ -1,5 +1,16 @@
 # Bàn giao FE — Laravel MVC / Blade
 
+## Cập nhật mới nhất — Đợt D/P1 quan sát, 18/10/2026
+
+Đã hoàn thiện Calendar/Timeline, dashboard/biểu đồ có bảng tương đương, snapshot/CSV, inbox lọc server, AI config/attempts và GitHub latest delivery. Đọc [P1_OBSERVATION.md](P1_OBSERVATION.md) trước các ghi chú P0/phần2–6, và [minh chứng P1](verification/p1-observation/README.md). Đợt E/F04–F10 chưa triển khai.
+
+Calendar dùng `view=day|week|month|list`, `date`, `from/to` (exclusive end,≤93ngày), `include_cancelled`, `project_id` nullable. Controller nay thực sự lọc project_id; không bỏ tham số khi đổi chế độ. `navigation` cấp URL trước/sau/hôm nay và trục timeline; `range.timezone` là timezone người dùng. `calendar/create?task_id=...&project_id=...` chỉ chuẩn bị form từ eligible WORK của actor, chưa ghi lịch. Private busy không có title/owner/ID/link/task trong HTML. Timeline giữ offset/width server theo timestamp và danh sách tương đương.
+
+`reports/_metrics` dùng metrics schema1 hiện có; bar/meter không làm phép tính nghiệp vụ tại client. `MetricDisplay::minutes` đổi cách đọc sang giờ/phút/giây; null khác0. CSV/snapshot giữ số phút gốc. `reports/_snapshot` cấp nhãn số liệu đã lưu/người tạo/kỳ/timezone/bộ lọc; không thay bằng metrics live nếu snapshot bị chặn quyền. Styles mới `public/css/p1-observation.css` được nạp sau p0-ui.css.
+
+Inbox nhận `filter=all|unread|read`, `type=task.created|task.updated|task.status_changed|task.comment_added` optional, query/paginate server trước render. Giữ native forms read/unread/read-all, không đánh dấu đã đọc trước POST/PATCH thành công. AI partial `_configuration` chỉ mô tả readiness, không xuất key; retry giữ context cũ, có attempts còn lại, không giả kết quả/progress. GitHub `$latestDelivery` là log đã lưu theo project hiện tại, không chứng minh đã kiểm mạng ở lần mở trang.
+
+
 ## Bàn giao P0 hiện tại — đọc trước các ghi chú lịch sử
 
 P0 đã triển khai. Đọc [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) để xem phạm vi, flow hàm và giới hạn; [verification/p0/README.md](verification/p0/README.md) để xem bằng chứng. Backlog UI_UX_FUNCTIONAL_IMPROVEMENTS.md vẫn chứa mô tả **trước nâng cấp**; P1/P2 chưa tự động thành chức năng đã làm.

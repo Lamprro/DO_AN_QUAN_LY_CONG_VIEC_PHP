@@ -1,0 +1,452 @@
+[
+  {
+    "step": "compiled Blade syntax checked",
+    "files": 131
+  },
+  {
+    "step": "login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo2@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo5@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create P1 own WORK",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14ce1-a19d-7129-9d5a-aab377b60a36",
+    "errors": []
+  },
+  {
+    "step": "create P1 own WORK SQL exists",
+    "verified": true
+  },
+  {
+    "step": "task-to-calendar prefill",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/create?project_id=01a14a6f-0362-706c-b894-285091fe2f26&task_id=01a14ce1-a19d-7129-9d5a-aab377b60a36",
+    "errors": []
+  },
+  {
+    "step": "prefill uses own eligible task",
+    "verified": true
+  },
+  {
+    "step": "save own real TASK_BLOCK",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/01a14ce1-a6f8-7031-8af6-3ac69832a6e3",
+    "errors": []
+  },
+  {
+    "step": "save own real TASK_BLOCK SQL exists",
+    "verified": true
+  },
+  {
+    "step": "Member creates own private meeting",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/01a14ce1-aa85-70ce-b997-56daaaa2650a",
+    "errors": []
+  },
+  {
+    "step": "Member creates own private meeting SQL exists",
+    "verified": true
+  },
+  {
+    "step": "calendar day",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-17&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "private projection day",
+    "verified": true
+  },
+  {
+    "step": "own authorized block rendered day",
+    "verified": true
+  },
+  {
+    "step": "navigation preserves project scope",
+    "verified": true
+  },
+  {
+    "step": "calendar week",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=week&date=2027-05-17&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "private projection week",
+    "verified": true
+  },
+  {
+    "step": "own authorized block rendered week",
+    "verified": true
+  },
+  {
+    "step": "calendar month",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=month&date=2027-05-17&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "private projection month",
+    "verified": true
+  },
+  {
+    "step": "own authorized block rendered month",
+    "verified": true
+  },
+  {
+    "step": "calendar list",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=list&date=2027-05-17&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "private projection list",
+    "verified": true
+  },
+  {
+    "step": "own authorized block rendered list",
+    "verified": true
+  },
+  {
+    "step": "day right edge excluded",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-18&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "no previous day events",
+    "verified": true
+  },
+  {
+    "step": "custom range navigation",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=list&from=2027-05-17&to=2027-05-19&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "next custom period keeps duration",
+    "verified": true
+  },
+  {
+    "step": "timeline clipped real slot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/timeline?view=day&date=2027-05-17",
+    "errors": []
+  },
+  {
+    "step": "axis and accessible list",
+    "verified": true
+  },
+  {
+    "step": "other project filter excludes first project events",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-17&project_id=01a14a7c-872a-700f-bbb4-148928be8117",
+    "errors": []
+  },
+  {
+    "step": "calendar project scope actually filtered",
+    "verified": true
+  },
+  {
+    "step": "outsider calendar denied",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-17&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "Viewer cannot prefill someone else task",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/create?project_id=01a14a6f-0362-706c-b894-285091fe2f26&task_id=01a14ce1-a19d-7129-9d5a-aab377b60a36",
+    "errors": []
+  },
+  {
+    "step": "overlarge calendar range refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-17&project_id=01a14a7c-872a-700f-bbb4-148928be8117",
+    "errors": []
+  },
+  {
+    "step": "range error has no business writes",
+    "verified": true
+  },
+  {
+    "step": "real overlap refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/create",
+    "errors": []
+  },
+  {
+    "step": "overlap not saved",
+    "verified": true
+  },
+  {
+    "step": "adjacent TASK_BLOCK allowed",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/01a14ce1-c15f-7280-bb17-46155c053478",
+    "errors": []
+  },
+  {
+    "step": "adjacent TASK_BLOCK allowed SQL exists",
+    "verified": true
+  },
+  {
+    "step": "dashboard real aggregates",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/dashboard?from=2027-05-01&to=2027-06-01&project_id=01a14a6f-0362-706c-b894-285091fe2f26&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "charts show source units and null actual",
+    "verified": true
+  },
+  {
+    "step": "save immutable report",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14ce1-c6e0-72cb-ab04-e4eb5e6ec4e1",
+    "errors": []
+  },
+  {
+    "step": "save immutable report SQL exists",
+    "verified": true
+  },
+  {
+    "step": "snapshot SQL period source",
+    "verified": true,
+    "planned_minutes": 90,
+    "actual_minutes": null
+  },
+  {
+    "step": "snapshot metadata visible",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14ce1-c6e0-72cb-ab04-e4eb5e6ec4e1",
+    "errors": []
+  },
+  {
+    "step": "snapshot creator/fixed label",
+    "verified": true
+  },
+  {
+    "step": "snapshot print",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14ce1-c6e0-72cb-ab04-e4eb5e6ec4e1/print",
+    "errors": []
+  },
+  {
+    "step": "snapshot CSV",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14ce1-c6e0-72cb-ab04-e4eb5e6ec4e1/export",
+    "errors": []
+  },
+  {
+    "step": "CSV preserves raw minute units",
+    "verified": false
+  },
+  {
+    "step": "CSV check helper corrected",
+    "reason": "Use CSV parser for quoted fields, not raw substring; application export unchanged."
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "snapshot print",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14ce1-c6e0-72cb-ab04-e4eb5e6ec4e1/print",
+    "errors": []
+  },
+  {
+    "step": "snapshot CSV",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14ce1-c6e0-72cb-ab04-e4eb5e6ec4e1/export",
+    "errors": []
+  },
+  {
+    "step": "CSV preserves raw minute units",
+    "verified": true
+  },
+  {
+    "step": "mutate source after snapshot",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14ce1-a19d-7129-9d5a-aab377b60a36",
+    "errors": []
+  },
+  {
+    "step": "stored metrics immutable",
+    "verified": true
+  },
+  {
+    "step": "other user cannot read Owner snapshot",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14ce1-c6e0-72cb-ab04-e4eb5e6ec4e1",
+    "errors": []
+  },
+  {
+    "step": "start WORK via actual form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14ce1-a19d-7129-9d5a-aab377b60a36",
+    "errors": []
+  },
+  {
+    "step": "start timer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "stop own global timer",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "actual duration in current recorded period",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/dashboard?from=2026-10-01&to=2026-11-01&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "ended session seconds displayed",
+    "verified": true
+  },
+  {
+    "step": "Member comments to notify Owner",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14ce1-a19d-7129-9d5a-aab377b60a36",
+    "errors": []
+  },
+  {
+    "step": "notification type + unread filter",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/notifications?filter=unread&type=task.comment_added",
+    "errors": []
+  },
+  {
+    "step": "new notice in correct filter",
+    "verified": true
+  },
+  {
+    "step": "read rendered notification form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/notifications",
+    "errors": []
+  },
+  {
+    "step": "read_at saved",
+    "verified": true
+  },
+  {
+    "step": "read-filter includes notice",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/notifications?filter=read&type=task.comment_added",
+    "errors": []
+  },
+  {
+    "step": "read filter server query",
+    "verified": true
+  },
+  {
+    "step": "foreign recipient cannot read notice",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/notifications/01a14ce2-957c-7123-9689-4a11e9da72eb/read",
+    "errors": []
+  },
+  {
+    "step": "GitHub state without enabling connection",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/github",
+    "errors": []
+  },
+  {
+    "step": "no fake network success",
+    "verified": true
+  },
+  {
+    "step": "queue empty before own request",
+    "verified": true
+  },
+  {
+    "step": "AI configuration state",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/ai-runs/create?from=2027-05-01&to=2027-06-01&project_id=01a14a6f-0362-706c-b894-285091fe2f26&include_archived=0",
+    "errors": []
+  },
+  {
+    "step": "disabled config truthfully visible",
+    "verified": true
+  },
+  {
+    "step": "queue real report request",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/ai-runs/01a14ce2-a31c-70ab-9942-e3a4a09e16e9",
+    "errors": []
+  },
+  {
+    "step": "queue real report request SQL exists",
+    "verified": true
+  },
+  {
+    "step": "only newly requested job pending",
+    "verified": true
+  },
+  {
+    "step": "real worker once",
+    "exit_code": 0,
+    "output": "  2026-10-18 02:41:24 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-18 02:41:24 App\\Jobs\\ProcessAiRun ............................................................. 63.56ms DONE\n"
+  },
+  {
+    "step": "worker handled configuration failure",
+    "verified": true
+  },
+  {
+    "step": "failed AI safe state + attempts",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/ai-runs/01a14ce2-a31c-70ab-9942-e3a4a09e16e9",
+    "errors": []
+  },
+  {
+    "step": "no fake success and retry context explained",
+    "verified": true
+  },
+  {
+    "step": "env/key/flags unchanged",
+    "verified": true
+  },
+  {
+    "step": "foreign keys valid",
+    "verified": true
+  },
+  {
+    "step": "P1 observation flow complete",
+    "no_test_classes": true,
+    "live_http": true
+  }
+]

@@ -24,8 +24,9 @@ class TimelineController extends Controller
             $row['width_percent'] = round(($end - $start) * 100 / $span, 4);
         }
         unset($row);
+        $navigation = $service->presentation($request, $range);
         $groups = collect($rows)->groupBy(fn ($r) => $r['task']?->id ?? 'none');
 
-        return view('calendar.timeline', compact('workspace', 'project', 'range', 'groups') + ['schedule' => config('work_schedule')]);
+        return view('calendar.timeline', compact('workspace', 'project', 'range', 'groups', 'navigation') + ['schedule' => config('work_schedule')]);
     }
 }

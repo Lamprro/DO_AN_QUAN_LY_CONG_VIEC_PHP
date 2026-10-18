@@ -1,0 +1,12 @@
+{
+  "browser": "IAB",
+  "viewport_width": 319,
+  "document_width_report": 304,
+  "document_width_calendar_month": 304,
+  "calendar_month_grid_width": 1050,
+  "calendar_scroll_region_width": 272,
+  "native_get_form_preserved_project": true,
+  "next_day_navigation_checked": true,
+  "snapshot_planned_display": "1 giờ 30 phút",
+  "snapshot_actual_display": "Chưa có dữ liệu"
+}

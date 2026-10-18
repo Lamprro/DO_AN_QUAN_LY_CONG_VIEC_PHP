@@ -20,9 +20,12 @@ class CalendarEventController extends Controller
     public function index(Request $request, Workspace $workspace)
     {
         $range = $this->views->range($request);
-        $rows = $this->views->rows($request->user(), $workspace, $range);
+        $request->validate(['project_id' => 'nullable|uuid']);
+        $project = $request->filled('project_id') ? $workspace->projects()->findOrFail($request->query('project_id')) : null;
+        $rows = $this->views->rows($request->user(), $workspace, $range, $project);
+        $navigation = $this->views->presentation($request, $range);
 
-        return view('calendar.index', compact('workspace', 'range', 'rows') + ['canCreate' => $this->canCreate($request, $workspace), 'schedule' => config('work_schedule')]);
+        return view('calendar.index', compact('workspace', 'project', 'range', 'rows', 'navigation') + ['canCreate' => $project ? app(TaskPolicy::class)->projectWritable($project) && $this->policy->scope($request->user(), $workspace, $project, 'calendar.create') : $this->canCreate($request, $workspace), 'schedule' => config('work_schedule')]);
     }
 
     private function canCreate(Request $request, Workspace $workspace): bool
@@ -56,7 +59,21 @@ class CalendarEventController extends Controller
     {
         abort_unless($this->canCreate($request, $workspace), 403);
 
-        return view('calendar.form', $this->context($request, $workspace));
+        $request->validate(['task_id' => 'nullable|uuid', 'project_id' => 'nullable|uuid']);
+        $context = $this->context($request, $workspace);
+        $prefill = [];
+        if ($request->filled('project_id')) {
+            abort_unless($context['projects']->contains('id', $request->query('project_id')), 403);
+            $prefill['project_id'] = $request->query('project_id');
+        }
+        if ($request->filled('task_id')) {
+            $task = $context['tasks']->firstWhere('id', $request->query('task_id'));
+            abort_unless($task, 403);
+            abort_if(isset($prefill['project_id']) && $prefill['project_id'] !== $task->project_id, 422);
+            $prefill = ['task_id' => $task->id, 'project_id' => $task->project_id, 'title' => $task->title, 'event_type' => 'TASK_BLOCK'];
+        }
+
+        return view('calendar.form', $context + ['prefill' => $prefill]);
     }
 
     public function store(CalendarEventRequest $request, Workspace $workspace)

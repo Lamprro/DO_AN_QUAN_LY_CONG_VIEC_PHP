@@ -24,9 +24,10 @@ class GithubIntegrationController extends Controller
     {
         $this->bound($r, $workspace, $project, 'integration.view');
         $connection = $project->githubConnection;
+        $latestDelivery = GithubLog::where('project_id', $project->id)->latest('received_at')->latest('id')->first();
         $logs = GithubLog::where('project_id', $project->id)->latest('received_at')->paginate(20);
 
-        return view('integrations.github', compact('workspace', 'project', 'connection', 'logs'));
+        return view('integrations.github', compact('workspace', 'project', 'connection', 'logs', 'latestDelivery'));
     }
 
     public function save(Request $r, Workspace $workspace, Project $project)

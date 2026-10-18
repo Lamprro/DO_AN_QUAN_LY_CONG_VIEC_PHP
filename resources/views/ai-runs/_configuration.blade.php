@@ -1,0 +1,3 @@
+
+@php($aiConfigured=config('work_management.ai_enabled') && filled(config('ai.key')) && filled(config('ai.endpoint')) && str_starts_with(config('ai.endpoint'),'https://') && config('ai.provider')!=='unconfigured' && config('ai.model')!=='unconfigured')
+<p class="notice {{ $aiConfigured?'':'warning' }}" data-ai-configured="{{ $aiConfigured?'1':'0' }}">{{ $aiConfigured?'Cấu hình AI đã có; chưa chứng minh nhà cung cấp phản hồi thành công.':'AI đang tắt hoặc thiếu cấu hình. Yêu cầu lưu vào queue chưa có kết quả; worker sẽ báo lỗi thật nếu không thể xử lý.' }}</p><p>Không nhập key vào yêu cầu. Chỉ gửi context trong phạm vi được phép; kết quả lập/điều chỉnh kế hoạch là bản nháp cần rà soát, hỗ trợ blocker chỉ là tư vấn.</p>

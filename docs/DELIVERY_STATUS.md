@@ -1,5 +1,7 @@
 # Bàn giao triển khai toàn bộ — 17/10/2026
 
+**18/10/2026 — Đợt D/P1 quan sát đã triển khai.** Xem [P1_OBSERVATION.md](P1_OBSERVATION.md) và bàn giao FE mới nhất. P0 giữ nguyên; đợt E/F04–F10 và P2 còn là backlog. Các mô tả “chưa có/cần bổ sung” của bản kế hoạch gốc là lịch sử trước nâng cấp.
+
 **Cập nhật P0 17/10/2026:** đã có app shell, forms/mobile, workflow/timer, F01 edit revisions, F03 visual plan editor và F02 diff/preview. Đọc [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) và hợp đồng P0 tại đầu FRONTEND_HANDOFF.md. Các đoạn trước nâng cấp bên dưới là nhật ký.
 
 Chỉ đạo mới: hoàn thiện các phần còn lại, không dừng chờ duyệt từng phần; kiểm tra bằng flow/dữ liệu thật, không thêm TestCase/mocks. Tài liệu này ghi trạng thái hiện tại, thay các câu “chờ duyệt/chưa làm phần7” trong nhật ký phần1–6 vốn được viết trước chỉ đạo mới.

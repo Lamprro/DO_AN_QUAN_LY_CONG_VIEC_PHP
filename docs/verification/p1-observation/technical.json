@@ -1,0 +1,39 @@
+[
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe vendor/bin/pint app/Http/Controllers/CalendarEventController.php app/Http/Controllers/GithubIntegrationController.php app/Http/Controllers/NotificationController.php app/Http/Controllers/TimelineController.php app/Services/CalendarViewService.php app/Support/MetricDisplay.php app/Support/UiLabels.php",
+    "exit_code": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"passed\"}"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:cache",
+    "exit_code": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "step": "source and compiled Blade syntax",
+    "files": 138,
+    "passed": true
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe -r require 'app/Support/MetricDisplay.php'; foreach([null,0,0.11,90] as $m)echo json_encode([$m,App\\Support\\MetricDisplay::minutes($m)],JSON_UNESCAPED_UNICODE).PHP_EOL;",
+    "exit_code": 0,
+    "output": "[null,\"Chưa có dữ liệu\"]\n[0,\"0 phút\"]\n[0.11,\"7 giây\"]\n[90,\"1 giờ 30 phút\"]\n"
+  },
+  {
+    "step": "command",
+    "command": "git diff --check",
+    "exit_code": 0,
+    "output": "warning: in the working copy of 'docs/FRONTEND_HANDOFF.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/IMPLEMENTATION_PROGRESS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/UI_UX_FUNCTIONAL_IMPROVEMENTS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/ai-runs/create.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/ai-runs/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/calendar/_range.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/calendar/_row.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/calendar/form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/calendar/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/calendar/timeline.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/layout.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/integrations/github.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/notifications/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/plans/ai.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/reports/_metrics.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/reports/print.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/reports/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/settings/edit.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/show.blade.php', CRLF will be replaced by LF the next time Git touches it\n"
+  },
+  {
+    "step": "final integrity",
+    "foreign_key_errors": 0,
+    "queue_empty": true,
+    "env_preserved": true,
+    "no_test_classes_added": true,
+    "migration_added": false
+  }
+]

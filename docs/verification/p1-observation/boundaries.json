@@ -1,0 +1,118 @@
+[
+  {
+    "step": "login Owner",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "save real cross-day block",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/01a14ce3-c692-7206-a30d-5fdb9775c37c",
+    "errors": []
+  },
+  {
+    "step": "timeline clips left boundary",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/timeline?view=day&date=2027-05-17",
+    "errors": []
+  },
+  {
+    "step": "half-hour visible from full-hour source",
+    "verified": true,
+    "source_minutes": 60,
+    "visible_minutes": 30
+  },
+  {
+    "step": "save all-day NOTE",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/01a14ce3-caf0-725a-9f14-b39570a2e2ca",
+    "errors": []
+  },
+  {
+    "step": "all-day start present",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-19&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "all-day day included",
+    "verified": true
+  },
+  {
+    "step": "all-day exclusive end",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-20&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "all-day end not repeated",
+    "verified": true
+  },
+  {
+    "step": "save cancelled event fixture",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar/01a14ce3-d063-7279-96b3-7dc8975b3ab1",
+    "errors": []
+  },
+  {
+    "step": "cancelled hidden by default",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-17&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "no cancelled record in default HTML",
+    "verified": true
+  },
+  {
+    "step": "cancelled explicit filter",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/calendar?view=day&date=2027-05-17&include_cancelled=1&project_id=01a14a6f-0362-706c-b894-285091fe2f26",
+    "errors": []
+  },
+  {
+    "step": "cancelled labeled and styled",
+    "verified": true
+  },
+  {
+    "step": "existing snapshot remains ninety planned minutes",
+    "verified": true
+  },
+  {
+    "step": "retry actual failed run",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/ai-runs/01a14ce2-a31c-70ab-9942-e3a4a09e16e9",
+    "errors": []
+  },
+  {
+    "step": "retry queued same snapshot",
+    "verified": true
+  },
+  {
+    "step": "cancel rendered queued run form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/ai-runs/01a14ce2-a31c-70ab-9942-e3a4a09e16e9",
+    "errors": []
+  },
+  {
+    "step": "cancel saved canonical state",
+    "verified": true
+  },
+  {
+    "step": "worker acknowledges cancelled job without provider",
+    "verified": true
+  },
+  {
+    "step": "foreign keys still clean",
+    "verified": true
+  },
+  {
+    "step": "env unchanged",
+    "verified": true
+  },
+  {
+    "step": "boundary complete",
+    "real_database": true
+  }
+]

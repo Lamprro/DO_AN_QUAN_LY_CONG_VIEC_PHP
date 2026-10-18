@@ -1,8 +1,27 @@
 # Bàn giao FE — Laravel MVC / Blade
 
+## Cập nhật mới nhất — Đợt E/F04–F10, 18/10/2026
+
+Đã có tiện ích backend và Blade chạy được. Đọc [PHASE_E_UTILITIES.md](PHASE_E_UTILITIES.md) và [minh chứng E](verification/phase-e/README.md). FE tiếp tục làm bố cục/typography/component trên các form có thật; service/database/quyền vẫn do backend xử lý. Các ghi chú D/P0 bên dưới là lịch sử trước đợt E.
+
+| Blade / server | Contract cần giữ khi làm giao diện |
+|---|---|
+| tasks/index + _utilities; TaskFilters | `preset=all|mine|review|blocked|overdue`, q/status/priority/assignee_id/archived/sort/direction/per_page=10|25|50; query server trước pagination. Preset links hiện mở danh sách nhanh mới; form lọc giữ preset để kết hợp. Không lọc chỉ mảng một trang ở client. |
+| _utilities → TaskUtilityController | POST `workspaces[.projects].task-filters.store`, `name`, `query[field]` từ whitelist; GET `.open`, DELETE `.destroy` + CSRF. `savedFilters` chỉ chính actor/scope. Không lưu raw URL, token, credential hoặc page vào query. |
+| tasks/index checkbox + bulk-tasks form | POST `workspaces[.projects].tasks.bulk`, `action=priority|assign|archive`; `items[taskUUID]=expected_revision`, max50; priority hoặc assignee_id nullable theo action. Checkbox có `form="bulk-tasks"` nên native browser gửi dù ngoài form. Chỉ các dòng chọn trên trang, không ngầm chọn toàn bộ kết quả. Không tự lấy revision mới khi stale. Một lỗi hủy cả nhóm; chỉ báo thành công sau redirect. |
+| tasks/_form + _deadline | `deadline_reason` bắt buộc khi sửa deadline đã lưu, không bắt khi tạo lần đầu. Detail có `deadlineInsight.overdue/conditions/history`; history UTC trước/sau/reason, tối đa20. Không dùng estimate/slot suy ngày hoàn thành hoặc dựng nguyên nhân trễ. |
+| utilities/reminders | GET `workspaces.reminders`, POST `.reminders.scan` + CSRF, chính actor; DTO reminders status/kind/local_date/skip_reason/sent_at. queued/skipped/failed/sent phải khác nhau. Scan không nghĩa đã gửi. Không AJAX tự quét liên tục hoặc gửi user_id khác. |
+| utilities/operations; QueueObservation::data | GET `workspaces.operations`, quyền `workspace.view_operations`. `runs`, `jobs`, `failedJobs`, `limited`, `reminders`, `jobsAvailable`. Chỉ metadata own run/current access. Giữ warning giới hạn/connection/không heartbeat; không thêm payload/exception/prompt. Link run dùng flow retry/cancel hiện có. |
+| timers/index → timers/adjust; TimeAdjustmentController | GET/PATCH `timers.adjust`/`timers.adjust.update`, `/timers/{entry}/adjust`. Giữ `_method=PATCH`, CSRF, hidden `version`, `timezone`; `started_at`, `ended_at` datetime-local step1 (giây), note, reason. Controller nhận HH:mm hoặc HH:mm:ss; server chuyển timezone. Version/timezone dùng old input khi lỗi; `?fresh=1` mới bỏ bản nhập. Không sửa phiên khác/running hoặc tạo entry giả. |
+
+Menu AppShell đã có Nhắc việc và Vận hành theo quyền. Permission mới chỉ Owner mặc định; không đổi role người khác để nút hiện. Hàng bulk vẫn kiểm backend dù FE ẩn/disable. Các CSS hiện có xử lý mobile; form correction đã đo ở319px, document304px, có ảnh. Không phải toàn bộ giao diện đã được thiết kế hoàn mỹ hoặc audit accessibility đầy đủ.
+
+Khi làm đẹp: tách sections filter/bulk cho dễ quét; làm rõ số dòng đang chọn, trạng thái nhắc chờ/bỏ qua/thất bại, lý do nhập hạn và sửa giờ; giữ error summary, nhãn field, old input, empty state, confirm nhóm và liên kết tải bản mới. Không optimistic báo đã gửi/đã cập nhật. Các enum/field names giữ nguyên dù nhãn tiếng Việt.
+
+
 ## Cập nhật mới nhất — Đợt D/P1 quan sát, 18/10/2026
 
-Đã hoàn thiện Calendar/Timeline, dashboard/biểu đồ có bảng tương đương, snapshot/CSV, inbox lọc server, AI config/attempts và GitHub latest delivery. Đọc [P1_OBSERVATION.md](P1_OBSERVATION.md) trước các ghi chú P0/phần2–6, và [minh chứng P1](verification/p1-observation/README.md). Đợt E/F04–F10 chưa triển khai.
+Đã hoàn thiện Calendar/Timeline, dashboard/biểu đồ có bảng tương đương, snapshot/CSV, inbox lọc server, AI config/attempts và GitHub latest delivery. Đọc [P1_OBSERVATION.md](P1_OBSERVATION.md) trước các ghi chú P0/phần2–6, và [minh chứng P1](verification/p1-observation/README.md). Đợt E/F04–F10 đã triển khai sau phần này; xem cập nhật mới nhất phía trên.
 
 Calendar dùng `view=day|week|month|list`, `date`, `from/to` (exclusive end,≤93ngày), `include_cancelled`, `project_id` nullable. Controller nay thực sự lọc project_id; không bỏ tham số khi đổi chế độ. `navigation` cấp URL trước/sau/hôm nay và trục timeline; `range.timezone` là timezone người dùng. `calendar/create?task_id=...&project_id=...` chỉ chuẩn bị form từ eligible WORK của actor, chưa ghi lịch. Private busy không có title/owner/ID/link/task trong HTML. Timeline giữ offset/width server theo timestamp và danh sách tương đương.
 
@@ -13,7 +32,7 @@ Inbox nhận `filter=all|unread|read`, `type=task.created|task.updated|task.stat
 
 ## Bàn giao P0 hiện tại — đọc trước các ghi chú lịch sử
 
-P0 đã triển khai. Đọc [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) để xem phạm vi, flow hàm và giới hạn; [verification/p0/README.md](verification/p0/README.md) để xem bằng chứng. Backlog UI_UX_FUNCTIONAL_IMPROVEMENTS.md vẫn chứa mô tả **trước nâng cấp**; P1/P2 chưa tự động thành chức năng đã làm.
+P0 đã triển khai. Đọc [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) để xem phạm vi, flow hàm và giới hạn; [verification/p0/README.md](verification/p0/README.md) để xem bằng chứng. Backlog UI_UX_FUNCTIONAL_IMPROVEMENTS.md vẫn chứa mô tả **trước nâng cấp**; Đợt D/E đã làm P1 nêu trong cập nhật mới nhất; P2 còn là backlog.
 
 ### File FE chính và trách nhiệm
 
@@ -50,7 +69,7 @@ Không gọi service/provider/SQL trong Blade mới, không chuyển quyền th�
 
 Cập nhật 17/10/2026: các module backend/Blade trong phạm vi bàn giao đã được triển khai, gồm Plan/version/duyệt–apply, replanning/assistance qua queue, local scheduling, timer và GitHub logs. AI/provider và dịch vụ ngoài chờ key/cấu hình thật. Đọc [DELIVERY_STATUS.md](DELIVERY_STATUS.md) và mục **Bàn giao cuối** phía dưới để biết hợp đồng hiện tại. Những mục ghi theo phần2–6 là lịch sử tại thời điểm triển khai, không phải trạng thái thiếu chức năng hiện nay.
 
-Kế hoạch nâng cấp tiếp theo: [UI/UX và chức năng chi tiết](UI_UX_FUNCTIONAL_IMPROVEMENTS.md), có ưu tiên P0/P1/P2, yêu cầu từng màn hình, phần cần bổ sung backend/database và flow nghiệm thu thật. P0 đã triển khai trong vòng hiện tại; P1/P2 vẫn là backlog, chưa phải chức năng mới đã làm. FE tiếp tục Laravel MVC/Blade trên form hiện có; backend chịu trách nhiệm logic/database/phân quyền.
+Kế hoạch nâng cấp tiếp theo: [UI/UX và chức năng chi tiết](UI_UX_FUNCTIONAL_IMPROVEMENTS.md), có ưu tiên P0/P1/P2, yêu cầu từng màn hình, phần cần bổ sung backend/database và flow nghiệm thu thật. P0 đã triển khai trong vòng hiện tại; Đợt D/E đã có mã và minh chứng; P2 vẫn là backlog. FE tiếp tục Laravel MVC/Blade trên form hiện có; backend chịu trách nhiệm logic/database/phân quyền.
 
 ## Bắt đầu
 

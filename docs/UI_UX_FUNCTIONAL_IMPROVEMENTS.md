@@ -1,6 +1,8 @@
+**18/10/2026 — Đợt E/F04–F10 đã triển khai:** presets, bộ lọc riêng, bulk nguyên tử, nhắc in-app qua queue, theo dõi hạn, quan sát vận hành có quyền và sửa giờ có lịch sử. Xem [flow E](PHASE_E_UTILITIES.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng thật](verification/phase-e/README.md). P2 và cấu hình dịch vụ ngoài vẫn theo backlog; chưa cài scheduler/worker thành service production.
+
 # Kế hoạch cải thiện UI/UX và chức năng
 
-**18/10/2026 — Đợt D/P1 quan sát đã triển khai.** Xem [P1_OBSERVATION.md](P1_OBSERVATION.md) và bàn giao FE mới nhất. P0 giữ nguyên; đợt E/F04–F10 và P2 còn là backlog. Các mô tả “chưa có/cần bổ sung” của bản kế hoạch gốc là lịch sử trước nâng cấp.
+**18/10/2026 — Đợt D/P1 quan sát đã triển khai.** Xem [P1_OBSERVATION.md](P1_OBSERVATION.md) và bàn giao FE mới nhất. P0 giữ nguyên; đợt E/F04–F10 đã triển khai ở cập nhật phía trên; P2 còn là backlog. Các mô tả “chưa có/cần bổ sung” của bản kế hoạch gốc là lịch sử trước nâng cấp.
 
 > Cập nhật 17/10/2026: vòng P0 đã triển khai, xem [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) và [bàn giao FE](FRONTEND_HANDOFF.md). Bảng “hiện trạng” và các câu “chưa có/cần bổ sung” trong bản kế hoạch gốc bên dưới mô tả **trước vòng P0**. F01/F02/F03 nay có mã và minh chứng; P1/P2/KEY còn là backlog. Preview dùng đường apply thật trong transaction rồi rollback, không lưu thay đổi nghiệp vụ (không phải hàm chỉ SELECT).
 

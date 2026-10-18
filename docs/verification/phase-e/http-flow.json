@@ -1,0 +1,676 @@
+[
+  {
+    "step": "login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo2@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo5@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 0",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-751f-71e2-a474-ebf5ee3bbc1c",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 1",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-7d75-7344-8932-7b18ff7c307b",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 2",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-84a2-71f2-a3dc-5f3cadb46d1f",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 3",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-8b22-7247-889b-84d77f40767a",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 4",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-92f8-7211-9fa4-1a796ddb24b1",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 5",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-9c09-733a-84cd-85a8140c0fc5",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 6",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-a393-71f2-9d40-0dab217e8bd8",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 7",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-ab70-71a4-946f-1fdaa1219526",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 8",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-b29e-7265-9d9d-5c4ae7603328",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 9",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-bab8-714c-8d54-a3b2bd64f336",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 10",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-c274-707b-a8dc-aa5051ecc5a9",
+    "errors": []
+  },
+  {
+    "step": "create scoped real WORK 11",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-cca9-7256-b7d0-b2a2a8c5a831",
+    "errors": []
+  },
+  {
+    "step": "mine page1",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks?q=Eutil1792292478&preset=mine&per_page=10",
+    "errors": []
+  },
+  {
+    "step": "mine page2",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks?q=Eutil1792292478&preset=mine&per_page=10&page=2",
+    "errors": []
+  },
+  {
+    "step": "server preset covers multiple pages",
+    "verified": true
+  },
+  {
+    "step": "real blocker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-751f-71e2-a474-ebf5ee3bbc1c",
+    "errors": []
+  },
+  {
+    "step": "blocked preset",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks?q=Eutil1792292478&preset=blocked",
+    "errors": []
+  },
+  {
+    "step": "blocked query correct",
+    "verified": true
+  },
+  {
+    "step": "overdue preset",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks?q=Eutil1792292478&preset=overdue",
+    "errors": []
+  },
+  {
+    "step": "overdue source WORK only",
+    "verified": true
+  },
+  {
+    "step": "real review lifecycle IN_PROGRESS",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-8b22-7247-889b-84d77f40767a",
+    "errors": []
+  },
+  {
+    "step": "real review lifecycle REVIEW",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-8b22-7247-889b-84d77f40767a",
+    "errors": []
+  },
+  {
+    "step": "review preset Owner",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks?q=Eutil1792292478&preset=review",
+    "errors": []
+  },
+  {
+    "step": "review actor query",
+    "verified": true
+  },
+  {
+    "step": "review preset Member lacking review permission",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks?q=Eutil1792292478&preset=review",
+    "errors": []
+  },
+  {
+    "step": "no unauthorized review result",
+    "verified": true
+  },
+  {
+    "step": "saved whitelist excludes credentials/unknown fields",
+    "verified": true
+  },
+  {
+    "step": "open own saved filter",
+    "http": 500,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/task-filters/01a14cf6-40fc-7364-90cd-b41ba4ed15d3/open",
+    "errors": []
+  },
+  {
+    "step": "resume after route binding fix",
+    "cause": "Inherited scoped binding looked for Project.saveds; per-route withoutScopedBindings plus explicit scope checks fixes it."
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo2@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "open own saved filter",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks?q=Eutil1792292478&per_page=10&preset=mine",
+    "errors": []
+  },
+  {
+    "step": "saved filter reuses server list",
+    "verified": true
+  },
+  {
+    "step": "other actor cannot open private filter",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/task-filters/01a14cf6-40fc-7364-90cd-b41ba4ed15d3/open",
+    "errors": []
+  },
+  {
+    "step": "wrong project filter rejected",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a7c-872a-700f-bbb4-148928be8117/task-filters/01a14cf6-40fc-7364-90cd-b41ba4ed15d3/open",
+    "errors": []
+  },
+  {
+    "step": "invalid saved sort refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "invalid query not stored",
+    "verified": true
+  },
+  {
+    "step": "mixed priority batch fails as unit",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/bulk",
+    "errors": []
+  },
+  {
+    "step": "resume with correct negative-flow expectation",
+    "reason": "REVIEW row preflight is forbidden403, not validation redirect200; adding a separate late domain rollback check."
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo2@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "mixed priority batch fails as unit",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/bulk",
+    "errors": []
+  },
+  {
+    "step": "no partial history/task/notifications on failed batch",
+    "verified": true
+  },
+  {
+    "step": "create GROUP rollback fixture",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf9-06de-71ec-96f1-29aa1cc7d1f4",
+    "errors": []
+  },
+  {
+    "step": "late invalid GROUP assignment rolls back earlier WORK",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "late domain failure rolls back task/history/notification",
+    "verified": true
+  },
+  {
+    "step": "priority batch succeeds",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "both real rows updated",
+    "verified": true
+  },
+  {
+    "step": "advance one revision",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "stale bulk refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "stale item rolls back entire batch",
+    "verified": true
+  },
+  {
+    "step": "Viewer bulk denied",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/bulk",
+    "errors": []
+  },
+  {
+    "step": "bulk assign existing eligible member",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "assignment via domain service",
+    "verified": true
+  },
+  {
+    "step": "resume existing fixture context",
+    "reason": "Resume helper lacked secret-project variable; no application error or mutation at that step."
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo2@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume existing fixture context",
+    "reason": "Resume helper lacked secret-project variable; no application error or mutation at that step."
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "resume login demo2@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "create actual cross-project fixture",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a7c-872a-700f-bbb4-148928be8117/tasks/01a14cfb-a616-72e2-a41c-edae22651673",
+    "errors": []
+  },
+  {
+    "step": "bulk archive rejects foreign scope",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/bulk",
+    "errors": []
+  },
+  {
+    "step": "foreign scope cannot partially archive",
+    "verified": true
+  },
+  {
+    "step": "archive own selected row",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "archive domain persisted",
+    "verified": true
+  },
+  {
+    "step": "deadline change without reason refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-84a2-71f2-a3dc-5f3cadb46d1f/edit",
+    "errors": []
+  },
+  {
+    "step": "deadline rejection no changes",
+    "verified": true
+  },
+  {
+    "step": "deadline with reason",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-84a2-71f2-a3dc-5f3cadb46d1f",
+    "errors": []
+  },
+  {
+    "step": "deadline audit recorded",
+    "verified": true
+  },
+  {
+    "step": "deadline insight source and history",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-84a2-71f2-a3dc-5f3cadb46d1f",
+    "errors": []
+  },
+  {
+    "step": "human deadline audit visible",
+    "verified": true
+  },
+  {
+    "step": "real immediate-review scan",
+    "exit_code": 0,
+    "output": "Queued reminders: 4\n"
+  },
+  {
+    "step": "due/review real source queued",
+    "verified": true
+  },
+  {
+    "step": "repeat scan dedupe",
+    "verified": true
+  },
+  {
+    "step": "cancel due source before worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-7d75-7344-8932-7b18ff7c307b",
+    "errors": []
+  },
+  {
+    "step": "real queue worker work-management-reminders",
+    "exit_code": 0,
+    "output": "  2026-10-18 03:08:59 App\\Jobs\\SendTaskReminder .............................................................. RUNNING\n  2026-10-18 03:08:59 App\\Jobs\\SendTaskReminder ........................................................ 104.82ms DONE\n  2026-10-18 03:08:59 App\\Jobs\\SendTaskReminder .............................................................. RUNNING\n  2026-10-18 03:08:59 App\\Jobs\\SendTaskReminder ......................................................... 19.66ms DONE\n  2026-10-18 03:08:59 App\\Jobs\\SendTaskReminder .............................................................. RUNNING\n  2026-10-18 03:08:59 App\\Jobs\\SendTaskReminder ......................................................... 19.29ms DONE\n  2026-10-18 03:08:59 App\\Jobs\\SendTaskReminder .............................................................. RUNNING\n  2026-10-18 03:08:59 App\\Jobs\\SendTaskReminder ......................................................... 22.97ms DONE\n"
+  },
+  {
+    "step": "worker exited cleanly work-management-reminders",
+    "verified": true
+  },
+  {
+    "step": "cancelled source skipped",
+    "verified": true
+  },
+  {
+    "step": "valid due/review delivered",
+    "verified": true
+  },
+  {
+    "step": "repeat completed scan cannot duplicate notifications",
+    "verified": true
+  },
+  {
+    "step": "own reminder page",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reminders",
+    "errors": []
+  },
+  {
+    "step": "reminder notification filter",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/notifications?type=task.reminder_due&filter=unread",
+    "errors": []
+  },
+  {
+    "step": "Member cannot open operations",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/operations",
+    "errors": []
+  },
+  {
+    "step": "queue own AI observation source",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/ai-runs/01a14cfc-07b2-7084-b582-420d148c10a9",
+    "errors": []
+  },
+  {
+    "step": "Owner operation live job projection",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/operations",
+    "errors": []
+  },
+  {
+    "step": "ops hides prompt and shows own real pending job",
+    "verified": true
+  },
+  {
+    "step": "real queue worker work-management-ai",
+    "exit_code": 0,
+    "output": "  2026-10-18 03:09:10 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-18 03:09:10 App\\Jobs\\ProcessAiRun ............................................................ 178.04ms DONE\n"
+  },
+  {
+    "step": "worker exited cleanly work-management-ai",
+    "verified": true
+  },
+  {
+    "step": "operations after worker",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/operations",
+    "errors": []
+  },
+  {
+    "step": "domain failure not fake success",
+    "verified": true
+  },
+  {
+    "step": "start correction WORK",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-cca9-7256-b7d0-b2a2a8c5a831",
+    "errors": []
+  },
+  {
+    "step": "real timer start 0",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "running entry cannot be adjusted",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust",
+    "errors": []
+  },
+  {
+    "step": "real timer stop 0",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "real timer start 1",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "running entry cannot be adjusted",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-5a80-7051-976b-f4d712141075/adjust",
+    "errors": []
+  },
+  {
+    "step": "real timer stop 1",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers",
+    "errors": []
+  },
+  {
+    "step": "B opens audit form",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust",
+    "errors": []
+  },
+  {
+    "step": "overlap correction refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust",
+    "errors": []
+  },
+  {
+    "step": "overlap no timer/audit change",
+    "verified": true
+  },
+  {
+    "step": "foreign actor cannot open own-hour editor",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust",
+    "errors": []
+  },
+  {
+    "step": "snapshot before timer correction",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14cfc-9721-71c8-a757-5a77fb3a4010",
+    "errors": []
+  },
+  {
+    "step": "A valid audited correction",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust",
+    "errors": []
+  },
+  {
+    "step": "one append-only audit and source changed",
+    "verified": true
+  },
+  {
+    "step": "B stale correction refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust",
+    "errors": []
+  },
+  {
+    "step": "stale keeps input without extra audit",
+    "verified": true
+  },
+  {
+    "step": "old snapshot immutable after correction",
+    "verified": true
+  },
+  {
+    "step": "new metrics after correction",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/reports/01a14cfc-b8a1-7087-a4fb-b43f329f4e39",
+    "errors": []
+  },
+  {
+    "step": "new actual follows corrected source",
+    "verified": true
+  },
+  {
+    "step": "old tasks unchanged by utility review",
+    "verified": true
+  },
+  {
+    "step": "env/key/flags unchanged",
+    "verified": true
+  },
+  {
+    "step": "foreign key check",
+    "verified": true
+  },
+  {
+    "step": "phase E complete",
+    "real_http": true,
+    "no_test_classes": true
+  }
+]

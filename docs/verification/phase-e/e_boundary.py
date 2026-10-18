@@ -1,0 +1,22 @@
+from pathlib import Path
+M=Path(__file__).parent;s=(M/'e_flow.py').read_text(encoding='utf-8');exec(s.split("for f in (R/'storage/framework/views')")[0]);state=json.loads((PRIVATE/'state.json').read_text());ids=state['tasks'];prefix=state['prefix'];journal=[]
+def log(step,**facts):
+ journal.append({'step':step,**facts});(OUT/'boundary-flow.json').write_text(json.dumps(journal,ensure_ascii=False,indent=2),encoding='utf-8');print(json.dumps(journal[-1],ensure_ascii=True),flush=True)
+owner=client('boundary-owner');member=client('boundary-member')
+for c,email in [(owner,'demo1@example.test'),(member,'demo3@example.test')]:observed('login '+email,submit_live(c,'/login','login',{'email':email,'password':'Demo@123456'}))
+before=business();observed('Member forged assignment denied',post(member,tp+'/bulk',{'action':'assign','assignee_id':uid,**items([ids[6]])},tp),403);verify('forged batch no changes',before==business())
+sid=state['saved_filter_id'];observed('foreign delete private filter denied',post(member,pp+'/task-filters/'+sid,{'_method':'DELETE'},tp),404);verify('filter retained',bool(rows('select id from saved_task_filters where id=?',(sid,))))
+observed('owner deletes only review filter',post(owner,pp+'/task-filters/'+sid,{'_method':'DELETE'},tp));verify('private filter deleted by owner',not rows('select id from saved_task_filters where id=?',(sid,)))
+# Create a new due source through HTTP. Assignment changes after enqueue must invalidate old recipient.
+now=datetime.datetime.now(datetime.timezone.utc)+datetime.timedelta(hours=7);v={'title':current(ids[9])['title'],'task_type':'WORK','priority':'medium','estimate_minutes':'45','assignee_id':uid,'reviewer_id':uid,'deadline_at':(now+datetime.timedelta(hours=4)).strftime('%Y-%m-%dT%H:%M'),'deadline_reason':prefix+' verify reminder source recheck'}
+observed('new future due source',submit_live(owner,tp+'/'+ids[9]+'/edit?fresh=1','task-edit',v));assert not rows("select id from jobs where queue='work-management-reminders'")
+cmd=[r'C:\xampp\php\php.exe','artisan','tasks:remind','--workspace='+wid,'--user='+uid,'--review-after=0'];p=subprocess.run(cmd,cwd=R,capture_output=True,text=True,timeout=60);verify('queued new due source',p.returncode==0 and rows('select status from task_reminders where task_id=?',(ids[9],))[0]['status']=='queued')
+muid=rows("select id from users where email='demo3@example.test'")[0]['id'];observed('reassign queued source through bulk',post(owner,tp+'/bulk',{'action':'assign','assignee_id':muid,**items([ids[9]])},tp));worker('work-management-reminders');verify('old assignee receives no stale reminder',rows('select status from task_reminders where task_id=?',(ids[9],))[0]['status']=='skipped' and not rows("select id from notifications where task_id=? and recipient_id=? and type='task.reminder_due'",(ids[9],uid)))
+entry=rows('select * from time_entries where id=?',(state['entries'][0],))[0];path='/timers/'+entry['id']+'/adjust'
+def local(raw):return (datetime.datetime.fromisoformat(raw).replace(tzinfo=None)+datetime.timedelta(hours=7)).strftime('%Y-%m-%dT%H:%M:%S')
+base={'started_at':local(entry['started_at']),'ended_at':local(entry['ended_at']),'timezone':'Asia/Ho_Chi_Minh','reason':prefix+' negative validation','note':entry['note']}
+before=rows('select * from time_entries where id=?',(entry['id'],));count=len(rows('select id from time_entry_adjustments'))
+body=observed('future correction refused',submit_live(owner,path+'?fresh=1','time-adjust',{**base,'ended_at':(now+datetime.timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%S')}));verify('future rejected without audit','không ở tương lai' in body and before==rows('select * from time_entries where id=?',(entry['id'],)) and count==len(rows('select id from time_entry_adjustments')))
+body=observed('missing correction reason refused',submit_live(owner,path+'?fresh=1','time-adjust',{**base,'reason':''}));verify('reason required without writes',before==rows('select * from time_entries where id=?',(entry['id'],)) and count==len(rows('select id from time_entry_adjustments')))
+body=observed('timezone mismatch refused',submit_live(owner,path+'?fresh=1','time-adjust',{**base,'timezone':'UTC'}));verify('no reinterpretation when timezone changes','Múi giờ hồ sơ đã đổi' in body and count==len(rows('select id from time_entry_adjustments')))
+verify('FK valid',not rows('pragma foreign_key_check'));log('boundary complete',no_mock=True)

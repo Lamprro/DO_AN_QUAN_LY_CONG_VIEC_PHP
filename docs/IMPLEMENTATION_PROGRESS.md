@@ -1,6 +1,8 @@
+**18/10/2026 — Đợt E/F04–F10 đã triển khai:** presets, bộ lọc riêng, bulk nguyên tử, nhắc in-app qua queue, theo dõi hạn, quan sát vận hành có quyền và sửa giờ có lịch sử. Xem [flow E](PHASE_E_UTILITIES.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng thật](verification/phase-e/README.md). P2 và cấu hình dịch vụ ngoài vẫn theo backlog; chưa cài scheduler/worker thành service production.
+
 > Cập nhật chỉ đạo mới 17/10/2026: chủ dự án yêu cầu hoàn thiện tất cả, bỏ dừng duyệt từng phần. Trạng thái hiện tại xem DELIVERY_STATUS.md và verification/final; các mục chi tiết phía dưới ghi lịch sử theo từng lần làm.
 
-**18/10/2026 — Đợt D/P1 quan sát đã triển khai.** Xem [P1_OBSERVATION.md](P1_OBSERVATION.md) và bàn giao FE mới nhất. P0 giữ nguyên; đợt E/F04–F10 và P2 còn là backlog. Các mô tả “chưa có/cần bổ sung” của bản kế hoạch gốc là lịch sử trước nâng cấp.
+**18/10/2026 — Đợt D/P1 quan sát đã triển khai.** Xem [P1_OBSERVATION.md](P1_OBSERVATION.md) và bàn giao FE mới nhất. P0 giữ nguyên; đợt E/F04–F10 đã triển khai ở cập nhật phía trên; P2 còn là backlog. Các mô tả “chưa có/cần bổ sung” của bản kế hoạch gốc là lịch sử trước nâng cấp.
 
 **Cập nhật P0 17/10/2026:** đã có app shell, forms/mobile, workflow/timer, F01 edit revisions, F03 visual plan editor và F02 diff/preview. Đọc [P0_IMPLEMENTATION.md](P0_IMPLEMENTATION.md) và hợp đồng P0 tại đầu FRONTEND_HANDOFF.md. Các đoạn trước nâng cấp bên dưới là nhật ký.
 

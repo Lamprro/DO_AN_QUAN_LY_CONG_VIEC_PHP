@@ -1,0 +1,111 @@
+[
+  {
+    "step": "login demo1@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "login demo3@example.test",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces",
+    "errors": []
+  },
+  {
+    "step": "Member forged assignment denied",
+    "http": 403,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/bulk",
+    "errors": []
+  },
+  {
+    "step": "forged batch no changes",
+    "verified": true
+  },
+  {
+    "step": "foreign delete private filter denied",
+    "http": 404,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/task-filters/01a14cf6-40fc-7364-90cd-b41ba4ed15d3",
+    "errors": []
+  },
+  {
+    "step": "filter retained",
+    "verified": true
+  },
+  {
+    "step": "owner deletes only review filter",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "private filter deleted by owner",
+    "verified": true
+  },
+  {
+    "step": "new future due source",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks/01a14cf5-bab8-714c-8d54-a3b2bd64f336",
+    "errors": []
+  },
+  {
+    "step": "queued new due source",
+    "verified": true
+  },
+  {
+    "step": "reassign queued source through bulk",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/workspaces/01a14a6e-ff85-7003-a4fa-4f4421c1931f/projects/01a14a6f-0362-706c-b894-285091fe2f26/tasks",
+    "errors": []
+  },
+  {
+    "step": "real queue worker work-management-reminders",
+    "exit_code": 0,
+    "output": "  2026-10-18 03:12:38 App\\Jobs\\SendTaskReminder .............................................................. RUNNING\n  2026-10-18 03:12:38 App\\Jobs\\SendTaskReminder ......................................................... 85.43ms DONE\n"
+  },
+  {
+    "step": "worker exited cleanly work-management-reminders",
+    "verified": true
+  },
+  {
+    "step": "old assignee receives no stale reminder",
+    "verified": true
+  },
+  {
+    "step": "future correction refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust?fresh=1",
+    "errors": []
+  },
+  {
+    "step": "future rejected without audit",
+    "verified": true
+  },
+  {
+    "step": "missing correction reason refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust?fresh=1",
+    "errors": []
+  },
+  {
+    "step": "reason required without writes",
+    "verified": true
+  },
+  {
+    "step": "timezone mismatch refused",
+    "http": 200,
+    "url": "http://127.0.0.1:8123/timers/01a14cfc-3578-7364-826b-20074e3ebecd/adjust?fresh=1",
+    "errors": []
+  },
+  {
+    "step": "no reinterpretation when timezone changes",
+    "verified": true
+  },
+  {
+    "step": "FK valid",
+    "verified": true
+  },
+  {
+    "step": "boundary complete",
+    "no_mock": true
+  }
+]

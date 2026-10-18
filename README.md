@@ -1,3 +1,5 @@
+Đã hoàn thiện đợt E/F04–F10: [tiện ích và flow](docs/PHASE_E_UTILITIES.md), [bàn giao FE](docs/FRONTEND_HANDOFF.md), [kiểm chứng thật](docs/verification/phase-e/README.md). Cập nhật migration bổ sung, giữ .env/APP_KEY/database; chạy scheduler và worker nhắc việc theo tài liệu.
+
 > Tài liệu phát triển tiếp: [Cải thiện UI/UX và chức năng](docs/UI_UX_FUNCTIONAL_IMPROVEMENTS.md), gồm backlog theo màn hình, ưu tiên và tiêu chí nghiệm thu.
 
 Đã hoàn thiện đợt D/P1 quan sát: [Calendar, báo cáo, thông báo và trạng thái tích hợp](docs/P1_OBSERVATION.md), [bàn giao FE](docs/FRONTEND_HANDOFF.md), [kiểm chứng thật](docs/verification/p1-observation/README.md). Không cần migration mới cho đợt này.

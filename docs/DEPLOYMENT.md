@@ -35,3 +35,8 @@ AI: xem AI_PROVIDER_CONTRACT.md; mặc định tắt, không tự chọn dịch 
 ## Sao lưu/khôi phục
 
 Sao lưu nhất quán DB cùng private storage và APP_KEY; giữ secret ngoài source ZIP. Khôi phục vào thư mục/database mới trước, trỏ .env đúng bản sao, giữ key, migrate bổ sung nếu cần, kiểm đăng nhập/file/lịch/snapshot và worker. Chưa thực hiện disaster recovery trên máy thứ hai. Thư mục dist là gói source, không phải backup dữ liệu.
+
+
+## Bổ sung đợt E
+
+Chạy migration bổ sung, không reset DB. Nhắc việc in-app cần scheduler và worker database `work-management-reminders`, độc lập queue AI. Hướng dẫn lệnh, quyền vận hành và giới hạn ở [PHASE_E_UTILITIES.md](PHASE_E_UTILITIES.md). `scripts/work-reminders.ps1 -Drain` chỉ xử lý queue rồi thoát; chưa tự cài service nền.

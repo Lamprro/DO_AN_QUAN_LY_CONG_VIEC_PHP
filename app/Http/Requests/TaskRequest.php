@@ -30,7 +30,7 @@ class TaskRequest extends FormRequest
         return ['expected_revision' => [$this->route('task') ? 'required' : 'prohibited', 'integer', 'min:1'], 'code' => ['nullable', 'string', 'max:40', 'regex:/^[A-Z0-9][A-Z0-9_-]*$/', Rule::unique('tasks', 'code')->where('workspace_id', $this->route('workspace')->id)->ignore($this->route('task')?->id)],
             'title' => ['required', 'string', 'max:200'], 'description' => ['nullable', 'string', 'max:20000'],
             'priority' => ['required', Rule::enum(TaskPriority::class)], 'estimate_minutes' => ['nullable', 'integer', 'min:0', 'max:10000000'],
-            'deadline_at' => ['nullable', 'date_format:Y-m-d\TH:i'], 'assignee_id' => ['nullable', 'uuid'], 'reviewer_id' => ['nullable', 'uuid'],
+            'deadline_reason' => ['nullable', 'string', 'max:2000'], 'deadline_at' => ['nullable', 'date_format:Y-m-d\TH:i'], 'assignee_id' => ['nullable', 'uuid'], 'reviewer_id' => ['nullable', 'uuid'],
             'status' => ['prohibited'], 'task_type' => ['sometimes', Rule::enum(TaskType::class)], 'parent_task_id' => ['nullable', 'uuid'], 'group_label' => ['nullable', 'string', 'max:120'], 'sort_order' => ['sometimes', 'integer', 'min:0', 'max:1000000'],
             'started_at' => ['prohibited'], 'completed_at' => ['prohibited'], 'archived_at' => ['prohibited'], 'project_id' => ['prohibited'], 'workspace_id' => ['prohibited']];
     }

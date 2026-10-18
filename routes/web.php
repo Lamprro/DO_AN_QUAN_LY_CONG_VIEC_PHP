@@ -9,6 +9,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TimeAdjustmentController;
 use App\Http\Controllers\TimeTrackingController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\WorkspaceMemberController;
@@ -25,6 +26,8 @@ Route::get('/invitations/{token}', [InvitationController::class, 'show'])->where
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::middleware(['auth', 'active.user'])->group(function () {
     require __DIR__.'/stage05.php';
+    Route::get('/timers/{entry}/adjust', [TimeAdjustmentController::class, 'edit'])->whereUuid('entry')->name('timers.adjust');
+    Route::patch('/timers/{entry}/adjust', [TimeAdjustmentController::class, 'update'])->whereUuid('entry')->name('timers.adjust.update');
     Route::get('/timers', [TimeTrackingController::class, 'index'])->name('timers.index');
     Route::post('/timers/{entry}/stop', [TimeTrackingController::class, 'stop'])->whereUuid('entry')->name('timers.stop');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,6 +49,7 @@ Route::middleware(['auth', 'active.user'])->group(function () {
         require __DIR__.'/calendar.php';
         require __DIR__.'/stage06.php';
         require __DIR__.'/remaining.php';
+        require __DIR__.'/task_utilities.php';
         Route::resource('projects', ProjectController::class);
         Route::post('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');
         Route::post('/projects/{project}/restore', [ProjectController::class, 'restore'])->name('projects.restore');

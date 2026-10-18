@@ -1,0 +1,99 @@
+[
+  {
+    "step": "isolated login",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3798-7002-b8d1-9c0174836549/tasks?preset=mine",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3798-7002-b8d1-9c0174836549/tasks?preset=review",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3798-7002-b8d1-9c0174836549/tasks?preset=blocked",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3798-7002-b8d1-9c0174836549/tasks?preset=overdue",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3798-7002-b8d1-9c0174836549/reminders",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3798-7002-b8d1-9c0174836549/operations",
+    "http": 200
+  },
+  {
+    "step": "isolated save filter",
+    "http": 200,
+    "redirect": "http://127.0.0.1:8125/workspaces/01a14d05-3798-7002-b8d1-9c0174836549/tasks?per_page=10&preset=mine"
+  },
+  {
+    "step": "isolated open scoped filter",
+    "http": 200,
+    "redirect": "http://127.0.0.1:8125/workspaces/01a14d05-3798-7002-b8d1-9c0174836549/tasks?per_page=10&preset=mine"
+  },
+  {
+    "step": "isolated owner removes filter",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3792-72c5-904e-2e0626f6582d/projects/01a14d05-37e9-7050-b9cd-cff5804e1249/tasks?preset=mine",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3792-72c5-904e-2e0626f6582d/projects/01a14d05-37e9-7050-b9cd-cff5804e1249/tasks?preset=review",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3792-72c5-904e-2e0626f6582d/projects/01a14d05-37e9-7050-b9cd-cff5804e1249/tasks?preset=blocked",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3792-72c5-904e-2e0626f6582d/projects/01a14d05-37e9-7050-b9cd-cff5804e1249/tasks?preset=overdue",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3792-72c5-904e-2e0626f6582d/reminders",
+    "http": 200
+  },
+  {
+    "step": "fresh utility page",
+    "path": "/workspaces/01a14d05-3792-72c5-904e-2e0626f6582d/operations",
+    "http": 200
+  },
+  {
+    "step": "isolated save filter",
+    "http": 200,
+    "redirect": "http://127.0.0.1:8125/workspaces/01a14d05-3792-72c5-904e-2e0626f6582d/projects/01a14d05-37e9-7050-b9cd-cff5804e1249/tasks?per_page=10&preset=mine"
+  },
+  {
+    "step": "isolated open scoped filter",
+    "http": 200,
+    "redirect": "http://127.0.0.1:8125/workspaces/01a14d05-3792-72c5-904e-2e0626f6582d/projects/01a14d05-37e9-7050-b9cd-cff5804e1249/tasks?per_page=10&preset=mine"
+  },
+  {
+    "step": "isolated owner removes filter",
+    "http": 200
+  },
+  {
+    "step": "COMPLETE",
+    "personal_and_project": true,
+    "no_main_db_writes": true
+  }
+]

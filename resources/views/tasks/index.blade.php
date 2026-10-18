@@ -1,10 +1,37 @@
 <x-layout title="Công việc"><h1>Công việc — {{ $project?->name ?? $workspace->name }}</h1>
-<div class="actions"><a class="button secondary" href="{{ route($routePrefix.'.tree',$routeParams) }}">Xem cây công việc</a><a href="{{ $project?route('workspaces.projects.show',[$workspace,$project]):route('workspaces.show',$workspace) }}">Về tổng quan</a>@if($canCreate)<a class="button" href="{{ route($routePrefix.'.create',$routeParams) }}">Tạo task</a>@endif</div>
+<div class="actions"><a class="button secondary" href="{{ route($routePrefix.'.tree',$routeParams) }}">Xem cây công việc</a><a href="{{ $project?route('workspaces.projects.show',[$workspace,$project]):route('workspaces.show',$workspace) }}">Về tổng quan</a>
+@if($canCreate)<a class="button" href="{{ route($routePrefix.'.create',$routeParams) }}">Tạo task</a>
+@endif</div>
+@include('tasks._utilities')
 <form method="GET" action="{{ route($routePrefix.'.index',$routeParams) }}" class="card" data-form="task-search">
+<label for="preset">Danh sách nhanh</label><select name="preset" id="preset">
+@foreach(['all'=>'Tất cả','mine'=>'Việc của tôi','review'=>'Chờ tôi duyệt','blocked'=>'Đang bị chặn','overdue'=>'WORK quá hạn'] as $key=>$label)<option value="{{ $key }}"
+@selected(($filters['preset']??'all')===$key)>{{ $label }}</option>
+@endforeach</select>
 <x-input name="q" label="Tìm tiêu đề hoặc mã" :value="$filters['q']??''" />
-<label for="status">Trạng thái</label><select id="status" name="status"><option value="">Tất cả</option>@foreach(\App\Enums\TaskStatus::cases() as $s)<option value="{{ $s->value }}" @selected(($filters['status']??'')===$s->value)>{{ \App\Support\UiLabels::text($s) }}</option>@endforeach</select>
-<label for="priority">Ưu tiên</label><select id="priority" name="priority"><option value="">Tất cả</option>@foreach(\App\Enums\TaskPriority::cases() as $p)<option value="{{ $p->value }}" @selected(($filters['priority']??'')===$p->value)>{{ \App\Support\UiLabels::text($p) }}</option>@endforeach</select>
-<label for="assignee_id">Người thực hiện</label><select id="assignee_id" name="assignee_id"><option value="">Tất cả</option>@foreach($people as $person)<option value="{{ $person->user_id }}" @selected(($filters['assignee_id']??'')===$person->user_id)>{{ $person->user->name }}</option>@endforeach</select>
+<label for="status">Trạng thái</label><select id="status" name="status"><option value="">Tất cả</option>
+@foreach(\App\Enums\TaskStatus::cases() as $s)<option value="{{ $s->value }}"
+@selected(($filters['status']??'')===$s->value)>{{ \App\Support\UiLabels::text($s) }}</option>
+@endforeach</select>
+<label for="priority">Ưu tiên</label><select id="priority" name="priority"><option value="">Tất cả</option>
+@foreach(\App\Enums\TaskPriority::cases() as $p)<option value="{{ $p->value }}"
+@selected(($filters['priority']??'')===$p->value)>{{ \App\Support\UiLabels::text($p) }}</option>
+@endforeach</select>
+<label for="assignee_id">Người thực hiện</label><select id="assignee_id" name="assignee_id"><option value="">Tất cả</option>
+@foreach($people as $person)<option value="{{ $person->user_id }}"
+@selected(($filters['assignee_id']??'')===$person->user_id)>{{ $person->user->name }}</option>
+@endforeach</select>
 @include('shared.list-controls',['sortOptions'=>['created_at'=>'Ngày tạo','code'=>'Mã','title'=>'Tiêu đề','priority'=>'Ưu tiên','deadline_at'=>'Hạn hoàn thành']])
-<label for="per_page">Số dòng</label><select id="per_page" name="per_page">@foreach([10,25,50] as $n)<option value="{{ $n }}" @selected((int)($filters['per_page']??10)===$n)>{{ $n }}</option>@endforeach</select><button type="submit">Lọc công việc</button></form>
-<section class="card table-wrap mobile-data-table" data-page="tasks-index"><table><thead><tr><th>Mã / Tiêu đề</th><th>Trạng thái</th><th>Phân công</th><th>Hạn hoàn thành</th></tr></thead><tbody>@forelse($tasks as $task)<tr data-task-id="{{ $task->id }}"><td data-label="Công việc"><a href="{{ route($routePrefix.'.show',[...$routeParams,$task]) }}">{{ $task->code }} — {{ $task->title }}</a></td><td data-label="Trạng thái">{{ \App\Support\UiLabels::text($task->task_type->value) }} · {{ \App\Support\UiLabels::text($task->status->value) }} · {{ \App\Support\UiLabels::text($task->priority->value) }} @if($task->archived_at) · Đã lưu trữ @endif</td><td data-label="Phân công">{{ $task->assignee?->name ?? 'Chưa phân công' }}</td><td data-label="Hạn hoàn thành">{{ $task->deadline_at?->setTimezone($workspace->timezone)->format('d/m/Y H:i') ?? 'Chưa có' }}</td></tr>@empty<tr><td colspan="4">Chưa có công việc phù hợp.</td></tr>@endforelse</tbody></table></section>{{ $tasks->links() }}</x-layout>
+<label for="per_page">Số dòng</label><select id="per_page" name="per_page">
+@foreach([10,25,50] as $n)<option value="{{ $n }}"
+@selected((int)($filters['per_page']??10)===$n)>{{ $n }}</option>
+@endforeach</select><button type="submit">Lọc công việc</button></form>
+<section class="card table-wrap mobile-data-table" data-page="tasks-index"><table><thead><tr><th>Chọn</th><th>Mã / Tiêu đề</th><th>Trạng thái</th><th>Phân công</th><th>Hạn hoàn thành</th></tr></thead><tbody>
+@forelse($tasks as $task)<tr data-task-id="{{ $task->id }}"><td data-label="Chọn">
+@if(auth()->user()->can('update',$task)||auth()->user()->can('archive',$task))<label><input type="checkbox" form="bulk-tasks" name="items[{{ $task->id }}]" value="{{ $task->revision }}"> {{ $task->code }}</label>
+@else Chỉ đọc
+@endif</td><td data-label="Công việc"><a href="{{ route($routePrefix.'.show',[...$routeParams,$task]) }}">{{ $task->code }} — {{ $task->title }}</a></td><td data-label="Trạng thái">{{ \App\Support\UiLabels::text($task->task_type->value) }} · {{ \App\Support\UiLabels::text($task->status->value) }} · {{ \App\Support\UiLabels::text($task->priority->value) }}
+@if($task->archived_at) · Đã lưu trữ
+@endif</td><td data-label="Phân công">{{ $task->assignee?->name ?? 'Chưa phân công' }}</td><td data-label="Hạn hoàn thành">{{ $task->deadline_at?->setTimezone($workspace->timezone)->format('d/m/Y H:i') ?? 'Chưa có' }}</td></tr>
+@empty<tr><td colspan="5">Chưa có công việc phù hợp.</td></tr>
+@endforelse</tbody></table></section>{{ $tasks->links() }}</x-layout>

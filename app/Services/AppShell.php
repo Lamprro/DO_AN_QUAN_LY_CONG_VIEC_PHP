@@ -56,6 +56,10 @@ class AppShell
         $crumb = [['label' => 'Workspace', 'url' => route('workspaces.index')]];
         if ($workspace) {
             $crumb[] = ['label' => $workspace->name, 'url' => route('workspaces.show', $workspace)];
+            if ($access->allows($actor, $workspace, 'workspace.view_operations')) {
+                $add('Vận hành của tôi', 'workspaces.operations', $workspace);
+            }
+            $add('Nhắc việc của tôi', 'workspaces.reminders', $workspace);
             $add('Tổng quan workspace', 'workspaces.show', $workspace);
             $add('Projects', 'workspaces.projects.index', $workspace);
             if ($access->allows($actor, $workspace, 'workspace.manage_members')) {

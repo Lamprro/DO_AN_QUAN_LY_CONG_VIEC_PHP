@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\TaskPriority;
-use App\Enums\TaskStatus;
 use App\Http\Requests\TaskRequest;
 use App\Models\Project;
+use App\Models\SavedTaskFilter;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
+use App\Services\DeadlineInsight;
 use App\Services\TaskService;
 use App\Services\TaskTreeService;
 use App\Services\TaskWorkflowService;
 use App\Support\ProjectAccess;
+use App\Support\TaskFilters;
 use App\Support\UiLabels;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -41,8 +42,7 @@ class TaskController extends Controller
     public function index(Request $request, Workspace $workspace, ?Project $project = null)
     {
         $context = $this->context($request, $workspace, $project);
-        $filters = $request->validate(['q' => ['nullable', 'string', 'max:200'], 'status' => ['nullable', Rule::enum(TaskStatus::class)], 'priority' => ['nullable', Rule::enum(TaskPriority::class)], 'assignee_id' => ['nullable', 'uuid'], 'archived' => ['nullable', Rule::in(['active', 'archived', 'all'])],
-            'sort' => ['nullable', Rule::in(['code', 'title', 'priority', 'deadline_at', 'created_at'])], 'direction' => ['nullable', Rule::in(['asc', 'desc'])], 'per_page' => ['nullable', Rule::in([10, 25, 50])]]);
+        $filters = TaskFilters::clean($request->query());
         $query = $this->query($workspace, $project)->with('assignee', 'reviewer');
         $archive = $filters['archived'] ?? 'active';
         if ($archive !== 'all') {
@@ -52,6 +52,7 @@ class TaskController extends Controller
         foreach (['status', 'priority', 'assignee_id'] as $field) {
             $query->when($filters[$field] ?? null, fn ($q, $v) => $q->where($field, $v));
         }
+        TaskFilters::applyPreset($query, $filters, $request->user(), $workspace, $project);
         $direction = $filters['direction'] ?? 'desc';
         $sort = $filters['sort'] ?? 'created_at';
         if ($sort === 'priority') {
@@ -61,7 +62,7 @@ class TaskController extends Controller
         }
         $tasks = $query->orderBy('id')->paginate((int) ($filters['per_page'] ?? 10))->withQueryString();
 
-        return view('tasks.index', $context + compact('tasks', 'filters') + ['people' => $this->access->eligibleMembers($workspace, $project)]);
+        return view('tasks.index', $context + compact('tasks', 'filters') + ['people' => $this->access->eligibleMembers($workspace, $project), 'savedFilters' => SavedTaskFilter::where('user_id', $request->user()->id)->where('workspace_id', $workspace->id)->where('project_id', $project?->id)->orderBy('name')->get()]);
     }
 
     public function create(Request $request, Workspace $workspace, ?Project $project = null)
@@ -114,10 +115,11 @@ class TaskController extends Controller
         $candidates = $all->filter(fn ($t) => $t->id !== $task->id && $t->task_type->value !== 'GROUP' && ! $t->archived_at);
         $progress = app(TaskTreeService::class)->progress(app(TaskTreeService::class)->descendants($task, $all));
         $deletable = $task->status->value === 'TODO' && ! $task->started_at && ! $task->completed_at && ! $task->activities()->withTrashed()->exists();
+        $deadlineInsight = app(DeadlineInsight::class)->build($task);
         $workflowUi = app(TaskWorkflowService::class)->availability($request->user(), $task);
         $statusOptions = app(TaskWorkflowService::class)->options($request->user(), $task);
 
-        return view('tasks.show', $this->context($request, $workspace, $project) + compact('activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'workflowUi', 'deletable'));
+        return view('tasks.show', $this->context($request, $workspace, $project) + compact('deadlineInsight', 'activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'workflowUi', 'deletable'));
     }
 
     public function edit(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)

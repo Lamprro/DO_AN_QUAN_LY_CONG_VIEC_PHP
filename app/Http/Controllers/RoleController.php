@@ -16,7 +16,7 @@ class RoleController extends Controller
     private function groups(array $permissions): array
     {
         $modules = ['workspace' => 'Workspace', 'project' => 'Project', 'task' => 'Công việc', 'calendar' => 'Lịch', 'plan' => 'Kế hoạch', 'report' => 'Báo cáo', 'integration' => 'Tích hợp'];
-        $actions = ['view' => 'Xem', 'create' => 'Tạo', 'update' => 'Sửa', 'archive' => 'Lưu trữ', 'manage_members' => 'Quản lý thành viên', 'manage_roles' => 'Quản lý vai trò', 'assign' => 'Phân công', 'review' => 'Duyệt công việc', 'comment' => 'Bình luận', 'attach' => 'Đính kèm tệp', 'delete' => 'Xóa', 'approve' => 'Duyệt kế hoạch', 'apply' => 'Áp dụng kế hoạch'];
+        $actions = ['view_operations' => 'Xem vận hành (chỉ run/job được phép)', 'view' => 'Xem', 'create' => 'Tạo', 'update' => 'Sửa', 'archive' => 'Lưu trữ', 'manage_members' => 'Quản lý thành viên', 'manage_roles' => 'Quản lý vai trò', 'assign' => 'Phân công', 'review' => 'Duyệt công việc', 'comment' => 'Bình luận', 'attach' => 'Đính kèm tệp', 'delete' => 'Xóa', 'approve' => 'Duyệt kế hoạch', 'apply' => 'Áp dụng kế hoạch'];
         $result = [];
         foreach ($permissions as $permission) {
             [$module,$action] = explode('.', $permission, 2);

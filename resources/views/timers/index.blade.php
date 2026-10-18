@@ -5,6 +5,8 @@
 @endif</p><p>{{ $entry->started_at->timezone(auth()->user()->timezone)->format('Y-m-d H:i:s') }} → {{ $entry->ended_at?->timezone(auth()->user()->timezone)->format('Y-m-d H:i:s') ?? 'Đang chạy' }}</p>
 @if(!$entry->ended_at)<form method="post" action="{{ route('timers.stop',$entry) }}">
 @csrf<button>Dừng timer</button></form>
-@else<p>{{ round($entry->started_at->diffInSeconds($entry->ended_at)/60,2) }} phút</p>
+@else
+@if(app(\App\Services\TimeAdjustmentService::class)->allowed(auth()->user(),$entry))<a href="{{ route('timers.adjust',$entry) }}">Điều chỉnh và xem lịch sử</a>
+@endif<p>{{ round($entry->started_at->diffInSeconds($entry->ended_at)/60,2) }} phút</p>
 @endif</article>
 @endforeach{{ $entries->links() }}</section></x-layout>

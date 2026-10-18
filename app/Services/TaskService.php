@@ -61,8 +61,15 @@ class TaskService
                 if ($task) {
                     $before = $task->getRawOriginal();
                     $task->fill($values);
+                    $deadlineChanged = $task->isDirty('deadline_at');
+                    if ($deadlineChanged && empty(trim($data['deadline_reason'] ?? ''))) {
+                        throw ValidationException::withMessages(['deadline_reason' => 'Cần ghi lý do thay đổi hạn.']);
+                    }
                     $changed = $task->isDirty();
                     $task->save();
+                    if ($deadlineChanged) {
+                        $this->history->record($actor, $task, 'task.deadline_changed', ['before' => ['deadline_at' => $before['deadline_at'] ?? null], 'after' => ['deadline_at' => $task->getRawOriginal('deadline_at')], 'reason' => $data['deadline_reason']]);
+                    }
                     if ($changed) {
                         $this->history->record($actor, $task, 'task.updated', ['before' => array_intersect_key($before, $values), 'after' => array_intersect_key($task->getAttributes(), $values)]);
                     }

@@ -1,0 +1,19 @@
+{
+  "scope": "phase E real local walkthrough",
+  "complete": true,
+  "fixture_prefix": "Eutil1792292478",
+  "flags": {
+    "ai": false,
+    "integrations": false
+  },
+  "env_sha256": "9a0768a72c85e056c2a9e2f5038f54a1931704327c8cafd68b845e9b920811c2",
+  "foreign_key_errors": 0,
+  "new_tables": {
+    "saved_task_filters": 1,
+    "task_reminders": 5,
+    "time_entry_adjustments": 2
+  },
+  "no_test_classes_added": true,
+  "scheduler_installed_as_service": false,
+  "production_load_tested": false
+}

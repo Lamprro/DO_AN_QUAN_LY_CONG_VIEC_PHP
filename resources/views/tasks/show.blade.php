@@ -17,6 +17,7 @@
 @endcan
 @if($task->assignee_id===auth()->id() && $task->task_type->value==='WORK' && in_array($task->status->value,['TODO','IN_PROGRESS','REVIEW'],true) && app(\App\Policies\TaskPolicy::class)->mutable(auth()->user(),$task,'task.update') && app(\App\Policies\CalendarEventPolicy::class)->scope(auth()->user(),$workspace,$project,'calendar.create'))<section class="card"><a class="button secondary" href="{{ route('workspaces.calendar.create',[$workspace,'project_id'=>$project?->id,'task_id'=>$task->id]) }}">Xếp lịch cho công việc này</a><p>Chỉ chuẩn bị form; chưa tạo khung giờ cho đến khi lưu sự kiện.</p></section>
 @endif
+@include('tasks._deadline')
 @include('tasks.workflow')
 <section class="card"><h2>Thời gian thực tế</h2><a href="{{ route('timers.index') }}">Timer của tôi</a>
 @if($task->task_type->value==='WORK' && $task->status->value==='IN_PROGRESS' && $task->assignee_id===auth()->id() && auth()->user()->can('execute',$task))<form method="post" action="{{ route('workspaces.timer.start',[$workspace,$task]) }}">

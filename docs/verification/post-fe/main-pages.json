@@ -1,0 +1,158 @@
+[
+  {
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/edit",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/members",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/roles",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/roles/create",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/operations",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/reminders",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/create",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/edit",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/members",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/github",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/timeline",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/tasks",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/tasks?view=board",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/tasks/create",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/tasks/tree",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/projects/01a147ea-0b32-7009-9dd6-550d5d557ff5/tasks/01a147ea-0b4b-738a-ade7-392dcaf25bb5",
+    "status": 200
+  },
+  {
+    "path": "/timers",
+    "status": 200
+  },
+  {
+    "path": "/notifications",
+    "status": 200
+  },
+  {
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "path": "/search",
+    "status": 200
+  },
+  {
+    "path": "/search?q=Demo",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/dashboard",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/reports",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/ai-runs",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/ai-runs/create",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/plans?project_id=01a147ea-0b32-7009-9dd6-550d5d557ff5",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/plans/create?project_id=01a147ea-0b32-7009-9dd6-550d5d557ff5",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/calendar",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/calendar/create",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/plans/01a147ea-0b7f-7077-845b-a6d1be16532b",
+    "status": 200
+  },
+  {
+    "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/plans/01a147ea-0b7f-7077-845b-a6d1be16532b/preview",
+    "status": 200
+  }
+]

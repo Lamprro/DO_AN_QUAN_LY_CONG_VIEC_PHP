@@ -74,6 +74,8 @@ class ProjectController extends Controller
     {
         if ($request->boolean('fresh')) {
             $request->session()->forget('_old_input');
+
+            return redirect()->to($request->fullUrlWithoutQuery(['fresh']));
         }
         $this->authorize('update', $project);
 

@@ -15,6 +15,8 @@ class TimeAdjustmentController extends Controller
 
         if ($r->boolean('fresh')) {
             $r->session()->forget('_old_input');
+
+            return redirect()->to($r->fullUrlWithoutQuery(['fresh']));
         }
 
         return view('timers.adjust', ['entry' => $entry, 'version' => $service->version($entry), 'audits' => TimeEntryAdjustment::where('time_entry_id', $entry->id)->latest('created_at')->latest('id')->paginate(15)]);

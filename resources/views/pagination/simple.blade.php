@@ -1,0 +1,1 @@
+@if($paginator->hasPages())<nav class="pagination-native" aria-label="Phân trang">@if(!$paginator->onFirstPage())<a href="{{ $paginator->previousPageUrl() }}" rel="prev">‹ Trước</a>@endif @if($paginator->hasMorePages())<a href="{{ $paginator->nextPageUrl() }}" rel="next">Sau ›</a>@endif</nav>@endif

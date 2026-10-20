@@ -17,8 +17,18 @@ class PlanReviewService
     public function diff(Plan $plan): array
     {
         $parent = $plan->parent;
-        $old = $parent?->data['payload'] ?? ['tasks' => [], 'dependencies' => [], 'slots' => []];
-        $new = $plan->data['payload'];
+        $oldPayload = $parent?->data['payload'] ?? $parent?->data ?? [];
+        $old = [
+            'tasks' => $oldPayload['tasks'] ?? [],
+            'dependencies' => $oldPayload['dependencies'] ?? [],
+            'slots' => $oldPayload['slots'] ?? ($oldPayload['events'] ?? []),
+        ];
+        $newPayload = $plan->data['payload'] ?? $plan->data ?? [];
+        $new = [
+            'tasks' => $newPayload['tasks'] ?? [],
+            'dependencies' => $newPayload['dependencies'] ?? [],
+            'slots' => $newPayload['slots'] ?? ($newPayload['events'] ?? []),
+        ];
         $map = $parent?->data['applied_task_ids'] ?? [];
         $key = fn ($r) => ! empty($r['task_id']) ? 'id:'.$r['task_id'] : (isset($map[$r['ref']]) ? 'id:'.$map[$r['ref']] : 'ref:'.$r['ref']);
         $a = [];
@@ -73,7 +83,7 @@ class PlanReviewService
             if ($sim->applied_at || ! in_array($sim->status->value, ['draft', 'proposed', 'approved'], true)) {
                 return ['valid' => false, 'errors' => ['Trạng thái đã thay đổi; tải lại kế hoạch.'], 'tasks' => [], 'events' => [], 'replaced' => []];
             }
-            $payload = $sim->data['payload'];
+            $payload = $service->payload($sim);
             $before = Task::where('workspace_id', $sim->workspace_id)->where('project_id', $sim->project_id)->get()->keyBy('id');
             $oldEvents = CalendarEvent::where('workspace_id', $sim->workspace_id)->where('project_id', $sim->project_id)->get()->keyBy('id');
             if ($sim->status->value !== 'approved') {
@@ -81,8 +91,9 @@ class PlanReviewService
             }
             $service->transition($actor, $sim, 'apply', 'approved');
             $sim = $sim->fresh();
-            $map = $sim->data['applied_task_ids'];
+            $map = $sim->data['applied_task_ids'] ?? [];
             $after = Task::where('workspace_id', $sim->workspace_id)->where('project_id', $sim->project_id)->with('assignee', 'reviewer')->get();
+
             $taskNames = $after->pluck('title', 'id')->all();
             $userNames = [];
             foreach ($after as $t) {

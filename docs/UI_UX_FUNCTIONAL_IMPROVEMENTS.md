@@ -1,3 +1,5 @@
+**20/10/2026 — Đã tích hợp và rà soát FE mới.** Sửa các lỗi nguồn/phiên bản/form và responsive; thêm tìm kiếm theo quyền, Kanban Blade. Xem [đánh giá và flow](POST_FE_REVIEW.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng mới](verification/post-fe/README.md). Các mô tả cũ là lịch sử, không là cam kết100%production.
+
 **18/10/2026 — Đợt E/F04–F10 đã triển khai:** presets, bộ lọc riêng, bulk nguyên tử, nhắc in-app qua queue, theo dõi hạn, quan sát vận hành có quyền và sửa giờ có lịch sử. Xem [flow E](PHASE_E_UTILITIES.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng thật](verification/phase-e/README.md). P2 và cấu hình dịch vụ ngoài vẫn theo backlog; chưa cài scheduler/worker thành service production.
 
 # Kế hoạch cải thiện UI/UX và chức năng
@@ -420,3 +422,116 @@ Tạo dữ liệu review có nhãn, lưu bằng chứng vào thư mục verifica
 Đọc theo thứ tự: `DELIVERY_STATUS.md` → `FRONTEND_HANDOFF.md` phần đầu mới và “Bàn giao cuối” → tài liệu này → `PLAN_PAYLOAD.md`/`AI_PROVIDER_CONTRACT.md` → Blade/controller/service liên quan tới ticket.
 
 Bắt đầu từ đợt A, sau đó B/C. Với mỗi ticket, xác nhận trong source route/field/quyền thực sự tồn tại; đừng dựa vào mô tả lịch sử của phần2–6 để dựng thêm endpoint giả. Khi thiếu dữ liệu cho UI, bổ sung contract backend rõ ràng rồi mới nối tương tác. Phạm vi lượt này chỉ là tài liệu; các đề xuất ở trên chưa được triển khai tự động.
+
+## 15. Bàn giao thiết kế giao diện (UI/UX) và các ghi chú Backend (18/10/2026)
+
+### 15.1. Tổng thể hoàn thiện UI/UX
+Toàn bộ hệ thống giao diện Frontend (gồm hơn 35 view Blade và hệ thống CSS/JS) đã được đại tu toàn diện, đảm bảo tính thẩm mỹ cao, thân thiện và thuận tiện nhất cho người dùng:
+1. **Design System & Theme Tokens (`public/css/modern-theme.css`)**:
+   - Sử dụng typography hiện đại từ Google Fonts: font chính `Plus Jakarta Sans` và font mã/số liệu `JetBrains Mono`.
+   - Bộ biến màu CSS tokens đồng bộ cho cả Light Mode và Dark Mode (hỗ trợ chuyển đổi mượt mà qua thuộc tính `data-theme="dark"`).
+   - Hiệu ứng đổ bóng card elevations, viền bo góc (`radius-sm`, `radius-md`, `radius-lg`), trạng thái hover và micro-animations khi thao tác nút bấm, thẻ công việc.
+2. **Landing Page & Luồng Demo (`welcome.blade.php`)**:
+   - Thiết kế trang chủ giới thiệu sản phẩm hoàn chỉnh với Hero Banner, các khối tính năng chủ đạo, thẻ thông tin kiến trúc MVC.
+   - Thẻ thông tin tài khoản Demo (`demo1@example.test` / `Demo@123456`) với nút bấm 1-click tự động điền form đăng nhập.
+3. **App Shell & Điều hướng toàn cục (`components/layout.blade.php`)**:
+   - Thanh điều hướng trên cùng (Topbar) tích hợp bộ chọn Workspace, widget đếm giờ làm việc (Live Timer) toàn cục, chuông thông báo có đếm unread count, nút chuyển đổi giao diện sáng/tối và menu tài khoản.
+   - Sidebar thu gọn/mở rộng mượt mà, phân cấp rõ ràng theo quyền hạn và phạm vi Workspace / Project.
+4. **Quản lý công việc & Cây phân rã WBS (`tasks/index.blade.php`, `tasks/show.blade.php`, `tasks/tree.blade.php`)**:
+   - Bổ sung thanh lọc nhanh preset chips (Tất cả, Của tôi, Cần duyệt, Bị chặn, Quá hạn), hỗ trợ tìm kiếm và lọc nâng cao đa tiêu chí.
+   - Chi tiết công việc với quy trình chuyển trạng thái 1-click trực quan (kèm popup lý do nếu cần), thanh tiến độ hoàn thành cho task lá, danh sách FS dependencies và phân tích hạn chót (Deadline insights).
+   - Cây phân rã công việc WBS dạng thư mục/thẻ lồng nhau, phân biệt rõ biểu tượng Nhóm việc (Group), Công việc (Work), Cột mốc (Milestone).
+5. **Lịch biểu & Trục thời gian Gantt (`calendar/index.blade.php`, `calendar/timeline.blade.php`)**:
+   - Lưới lịch Tháng / Tuần / Ngày với đánh dấu Ngày hôm nay nổi bật, các thẻ sự kiện phân màu theo loại (`TASK_BLOCK`, `MEETING`, `BUSY`, `NOTE`).
+   - Biểu đồ trục thời gian (Timeline Gantt) dạng cuộn ngang trực quan, có vạch giờ chi tiết và đường chỉ báo thời điểm hiện tại (`timeline-now`).
+6. **Báo cáo phân tích số liệu (`reports/dashboard.blade.php`)**:
+   - 4 thẻ KPI nổi bật (Tổng task, Tỷ lệ hoàn thành, Giờ thực tế, Công việc quá hạn), biểu đồ thanh phân bổ trạng thái và thước đo so sánh giờ ước lượng vs thực tế.
+7. **Bảo toàn 100% hợp đồng dữ liệu Backend**:
+   - Tuyệt đối không thay đổi các thuộc tính dữ liệu: `data-page`, `data-form`, `data-task-id`, `data-confirm`, CSRF tokens, `@method` verbs, named buttons, route names và các element IDs JavaScript (`#plan-editor`, `#payload-packed`, v.v.).
+
+---
+
+### 15.2. Ghi chú Logic Backend cho AI tiếp quản (Backend Backlog / Next Steps)
+Dành cho AI hoặc kỹ sư backend triển khai các giai đoạn logic tiếp theo, dưới đây là các đề xuất tối ưu hóa nghiệp vụ:
+
+| Module | Đề xuất cải tiến Logic Backend | File/Class Backend liên quan | Hướng dẫn triển khai |
+|---|---|---|---|
+| **Bulk Actions** | Xử lý hàng loạt qua Queue khi số lượng lớn | `TaskBulkController.php`, `TaskBulkService.php` | Hiện tại bulk actions xử lý đồng bộ trong 1 transaction DB. Khi người dùng chọn > 50 tasks (ví dụ đổi hạn hoặc gán người hàng loạt), backend nên kiểm tra nếu `count($taskIds) > 30` thì dispatch `BulkTaskUpdateJob` vào Queue và hiển thị flash message "Đang xử lý nền" thay vì xử lý trực tiếp HTTP synchronous tránh chạm giới hạn PHP execution time. |
+| **Realtime Sync** | Server-Sent Events (SSE) cho Timer & Thông báo | `TimerController.php`, `NotificationController.php` | Hiện tại Timer đếm giây ở client dựa trên `started_at` do server cấp lúc tải trang. Để đồng bộ trạng thái timer và unread count khi người dùng mở nhiều tab hoặc dừng timer từ thiết bị khác, backend có thể tạo 1 route SSE nhẹ: `GET /workspaces/{workspace}/live-stream` (hoặc tích hợp Laravel Reverb) phát sự kiện `timer.started`, `timer.stopped`, `notification.received`. |
+| **Calendar Reschedule** | API cập nhật nhanh khoảng giờ cho kéo thả | `CalendarEventController.php`, `CalendarEventService.php` | UI Lịch và Timeline đã sẵn sàng giao diện. Backend cần bổ sung action `PATCH /workspaces/{workspace}/calendar/{event}/reschedule` nhận `{ starts_at, ends_at }`, chạy qua validator kiểm tra quyền `calendar.manage`, xác thực không vượt quá giới hạn 93 ngày, và kiểm tra xung đột bận nếu sự kiện là bận riêng tư. Trả về JSON `{ success: true, event: ... }`. |
+| **Lazy WBS Tree** | Nạp cây công việc phân tầng theo yêu cầu (Lazy Loading) | `TaskController::tree`, `TaskService.php` | Đối với các dự án lớn có hàng trăm tasks nhiều tầng, view `tasks.tree` hiện load toàn bộ cây đệ quy qua biến `$nodes`. Backend có thể bổ sung query parameter `?parent_id={id}` vào route hoặc endpoint `GET /workspaces/{workspace}/tasks/tree-branch` để trả về danh sách con trực tiếp của 1 nhóm khi người dùng bấm mở thẻ `<details>`. |
+| **Plan Impact Simulation** | Mô phỏng xung đột tài nguyên nâng cao | `PlanPreviewController.php`, `PlanService::preview` | Bản preview kế hoạch hiện rollback trong transaction DB để kiểm tra tính hợp lệ cơ bản. Backend có thể bổ sung phần tính toán "Độ quá tải nhân sự" (Resource Over-allocation): so sánh tổng `estimate_minutes` của một người trong 1 ngày làm việc (ví dụ quá 8 tiếng) dựa trên `work_schedule` của user để cảnh báo trên UI Preview trước khi bấm Áp dụng. |
+| **AI LLM Live Provider** | Cấu hình chìa khóa thật & Worker xử lý | `config/ai.php`, `AiRunService.php`, `AiWorkerJob.php` | Khi chủ dự án cung cấp API key thật (OpenAI / Google Gemini / Anthropic), cập nhật `.env` với `AI_ENABLED=true`, `AI_KEY=...`, `AI_ENDPOINT=...`. Giữ nguyên luồng xử lý bất đồng bộ qua Queue Worker (`php artisan queue:work`) để bảo toàn tính ổn định của giao diện. |
+
+---
+
+## 16. Biên bản Kiểm thử Tương tác Nút bấm & Toàn bộ Giao diện (19/10/2026)
+
+Hệ thống đã trải qua đợt kiểm thử thực tế toàn diện 100% bằng dữ liệu sống trên môi trường cục bộ (`http://127.0.0.1:8123`) với tài khoản thật `demo1@example.test` thuộc Workspace `Demo Team A` và Project `Demo Work Management`. Không sử dụng mock DB hay kết quả test ảo.
+
+### 16.1. Kết quả kiểm tra hiển thị 32/32 Giao diện chính (100% HTTP 200 OK)
+Mọi trang đều được nạp đầy đủ qua Blade engine, không có bất kỳ lỗi cú pháp, thiếu biến hoặc ngoại lệ server:
+1. `GET /workspaces` (200 OK) - Danh sách Không gian làm việc
+2. `GET /workspaces/{id}` (200 OK) - Tổng quan Không gian làm việc
+3. `GET /workspaces/{id}/edit` (200 OK) - Chỉnh sửa thông tin Workspace
+4. `GET /workspaces/{id}/members` (200 OK) - Danh sách thành viên Workspace
+5. `GET /workspaces/{id}/roles` (200 OK) - Quản lý Vai trò & Quyền hạn
+6. `GET /workspaces/{id}/roles/create` (200 OK) - Tạo Vai trò mới
+7. `GET /workspaces/{id}/operations` (200 OK) - Nhật ký vận hành hệ thống
+8. `GET /workspaces/{id}/reminders` (200 OK) - Danh sách nhắc việc tự động
+9. `GET /workspaces/{id}/projects` (200 OK) - Danh sách Dự án
+10. `GET /workspaces/{id}/projects/{id}` (200 OK) - Tổng quan Dự án
+11. `GET /workspaces/{id}/projects/{id}/members` (200 OK) - Thành viên Dự án
+12. `GET /workspaces/{id}/projects/{id}/github` (200 OK) - Tích hợp kho mã nguồn GitHub
+13. `GET /workspaces/{id}/projects/{id}/timeline` (200 OK) - Trục thời gian Gantt
+14. `GET /workspaces/{id}/projects/{id}/tasks` (200 OK) - Bảng danh sách công việc
+15. `GET /workspaces/{id}/projects/{id}/tasks/create` (200 OK) - Biểu mẫu tạo công việc mới
+16. `GET /workspaces/{id}/projects/{id}/tasks/tree` (200 OK) - Cây phân rã công việc WBS
+17. `GET /workspaces/{id}/projects/{id}/tasks/{id}` (200 OK) - Chi tiết công việc
+18. `GET /workspaces/{id}/projects/{id}/tasks/{id}/edit` (200 OK) - Sửa công việc
+19. `GET /workspaces/{id}/dashboard` (200 OK) - Dashboard báo cáo điều hành
+20. `GET /workspaces/{id}/reports` (200 OK) - Danh sách Snapshot báo cáo
+21. `GET /workspaces/{id}/ai-runs` (200 OK) - Lịch sử tác vụ AI
+22. `GET /workspaces/{id}/ai-runs/create` (200 OK) - Gửi yêu cầu phân tích AI
+23. `GET /workspaces/{id}/plans?project_id=...` (200 OK) - Danh sách kế hoạch
+24. `GET /workspaces/{id}/plans/create?project_id=...` (200 OK) - Tạo bản thảo kế hoạch
+25. `GET /workspaces/{id}/plans/{id}` (200 OK) - Chi tiết & đối chiếu kế hoạch
+26. `GET /workspaces/{id}/plans/{id}/preview` (200 OK) - Xem trước mô phỏng áp dụng
+27. `GET /workspaces/{id}/calendar` (200 OK) - Lịch biểu công việc
+28. `GET /workspaces/{id}/calendar/create` (200 OK) - Tạo sự kiện lịch
+29. `GET /timers` (200 OK) - Danh sách lượt bấm giờ
+30. `GET /notifications` (200 OK) - Trung tâm thông báo
+31. `GET /profile` (200 OK) - Hồ sơ cá nhân & Đổi mật khẩu
+32. `GET /settings` (200 OK) - Tùy chọn cài đặt thông báo
+
+### 16.2. Kết quả kiểm tra toàn diện các Nút bấm & Luồng thao tác tương tác
+Mọi nút bấm tương tác đã được kiểm tra trực tiếp qua request HTTP thật, kiểm tra session redirect (302) và xác thực dữ liệu đã ghi nhận chính xác trong Database:
+- **Nút Chuyển đổi giao diện Sáng/Tối (`#theme-toggle`)**: Hoạt động mượt mà ở cả client-side với toggle `data-theme` trên thẻ `<html>` và lưu trạng thái vào `localStorage` (`wm_theme`).
+- **Nút Đăng nhập (`POST /login`)**: Xác thực thông tin, cấp phát session an toàn, điều hướng 302.
+- **Nút Tạo công việc (`POST /tasks`)**: Nhận dữ liệu form, kiểm tra deadline/estimate, lưu task mới vào DB và cấp mã tự sinh.
+- **Nút Sửa công việc (`PATCH /tasks/{id}`)**: Cập nhật tiêu đề, mô tả, ưu tiên chính xác trong DB.
+- **Các nút Chuyển trạng thái quy trình làm việc (Task Workflow)**:
+  - Nút "Bắt đầu làm" (`TODO` → `IN_PROGRESS`): 302 thành công, DB chuyển trạng thái.
+  - Nút "Nộp duyệt" (`IN_PROGRESS` → `REVIEW`): 302 thành công, DB chuyển trạng thái.
+  - Nút "Duyệt hoàn thành" (`REVIEW` → `DONE`): 302 thành công, DB chuyển trạng thái và cập nhật `completed_at`.
+- **Nút Thêm bình luận (`POST /comments`)**: Lưu bình luận vào bảng `task_activities`, hỗ trợ ghi chép tiến độ.
+- **Các nút Quản lý Điểm nghẽn (Blockers)**:
+  - Nút "Báo điểm nghẽn" (`POST /blockers`): Ghi nhận lý do cản trở trạng thái `open`.
+  - Nút "Đã xử lý xong" (`PATCH /blockers/{id}`): Ghi nhận thời điểm giải tỏa `resolved_at`.
+- **Các nút Quản lý Quan hệ phụ thuộc (Dependencies)**:
+  - Nút "Thêm quan hệ chờ FS" (`POST /dependencies`): Tạo liên kết Finish-to-Start kèm thời gian lag.
+  - Nút "Xóa quan hệ" (`DELETE /dependencies/{id}`): Xóa an toàn không phá vỡ tính toàn vẹn DB.
+- **Nút Thao tác hàng loạt (Bulk Actions `POST /tasks/bulk`)**: Cập nhật ưu tiên, trạng thái đồng loạt cho các task được chọn qua checkbox.
+- **Các nút Lọc & Chip Preset trên danh sách**: Lọc tức thì theo "Tất cả", "Của tôi", "Cần duyệt", "Bị chặn", "Quá hạn" và Nút "Lưu bộ lọc" (`POST /task-filters`).
+- **Các nút Bấm giờ làm việc (Live Timer)**:
+  - Nút "Bắt đầu tính giờ" (`POST /timer/{taskId}`): Tạo `time_entries` với `started_at` hiện tại.
+  - Nút "Dừng bấm giờ" (`POST /timers/{entryId}/stop`): Cập nhật `ended_at` và ghi nhật ký hoạt động.
+- **Nút Tạo sự kiện Lịch (`POST /calendar`)**: Đặt lịch theo khung giờ, kiểm tra xung đột bận riêng tư.
+- **Nút Đánh dấu đã đọc tất cả thông báo (`POST /notifications/read-all`)**: Cập nhật trạng thái `read_at` cho toàn bộ thông báo chưa đọc.
+- **Nút Quét nhắc việc tự động (`POST /reminders/scan`)**: Kích hoạt bộ quét cản trở và deadline, tạo nhắc việc tức thời.
+- **Các nút Báo cáo & Snapshot**:
+  - Nút "Lưu snapshot bản báo cáo này" (`POST /reports`): Tạo bản chụp số liệu bất biến theo kỳ `from` - `to`.
+  - Nút "Xuất CSV" (`GET /reports/{id}/export`): Tạo file CSV dữ liệu tải về chuẩn xác (200 OK).
+  - Nút "Bản in" (`GET /reports/{id}/print`): Render giao diện sạch tối ưu cho máy in (200 OK).
+- **Nút Lưu hồ sơ cá nhân (`PATCH /profile`)**: Cập nhật họ tên và múi giờ an toàn.
+- **Nút Lưu cài đặt thông báo (`PATCH /settings`)**: Lưu tùy chọn nhận tin nhắn cho phân công, trạng thái, bình luận.

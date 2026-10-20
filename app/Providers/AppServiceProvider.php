@@ -23,6 +23,7 @@ use App\Services\HttpAiProvider;
 use App\Services\NotificationService;
 use App\Services\SettingService;
 use App\Support\ReportAccess;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Paginator::defaultView('pagination.native');
+        Paginator::defaultSimpleView('pagination.simple');
         foreach (config('domain_schema.models') as $model) {
             $model::observe(IntegrityObserver::class);
         }

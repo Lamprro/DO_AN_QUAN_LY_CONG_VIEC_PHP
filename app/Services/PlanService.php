@@ -179,6 +179,15 @@ class PlanService
         }, 3);
     }
 
+    public function payload(Plan $plan): array
+    {
+        if (! is_array($plan->data['payload'] ?? null)) {
+            $this->fail('Kế hoạch thiếu dữ liệu chuẩn; hãy tạo bản nháp mới từ trình soạn kế hoạch.');
+        }
+
+        return $this->validate($plan->data['payload'], $plan->workspace->timezone);
+    }
+
     public function transition(User $actor, Plan $plan, string $action, string $expected, ?string $reason = null): void
     {
         DB::transaction(function () use ($actor, $plan, $action, $expected, $reason) {
@@ -194,12 +203,15 @@ class PlanService
                 $this->fail('Trạng thái kế hoạch đã đổi; tải lại.');
             }
             if ($action === 'propose' && $expected === 'draft') {
-                $this->validate($plan->data['payload'], $plan->workspace->timezone);
+                $this->payload($plan);
                 $plan->update(['status' => 'proposed']);
 
                 return;
             }
             if (in_array($action, ['approve', 'reject']) && $expected === 'proposed') {
+                if ($action === 'approve') {
+                    $this->payload($plan);
+                }
                 if ($action === 'reject' && ! $reason) {
                     $this->fail('Cần lý do từ chối.');
                 }
@@ -214,7 +226,14 @@ class PlanService
                 return;
             } // Idempotent replay; never duplicate tasks/events.
             abort_unless($this->allowed($actor, $plan->workspace, $plan->project, 'plan.approve'), 403);
-            $snapshotActor = User::findOrFail($plan->data['snapshot_actor_id']);
+            $payload = $this->payload($plan);
+            if (! is_string($plan->data['snapshot_actor_id'] ?? null) || ! is_string($plan->data['fingerprint'] ?? null)) {
+                $this->fail('Kế hoạch thiếu snapshot nguồn; hãy tạo phiên bản mới để rà soát.');
+            }
+            $snapshotActor = User::find($plan->data['snapshot_actor_id']);
+            if (! $snapshotActor) {
+                $this->fail('Người lập nguồn không còn hợp lệ; hãy tạo phiên bản mới.');
+            }
             if (! $this->allowed($snapshotActor, $plan->workspace, $plan->project) || $this->fingerprint($snapshotActor, $plan->workspace, $plan->project) !== $plan->data['fingerprint']) {
                 $this->fail('Dữ liệu nguồn đã thay đổi. Tạo phiên bản mới để rà soát lại.');
             }
@@ -222,7 +241,6 @@ class PlanService
             if ($active?->id !== ($plan->data['base_active_id'] ?? null)) {
                 $this->fail('Phiên bản đang áp dụng đã thay đổi.');
             }
-            $payload = $this->validate($plan->data['payload'], $plan->workspace->timezone);
             $order = array_flip(array_column($payload['tasks'], 'ref'));
             $map = [];
             $pending = $payload['tasks'];

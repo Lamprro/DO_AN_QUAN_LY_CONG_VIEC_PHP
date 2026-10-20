@@ -1,0 +1,38 @@
+{
+  "checks": [
+    {
+      "command": "node --check public/js/app-ui.js",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": "node --check public/js/theme.js",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": "node --check public/js/plan-editor.js",
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": "C:\\xampp\\php\\php.exe artisan view:cache",
+      "exit_code": 0,
+      "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+    },
+    {
+      "command": "C:\\xampp\\php\\php.exe artisan view:clear",
+      "exit_code": 0,
+      "output": "\n   INFO  Compiled views cleared successfully.  \n\n"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "output": "eplaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/roles/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/settings/edit.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/_utilities.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/tree.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/workflow.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/utilities/operations.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/utilities/reminders.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/welcome.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/workspaces/index.blade.php', CRLF will be replaced by LF the next time Git touches it\n"
+    }
+  ],
+  "main_business_and_env_unchanged": true,
+  "incoming_fe_files_preserved": 55,
+  "no_new_test_classes": true,
+  "new_migration_required": false
+}

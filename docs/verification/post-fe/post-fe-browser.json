@@ -1,0 +1,17 @@
+{
+  "mobile": {
+    "document": 375,
+    "overflow": [],
+    "themeOwner": "01a159d7-5782-7144-86b5-7cc817489078",
+    "viewport": 390
+  },
+  "bulkBeforeConfirm": {
+    "checked": 2,
+    "revisionValues": [
+      1,
+      1
+    ],
+    "assigneeDisabledForPriority": true
+  },
+  "bulkConfirmation": "automation blocked; not recorded as submitted"
+}

@@ -1,6 +1,6 @@
 
 @props(['title'=>'Quản lý công việc'])
-<!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ asset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ asset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ asset('css/p1-observation.css') }}"><script src="{{ asset('js/app-ui.js') }}" defer></script></head>
+<!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}" data-theme-preference="{{ $preferences['theme']??'system' }}" data-theme-owner="{{ auth()->id()??'guest' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ asset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ asset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ asset('css/p1-observation.css') }}"><link rel="stylesheet" href="{{ asset('css/modern-theme.css') }}"><link rel="stylesheet" href="{{ asset('css/review-polish.css') }}"><script src="{{ asset('js/theme.js') }}"></script><script src="{{ asset('js/app-ui.js') }}" defer></script></head>
 <body><a href="#main-content" class="skip-link">Tới nội dung chính</a><header class="app-header"><a href="{{ route('home') }}" class="brand">Work Management</a>
 @auth
 <button type="button" class="secondary nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="app-sidebar">Menu</button>
@@ -8,10 +8,11 @@
 @forelse($shell['workspaces'] as $item)<a href="{{ route('workspaces.show',$item) }}">{{ $item->name }} <small>{{ \App\Support\UiLabels::text($item->kind) }}</small></a>
 @empty<p>Chưa có workspace truy cập được.</p>
 @endforelse<a href="{{ route('workspaces.index') }}">Tất cả workspace</a></nav></details>
-<nav aria-label="Tài khoản" class="account-nav"><a href="{{ route('notifications.index') }}">Thông báo <span class="count" data-unread-count>{{ $unreadNotifications??0 }}</span></a><details><summary>{{ auth()->user()->name }}</summary><div class="account-menu"><a href="{{ route('profile.edit') }}">Hồ sơ</a><a href="{{ route('settings.edit') }}">Cấu hình</a><form action="{{ route('logout') }}" method="post" data-form="logout">
+<form method="get" action="{{ route('search.index') }}" class="global-search" role="search"><label class="sr-only" for="global-query">Tìm công việc và dự án</label><input type="search" id="global-query" name="q" maxlength="200" required placeholder="Tìm công việc, dự án…"><button class="secondary">Tìm</button></form>
+<nav aria-label="Tài khoản" class="account-nav"><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button><a href="{{ route('notifications.index') }}">Thông báo <span class="count" data-unread-count>{{ $unreadNotifications??0 }}</span></a><details><summary>{{ auth()->user()->name }}</summary><div class="account-menu"><a href="{{ route('profile.edit') }}">Hồ sơ</a><a href="{{ route('settings.edit') }}">Cấu hình</a><form action="{{ route('logout') }}" method="post" data-form="logout">
 @csrf<button class="secondary">Đăng xuất</button></form></div></details></nav>
 @else
-<nav aria-label="Tài khoản"><a href="{{ route('login') }}">Đăng nhập</a><a href="{{ route('register') }}">Đăng ký</a></nav>
+<nav aria-label="Tài khoản" class="account-nav"><button type="button" class="theme-toggle" id="theme-toggle-guest" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button><a href="{{ route('login') }}">Đăng nhập</a><a href="{{ route('register') }}">Đăng ký</a></nav>
 @endauth
 </header>
 @auth

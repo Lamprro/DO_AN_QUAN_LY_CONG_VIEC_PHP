@@ -1,6 +1,29 @@
 # Bàn giao FE — Laravel MVC / Blade
 
-## Cập nhật mới nhất — Đợt E/F04–F10, 18/10/2026
+## Cập nhật tiếp nhận FE và hoàn thiện — 20/10/2026
+
+Đọc [POST_FE_REVIEW.md](POST_FE_REVIEW.md) và [minh chứng mới](verification/post-fe/README.md) trước các đoạn18–19/10. Giữ giao diện AI FE đã làm, sửa preview kế hoạch rỗng, stale Calendar, one-shot fresh, responsive/filter grid, theme theo tài khoản và pagination. Bổ sung tìm kiếm theo quyền và Kanban từ nguồn thật. Các câu100%button pass/HTTP200 trong lịch sử không thay thế hồ sơ flow mới; dịch vụ ngoài vẫn chờ cấu hình.
+
+| File / flow mới | Hợp đồng FE cần giữ |
+|---|---|
+| SearchController → search/index | GET search.index `/search`, q≤200, workspace_id nullable, type=all|tasks|projects; tasks_page/projects_page. Không search/count ở client trên tập ngoài quyền; source revoked biến mất ở request sau. |
+| TaskController → tasks/board | GET tasks.index `view=list|board`, cùng filter/scope hiện có. Board10/cột, page_todo/page_in_progress/page_review/page_done/page_cancelled; GROUP dùng tree; mở detail để chuyển status. Không drag trạng thái bỏ workflow. |
+| TaskFilters/SavedTaskFilter | Whitelist thêm view=list|board; saved query không gồm pagination tokens. Board và list dùng cùng nguồn. |
+| Edit task/project/calendar/timer | fresh=1 chỉ bỏ bản nhập một lần rồi302 về URL chuẩn. Hidden expected_revision/version/timezone giữ old input khi lỗi; không tự refresh token khi stale. |
+| theme.js + components/layout | data-theme-owner theo actor/guest, data-theme-preference từ server. Khóa wm_theme:actor và :preference; system theo media query; settings form lưu DB qua route hiện có. Không dùng lại wm_theme global để lấn cấu hình người khác. |
+| app-ui.js + _utilities | #bulk-count aria-live, #bulk-select-page chỉ dòng hiện trang; disable field không theo action, external checkbox form=bulk-tasks giữ revision. Native data-confirm vẫn chạy, không tự xác nhận hay báo lưu trước response. |
+| pagination/native + simple | Laravel Paginator dùng view riêng; labels/URL server, CSS review-polish. Không cần Tailwind hoặc hai bản pagination ẩn/hiện. |
+
+Styles nạp modern-theme.css rồi review-polish.css. Các grid minmax dùng min(100%,Npx); CSS xử lý focus/mobile/reduced-motion/print. Giữ local horizontal scroll của timeline/board. Không phụ thuộc Google Fonts để hiển thị; bộ font có fallback hệ thống. Participant calendar chỉ tham khảo, không phải gửi tin/đặt lịch cho họ. Demo hint chỉ local. Preview thiếu payload hiển thị cảnh báo; không sửa fixture cũ để cho valid.
+
+
+## Cập nhật toàn diện giao diện (UI/UX Overhaul) — 18/10/2026
+
+Toàn bộ hệ thống giao diện Frontend (hơn 35 views Blade trong 22 modules) đã được chuẩn hóa và nâng cấp thẩm mỹ cao cấp với Design System hoàn chỉnh (`public/css/modern-theme.css`), typography Google Fonts (`Plus Jakarta Sans` & `JetBrains Mono`), hỗ trợ chuyển đổi Light/Dark mode, layout responsive thông minh, landing page `welcome.blade.php` hoàn toàn mới cho khách và nút điền tự động tài khoản Demo (`demo1@example.test` / `Demo@123456`).
+- **100% hợp đồng dữ liệu được bảo toàn:** `data-page`, `data-form`, `data-task-id`, `data-confirm`, CSRF tokens, `@method` verbs, named submitters, và toàn bộ JavaScript event bindings (`#plan-editor`, `#payload-packed`, `#input-mode`, v.v.).
+- Xem chi tiết danh mục bàn giao và các khuyến nghị logic Backend tiếp theo tại [UI_UX_FUNCTIONAL_IMPROVEMENTS.md](UI_UX_FUNCTIONAL_IMPROVEMENTS.md#15-bàn-giao-thiết-kế-giao-diện-uiux-và-các-ghi-chú-backend-18102026).
+
+## Cập nhật trước đó — Đợt E/F04–F10, 18/10/2026
 
 Đã có tiện ích backend và Blade chạy được. Đọc [PHASE_E_UTILITIES.md](PHASE_E_UTILITIES.md) và [minh chứng E](verification/phase-e/README.md). FE tiếp tục làm bố cục/typography/component trên các form có thật; service/database/quyền vẫn do backend xử lý. Các ghi chú D/P0 bên dưới là lịch sử trước đợt E.
 

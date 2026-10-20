@@ -1,0 +1,118 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/calendar/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/calendar/01a159db-b1b8-7156-976b-df0cad28c920/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/calendar/01a159db-b1b8-7156-976b-df0cad28c920/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/calendar/01a159db-b1b8-7156-976b-df0cad28c920",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/calendar/01a159db-b1b8-7156-976b-df0cad28c920",
+    "status": 200
+  },
+  {
+    "step": "calendar stale keeps version and text",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/calendar/01a159db-b1b8-7156-976b-df0cad28c920/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/calendar/01a159db-b1b8-7156-976b-df0cad28c920",
+    "status": 200
+  },
+  {
+    "step": "repeated stale submit still cannot overwrite",
+    "verified": false
+  }
+]

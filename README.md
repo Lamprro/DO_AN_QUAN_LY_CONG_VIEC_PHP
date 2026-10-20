@@ -1,3 +1,5 @@
+Đã tiếp nhận và hoàn thiện FE: [đánh giá UI/UX và chức năng ngày20/10](docs/POST_FE_REVIEW.md), [bàn giao FE](docs/FRONTEND_HANDOFF.md), [flow kiểm chứng mới](docs/verification/post-fe/README.md). Có tìm kiếm theo quyền và Kanban; không cần migration mới cho vòng này.
+
 Đã hoàn thiện đợt E/F04–F10: [tiện ích và flow](docs/PHASE_E_UTILITIES.md), [bàn giao FE](docs/FRONTEND_HANDOFF.md), [kiểm chứng thật](docs/verification/phase-e/README.md). Cập nhật migration bổ sung, giữ .env/APP_KEY/database; chạy scheduler và worker nhắc việc theo tài liệu.
 
 > Tài liệu phát triển tiếp: [Cải thiện UI/UX và chức năng](docs/UI_UX_FUNCTIONAL_IMPROVEMENTS.md), gồm backlog theo màn hình, ưu tiên và tiêu chí nghiệm thu.

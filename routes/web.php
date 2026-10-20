@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TimeAdjustmentController;
 use App\Http\Controllers\TimeTrackingController;
@@ -15,7 +16,7 @@ use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\WorkspaceMemberController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => auth()->check() ? to_route('workspaces.index') : to_route('login'))->name('home');
+Route::get('/', fn () => auth()->check() ? to_route('workspaces.index') : view('welcome'))->name('home');
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store'])->middleware('throttle:10,1')->name('register.store');
@@ -26,6 +27,7 @@ Route::get('/invitations/{token}', [InvitationController::class, 'show'])->where
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::middleware(['auth', 'active.user'])->group(function () {
     require __DIR__.'/stage05.php';
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
     Route::get('/timers/{entry}/adjust', [TimeAdjustmentController::class, 'edit'])->whereUuid('entry')->name('timers.adjust');
     Route::patch('/timers/{entry}/adjust', [TimeAdjustmentController::class, 'update'])->whereUuid('entry')->name('timers.adjust.update');
     Route::get('/timers', [TimeTrackingController::class, 'index'])->name('timers.index');

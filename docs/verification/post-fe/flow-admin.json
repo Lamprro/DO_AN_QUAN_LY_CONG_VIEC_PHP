@@ -1,0 +1,201 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "resume member form",
+    "reason": "Helper omitted native hidden status=active; resumed from rendered form. No application contract was changed."
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/members",
+    "status": 200
+  },
+  {
+    "step": "project membership created",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted ReviewFE1792508879 member queued then revoked",
+    "verified": true
+  },
+  {
+    "step": "current member reminder actually queued",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/members/01a159e0-8472-710e-ac2f-d42dbeb91624",
+    "status": 200
+  },
+  {
+    "step": "worker rechecks revoked project permission",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/search",
+    "status": 200
+  },
+  {
+    "step": "revoked membership removes search title and count",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/tasks/01a159e0-871f-7260-a3fe-ff25ef417977",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/calendar/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/calendar",
+    "status": 200
+  },
+  {
+    "step": "private busy hides title/id/link",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/calendar/01a159e0-9dfa-70ad-9800-1e470ae130ef",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/tasks/01a159da-fe3d-7342-8b21-9283472fd32a",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/tasks/01a159da-fe3d-7342-8b21-9283472fd32a",
+    "status": 200
+  },
+  {
+    "step": "multipart upload HTTP success",
+    "verified": true
+  },
+  {
+    "step": "authorized private download equals original bytes",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/projects/01a159da-f791-7138-a502-29000388ca4d/tasks/01a159da-fe3d-7342-8b21-9283472fd32a/attachments/01a159e0-a472-7307-ac4e-47b7b18470c4",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "settings theme and notification saved",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/notifications",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/notifications/read-all",
+    "status": 200
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "actual_membership_and_file": true,
+    "main_database_untouched": true
+  }
+]

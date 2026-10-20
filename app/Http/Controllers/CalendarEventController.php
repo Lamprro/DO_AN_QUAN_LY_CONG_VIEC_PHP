@@ -96,6 +96,12 @@ class CalendarEventController extends Controller
         $this->bound($workspace, $event);
         Gate::authorize('update', $event);
 
+        if ($request->boolean('fresh')) {
+            $request->session()->forget('_old_input');
+
+            return redirect()->to($request->fullUrlWithoutQuery(['fresh']));
+        }
+
         return view('calendar.form', $this->context($request, $workspace, $event));
     }
 

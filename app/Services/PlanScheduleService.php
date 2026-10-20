@@ -13,7 +13,7 @@ class PlanScheduleService
     public function suggest(User $actor, Plan $base, string $from): Plan
     {
         abort_unless(app(PlanService::class)->allowed($actor, $base->workspace, $base->project, 'plan.update'), 403);
-        $payload = $base->data['payload'];
+        $payload = app(PlanService::class)->payload($base);
         $payload['slots'] = [];
         $zone = $base->workspace->timezone;
         $start = CarbonImmutable::createFromFormat('!Y-m-d', $from, $zone);

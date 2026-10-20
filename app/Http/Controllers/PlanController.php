@@ -51,7 +51,11 @@ class PlanController extends Controller
             $base = Plan::findOrFail($request->input('base_id'));
             $this->bound($request, $workspace, $base);
             abort_unless($base->project_id === $project?->id, 404);
-            $payload = $base->data['payload'];
+            try {
+                $payload = $this->service->payload($base);
+            } catch (ValidationException $e) {
+                return to_route('workspaces.plans.show', [$workspace, $base])->with('warning', 'Kế hoạch nguồn thiếu dữ liệu chuẩn. Hãy tạo kế hoạch mới thay vì sao chép bản này.');
+            }
             foreach ($payload['tasks'] as &$row) {
                 if (isset($base->data['applied_task_ids'][$row['ref']])) {
                     $row['task_id'] = $base->data['applied_task_ids'][$row['ref']];

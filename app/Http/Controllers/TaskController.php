@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskStatus;
 use App\Http\Requests\TaskRequest;
 use App\Models\Project;
 use App\Models\SavedTaskFilter;
@@ -59,6 +60,14 @@ class TaskController extends Controller
             $query->orderByRaw("CASE priority WHEN 'low' THEN 1 WHEN 'medium' THEN 2 WHEN 'high' THEN 3 WHEN 'urgent' THEN 4 ELSE 0 END ".$direction);
         } else {
             $query->orderBy($sort, $direction);
+        }
+        if (($filters['view'] ?? 'list') === 'board') {
+            $board = [];
+            foreach (TaskStatus::cases() as $status) {
+                $board[$status->value] = (clone $query)->where('task_type', '!=', 'GROUP')->where('status', $status->value)->orderBy('id')->paginate(10, ['*'], 'page_'.strtolower($status->value))->withQueryString();
+            }
+
+            return view('tasks.board', $context + compact('board', 'filters'));
         }
         $tasks = $query->orderBy('id')->paginate((int) ($filters['per_page'] ?? 10))->withQueryString();
 
@@ -126,6 +135,8 @@ class TaskController extends Controller
     {
         if ($request->boolean('fresh')) {
             $request->session()->forget('_old_input');
+
+            return redirect()->to($request->fullUrlWithoutQuery(['fresh']));
         }
         $this->bound($workspace, $project, $task);
         $this->authorize('update', $task);

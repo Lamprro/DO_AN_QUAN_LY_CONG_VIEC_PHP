@@ -1,0 +1,134 @@
+[
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe vendor/bin/pint app/Http/Controllers/CalendarEventController.php app/Http/Controllers/PlanController.php app/Http/Controllers/ProjectController.php app/Http/Controllers/SearchController.php app/Http/Controllers/TaskController.php app/Http/Controllers/TimeAdjustmentController.php app/Providers/AppServiceProvider.php app/Services/PlanReviewService.php app/Services/PlanScheduleService.php app/Services/PlanService.php app/Support/TaskFilters.php routes/web.php",
+    "exit_code": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"fixed\",\"files\":[{\"path\":\"app\\\\Http\\\\Controllers\\\\CalendarEventController.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"statement_indentation\",\"not_operator_with_successor_space\",\"single_line_empty_body\",\"blank_line_before_statement\"]},{\"path\":\"app\\\\Http\\\\Controllers\\\\PlanController.php\",\"fixers\":[\"method_argument_space\",\"control_structure_continuation_position\",\"line_ending\",\"unary_operator_spaces\",\"whitespace_after_comma_in_array\",\"braces_position\",\"statement_indentation\",\"not_operator_with_successor_space\",\"single_line_empty_body\"]},{\"path\":\"app\\\\Http\\\\Controllers\\\\ProjectController.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"not_operator_with_successor_space\",\"single_line_empty_body\",\"blank_line_before_statement\"]},{\"path\":\"app\\\\Http\\\\Controllers\\\\SearchController.php\",\"fixers\":[\"single_space_around_construct\",\"function_declaration\",\"method_argument_space\",\"blank_line_after_opening_tag\",\"control_structure_braces\",\"line_ending\",\"whitespace_after_comma_in_array\",\"no_multiple_statements_per_line\",\"braces_position\",\"statement_indentation\",\"not_operator_with_successor_space\",\"single_line_after_imports\",\"blank_line_after_namespace\",\"blank_line_before_statement\",\"ordered_imports\",\"binary_operator_spaces\"]},{\"path\":\"app\\\\Http\\\\Controllers\\\\TaskController.php\",\"fixers\":[\"method_argument_space\",\"fully_qualified_strict_types\",\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"not_operator_with_successor_space\",\"single_line_empty_body\",\"blank_line_before_statement\",\"ordered_imports\",\"binary_operator_spaces\"]},{\"path\":\"app\\\\Http\\\\Controllers\\\\TimeAdjustmentController.php\",\"fixers\":[\"line_ending\",\"blank_line_before_statement\"]},{\"path\":\"app\\\\Providers\\\\AppServiceProvider.php\",\"fixers\":[\"fully_qualified_strict_types\",\"line_ending\",\"ordered_imports\"]},{\"path\":\"app\\\\Services\\\\PlanReviewService.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"not_operator_with_successor_space\"]},{\"path\":\"app\\\\Services\\\\PlanScheduleService.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"not_operator_with_successor_space\"]},{\"path\":\"app\\\\Services\\\\PlanService.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"statement_indentation\",\"not_operator_with_successor_space\",\"blank_line_before_statement\",\"binary_operator_spaces\"]},{\"path\":\"app\\\\Support\\\\TaskFilters.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"whitespace_after_comma_in_array\",\"not_operator_with_successor_space\",\"binary_operator_spaces\"]},{\"path\":\"routes\\\\web.php\",\"fixers\":[\"fully_qualified_strict_types\",\"line_ending\",\"ordered_imports\"]}]}"
+  },
+  {
+    "step": "PHP source lint",
+    "files": 12,
+    "all_passed": true
+  },
+  {
+    "step": "command",
+    "command": "node --check public/js/app-ui.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "node --check public/js/theme.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "node --check public/js/plan-editor.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:cache",
+    "exit_code": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan config:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cached successfully.  \n\n"
+  },
+  {
+    "step": "compiled Blade lint",
+    "files": 140,
+    "all_passed": true
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan schedule:list",
+    "exit_code": 0,
+    "output": "\n  0 * * * *  php artisan tasks:remind .......................................................... Next Due: 39 phút tới\n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan config:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cache cleared successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Route cache cleared successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Compiled views cleared successfully.  \n\n"
+  },
+  {
+    "step": "main business unchanged tasks",
+    "verified": true,
+    "count": 112
+  },
+  {
+    "step": "main business unchanged projects",
+    "verified": true,
+    "count": 16
+  },
+  {
+    "step": "main business unchanged plans",
+    "verified": true,
+    "count": 23
+  },
+  {
+    "step": "main business unchanged task_activities",
+    "verified": true,
+    "count": 281
+  },
+  {
+    "step": "main business unchanged calendar_events",
+    "verified": true,
+    "count": 50
+  },
+  {
+    "step": "main business unchanged time_entries",
+    "verified": true,
+    "count": 10
+  },
+  {
+    "step": "main business unchanged workspace_members",
+    "verified": true,
+    "count": 50
+  },
+  {
+    "step": "main business unchanged project_members",
+    "verified": true,
+    "count": 33
+  },
+  {
+    "step": "main env/key and FK preserved",
+    "verified": true
+  },
+  {
+    "step": "provider flags unchanged",
+    "flags": {
+      "ai": false,
+      "integrations": false
+    }
+  },
+  {
+    "step": "COMPLETE",
+    "no_test_classes": true,
+    "main_business_not_mutated": true
+  }
+]

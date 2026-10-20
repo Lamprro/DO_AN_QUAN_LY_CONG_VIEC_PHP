@@ -1,0 +1,112 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/dashboard",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159da-f48c-7332-852f-63744a763012/reports",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers/01a159db-4723-70e0-a953-b7771ae7e0a1/adjust",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers/01a159db-4723-70e0-a953-b7771ae7e0a1/adjust",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers/01a159db-4723-70e0-a953-b7771ae7e0a1/adjust",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/timers/01a159db-4723-70e0-a953-b7771ae7e0a1/adjust",
+    "status": 200
+  },
+  {
+    "step": "own time correction persists audit",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/timers/01a159db-4723-70e0-a953-b7771ae7e0a1/adjust",
+    "status": 200
+  },
+  {
+    "step": "correction stale preserves entry and audit",
+    "verified": false
+  }
+]

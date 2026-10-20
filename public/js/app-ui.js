@@ -10,7 +10,7 @@
  const dot=name=>name.replace(/\[([^\]]+)\]/g,'.$1');
  const locate=key=>[...document.querySelectorAll('input[name],select[name],textarea[name]')].find(i=>dot(i.name)===key&&i.type!=='hidden'&&!i.disabled);
  document.querySelectorAll('[data-error-key]').forEach(link=>{
-  const key=link.dataset.errorKey,target=locate(key);if(target){target.setAttribute('aria-invalid','true');const msg=document.createElement('small');msg.className='error';msg.textContent=link.textContent;msg.id=(target.id||key.replaceAll('.','-'))+'-server-error';target.setAttribute('aria-describedby',msg.id);target.after(msg);link.href='#'+target.id;}
+  const key=link.dataset.errorKey,target=locate(key);if(target){target.setAttribute('aria-invalid','true');const hasMessage=target.getAttribute('aria-describedby')&&document.getElementById(target.getAttribute('aria-describedby'));const msg=document.createElement('small');msg.className='error';msg.textContent=link.textContent;msg.id=(target.id||key.replaceAll('.','-'))+'-server-error';if(!hasMessage){target.setAttribute('aria-describedby',msg.id);target.after(msg);}link.href='#'+target.id;}
   link.addEventListener('click',e=>{e.preventDefault();const t=locate(key);if(t){for(let p=t.parentElement;p;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;t.focus();t.scrollIntoView({block:'center',behavior:'auto'});}else document.querySelector('#error-summary')?.focus();});
  });
  if(document.querySelector('#error-summary'))document.querySelector('#error-summary').focus();
@@ -33,5 +33,24 @@
  document.querySelectorAll('input[type=file]').forEach(input=>{const text=document.createElement('p');text.className='muted';text.setAttribute('aria-live','polite');input.after(text);input.addEventListener('change',()=>{const file=input.files[0];text.textContent=file?file.name+' · '+(file.size/1024).toFixed(1)+' KB':'';});});
  document.querySelectorAll('form[data-form="task-status"] button[name=status]').forEach(b=>b.addEventListener('click',()=>{const reason=b.form.querySelector('[name=reason]');if(reason)reason.required=['CANCELLED','TODO'].includes(b.value)||b.dataset.reason==='1';}));
  const type=document.querySelector('select[name=task_type]');if(type){const sync=()=>{const work=type.value==='WORK',group=type.value==='GROUP';for(const name of ['estimate_minutes','assignee_id','reviewer_id']){const input=type.form.querySelector(`[name="${name}"]`);if(!input)continue;const off=name==='estimate_minutes'?!work:group;input.closest('.field')?.classList.toggle('unsupported-field',off);input.disabled=off;}};type.addEventListener('change',sync);sync();}
- document.querySelectorAll('form[data-form="task-search"],form[data-form="project-search"]').forEach(f=>{f.classList.add('filter-bar');if([...f.elements].some(el=>el.name&&!['per_page','sort','direction','archived'].includes(el.name)&&el.value)){const note=document.createElement('p');note.className='filter-active';note.textContent='Bộ lọc: '+[...f.elements].filter(el=>el.name&&!['page','per_page','sort','direction','archived'].includes(el.name)&&el.value).map(el=>(f.querySelector('label[for="'+el.id+'"]')?.textContent||el.name)+': '+(el.tagName==='SELECT'?el.selectedOptions[0]?.textContent:el.value)).join(' · ');f.prepend(note);}const a=document.createElement('a');a.href=f.action;a.textContent='Xóa bộ lọc';a.className='button secondary';f.append(a);});
+ document.querySelectorAll('form[data-form="task-search"],form[data-form="project-search"]').forEach(f=>{
+  f.classList.add('filter-bar');const active=[...f.elements].filter(el=>el.name&&!['page','per_page','sort','direction','view'].includes(el.name)&&el.value&&!(el.name==='preset'&&el.value==='all')&&!(el.name==='archived'&&el.value==='active'));
+  if(active.length){const note=document.createElement('p');note.className='filter-active';note.textContent='Bộ lọc: '+active.map(el=>(f.querySelector('label[for="'+el.id+'"]')?.textContent||el.name)+': '+(el.tagName==='SELECT'?el.selectedOptions[0]?.textContent:el.value)).join(' · ');f.prepend(note);}
+  if(![...f.querySelectorAll('a')].some(a=>a.href===f.action)){const a=document.createElement('a');a.href=f.action;a.textContent='Xóa bộ lọc';a.className='button secondary';f.append(a);}
+ });
+  document.querySelectorAll('#theme-toggle,#theme-toggle-guest').forEach(btn=>btn.addEventListener('click',()=>window.WorkTheme?.toggle()));
+  const settingsForm=document.querySelector('form[data-form="settings-update"]');
+  settingsForm?.addEventListener('submit',()=>{if(settingsForm.checkValidity())window.WorkTheme?.set(settingsForm.elements.theme.value);});
+  const bulk=document.querySelector('#bulk-tasks');
+  if(bulk){
+    const boxes=[...document.querySelectorAll('input[type="checkbox"][form="bulk-tasks"][name^="items["]')];
+    const count=document.querySelector('#bulk-count'),all=document.querySelector('#bulk-select-page'),action=bulk.elements.action;
+    const sync=()=>{const n=boxes.filter(b=>b.checked).length;if(count)count.textContent=`Đã chọn ${n} công việc trên trang này`;if(all){all.checked=boxes.length>0&&n===boxes.length;all.indeterminate=n>0&&n<boxes.length;}for(const name of ['priority','assignee_id']){const input=bulk.elements[name];const relevant=(name==='priority'&&action.value==='priority')||(name==='assignee_id'&&action.value==='assign');input.disabled=!relevant;input.closest('div').hidden=!relevant;}};
+    boxes.forEach(b=>b.addEventListener('change',sync));all?.addEventListener('change',()=>{boxes.forEach(b=>b.checked=all.checked);sync();});action.addEventListener('change',sync);sync();
+    bulk.addEventListener('submit',e=>{if(!boxes.some(b=>b.checked)){e.preventDefault();count.textContent='Hãy chọn ít nhất một công việc ở bảng bên dưới.';count.focus();}},true);
+  }
+  const calendarForm=document.querySelector('form[data-form="calendar-save"]');
+  if(calendarForm){const type=calendarForm.elements.event_type,project=calendarForm.elements.project_id,task=calendarForm.elements.task_id;
+    if(type&&project&&task&&!task.disabled){const sync=()=>{const block=type.value==='TASK_BLOCK';task.required=block;task.disabled=!block;[...task.options].forEach(o=>{const excluded=!!o.value&&o.dataset.projectId!==project.value;o.hidden=excluded;o.disabled=excluded;});if(task.selectedOptions[0]?.disabled)task.value='';if(!block)task.value='';};type.addEventListener('change',sync);project.addEventListener('change',sync);sync();}
+  }
 })();

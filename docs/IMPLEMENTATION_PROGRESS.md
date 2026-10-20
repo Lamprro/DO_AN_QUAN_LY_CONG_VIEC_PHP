@@ -1,3 +1,5 @@
+**20/10/2026 — Đã tích hợp và rà soát FE mới.** Sửa các lỗi nguồn/phiên bản/form và responsive; thêm tìm kiếm theo quyền, Kanban Blade. Xem [đánh giá và flow](POST_FE_REVIEW.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng mới](verification/post-fe/README.md). Các mô tả cũ là lịch sử, không là cam kết100%production.
+
 **18/10/2026 — Đợt E/F04–F10 đã triển khai:** presets, bộ lọc riêng, bulk nguyên tử, nhắc in-app qua queue, theo dõi hạn, quan sát vận hành có quyền và sửa giờ có lịch sử. Xem [flow E](PHASE_E_UTILITIES.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng thật](verification/phase-e/README.md). P2 và cấu hình dịch vụ ngoài vẫn theo backlog; chưa cài scheduler/worker thành service production.
 
 > Cập nhật chỉ đạo mới 17/10/2026: chủ dự án yêu cầu hoàn thiện tất cả, bỏ dừng duyệt từng phần. Trạng thái hiện tại xem DELIVERY_STATUS.md và verification/final; các mục chi tiết phía dưới ghi lịch sử theo từng lần làm.

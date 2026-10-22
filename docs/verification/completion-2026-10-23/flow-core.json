@@ -1,0 +1,639 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 0",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 1",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 2",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 3",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 4",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 5",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 6",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 7",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 8",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 9",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 10",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 task 11",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "board first page ten actual tasks",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "board next page independent and complete",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16498-9632-7084-8166-3bf03601a922/projects/01a16498-9649-71b8-8b8f-eb55fb400932/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16498-9632-7084-8166-3bf03601a922/projects/01a16498-9649-71b8-8b8f-eb55fb400932/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 secret outside scope",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/search",
+    "status": 200
+  },
+  {
+    "step": "search does not leak foreign title or id",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/search",
+    "status": 200
+  },
+  {
+    "step": "member search has no private workspace rows",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/search",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 literal%_ and <script>alert(1)</script>",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/search",
+    "status": 200
+  },
+  {
+    "step": "search treats SQL wildcard characters literally and escapes markup",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/task-filters",
+    "status": 200
+  },
+  {
+    "step": "filter saved whitelist and board",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/task-filters/01a16499-5179-706d-a9f6-cd1d7715bcfc/open",
+    "status": 200
+  },
+  {
+    "step": "saved filter opens actual board",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/task-filters/01a16499-5179-706d-a9f6-cd1d7715bcfc/open",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/bulk",
+    "status": 200
+  },
+  {
+    "step": "bulk persisted both selected priorities",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/bulk",
+    "status": 200
+  },
+  {
+    "step": "stale bulk all-or-nothing",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52/blockers",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52/status",
+    "status": 200
+  },
+  {
+    "step": "blocker cannot be bypassed",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52/blockers/01a16499-6981-71ef-bda6-57718e64d7f6",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00/dependencies",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00/status",
+    "status": 200
+  },
+  {
+    "step": "FS blocks successor before predecessor done",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52/status",
+    "status": 200
+  },
+  {
+    "step": "work actually started",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/timer/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52/status",
+    "status": 200
+  },
+  {
+    "step": "running timer stops premature review",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/timers/01a16499-8693-714b-8572-4af029bafb11/stop",
+    "status": 200
+  },
+  {
+    "step": "real timer ended",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-16eb-7208-8d86-78668eadab52/status",
+    "status": 200
+  },
+  {
+    "step": "reviewer completed work",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00/status",
+    "status": 200
+  },
+  {
+    "step": "FS successor now allowed",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00/comments",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1a1d-71ca-bb66-4f7f23e51d00",
+    "status": 200
+  },
+  {
+    "step": "comment stored and escaped",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "isolated_database": true,
+    "no_test_classes": true
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  }
+]

@@ -1,0 +1,266 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/roles",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/roles/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/operations",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/reminders",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/github",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/timeline",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/timeline",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/tree",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1fce-71a0-a5a1-1433fc6d9c18",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a16499-1fce-71a0-a5a1-1433fc6d9c18/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/notifications",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/search",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/search",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/dashboard",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/reports",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/ai-runs",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/ai-runs/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/plans",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/plans/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/calendar/create",
+    "status": 200
+  },
+  {
+    "step": "all module pages and referenced assets served",
+    "verified": true,
+    "pages": 40
+  },
+  {
+    "step": "FK integrity",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE"
+  }
+]

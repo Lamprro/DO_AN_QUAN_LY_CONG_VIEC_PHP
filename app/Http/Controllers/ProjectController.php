@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Workspace;
 use App\Services\ProjectService;
 use App\Support\ProjectAccess;
+use App\Support\SearchTerm;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -24,7 +25,7 @@ class ProjectController extends Controller
         if ($archive !== 'all') {
             $archive === 'archived' ? $query->whereNotNull('archived_at') : $query->whereNull('archived_at');
         }
-        $projects = $query->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->where('name', 'like', '%'.$filters['q'].'%'))->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
+        $projects = $query->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->whereRaw("name LIKE ? ESCAPE '!'", [SearchTerm::contains($filters['q'])]))->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
             ->orderBy($filters['sort'] ?? 'created_at', $filters['direction'] ?? 'desc')->orderBy('id')->paginate(12)->withQueryString();
 
         foreach ($projects as $listed) {

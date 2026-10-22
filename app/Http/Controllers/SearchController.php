@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Workspace;
 use App\Support\ProjectAccess;
+use App\Support\SearchTerm;
 use App\Support\WorkspaceAccess;
 use Illuminate\Http\Request;
 
@@ -37,11 +38,11 @@ class SearchController extends Controller
             }
         }
         $term = trim($filters['q'] ?? '');
-        $pattern = '%'.str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $term).'%';
+        $pattern = SearchTerm::contains($term);
         $type = $filters['type'] ?? 'all';
         $tasks = Task::query()->whereIn('workspace_id', $scope->pluck('id'))->where(fn ($q) => $q->whereIn('project_id', $taskProjectIds)->orWhere(fn ($q) => $q->whereNull('project_id')->whereIn('workspace_id', $personal)))->whereNull('archived_at')->when($term === '' || $type === 'projects', fn ($q) => $q->whereRaw('1=0'))->where(fn ($q) => $q->whereRaw("title LIKE ? ESCAPE '!'", [$pattern])->orWhereRaw("code LIKE ? ESCAPE '!'", [$pattern]))->with('workspace', 'project', 'assignee')->latest()->orderBy('id')->paginate(10, ['*'], 'tasks_page')->withQueryString();
         $projects = Project::query()->whereIn('workspace_id', $scope->pluck('id'))->whereIn('id', $projectIds)->whereNull('archived_at')->when($term === '' || $type === 'tasks', fn ($q) => $q->whereRaw('1=0'))->whereRaw("name LIKE ? ESCAPE '!'", [$pattern])->with('workspace')->latest()->orderBy('id')->paginate(10, ['*'], 'projects_page')->withQueryString();
 
-        return view('search.index',compact('filters','workspaces','tasks','projects','term'));
+        return view('search.index', compact('filters', 'workspaces', 'tasks', 'projects', 'term'));
     }
 }

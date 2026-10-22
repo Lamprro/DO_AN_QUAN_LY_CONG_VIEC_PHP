@@ -17,8 +17,14 @@
             Cấu trúc phân cấp đa tầng từ Nhóm việc (Group), Công việc (Work) đến Cột mốc (Milestone)
         </p>
     </div>
-    <div class="actions" style="display: flex; gap: 0.5rem;">
-        <a class="button secondary" href="{{ route($routePrefix.'.index', $routeParams) }}" style="display: inline-flex; align-items: center; gap: 0.375rem;">
+    <div class="actions" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <button type="button" id="btn-tree-expand-all" class="button secondary" style="padding: 0.45rem 0.75rem; font-size: 0.8125rem;">
+            ⊞ Mở rộng tất cả
+        </button>
+        <button type="button" id="btn-tree-collapse-all" class="button secondary" style="padding: 0.45rem 0.75rem; font-size: 0.8125rem;">
+            ⊟ Thu gọn tất cả
+        </button>
+        <a class="button secondary" href="{{ route($routePrefix.'.index', $routeParams) }}" style="display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.45rem 0.75rem; font-size: 0.8125rem;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
             Danh sách công việc
         </a>

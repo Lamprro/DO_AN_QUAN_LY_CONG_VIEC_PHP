@@ -24,3 +24,16 @@ Homestead.yaml
 Thumbs.db
 
 /dist/
+
+# Local credentials, database snapshots and exported session state.
+.env.*
+!.env.example
+*.sqlite*
+*.db
+*.dump
+*.key
+*.pem
+*.p12
+*.pfx
+*.cookies
+/database/*.sql

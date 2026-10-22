@@ -1,0 +1,554 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "literal task list search only matching rows",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "literal Kanban search only matching cards",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects",
+    "status": 200
+  },
+  {
+    "step": "literal project search",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "literal workspace search",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649b-12b4-7331-9306-c43cb3f52077",
+    "status": 200
+  },
+  {
+    "step": "audit preserves literal low/DONE and translates priority only",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/plans/create",
+    "status": 200
+  },
+  {
+    "step": "plan source search still renders",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/register",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/register",
+    "status": 200
+  },
+  {
+    "step": "register normalized email and hashed password",
+    "verified": true
+  },
+  {
+    "step": "register creates personal workspace and owner membership",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "step": "profile changes saved",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "step": "password change invalidates other DB sessions",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/logout",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "step": "logout requires login",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "old password rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/profile",
+    "status": 200
+  },
+  {
+    "step": "new password logs in and intended profile accessible",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/00000000-0000-0000-0000-000000000000",
+    "status": 404
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 419
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-487d-72c7-a912-726953d78986/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-487d-72c7-a912-726953d78986",
+    "status": 200
+  },
+  {
+    "step": "tree cycle rejected atomically",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 grouped A",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 grouped B",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6/dependencies",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa/dependencies",
+    "status": 200
+  },
+  {
+    "step": "dependency cycle rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa/status",
+    "status": 200
+  },
+  {
+    "step": "cannot skip review",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa/status",
+    "status": 200
+  },
+  {
+    "step": "review rejection requires reason",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-51e4-7233-8d43-935cbd68a6fa/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6/status",
+    "status": 200
+  },
+  {
+    "step": "positive FS lag blocks immediate successor",
+    "verified": true
+  },
+  {
+    "step": "ancestor status aggregated through two levels",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-4b9c-7095-b25c-5c5a1a83db40",
+    "status": 200
+  },
+  {
+    "step": "group weighted progress visible",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-4b9c-7095-b25c-5c5a1a83db40",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-4b9c-7095-b25c-5c5a1a83db40/archive",
+    "status": 200
+  },
+  {
+    "step": "parent archive blocked while active children exist",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6/archive",
+    "status": 200
+  },
+  {
+    "step": "archive hides leaf",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6/restore",
+    "status": 200
+  },
+  {
+    "step": "restore returns leaf",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649f-551d-7288-a992-636ac80769e6",
+    "status": 200
+  },
+  {
+    "step": "history prevents destructive task delete",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/plans/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/plans",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/plans/01a1649f-97ec-717e-a705-5996293f9b03",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/plans/01a1649f-97ec-717e-a705-5996293f9b03/schedule",
+    "status": 200
+  },
+  {
+    "step": "local scheduling creates draft without changing tasks",
+    "verified": false
+  }
+]

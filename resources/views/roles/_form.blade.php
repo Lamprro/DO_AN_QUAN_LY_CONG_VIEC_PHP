@@ -17,14 +17,25 @@
     </div>
 
     <div style="display: flex; flex-direction: column; gap: 1.25rem;">
-        <h3 style="font-size: 1.125rem; font-weight: 700; margin: 0; color: var(--color-text);">Danh mục quyền hạn chi tiết</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 700; margin: 0; color: var(--color-text);">Danh mục quyền hạn chi tiết</h3>
+            <div style="max-width: 320px; width: 100%;">
+                <input type="search" id="permission-search" placeholder="🔍 Lọc quyền theo từ khóa..." style="width: 100%; padding: 0.45rem 0.75rem; font-size: 0.8125rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface);">
+            </div>
+        </div>
 
         @foreach($permissionGroups as $group => $permissions)
         <fieldset class="card" style="padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); margin: 0; background: var(--color-surface);">
-            <legend style="padding: 0 0.5rem; font-weight: 700; font-size: 0.9375rem; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em;">
-                {{ $group }}
-            </legend>
-            <div class="permissions" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 0.75rem; margin-top: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <legend style="padding: 0; font-weight: 700; font-size: 0.9375rem; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">
+                    {{ $group }}
+                </legend>
+                <div class="permission-group-actions" style="display: flex; gap: 0.35rem; align-items: center;">
+                    <button type="button" class="preset-chip btn-select-all" style="font-size: 0.75rem;">✓ Chọn tất cả</button>
+                    <button type="button" class="preset-chip btn-deselect-all" style="font-size: 0.75rem;">✕ Bỏ chọn</button>
+                </div>
+            </div>
+            <div class="permissions" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 0.75rem;">
                 @foreach($permissions as $permission)
                 <label for="permission-{{ str_replace('.', '-', $permission['value']) }}" style="display: flex; align-items: flex-start; gap: 0.625rem; padding: 0.625rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-surface-hover); cursor: pointer; transition: all var(--transition-fast);">
                     <input id="permission-{{ str_replace('.', '-', $permission['value']) }}" type="checkbox" name="permissions[]" value="{{ $permission['value'] }}" @checked(in_array($permission['value'], $selectedPermissions, true)) style="margin-top: 0.1875rem;">
@@ -43,12 +54,23 @@
         @endforeach
     </div>
 
-    <div class="actions" style="display: flex; gap: 0.75rem; align-items: center; padding-top: 1rem; border-top: 1px solid var(--color-border);">
-        <button type="submit" class="button" style="padding: 0.625rem 1.25rem; font-weight: 600;">
-            Lưu cấu hình vai trò
-        </button>
-        <a class="button secondary" href="{{ route('workspaces.roles.index', $workspace) }}">
-            Hủy và quay lại
-        </a>
+    {{-- Sticky Floating Action Bar --}}
+    <div class="sticky-form-bar">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.875rem; font-weight: 600; color: var(--text);">
+                {{ isset($role) ? 'Sửa vai trò: '.$role->name : 'Tạo vai trò mới' }}
+            </span>
+            <span class="muted" style="font-size: 0.75rem;">· Phím tắt:</span>
+            <kbd class="kbd-shortcut">Ctrl + ↵</kbd>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <a class="button secondary" href="{{ route('workspaces.roles.index', $workspace) }}" style="padding: 0.55rem 1rem;">
+                Hủy bỏ
+            </a>
+            <button type="submit" class="button" style="padding: 0.55rem 1.5rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;">
+                <span>Lưu cấu hình vai trò</span>
+                <span class="kbd-shortcut" style="background: rgba(255,255,255,0.25); color: #fff; border-color: rgba(255,255,255,0.35);">Ctrl+↵</span>
+            </button>
+        </div>
     </div>
 </div>

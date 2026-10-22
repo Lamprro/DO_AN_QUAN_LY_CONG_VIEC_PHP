@@ -251,6 +251,7 @@
                                 <form method="POST" action="{{ route($routePrefix.'.comments.update',[...$routeParams,$task,$activity->id]) }}" data-form="comment-update" style="margin-top: 0.5rem;">
                                     @csrf
                                     @method('PATCH')
+                                    <label class="sr-only" for="comment-{{ $activity->id }}">Nội dung bình luận cần sửa</label>
                                     <textarea id="comment-{{ $activity->id }}" name="content" required maxlength="10000" rows="3">{{ $activity->content }}</textarea>
                                     <button type="submit" style="margin-top: 0.4rem; font-size: 0.8rem; padding: 0.35rem 0.75rem; min-height: 32px;">Lưu sửa</button>
                                 </form>

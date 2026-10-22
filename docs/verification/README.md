@@ -77,3 +77,8 @@ Xem [minh chứng phần 6](stage06/README.md): HTTP/browser/SQLite + worker th�
 ## Hoàn thiện phần7–10
 
 Xem [minh chứng cuối](final/README.md) cho Plan/version/apply, scheduler local, timer HTTP thật, AI disabled queue, GitHub signed local payload, phân quyền và cài source riêng. DELIVERY_STATUS.md là trạng thái hiện tại thay các mục chờ duyệt lịch sử.
+
+
+## Nghiệm thu toàn hệ thống 23/10/2026
+
+Đã rà soát và sửa các lỗi cuối qua flow HTTP/browser/database/worker trên bản cài riêng. Trạng thái chi tiết mới nhất: `docs/COMPLETION_REPORT_2026-10-23.md`; minh chứng: `docs/verification/completion-2026-10-23/`; thiết kế/schema hiện hành: `docs/design/CURRENT_SYSTEM.md`. Các mục chờ duyệt trước đây là lịch sử. Không thêm lớp test, không thay dữ liệu chính hoặc APP_KEY.

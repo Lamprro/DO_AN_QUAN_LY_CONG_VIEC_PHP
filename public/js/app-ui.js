@@ -7,13 +7,27 @@
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('nav-open'))closeNav();if(e.key==='Tab'&&document.body.classList.contains('nav-open')){const items=[...aside.querySelectorAll('a,button')];if(e.shiftKey&&document.activeElement===items[0]){e.preventDefault();items.at(-1)?.focus();}else if(!e.shiftKey&&document.activeElement===items.at(-1)){e.preventDefault();items[0]?.focus();}}});
  const names={TODO:'Chưa bắt đầu',IN_PROGRESS:'Đang thực hiện',REVIEW:'Chờ duyệt',DONE:'Hoàn thành',CANCELLED:'Đã hủy',GROUP:'Nhóm việc',WORK:'Công việc',MILESTONE:'Mốc',low:'Thấp',medium:'Vừa',high:'Cao',urgent:'Khẩn cấp'};
  document.querySelectorAll('select[name="status"] option,select[name="priority"] option,select[name="task_type"] option').forEach(o=>{if(names[o.value]&&o.textContent.trim()===o.value)o.textContent=names[o.value];});
+ const quickEditModal=document.querySelector('#quick-edit-modal');
+ let quickTrigger;
+ const openQuick=trigger=>{if(!quickEditModal)return;quickTrigger=trigger||document.querySelector('[data-open-quick-edit]');if(!quickEditModal.open)quickEditModal.showModal();document.body.classList.add('quick-edit-open');(quickEditModal.querySelector('[data-quick-errors]')||quickEditModal.querySelector('[name=title]'))?.focus();};
+ document.querySelectorAll('[data-open-quick-edit]').forEach(btn=>btn.addEventListener('click',()=>openQuick(btn)));
+ quickEditModal?.querySelectorAll('[data-close-quick-edit]').forEach(btn=>btn.addEventListener('click',()=>quickEditModal.close()));
+ quickEditModal?.addEventListener('close',()=>{document.body.classList.remove('quick-edit-open');quickTrigger?.focus();});
+ quickEditModal?.addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;
+  const items=[...quickEditModal.querySelectorAll('button:not(:disabled),input:not(:disabled):not([type="hidden"]),select:not(:disabled),textarea:not(:disabled),a[href],[tabindex="0"]')].filter(el=>el.getClientRects().length);
+  const first=items[0],last=items.at(-1);
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}
+ });
+ if(quickEditModal?.dataset.reopen==='1')openQuick();
  const dot=name=>name.replace(/\[([^\]]+)\]/g,'.$1');
  const locate=key=>[...document.querySelectorAll('input[name],select[name],textarea[name]')].find(i=>dot(i.name)===key&&i.type!=='hidden'&&!i.disabled);
  document.querySelectorAll('[data-error-key]').forEach(link=>{
   const key=link.dataset.errorKey,target=locate(key);if(target){target.setAttribute('aria-invalid','true');const hasMessage=target.getAttribute('aria-describedby')&&document.getElementById(target.getAttribute('aria-describedby'));const msg=document.createElement('small');msg.className='error';msg.textContent=link.textContent;msg.id=(target.id||key.replaceAll('.','-'))+'-server-error';if(!hasMessage){target.setAttribute('aria-describedby',msg.id);target.after(msg);}link.href='#'+target.id;}
-  link.addEventListener('click',e=>{e.preventDefault();const t=locate(key);if(t){for(let p=t.parentElement;p;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;t.focus();t.scrollIntoView({block:'center',behavior:'auto'});}else document.querySelector('#error-summary')?.focus();});
+  link.addEventListener('click',e=>{e.preventDefault();const t=locate(key);if(t){if(t.closest('dialog')===quickEditModal&&!quickEditModal.open)openQuick();for(let p=t.parentElement;p;p=p.parentElement)if(p.tagName==='DETAILS')p.open=true;t.focus();t.scrollIntoView({block:'center',behavior:'auto'});}else document.querySelector('#error-summary')?.focus();});
  });
- if(document.querySelector('#error-summary'))document.querySelector('#error-summary').focus();
+ if(document.querySelector('#error-summary')&&!quickEditModal?.open)document.querySelector('#error-summary').focus();
  document.querySelectorAll('input[type=password]').forEach(input=>{const button=document.createElement('button');button.type='button';button.className='secondary password-toggle';button.textContent='Hiện mật khẩu';button.setAttribute('aria-pressed','false');button.addEventListener('click',()=>{const show=input.type==='password';input.type=show?'text':'password';button.textContent=show?'Ẩn mật khẩu':'Hiện mật khẩu';button.setAttribute('aria-pressed',String(show));});input.after(button);});
  const dirtyForms=new Set();document.querySelectorAll('[data-dirty-form]').forEach(f=>{f.addEventListener('input',()=>dirtyForms.add(f));f.addEventListener('change',()=>dirtyForms.add(f));});
  window.addEventListener('beforeunload',e=>{if(dirtyForms.size){e.preventDefault();e.returnValue='';}});
@@ -53,4 +67,160 @@
   if(calendarForm){const type=calendarForm.elements.event_type,project=calendarForm.elements.project_id,task=calendarForm.elements.task_id;
     if(type&&project&&task&&!task.disabled){const sync=()=>{const block=type.value==='TASK_BLOCK';task.required=block;task.disabled=!block;[...task.options].forEach(o=>{const excluded=!!o.value&&o.dataset.projectId!==project.value;o.hidden=excluded;o.disabled=excluded;});if(task.selectedOptions[0]?.disabled)task.value='';if(!block)task.value='';};type.addEventListener('change',sync);project.addEventListener('change',sync);sync();}
   }
+  // --- Enhanced Edit & Field Management UX ---
+  // 1. Quick Presets for Estimate Minutes & Live Human-Readable Formatter
+  document.querySelectorAll('input[name="estimate_minutes"]').forEach(input => {
+    const field = input.closest('[data-edit-field]') || input.closest('.field') || input.parentElement;
+    const label = field?.querySelector('label');
+    const badge = document.createElement('span');
+    badge.className = 'live-preview-badge';
+    badge.hidden = true;
+    label?.appendChild(badge);
+
+    const updatePreview = () => {
+      const v = parseInt(input.value, 10);
+      if (!v || v <= 0) {
+        badge.hidden = true;
+        return;
+      }
+      badge.hidden = false;
+      const h = Math.floor(v / 60);
+      const m = v % 60;
+      let text = '≈ ';
+      if (h > 0) text += `${h}h `;
+      if (m > 0 || h === 0) text += `${m}p`;
+      badge.textContent = text;
+    };
+    input.addEventListener('input', updatePreview);
+    updatePreview();
+
+    const presetsContainer = field?.querySelector('.estimate-presets');
+    if (presetsContainer) {
+      presetsContainer.querySelectorAll('.preset-chip').forEach(chip => {
+        chip.addEventListener('click', e => {
+          e.preventDefault();
+          if (input.disabled) return;
+          const add = parseInt(chip.dataset.add, 10);
+          const set = parseInt(chip.dataset.set, 10);
+          if (chip.dataset.clear) {
+            input.value = '';
+          } else if (!isNaN(set)) {
+            input.value = set;
+          } else if (!isNaN(add)) {
+            const current = parseInt(input.value, 10) || 0;
+            input.value = current + add;
+          }
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      });
+    }
+  });
+
+  // 2. Quick Presets for Deadline Picker
+  document.querySelectorAll('input[name="deadline_at"]').forEach(input => {
+    const field = input.closest('[data-edit-field]') || input.closest('.field') || input.parentElement;
+    const presetsContainer = field?.querySelector('.deadline-presets');
+    if (presetsContainer) {
+      presetsContainer.querySelectorAll('.preset-chip').forEach(chip => {
+        chip.addEventListener('click', e => {
+          e.preventDefault();
+          if (input.disabled) return;
+          input.value = chip.dataset.value || '';
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+
+          const reasonField = input.form?.querySelector('[name="deadline_reason"]');
+          if (reasonField) {
+            reasonField.classList.add('pulse-attention');
+            reasonField.focus();
+            setTimeout(() => reasonField.classList.remove('pulse-attention'), 3000);
+          }
+        });
+      });
+    }
+  });
+
+  // 3. Interactive Segmented Priority Control
+  document.querySelectorAll('select[name="priority"]').forEach(select => {
+    const parent = select.closest('.field') || select.parentElement;
+    const selector = parent?.querySelector('.priority-selector');
+    if (selector) {
+      const syncButtons = () => {
+        selector.querySelectorAll('.priority-btn').forEach(btn => {
+          btn.classList.toggle('selected', btn.dataset.priority === select.value);
+          btn.setAttribute('aria-pressed',String(btn.dataset.priority === select.value));
+        });
+      };
+      selector.querySelectorAll('.priority-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          select.value = btn.dataset.priority;
+          syncButtons();
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      });
+      select.addEventListener('change', syncButtons);
+      syncButtons();
+    }
+  });
+
+  // 4. Ctrl + Enter Keyboard Shortcut to Submit Form
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      const form = e.target.closest('form');
+      if (form && ['task-create','task-edit','task-quick-edit','project-create','project-edit','role-create','role-edit'].includes(form.dataset.form) && !e.defaultPrevented) {
+        const submitBtn = form.querySelector('button[type="submit"], button:not([type])');
+        if (submitBtn && !submitBtn.disabled) {
+          e.preventDefault();
+          submitBtn.click();
+        }
+      }
+    }
+  });
+
+  // 5. Auto-expanding Textareas
+  document.querySelectorAll('textarea').forEach(ta => {
+    const resize = () => {
+      ta.style.height = 'auto';
+      ta.style.height = Math.max(70, ta.scrollHeight + 4) + 'px';
+    };
+    ta.addEventListener('input', resize);
+    if (ta.value) resize();
+  });
+
+  // 6. Role Permissions Select All / Deselect All / Search
+  document.querySelectorAll('fieldset .permission-group-actions').forEach(bar => {
+    const fieldset = bar.closest('fieldset');
+    bar.querySelector('.btn-select-all')?.addEventListener('click', e => {
+      e.preventDefault();
+      fieldset.querySelectorAll('input[type="checkbox"]:not(:disabled)').forEach(cb => {cb.checked = true;cb.dispatchEvent(new Event('change',{bubbles:true}));});
+    });
+    bar.querySelector('.btn-deselect-all')?.addEventListener('click', e => {
+      e.preventDefault();
+      fieldset.querySelectorAll('input[type="checkbox"]:not(:disabled)').forEach(cb => {cb.checked = false;cb.dispatchEvent(new Event('change',{bubbles:true}));});
+    });
+  });
+
+  const permSearch = document.querySelector('#permission-search');
+  if (permSearch) {
+    permSearch.addEventListener('input', () => {
+      const q = permSearch.value.toLowerCase().trim();
+      document.querySelectorAll('fieldset.card label').forEach(lbl => {
+        if (!lbl.querySelector('input[name="permissions[]"]')) return;
+        const text = lbl.textContent.toLowerCase();
+        lbl.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    });
+  }
+
+  // 8. Tree WBS Expand All / Collapse All
+  document.querySelector('#btn-tree-expand-all')?.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.task-tree details').forEach(d => d.open = true);
+  });
+  document.querySelector('#btn-tree-collapse-all')?.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.task-tree details').forEach(d => d.open = false);
+  });
 })();

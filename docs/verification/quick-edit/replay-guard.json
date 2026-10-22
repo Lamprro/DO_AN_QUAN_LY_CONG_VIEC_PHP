@@ -1,0 +1,1 @@
+{"loopback_only": true, "main_root_and_database_rejected": true, "http_session_matches_review_db": true, "business_writes_for_guard": false}

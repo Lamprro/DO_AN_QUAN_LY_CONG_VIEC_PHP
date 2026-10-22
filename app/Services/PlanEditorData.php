@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
 use App\Support\ProjectAccess;
+use App\Support\SearchTerm;
 
 class PlanEditorData
 {
@@ -45,7 +46,7 @@ class PlanEditorData
             $query->whereRaw('1 = 0');
         }
         $needle = request()->query('source_q');
-        $choices = (clone $query)->when(is_string($needle) && $needle !== '', fn ($q) => $q->where(fn ($q) => $q->where('code', 'like', '%'.$needle.'%')->orWhere('title', 'like', '%'.$needle.'%')))->orderBy('code')->limit(201)->get();
+        $choices = (clone $query)->when(is_string($needle) && $needle !== '', fn ($q) => $q->where(fn ($q) => $q->whereRaw("code LIKE ? ESCAPE '!'", [SearchTerm::contains($needle)])->orWhereRaw("title LIKE ? ESCAPE '!'", [SearchTerm::contains($needle)])))->orderBy('code')->limit(201)->get();
         $hasMore = $choices->count() > 200;
         $choices = $choices->take(200);
         $selected = [];

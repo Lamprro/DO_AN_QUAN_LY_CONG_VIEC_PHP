@@ -1,0 +1,164 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a15a1f-f0ec-72fe-8688-e0640f7153f6/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a15a1f-f0ec-72fe-8688-e0640f7153f6/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a15a1f-f0ec-72fe-8688-e0640f7153f6/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a15a1f-f0ec-72fe-8688-e0640f7153f6/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted QuickEdit1792513236 current assignee",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a15a1f-f0ec-72fe-8688-e0640f7153f6/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a15a1f-f0ec-72fe-8688-e0640f7153f6/members/01a15a1f-f455-72c8-8c7d-016dc423fd8c",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a15a1f-f0ec-72fe-8688-e0640f7153f6/tasks/01a15a1f-f7ef-72f8-9703-cea29ad9440d",
+    "status": 200
+  },
+  {
+    "step": "ineligible existing assignee retained in rendered selected option",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a15a1f-f0ec-72fe-8688-e0640f7153f6/tasks/01a15a1f-f7ef-72f8-9703-cea29ad9440d",
+    "status": 200
+  },
+  {
+    "step": "unrelated quick save does not clear ineligible assignment",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afe-72fc-8518-49b6dcbab92e/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afe-72fc-8518-49b6dcbab92e/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted QuickEdit1792513236 personal",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afe-72fc-8518-49b6dcbab92e/tasks/01a15a20-01a1-730b-bea2-2939f0c84a95",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afe-72fc-8518-49b6dcbab92e/tasks/01a15a20-01a1-730b-bea2-2939f0c84a95",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afe-72fc-8518-49b6dcbab92e/tasks/01a15a20-01a1-730b-bea2-2939f0c84a95",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afe-72fc-8518-49b6dcbab92e/tasks/01a15a20-01a1-730b-bea2-2939f0c84a95",
+    "status": 409
+  },
+  {
+    "step": "personal scoped task conflict keeps titles verbatim",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afe-72fc-8518-49b6dcbab92e/tasks/01a15a20-01a1-730b-bea2-2939f0c84a95/resolve-edit",
+    "status": 200
+  },
+  {
+    "step": "personal scoped resolution saves intended choices",
+    "verified": true
+  },
+  {
+    "step": "browser save and comparison read back from SQL",
+    "verified": true
+  },
+  {
+    "step": "foreign key integrity after extra flows",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "no_test_classes": true
+  }
+]

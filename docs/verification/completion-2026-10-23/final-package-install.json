@@ -1,0 +1,51 @@
+[
+  {
+    "step": "command",
+    "command": "C:\\Users\\maiva\\AppData\\Local\\Programs\\Python\\Python313\\python.exe scripts/package-source.py",
+    "exit_code": 0,
+    "output": "{\"archive\": \"D:\\\\HeThong_PhanTichTaiChinh\\\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\\\dist\\\\work-management-mvc-source.zip\", \"files\": 599, \"bytes\": 2274175, \"sha256\": \"02541ee14ff2f8008a281baf7a3c2383d6534ae8d0b7c731e412c9985f26e920\", \"verified\": true}\n"
+  },
+  {
+    "step": "source-only ZIP hashes verified",
+    "files": 599,
+    "contains_live_env": false,
+    "contains_live_db": false
+  },
+  {
+    "step": "dependencies reused",
+    "vendor_from_same_machine": true,
+    "new_network_composer_install": false
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe scripts/setup-local.php --demo",
+    "exit_code": 0,
+    "output": "................................... 7.69ms DONE\n  2026_10_17_000018_create_report_snapshots_table ........................................................ 5.38ms DONE\n  2026_10_17_000019_create_github_logs_table ............................................................. 5.43ms DONE\n  2026_10_17_000020_add_edit_revisions ................................................................... 6.54ms DONE\n  2026_10_18_000021_add_task_utilities .................................................................. 30.33ms DONE\n  2026_10_18_000022_add_time_overlap_index ............................................................... 2.81ms DONE\n\n\n   INFO  Seeding database.  \n\n  Database\\Seeders\\DemoSeeder ................................................................................ RUNNING  \n  Database\\Seeders\\DemoSeeder .......................................................................... 1,206 ms DONE  \n\nReady. Run scripts/serve-local.ps1 and scripts/work-ai.ps1 in separate terminals.\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:cache",
+    "exit_code": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "step": "packaged source boots and serves authenticated pages",
+    "verified": true,
+    "migrations": true,
+    "seed_tasks": 40,
+    "route_and_view_cache": true,
+    "server_helper": true
+  },
+  {
+    "step": "COMPLETE",
+    "second_physical_machine_tested": false,
+    "isolated_directory": "C:\\Users\\maiva\\AppData\\Local\\Temp\\wm-final-package-zp5oetoe\\project",
+    "main_db_not_touched": true
+  }
+]

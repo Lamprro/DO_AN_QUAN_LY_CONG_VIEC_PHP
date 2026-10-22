@@ -1,0 +1,6 @@
+{
+  "python_sources_parse": true,
+  "main_installation_refused_before_login": true,
+  "published_full_sequence_replayed": false,
+  "note": "Executed original flow scripts during audit; published copy adds explicit isolated-root/session guards. Only syntax and main-root guard checked on the published copy."
+}

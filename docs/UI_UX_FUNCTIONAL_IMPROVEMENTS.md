@@ -535,3 +535,76 @@ Mọi nút bấm tương tác đã được kiểm tra trực tiếp qua request
   - Nút "Bản in" (`GET /reports/{id}/print`): Render giao diện sạch tối ưu cho máy in (200 OK).
 - **Nút Lưu hồ sơ cá nhân (`PATCH /profile`)**: Cập nhật họ tên và múi giờ an toàn.
 - **Nút Lưu cài đặt thông báo (`PATCH /settings`)**: Lưu tùy chọn nhận tin nhắn cho phân công, trạng thái, bình luận.
+
+---
+
+## 17. Nâng cấp Hệ thống Chỉnh sửa Trường dữ liệu (Field Editing UX) & Đặc tả Logic Backend (20/10/2026)
+
+Để giải quyết triệt để nhu cầu chỉnh sửa nhanh, tiện lợi và quản lý công việc tối ưu nhất cho người dùng mà không phá vỡ kiến trúc Laravel MVC, hệ thống đã triển khai bộ công cụ tương tác chỉnh sửa hiện đại ở phía Frontend, đồng thời ghi lại các đặc tả logic cho phía Backend tiếp quản xử lý.
+
+### 17.1. Cải tiến UI/UX đã hoàn thiện ở phía Client
+
+1. **Bộ chọn Ưu tiên trực quan dạng nút phân đoạn (Segmented Priority Control)**:
+   - Thay thế dropdown đơn điệu bằng 4 nút bấm gắn màu nhận diện thương hiệu: 🟢 Thấp (`low`), 🟡 Vừa (`medium`), 🟠 Cao (`high`), 🔴 Khẩn cấp (`urgent`).
+   - Tự động đồng bộ 2 chiều với thẻ `<select name="priority">` ẩn bên dưới, bảo toàn 100% hợp đồng dữ liệu với server.
+
+2. **Gợi ý đặt nhanh Thời lượng ước lượng (Estimate Presets & Live Formatter)**:
+   - Các nút chip 1-click: `30p`, `1h`, `2h`, `4h`, `8h (1 ngày)`, `+30p`, `Xóa`.
+   - Nhãn đọc hiểu trực quan thời gian thực (Live Preview Badge): tự động chuyển đổi số phút nhập thô thành dạng thân thiện, ví dụ:
+     - `90 phút` → `≈ 1h 30p`
+     - `480 phút` → `≈ 8h (1 ngày công)`
+     - `720 phút` → `≈ 12h (1.5 ngày công)`
+
+3. **Gợi ý chọn nhanh Hạn chót (Deadline Presets)**:
+   - Các nút chip thông minh: `Hôm nay 17:30`, `Ngày mai 17:30`, `Thứ 6 tuần này`, `+7 ngày (Tuần sau)`, `Bỏ hạn`.
+   - Tự động điền định dạng chuẩn `YYYY-MM-DDTHH:mm` theo đúng múi giờ `workspace.timezone`.
+   - Hiệu ứng nhắc nhở viền phát sáng (`pulse-attention`) tự động focus vào ô "Lý do đổi hạn" (`deadline_reason`) nếu người dùng sửa đổi deadline, tránh gặp lỗi validation khi lưu.
+
+4. **Thanh thao tác nổi cố định chân trang (Sticky Floating Action Bar)**:
+   - Tự động hiển thị nổi phía dưới màn hình khi form dài, kèm hiệu ứng mờ kính (glassmorphism backdrop blur).
+   - Người dùng không cần cuộn chuột hết trang để bấm Lưu.
+   - Tích hợp phím tắt bàn phím: bấm **`Ctrl + Enter`** (hoặc `Cmd + Enter` trên macOS) ở bất kỳ đâu trong form để lưu ngay lập tức.
+
+5. **Hộp thoại Chỉnh sửa nhanh (Quick Edit Slide-Over Modal)**:
+   - Tích hợp trực tiếp trên trang chi tiết công việc `tasks/show.blade.php` qua nút **"⚡ Sửa nhanh"**.
+   - Mở modal popup gọn gàng chứa các trường thiết yếu: Tiêu đề, Mức ưu tiên, Ước lượng, Hạn chót, Lý do đổi hạn, Người thực hiện, Người duyệt.
+   - Gửi yêu cầu cập nhật trực tiếp qua `PATCH /tasks/{id}` và giữ người dùng ở lại trang chi tiết sau khi lưu thành công, giúp cập nhật nhiều task liên tiếp mà không mất thời gian chuyển trang.
+
+6. **Nút Chỉnh sửa trực tiếp trên từng dòng danh sách (`tasks/index.blade.php`)**:
+   - Thêm nút `✏️ Sửa` ngay cạnh tên công việc trên bảng, cho phép chuyển thẳng vào trang edit chỉ với 1 click.
+
+7. **Bộ công cụ chọn quyền theo nhóm trong Quản lý Vai trò (`roles/_form.blade.php`)**:
+   - Thêm các nút **"✓ Chọn tất cả"** và **"✕ Bỏ chọn"** cho từng nhóm module (Task, Project, Member, Workspace, Calendar, Report...).
+   - Ô tìm kiếm lọc quyền tức thời (`#permission-search`): gõ từ khóa để lọc các checkbox phù hợp.
+
+8. **Bộ nút "⊞ Mở rộng tất cả" và "⊟ Thu gọn tất cả" trên Cây công việc (`tasks/tree.blade.php`)**:
+   - Cho phép người quản lý mở rộng hoặc thu gọn toàn bộ các nhóm việc WBS đa tầng chỉ trong 1 thao tác.
+
+9. **Tự động co giãn ô nhập văn bản (Auto-expanding Textarea)**:
+   - Các ô mô tả, lý do blocker, bình luận tự động điều chỉnh chiều cao theo độ dài văn bản người dùng gõ, loại bỏ thanh cuộn lồng nhau.
+
+---
+
+### 17.2. Ghi chú & Đặc tả Logic Phía Server (Backend Backlog cho Kỹ sư / AI Backend)
+
+Dành cho phía Server tiếp quản để hoàn thiện các tính năng xử lý dữ liệu nâng cao hỗ trợ giao diện chỉnh sửa:
+
+| Tính năng Server | Mục tiêu nghiệp vụ | Đặc tả Endpoint / Contract Backend | Hướng dẫn triển khai Logic |
+|---|---|---|---|
+| **1. Partial Inline Field Update API** | Cập nhật từng trường riêng biệt không cần gửi toàn bộ form | `PATCH /workspaces/{ws}/projects/{proj}/tasks/{task}/field` (hoặc kiểm tra Header `Accept: application/json` tại `TaskController@update`) | - Nhận payload JSON: `{ "field": "priority", "value": "high", "expected_revision": 4 }`.<br>- Validate chỉ riêng trường được yêu cầu, kiểm tra quyền `task.update` và so sánh `expected_revision`.<br>- Tăng revision +1, ghi log `task_activities` (field changed).<br>- Trả về HTTP 200 JSON: `{ "success": true, "revision": 5, "display_value": "Cao", "updated_at": "..." }`.<br>- Nếu revision không khớp, trả về HTTP 409 Conflict kèm thông tin phiên bản mới nhất. |
+| **2. Auto-save Draft API** | Lưu tự động bản nháp dở dang, tránh mất dữ liệu khi rớt mạng | `POST /workspaces/{ws}/tasks/{task}/draft`<br>`GET /workspaces/{ws}/tasks/{task}/draft` | - Tạo bảng `task_drafts (task_id, user_id, payload_json, updated_at)` hoặc lưu cache Redis key `draft:task:{task_id}:user:{user_id}` với TTL 7 ngày.<br>- Client tự động gửi payload sau mỗi 10 giây khi có thay đổi.<br>- Khi người dùng mở lại trang Sửa, nếu phát hiện có draft mới hơn `task.updated_at`, server truyền biến `has_draft: true` vào view để hiển thị thông báo "Khôi phục bản nháp chưa lưu". |
+| **3. Optimistic Lock Conflict Diff View** | Xử lý đối chiếu trực quan khi hai người cùng sửa một lúc | Controller ném `ValidationException` hoặc trả về view `tasks.conflict` khi `expected_revision != revision` | - Khi phát hiện xung đột phiên bản, server trả về dữ liệu 3 cột: `field`, `your_value` (dữ liệu người dùng vừa bấm lưu), và `server_value` (dữ liệu người khác đã lưu trước đó).<br>- Cho phép người dùng tick chọn giữ trường nào trước khi ghi đè bản mới nhất. |
+| **4. Realtime Event Broadcasting (SSE / Reverb)** | Cập nhật trực tiếp trạng thái trên màn hình người khác | `GET /workspaces/{ws}/events` (Server-Sent Events) hoặc Laravel Reverb WebSocket channel `workspace.{id}` | - Phát các event: `TaskUpdated`, `TaskStatusChanged`, `TaskAssigned`, `TimerStarted`.<br>- Payload gửi về: `{ "event": "task.updated", "task_id": "...", "field": "status", "new_status": "DONE", "actor_name": "Nguyen Van A" }`.<br>- Phía client tự động đổi màu badge và số đếm mà người dùng không cần bấm F5 tải lại trang. |
+| **5. Thùng rác & Khôi phục nhanh (Soft-delete & Recycle Bin)** | Khôi phục công việc đã lưu trữ hoặc xóa nhầm trong 30 ngày | `GET /workspaces/{ws}/trash`<br>`POST /workspaces/{ws}/tasks/{task}/restore` | - Đã có trường `archived_at` trên Task. Bổ sung bộ lọc xem nhanh thùng rác và quyền `task.restore`.<br>- Lệnh Artisan cron job tự động dọn dẹp các task đã archive quá 90 ngày nếu chủ workspace bật tùy chọn dọn rác định kỳ. |
+
+
+
+## 18. Kết quả sửa tích hợp Backend/FE ngày 20/10/2026
+
+Phần 16–17 là báo cáo/đề xuất từ lần làm FE trước. Không dùng câu “100% hoàn thiện” hoặc HTTP 200 của trang làm bằng chứng mọi thao tác đã hoạt động. Bản tiếp nhận thực tế có lỗi cú pháp JS, thiếu toolbar container, chip không tìm thấy input, preset dùng timezone trình duyệt và modal không giữ đầy đủ dữ liệu lỗi.
+
+Đã sửa: Calendar handler bị thiếu dấu đóng; preset estimate/deadline dùng wrapper đúng; preset ngày do server tính theo workspace; quy tắc Thứ Sáu có hôm nay; bỏ quy đổi cứng 8h=ngày công; priority có trạng thái truy cập; Ctrl+Enter giới hạn form metadata; permission helper không chọn checkbox disabled và dùng đúng `permissions[]`; native Quick Edit có CSRF/policy/revision, giữ input, reopen khi lỗi, focus/Escape và responsive; conflict Blade 409 + native POST giải quyết từng trường, tiếp tục chặn khi bản máy chủ đổi thêm. Tiêu đề/mô tả được giữ nguyên văn và escape, chỉ enum được dịch.
+
+Không cần thêm API `/field`, `/draft`, SSE hoặc Reverb để chạy các luồng này. Các dòng đề xuất tương ứng trong mục17.2 vẫn là backlog, không phải route đã triển khai; tính năng đối chiếu đã triển khai bằng MVC/Blade. Không có autosave bền sau khi đóng tab. Bản đối chiếu là hai giá trị mine/server, không tuyên bố có baseline để merge ba chiều.
+
+Hợp đồng FE hiện hành ở cuối [FRONTEND_HANDOFF.md](FRONTEND_HANDOFF.md). Kết quả kiểm tra flow/dữ liệu và giới hạn cụ thể: [verification/quick-edit/README.md](verification/quick-edit/README.md).

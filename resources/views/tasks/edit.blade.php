@@ -14,7 +14,7 @@
         <h1 style="font-size: 1.5rem; font-weight: 700; margin: 0 0 1.5rem; color: var(--color-text); letter-spacing: -0.01em;">
             Chỉnh sửa công việc: {{ $task->code }}
         </h1>
-        <form action="{{ route($routePrefix.'.update', [...$routeParams, $task]) }}" method="POST" data-form="task-edit">
+        <form action="{{ route($routePrefix.'.update', [...$routeParams, $task]) }}" method="POST" data-form="task-edit" data-dirty-form>
             @csrf
             @method('PATCH')
             @include('tasks._form')

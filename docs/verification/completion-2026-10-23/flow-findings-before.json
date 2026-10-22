@@ -1,0 +1,88 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "BUG literal wildcard search in task list",
+    "observed_unrelated_task": false,
+    "expected": false
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects",
+    "status": 200
+  },
+  {
+    "step": "BUG literal wildcard search in project list",
+    "observed_unrelated_project": true,
+    "expected": false
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Completion1792689110 literal history",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649b-12b4-7331-9306-c43cb3f52077/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649b-12b4-7331-9306-c43cb3f52077",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/tasks/01a1649b-12b4-7331-9306-c43cb3f52077",
+    "status": 200
+  },
+  {
+    "step": "BUG audit text translated as enum",
+    "title_translated": true,
+    "description_translated": true,
+    "expected": false
+  }
+]

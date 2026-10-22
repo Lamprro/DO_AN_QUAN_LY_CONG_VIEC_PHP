@@ -1,0 +1,29 @@
+{
+  "browser": {
+    "quick_save": true,
+    "deadline_reason_reopen": true,
+    "close_reopen_keeps_draft": true,
+    "escape_focus_return": true,
+    "ctrl_enter_metadata_save": true,
+    "ctrl_enter_status_no_submit": true,
+    "two_tabs_conflict_resolved": true,
+    "mobile": {
+      "width": 390,
+      "document_scroll_width": 390,
+      "dialog_client_width": 350,
+      "dialog_scroll_width": 350
+    },
+    "console_errors": [],
+    "viewport_reset": true,
+    "tab_focus_loop": true,
+    "shift_tab_focus_loop": true,
+    "duplicate_dom_ids": []
+  },
+  "http_sql_checks": 37,
+  "database": "isolated review installation; main unchanged per technical.json",
+  "screenshots": [
+    "quick-modal.png",
+    "quick-conflict.png"
+  ],
+  "class_tests_added": false
+}

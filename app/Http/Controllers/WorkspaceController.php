@@ -8,6 +8,7 @@ use App\Models\Workspace;
 use App\Services\MemberService;
 use App\Services\WorkspaceService;
 use App\Support\ProjectAccess;
+use App\Support\SearchTerm;
 use App\Support\WorkspaceAccess;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class WorkspaceController extends Controller
         $user = $request->user();
         $workspaces = Workspace::query()->whereHas('members', fn ($q) => $q->where('user_id', $user->id)->where('status', 'active'))
             ->where(fn ($q) => $q->where('owner_id', $user->id)->orWhereHas('members', fn ($m) => $m->where('user_id', $user->id)->where('status', 'active')->whereHas('role', fn ($r) => $r->whereJsonContains('permissions', 'workspace.view'))))
-            ->when($request->filled('q'), fn ($q) => $q->where('name', 'like', '%'.$request->input('q').'%'))->latest()->paginate(12)->withQueryString();
+            ->when($request->filled('q'), fn ($q) => $q->whereRaw("name LIKE ? ESCAPE '!'", [SearchTerm::contains($request->input('q'))]))->latest()->paginate(12)->withQueryString();
 
         return view('workspaces.index', compact('workspaces'));
     }

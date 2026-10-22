@@ -71,10 +71,13 @@
     </div>
 
     <!-- Actions Toolbar -->
-    <div class="actions" style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+    <div class="actions">
         @can('update',$task)
-            <a class="button" href="{{ route($routePrefix.'.edit',[...$routeParams,$task]) }}">
-                ✏️ Chỉnh sửa thông tin
+            <button type="button" class="button" data-open-quick-edit style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700;">
+                ⚡ Sửa nhanh
+            </button>
+            <a class="button secondary" href="{{ route($routePrefix.'.edit',[...$routeParams,$task]) }}">
+                📝 Chỉnh sửa đầy đủ
             </a>
         @endcan
 
@@ -140,4 +143,6 @@
         @endif
     @endcan
 </div>
+
+@include('tasks._quick-edit')
 </x-layout>

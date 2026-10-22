@@ -33,3 +33,33 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 form[data-form="task-search"],form[data-form="project-search"] { display:block!important; }
 
 .task-code { display:block;font-family:var(--font-mono);font-size:.7rem;margin-top:.65rem;overflow-wrap:anywhere; }.priority-urgent { color:var(--danger)!important;background:var(--danger-bg)!important; }.priority-high { color:var(--warning)!important;background:var(--warning-bg)!important; }
+
+/* Native dialog keeps focus inside Quick Edit and retains drafts when closed. */
+.task-edit-modal{width:min(680px,calc(100vw - 24px));max-width:680px;max-height:90dvh;box-sizing:border-box;padding:1.25rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);color:var(--text);overflow:auto;box-shadow:0 24px 80px #0005;}
+.task-edit-modal::backdrop{background:rgb(15 23 42 / .6);backdrop-filter:blur(3px);}
+body.quick-edit-open{overflow:hidden;}
+.quick-edit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:1rem;}
+.task-edit-modal .actions{position:sticky;bottom:-1.25rem;background:var(--surface);padding:1rem 0;flex-wrap:wrap;border-top:1px solid var(--border);}
+.task-edit-modal .field{margin-top:1rem;}.task-edit-modal .preset-chip{white-space:normal;}
+.conflict-value{white-space:pre-wrap;overflow-wrap:anywhere;max-height:18rem;overflow:auto;}.conflict-row{min-width:0;}
+.conflict-row select{max-width:100%;}.quick-edit-header{gap:1rem;}
+@media(max-width:480px){.task-edit-modal{padding:1rem;}.task-edit-modal .actions{bottom:-1rem;}.task-edit-modal .actions>*{flex:1 1 100%;}}
+
+.task-edit-modal h2{overflow-wrap:anywhere;min-width:0;}.task-edit-modal [data-quick-errors]{display:block;}.task-edit-modal [data-quick-errors] ul{margin-bottom:0;}
+
+/* A wrapped mobile header must scroll away and remain below the menu drawer. */
+@media(max-width:900px){
+ .app-header{position:relative;z-index:20;}
+}
+@media(max-width:680px){
+ .app-header{display:grid;grid-template-columns:minmax(0,1fr) auto;padding:.75rem 1rem!important;}
+ .app-header .brand{font-size:.9rem;padding:.25rem 0;gap:.4rem;}
+ .app-header .nav-toggle{padding:.5rem .65rem;}
+ .app-header .workspace-switcher,.app-header .global-search,.app-header .account-nav{grid-column:1/-1;max-width:100%;width:100%;}
+ .workspace-switcher summary{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+ .workspace-switcher nav{min-width:0;max-width:100%;width:100%;}
+ .app-header .account-nav{margin-left:0;flex-wrap:wrap;gap:.5rem;}
+}
+
+/* Wrapped card titles keep one continuous click/focus target. */
+.card h2 > a{display:block;}

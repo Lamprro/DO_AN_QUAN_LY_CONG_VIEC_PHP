@@ -1,0 +1,78 @@
+[
+  {
+    "step": "source archive extracted",
+    "directory": "C:\\Users\\maiva\\AppData\\Local\\Temp\\wm-release-sdctut3u\\project",
+    "files": 657,
+    "contains_env": false,
+    "contains_live_db": false
+  },
+  {
+    "step": "copy installed dependencies for isolated check",
+    "note": "Uses already installed vendor on same host; not a fresh network download or second physical computer."
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe D:/Composer/composer.phar validate --no-check-publish",
+    "exit_code": 0,
+    "output": "./composer.json is valid\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe scripts/setup-local.php --demo",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cache cleared successfully.  \n\n\n   INFO  Application key set successfully.  \n\n\n   INFO  Preparing database.  \n\n  Creating migration table ............................................................................... 8.07ms DONE\n\n   INFO  Running migrations.  \n\n  0001_01_01_000000_create_users_table .................................................................. 14.89ms DONE\n  0001_01_01_000001_create_cache_table .................................................................. 10.57ms DONE\n  0001_01_01_000002_create_jobs_table ................................................................... 13.49ms DONE\n  2026_10_17_000001_create_user_settings_table ........................................................... 5.74ms DONE\n  2026_10_17_000002_create_workspaces_table .............................................................. 3.43ms DONE\n  2026_10_17_000003_create_roles_table ................................................................... 5.18ms DONE\n  2026_10_17_000004_create_workspace_members_table ....................................................... 8.59ms DONE\n  2026_10_17_000005_create_integration_connections_table ................................................. 5.24ms DONE\n  2026_10_17_000006_create_projects_table ................................................................ 6.99ms DONE\n  2026_10_17_000007_create_project_members_table ......................................................... 5.44ms DONE\n  2026_10_17_000008_create_tasks_table .................................................................. 15.28ms DONE\n  2026_10_17_000009_create_task_dependencies_table ....................................................... 7.41ms DONE\n  2026_10_17_000010_create_task_blockers_table ........................................................... 3.03ms DONE\n  2026_10_17_000011_create_ai_runs_table ................................................................. 9.15ms DONE\n  2026_10_17_000012_create_ai_calls_table ................................................................ 5.56ms DONE\n  2026_10_17_000013_create_plans_table .................................................................. 12.23ms DONE\n  2026_10_17_000014_create_calendar_events_table ........................................................ 12.32ms DONE\n  2026_10_17_000015_create_time_entries_table ............................................................ 5.15ms DONE\n  2026_10_17_000016_create_task_activities_table ......................................................... 5.99ms DONE\n  2026_10_17_000017_create_notifications_table ........................................................... 8.48ms DONE\n  2026_10_17_000018_create_report_snapshots_table ........................................................ 5.68ms DONE\n  2026_10_17_000019_create_github_logs_table ............................................................. 6.58ms DONE\n  2026_10_17_000020_add_edit_revisions ................................................................... 8.13ms DONE\n  2026_10_18_000021_add_task_utilities .................................................................. 32.24ms DONE\n  2026_10_18_000022_add_time_overlap_index ............................................................... 2.37ms DONE\n\n\n   INFO  Seeding database.  \n\n  Database\\Seeders\\DemoSeeder ................................................................................ RUNNING  \n  Database\\Seeders\\DemoSeeder .......................................................................... 1,387 ms DONE  \n\nReady. Run scripts/serve-local.ps1 and scripts/work-ai.ps1 in separate terminals.\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe scripts/setup-local.php --demo",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cache cleared successfully.  \n\n\n   INFO  Nothing to migrate.  \n\n\n   INFO  Seeding database.  \n\n  Database\\Seeders\\DemoSeeder ................................................................................ RUNNING  \n  Database\\Seeders\\DemoSeeder .......................................................................... 1,250 ms DONE  \n\nReady. Run scripts/serve-local.ps1 and scripts/work-ai.ps1 in separate terminals.\n"
+  },
+  {
+    "step": "fresh migrations + repeated demo seed + key preserved",
+    "counts": {
+      "users": 5,
+      "workspaces": 3,
+      "projects": 3,
+      "tasks": 40,
+      "calendar_events": 20
+    },
+    "fk_errors": [],
+    "second_run_preserves_key": true,
+    "database_isolated": true
+  },
+  {
+    "step": "isolated HTTP login using installed source",
+    "http": 200,
+    "redirect": "http://127.0.0.1:8126/workspaces",
+    "real_database": true
+  },
+  {
+    "step": "isolated page",
+    "path": "/workspaces/01a16498-9630-71a3-98dd-c126d53a937c/projects/01a16498-9647-7330-a7c1-a4048af07f4b",
+    "http": 200
+  },
+  {
+    "step": "isolated page",
+    "path": "/workspaces/01a16498-9630-71a3-98dd-c126d53a937c/plans?project_id=01a16498-9647-7330-a7c1-a4048af07f4b",
+    "http": 200
+  },
+  {
+    "step": "isolated page",
+    "path": "/timers",
+    "http": 200
+  },
+  {
+    "step": "isolated page",
+    "path": "/workspaces/01a16498-9630-71a3-98dd-c126d53a937c/dashboard",
+    "http": 200
+  },
+  {
+    "step": "COMPLETE",
+    "active_env_unchanged": true,
+    "active_db_not_reset": true,
+    "isolated_source_directory": "C:\\Users\\maiva\\AppData\\Local\\Temp\\wm-release-sdctut3u\\project",
+    "vendor_reused": true,
+    "second_physical_machine_tested": false
+  }
+]

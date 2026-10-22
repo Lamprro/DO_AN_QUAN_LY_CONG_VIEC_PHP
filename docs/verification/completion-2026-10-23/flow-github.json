@@ -1,0 +1,80 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/github",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/github",
+    "status": 200
+  },
+  {
+    "step": "review connection encrypted",
+    "verified": true
+  },
+  {
+    "step": "unsigned local webhook denied",
+    "verified": true
+  },
+  {
+    "step": "signed delivery accepted",
+    "verified": true
+  },
+  {
+    "step": "duplicate delivery idempotent",
+    "verified": true
+  },
+  {
+    "step": "one log and one activity, task unchanged",
+    "verified": true
+  },
+  {
+    "step": "foreign repository denied",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/github",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a16499-10c3-721f-a8e8-d87f98696a32/projects/01a16499-13e1-73a6-ade2-47aec9aea001/github",
+    "status": 200
+  },
+  {
+    "step": "disabled connection denied",
+    "verified": true
+  },
+  {
+    "step": "review env restored",
+    "verified": true
+  },
+  {
+    "step": "FK integrity",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "real_github_network": false,
+    "local_signed_payload": true,
+    "main_configuration_not_touched": true
+  }
+]

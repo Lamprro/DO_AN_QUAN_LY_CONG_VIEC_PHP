@@ -1,0 +1,56 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor "Khách" as Guest
+actor "Người dùng đăng nhập" as User
+actor "Owner / quản trị có quyền" as Owner
+actor "Thành viên project" as Member
+actor "Người thực hiện" as Assignee
+actor "Người duyệt" as Reviewer
+actor "Người duyệt và áp dụng plan" as Approver
+actor "Worker hệ thống" as Worker
+actor "GitHub" as GitHub
+rectangle "Quản lý công việc Laravel MVC / Blade" {
+ usecase "Đăng ký / đăng nhập" as Auth
+ usecase "Hồ sơ / settings / đăng xuất" as Profile
+ usecase "Workspace / Role / Member / lời mời" as Admin
+ usecase "Project / Task CRUD / tìm kiếm" as Task
+ usecase "Tree / FS / blocker / comment / file" as Flow
+ usecase "Bắt đầu / timer / nộp duyệt" as Execute
+ usecase "Duyệt / yêu cầu sửa / mở lại" as Review
+ usecase "Calendar / Timeline" as Calendar
+ usecase "Dashboard / snapshot / CSV / print" as Report
+ usecase "Plan nháp / version / local schedule" as Plan
+ usecase "Đề xuất / duyệt / preview / apply" as Apply
+ usecase "Kiểm quyền và phạm vi hiện tại" as Permission
+ usecase "Queue AI / nhắc việc" as Queue
+ usecase "Xử lý webhook" as Hook
+ usecase "Kiểm HMAC và delivery chống trùng" as Signature
+}
+Guest --> Auth
+User --> Profile
+User --> Calendar
+User --> Report
+Owner --> Admin
+Member --> Task
+Member --> Flow
+Member --> Plan
+Assignee --> Execute
+Reviewer --> Review
+Approver --> Apply
+Worker --> Queue
+GitHub --> Hook
+Task .> Permission : <<include>>
+Apply .> Permission : <<include>>
+Queue .> Permission : <<include>>
+Hook .> Signature : <<include>>
+note bottom of Permission
+  Actor chỉ mô tả vai trò nghiệp vụ.
+  Quyền thực tế = membership + permission + Policy + trạng thái.
+  Có quyền workspace không tự cấp mọi quyền project.
+end note
+note bottom of Queue
+  AI giữ tắt khi thiếu cấu hình.
+  Nhắc việc chạy worker thật, kiểm lại quyền khi xử lý.
+end note
+@enduml

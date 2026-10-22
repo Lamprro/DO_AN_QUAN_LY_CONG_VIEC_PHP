@@ -11,14 +11,19 @@ use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
 use App\Services\DeadlineInsight;
+use App\Services\TaskEditConflict;
+use App\Services\TaskEditData;
 use App\Services\TaskService;
 use App\Services\TaskTreeService;
 use App\Services\TaskWorkflowService;
 use App\Support\ProjectAccess;
+use App\Support\SearchTerm;
 use App\Support\TaskFilters;
 use App\Support\UiLabels;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
@@ -28,10 +33,10 @@ class TaskController extends Controller
     {
         abort_unless($this->policy->scope($request->user(), $workspace, $project, 'task.view'), 403);
 
-        return ['workspace' => $workspace, 'project' => $project, 'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace],
+        return ['deadlinePresets' => app(TaskEditData::class)->presets($workspace), 'workspace' => $workspace, 'project' => $project, 'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace],
             'canCreate' => $this->policy->projectWritable($project) && $this->policy->scope($request->user(), $workspace, $project, 'task.create'),
             'parents' => $workspace->tasks()->where('project_id', $project?->id)->where('task_type', 'GROUP')->whereNull('archived_at')->orderBy('sort_order')->get(),
-            'reviewers' => $this->access->eligibleMembers($workspace, $project, 'task.review'),
+            'people' => $this->access->eligibleMembers($workspace, $project), 'reviewers' => $this->access->eligibleMembers($workspace, $project, 'task.review'),
             'canAssign' => $this->policy->scope($request->user(), $workspace, $project, 'task.assign')];
     }
 
@@ -49,7 +54,7 @@ class TaskController extends Controller
         if ($archive !== 'all') {
             $archive === 'archived' ? $query->whereNotNull('archived_at') : $query->whereNull('archived_at');
         }
-        $query->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->where(fn ($s) => $s->where('title', 'like', '%'.$filters['q'].'%')->orWhere('code', 'like', '%'.$filters['q'].'%')));
+        $query->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->where(fn ($s) => $s->whereRaw("title LIKE ? ESCAPE '!'", [SearchTerm::contains($filters['q'])])->orWhereRaw("code LIKE ? ESCAPE '!'", [SearchTerm::contains($filters['q'])])));
         foreach (['status', 'priority', 'assignee_id'] as $field) {
             $query->when($filters[$field] ?? null, fn ($q, $v) => $q->where($field, $v));
         }
@@ -117,7 +122,7 @@ class TaskController extends Controller
                 return 'Chưa có';
             }
 
-            return is_scalar($value) ? UiLabels::text($value) : json_encode($value, JSON_UNESCAPED_UNICODE);
+            return is_scalar($value) ? (in_array($field, ['status', 'priority', 'task_type'], true) ? UiLabels::text($value) : (string) $value) : json_encode($value, JSON_UNESCAPED_UNICODE);
         };
         $dependencies = $task->incomingDependencies()->with('predecessor')->get();
         $blockers = $task->blockers()->with('reporter', 'resolver')->orderByDesc('created_at')->get();
@@ -147,10 +152,58 @@ class TaskController extends Controller
     public function update(TaskRequest $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
     {
         $this->bound($workspace, $project, $task);
-        $this->service->save($request->user(), $workspace, $project, $request->validated(), $task);
+
+        return $this->saveEdit($request, $workspace, $project, $task, $request->validated(), $request->input('edit_surface') === 'quick' ? 'quick' : 'full');
+    }
+
+    private function saveEdit(Request $request, Workspace $workspace, ?Project $project, Task $task, array $data, string $surface, ?string $token = null)
+    {
+        try {
+            $this->service->save($request->user(), $workspace, $project, $data, $task);
+        } catch (ValidationException $e) {
+            $task = $task->fresh();
+            $this->authorize('update', $task);
+            if (isset($e->errors()['expected_revision'])) {
+                $conflict = app(TaskEditConflict::class)->prepare($request, $task, $data, $surface);
+                if ($token) {
+                    app(TaskEditConflict::class)->forget($request, $token);
+                }
+
+                return response()->view('tasks.conflict', $this->context($request, $workspace, $project) + compact('task', 'conflict'), 409);
+            }
+            $request->session()->flash('task_edit_error', ['task_id' => $task->id, 'surface' => $surface]);
+            $context = $this->context($request, $workspace, $project);
+
+            return to_route($context['routePrefix'].($surface === 'quick' ? '.show' : '.edit'), [...$context['routeParams'], $task])->withErrors($e->errors())->withInput($data + ['edit_surface' => $surface]);
+        }
+        if ($token) {
+            app(TaskEditConflict::class)->forget($request, $token);
+        }
         $context = $this->context($request, $workspace, $project);
 
         return to_route($context['routePrefix'].'.show', [...$context['routeParams'], $task])->with('success', 'Đã cập nhật task.');
+    }
+
+    public function resolveEdit(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
+    {
+        $this->bound($workspace, $project, $task);
+        $this->authorize('update', $task);
+        try {
+            $input = $request->validate(['conflict_token' => 'required|uuid', 'expected_revision' => 'required|integer|min:1', 'choices' => 'sometimes|array', 'choices.*' => 'required|in:mine,server', 'deadline_reason' => 'nullable|string|max:2000']);
+            $resolved = app(TaskEditConflict::class)->resolve($request, $task, $input);
+        } catch (ValidationException $e) {
+            return response()->view('tasks.conflict-unavailable', $this->context($request, $workspace, $project) + ['task' => $task, 'messages' => $e->errors()], 422);
+        }
+        try {
+            $data = Validator::make($resolved['data'], TaskRequest::fieldRules($workspace, $task))->validate();
+        } catch (ValidationException $e) {
+            $request->session()->flash('task_edit_error', ['task_id' => $task->id, 'surface' => $resolved['surface']]);
+            $context = $this->context($request, $workspace, $project);
+
+            return to_route($context['routePrefix'].($resolved['surface'] === 'quick' ? '.show' : '.edit'), [...$context['routeParams'], $task])->withErrors($e->errors())->withInput($resolved['data'] + ['edit_surface' => $resolved['surface']]);
+        }
+
+        return $this->saveEdit($request, $workspace, $project, $task, $data, $resolved['surface'], $input['conflict_token']);
     }
 
     public function archive(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)

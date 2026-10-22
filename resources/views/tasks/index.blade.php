@@ -117,11 +117,16 @@
                         @endif
                     </td>
                     <td data-label="Công việc">
-                        <div style="font-weight: 700; font-size: 0.95rem;">
+                        <div style="font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
                             <a href="{{ route($routePrefix.'.show',[...$routeParams,$task]) }}" style="text-decoration: none;">
                                 <span style="font-family: var(--font-mono); color: var(--primary); font-weight: 700; margin-right: 0.4rem;">{{ $task->code }}</span>
                                 {{ $task->title }}
                             </a>
+                            @can('update', $task)
+                                <a href="{{ route($routePrefix.'.edit',[...$routeParams,$task]) }}" class="preset-chip" style="font-size: 0.72rem; padding: 0.15rem 0.45rem;" title="Sửa công việc">
+                                    ✏️ Sửa
+                                </a>
+                            @endcan
                         </div>
                     </td>
                     <td data-label="Trạng thái">

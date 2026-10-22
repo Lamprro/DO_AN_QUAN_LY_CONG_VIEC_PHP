@@ -1,8 +1,9 @@
 <div style="display: flex; flex-direction: column; gap: 1.5rem;">
     @if($task)
+        <input type="hidden" name="edit_surface" value="full">
         <input type="hidden" name="expected_revision" value="{{ old('expected_revision', $task->revision) }}">
         <div class="notice" style="background: rgba(99, 102, 241, 0.08); border-left: 3px solid var(--color-primary); padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.8125rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-            <span>Đang sửa phiên bản <strong>#{{ $task->revision }}</strong> của công việc <strong>{{ $task->code }}</strong>.</span>
+            <span>Đang sửa phiên bản <strong>#{{ old('expected_revision',$task->revision) }}</strong> của công việc <strong>{{ $task->code }}</strong>.</span>
             <a href="{{ request()->url() }}?fresh=1" style="color: var(--color-primary); font-weight: 500;">Tải lại dữ liệu gốc từ máy chủ</a>
         </div>
     @endif
@@ -83,13 +84,34 @@
                         </option>
                     @endforeach
                 </select>
+                <div class="priority-selector" aria-label="Chọn nhanh mức ưu tiên">
+                    <button type="button" class="priority-btn" data-priority="low">🟢 Thấp</button>
+                    <button type="button" class="priority-btn" data-priority="medium">🟡 Vừa</button>
+                    <button type="button" class="priority-btn" data-priority="high">🟠 Cao</button>
+                    <button type="button" class="priority-btn" data-priority="urgent">🔴 Khẩn</button>
+                </div>
             </div>
 
             @if(!$task || $task->task_type->value === 'WORK')
-                <x-input name="estimate_minutes" label="Thời lượng ước lượng (phút)" type="number" :value="$task?->estimate_minutes ?? ''" min="0" max="10000000" placeholder="Ví dụ: 120" />
+                <div data-edit-field class="field" style="margin: 0;">
+                    <x-input name="estimate_minutes" label="Thời lượng ước lượng (phút)" type="number" :value="$task?->estimate_minutes ?? ''" min="0" max="10000000" placeholder="Ví dụ: 120" />
+                    <div class="field-presets estimate-presets">
+                        <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-right: 0.2rem;">Đặt nhanh:</span>
+                        <button type="button" class="preset-chip" data-set="30">30p</button>
+                        <button type="button" class="preset-chip" data-set="60">1h</button>
+                        <button type="button" class="preset-chip" data-set="120">2h</button>
+                        <button type="button" class="preset-chip" data-set="240">4h</button>
+                        <button type="button" class="preset-chip" data-set="480">8h (tham khảo)</button>
+                        <button type="button" class="preset-chip" data-add="30">+30p</button>
+                        <button type="button" class="preset-chip" data-clear="1" style="color: var(--danger);">✕ Xóa</button>
+                    </div>
+                </div>
             @endif
 
-            <x-input name="deadline_at" :label="'Hạn chót — '.$workspace->timezone" type="datetime-local" :value="$task?->deadline_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? ''" />
+            <div data-edit-field class="field" style="margin: 0;">
+                <x-input name="deadline_at" :label="'Hạn chót — '.$workspace->timezone" type="datetime-local" :value="$task?->deadline_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? ''" />
+                @include('tasks._deadline-presets')
+            </div>
         </div>
 
         @if($task)
@@ -132,12 +154,23 @@
     </div>
     @endif
 
-    <div class="actions" style="display: flex; gap: 0.75rem; align-items: center; padding-top: 1rem; border-top: 1px solid var(--color-border);">
-        <button type="submit" class="button" style="padding: 0.625rem 1.5rem; font-weight: 600;">
-            {{ $task ? 'Cập nhật công việc' : 'Tạo công việc' }}
-        </button>
-        <a class="button secondary" href="{{ route($routePrefix.'.index', $routeParams) }}">
-            Hủy và quay lại danh sách
-        </a>
+    {{-- Sticky Floating Action Bar --}}
+    <div class="sticky-form-bar">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.875rem; font-weight: 600; color: var(--text);">
+                {{ $task ? 'Đang chỉnh sửa: '.$task->code : 'Đang tạo công việc mới' }}
+            </span>
+            <span class="muted" style="font-size: 0.75rem;">· Phím tắt:</span>
+            <kbd class="kbd-shortcut">Ctrl + ↵</kbd>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <a class="button secondary" href="{{ route($routePrefix.'.index', $routeParams) }}" style="padding: 0.55rem 1rem;">
+                Hủy bỏ
+            </a>
+            <button type="submit" class="button" style="padding: 0.55rem 1.5rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;">
+                <span>{{ $task ? 'Lưu thay đổi' : 'Tạo công việc' }}</span>
+                <span class="kbd-shortcut" style="background: rgba(255,255,255,0.25); color: #fff; border-color: rgba(255,255,255,0.35);">Ctrl+↵</span>
+            </button>
+        </div>
     </div>
 </div>

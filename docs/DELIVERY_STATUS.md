@@ -25,3 +25,8 @@ Các phần cần cấu hình sau theo yêu cầu chủ dự án: nhà cung cấ
 Giới hạn nghiệp vụ có chủ ý: apply chỉ sửa task chưa bắt đầu, không xóa dữ liệu cũ khi bỏ dòng khỏi JSON; slot chỉ chính người apply; scheduler local không tối ưu đa nhân sự; so sánh phiên bản nay có diff trường trước/sau, source editor và preview dùng chung đường apply. Report hiện chỉ chủ snapshot xem với quyền nguồn hiện tại. Email/Telegram/Google Calendar không nằm trong tích hợp được chọn và không có trạng thái thành công giả.
 
 Xem DEPLOYMENT.md để cài/vận hành, FRONTEND_HANDOFF.md để FE tiếp tục, PLAN_PAYLOAD.md và AI_PROVIDER_CONTRACT.md để nối logic. Dữ liệu review còn trên máy để xem lại, không đưa DB hiện tại vào gói source.
+
+
+## Nghiệm thu toàn hệ thống 23/10/2026
+
+Đã rà soát và sửa các lỗi cuối qua flow HTTP/browser/database/worker trên bản cài riêng. Trạng thái chi tiết mới nhất: `docs/COMPLETION_REPORT_2026-10-23.md`; minh chứng: `docs/verification/completion-2026-10-23/`; thiết kế/schema hiện hành: `docs/design/CURRENT_SYSTEM.md`. Các mục chờ duyệt trước đây là lịch sử. Không thêm lớp test, không thay dữ liệu chính hoặc APP_KEY.

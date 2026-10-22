@@ -1,0 +1,10 @@
+{
+  "command": "composer audit --locked --format=json --no-interaction",
+  "exit_code": 0,
+  "result": {
+    "advisories": [],
+    "abandoned": [],
+    "filter": []
+  },
+  "scope": "composer.lock at this audit; not a penetration test"
+}

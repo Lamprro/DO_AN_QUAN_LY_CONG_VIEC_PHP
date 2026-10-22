@@ -1,0 +1,315 @@
+[
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe vendor/bin/pint app/Http/Controllers/ProjectController.php app/Http/Controllers/SearchController.php app/Http/Controllers/TaskController.php app/Http/Controllers/WorkspaceController.php app/Services/PlanEditorData.php app/Support/SearchTerm.php app/Support/UiLabels.php",
+    "exit_code": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"fixed\",\"files\":[{\"path\":\"app\\\\Http\\\\Controllers\\\\ProjectController.php\",\"fixers\":[\"fully_qualified_strict_types\",\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"not_operator_with_successor_space\",\"single_line_empty_body\",\"ordered_imports\"]},{\"path\":\"app\\\\Http\\\\Controllers\\\\SearchController.php\",\"fixers\":[\"method_argument_space\",\"fully_qualified_strict_types\",\"line_ending\",\"unary_operator_spaces\",\"not_operator_with_successor_space\",\"ordered_imports\"]},{\"path\":\"app\\\\Http\\\\Controllers\\\\TaskController.php\",\"fixers\":[\"fully_qualified_strict_types\",\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"not_operator_with_successor_space\",\"single_line_empty_body\",\"ordered_imports\"]},{\"path\":\"app\\\\Http\\\\Controllers\\\\WorkspaceController.php\",\"fixers\":[\"fully_qualified_strict_types\",\"line_ending\",\"ordered_imports\"]},{\"path\":\"app\\\\Services\\\\PlanEditorData.php\",\"fixers\":[\"fully_qualified_strict_types\",\"line_ending\",\"unary_operator_spaces\",\"not_operator_with_successor_space\"]},{\"path\":\"app\\\\Support\\\\SearchTerm.php\",\"fixers\":[\"line_ending\"]},{\"path\":\"app\\\\Support\\\\UiLabels.php\",\"fixers\":[\"line_ending\"]}]}"
+  },
+  {
+    "step": "PHP full source syntax",
+    "verified": true,
+    "files": 212
+  },
+  {
+    "step": "command",
+    "command": "node --check D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\js\\app-ui.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "node --check D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\js\\form-confirm.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "node --check D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\js\\plan-editor.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "node --check D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\js\\theme.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:cache",
+    "exit_code": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan config:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cached successfully.  \n\n"
+  },
+  {
+    "step": "compiled Blade syntax",
+    "verified": true,
+    "files": 144
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan migrate:status",
+    "exit_code": 0,
+    "output": "e .................................................................. [1] Ran  \n  2026_10_17_000003_create_roles_table ....................................................................... [1] Ran  \n  2026_10_17_000004_create_workspace_members_table ........................................................... [1] Ran  \n  2026_10_17_000005_create_integration_connections_table ..................................................... [1] Ran  \n  2026_10_17_000006_create_projects_table .................................................................... [1] Ran  \n  2026_10_17_000007_create_project_members_table ............................................................. [1] Ran  \n  2026_10_17_000008_create_tasks_table ....................................................................... [1] Ran  \n  2026_10_17_000009_create_task_dependencies_table ........................................................... [1] Ran  \n  2026_10_17_000010_create_task_blockers_table ............................................................... [1] Ran  \n  2026_10_17_000011_create_ai_runs_table ..................................................................... [1] Ran  \n  2026_10_17_000012_create_ai_calls_table .................................................................... [1] Ran  \n  2026_10_17_000013_create_plans_table ....................................................................... [1] Ran  \n  2026_10_17_000014_create_calendar_events_table ............................................................. [1] Ran  \n  2026_10_17_000015_create_time_entries_table ................................................................ [1] Ran  \n  2026_10_17_000016_create_task_activities_table ............................................................. [1] Ran  \n  2026_10_17_000017_create_notifications_table ............................................................... [1] Ran  \n  2026_10_17_000018_create_report_snapshots_table ............................................................ [1] Ran  \n  2026_10_17_000019_create_github_logs_table ................................................................. [1] Ran  \n  2026_10_17_000020_add_edit_revisions ....................................................................... [1] Ran  \n  2026_10_18_000021_add_task_utilities ....................................................................... [1] Ran  \n  2026_10_18_000022_add_time_overlap_index ................................................................... [1] Ran  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan schedule:list",
+    "exit_code": 0,
+    "output": "\n  0 * * * *  php artisan tasks:remind .......................................................... Next Due: 35 phút tới\n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:list --json",
+    "exit_code": 0,
+    "output": "WorkflowController@comment\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"DELETE\",\"uri\":\"workspaces\\/{workspace}\\/tasks\\/{task}\\/comments\\/{activity}\",\"name\":\"workspaces.tasks.comments.destroy\",\"action\":\"App\\\\Http\\\\Controllers\\\\TaskWorkflowController@comment\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"POST\",\"uri\":\"workspaces\\/{workspace}\\/tasks\\/{task}\\/dependencies\",\"name\":\"workspaces.tasks.dependencies.store\",\"action\":\"App\\\\Http\\\\Controllers\\\\TaskWorkflowController@dependency\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"DELETE\",\"uri\":\"workspaces\\/{workspace}\\/tasks\\/{task}\\/dependencies\\/{dependency}\",\"name\":\"workspaces.tasks.dependencies.destroy\",\"action\":\"App\\\\Http\\\\Controllers\\\\TaskWorkflowController@removeDependency\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"GET|HEAD\",\"uri\":\"workspaces\\/{workspace}\\/tasks\\/{task}\\/edit\",\"name\":\"workspaces.tasks.edit\",\"action\":\"App\\\\Http\\\\Controllers\\\\TaskController@edit\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"POST\",\"uri\":\"workspaces\\/{workspace}\\/tasks\\/{task}\\/resolve-edit\",\"name\":\"workspaces.tasks.resolve-edit\",\"action\":\"App\\\\Http\\\\Controllers\\\\TaskController@resolveEdit\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"POST\",\"uri\":\"workspaces\\/{workspace}\\/tasks\\/{task}\\/restore\",\"name\":\"workspaces.tasks.restore\",\"action\":\"App\\\\Http\\\\Controllers\\\\TaskController@restore\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"PATCH\",\"uri\":\"workspaces\\/{workspace}\\/tasks\\/{task}\\/status\",\"name\":\"workspaces.tasks.status.update\",\"action\":\"App\\\\Http\\\\Controllers\\\\TaskWorkflowController@status\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"POST\",\"uri\":\"workspaces\\/{workspace}\\/timer\\/{task}\",\"name\":\"workspaces.timer.start\",\"action\":\"App\\\\Http\\\\Controllers\\\\TimeTrackingController@start\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"POST\",\"uri\":\"workspaces\\/{workspace}\\/transfer-owner\",\"name\":\"workspaces.transfer\",\"action\":\"App\\\\Http\\\\Controllers\\\\WorkspaceController@transfer\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"workspace.member\"],\"path\":null}]\n"
+  },
+  {
+    "step": "routes registered",
+    "verified": true,
+    "count": 145
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan config:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cache cleared successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Route cache cleared successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Compiled views cleared successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe D:/Composer/composer.phar validate --no-check-publish",
+    "exit_code": 0,
+    "output": "./composer.json is valid\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe D:/Composer/composer.phar check-platform-reqs",
+    "exit_code": 0,
+    "output": "composer-runtime-api 2.2.2      success                                       \next-ctype            *          success provided by symfony/polyfill-ctype    \next-dom              20031129   success                                       \next-fileinfo         8.2.12     success                                       \next-filter           8.2.12     success                                       \next-hash             8.2.12     success                                       \next-iconv            8.2.12     success                                       \next-json             8.2.12     success                                       \next-libxml           8.2.12     success                                       \next-mbstring         *          success provided by symfony/polyfill-mbstring \next-openssl          8.2.12     success                                       \next-pcre             8.2.12     success                                       \next-phar             8.2.12     success                                       \next-session          8.2.12     success                                       \next-tokenizer        8.2.12     success                                       \next-xml              8.2.12     success                                       \next-xmlwriter        8.2.12     success                                       \nphp                  8.2.12     success                                       \nChecking platform requirements for packages in the vendor dir\n"
+  },
+  {
+    "step": "main table preserved migrations",
+    "verified": true,
+    "count": 25
+  },
+  {
+    "step": "main table preserved users",
+    "verified": true,
+    "count": 21
+  },
+  {
+    "step": "main table preserved password_reset_tokens",
+    "verified": true,
+    "count": 0
+  },
+  {
+    "step": "main table preserved sessions",
+    "verified": true,
+    "count": 5
+  },
+  {
+    "step": "main table preserved cache",
+    "verified": true,
+    "count": 2
+  },
+  {
+    "step": "main table preserved cache_locks",
+    "verified": true,
+    "count": 0
+  },
+  {
+    "step": "main table preserved jobs",
+    "verified": true,
+    "count": 0
+  },
+  {
+    "step": "main table preserved job_batches",
+    "verified": true,
+    "count": 0
+  },
+  {
+    "step": "main table preserved failed_jobs",
+    "verified": true,
+    "count": 0
+  },
+  {
+    "step": "main table preserved user_settings",
+    "verified": true,
+    "count": 21
+  },
+  {
+    "step": "main table preserved workspaces",
+    "verified": true,
+    "count": 32
+  },
+  {
+    "step": "main table preserved roles",
+    "verified": true,
+    "count": 131
+  },
+  {
+    "step": "main table preserved workspace_members",
+    "verified": true,
+    "count": 50
+  },
+  {
+    "step": "main table preserved integration_connections",
+    "verified": true,
+    "count": 2
+  },
+  {
+    "step": "main table preserved projects",
+    "verified": true,
+    "count": 16
+  },
+  {
+    "step": "main table preserved project_members",
+    "verified": true,
+    "count": 33
+  },
+  {
+    "step": "main table preserved tasks",
+    "verified": true,
+    "count": 112
+  },
+  {
+    "step": "main table preserved task_dependencies",
+    "verified": true,
+    "count": 6
+  },
+  {
+    "step": "main table preserved task_blockers",
+    "verified": true,
+    "count": 10
+  },
+  {
+    "step": "main table preserved ai_runs",
+    "verified": true,
+    "count": 10
+  },
+  {
+    "step": "main table preserved ai_calls",
+    "verified": true,
+    "count": 10
+  },
+  {
+    "step": "main table preserved plans",
+    "verified": true,
+    "count": 23
+  },
+  {
+    "step": "main table preserved calendar_events",
+    "verified": true,
+    "count": 50
+  },
+  {
+    "step": "main table preserved time_entries",
+    "verified": true,
+    "count": 11
+  },
+  {
+    "step": "main table preserved task_activities",
+    "verified": true,
+    "count": 284
+  },
+  {
+    "step": "main table preserved notifications",
+    "verified": true,
+    "count": 34
+  },
+  {
+    "step": "main table preserved report_snapshots",
+    "verified": true,
+    "count": 22
+  },
+  {
+    "step": "main table preserved github_logs",
+    "verified": true,
+    "count": 1
+  },
+  {
+    "step": "main table preserved saved_task_filters",
+    "verified": true,
+    "count": 4
+  },
+  {
+    "step": "main table preserved time_entry_adjustments",
+    "verified": true,
+    "count": 2
+  },
+  {
+    "step": "main table preserved task_reminders",
+    "verified": true,
+    "count": 5
+  },
+  {
+    "step": "main env/key/database preserved",
+    "verified": true
+  },
+  {
+    "step": "browser quick edit SQL readback",
+    "verified": true,
+    "row": {
+      "id": "01a1649b-12b4-7331-9306-c43cb3f52077",
+      "title": "Nghiệm thu UI — sửa nhanh đã kiểm chứng",
+      "description": "DONE",
+      "estimate_minutes": 90,
+      "revision": 3
+    }
+  },
+  {
+    "step": "isolated DB final counts and integrity",
+    "verified": true,
+    "counts": {
+      "users": 8,
+      "workspaces": 13,
+      "projects": 8,
+      "tasks": 71,
+      "plans": 7,
+      "calendar_events": 23,
+      "task_activities": 87,
+      "notifications": 3,
+      "time_entries": 1,
+      "task_reminders": 2
+    }
+  },
+  {
+    "step": "review application error log",
+    "error_entries": 0,
+    "entries": []
+  },
+  {
+    "step": "command",
+    "command": "git diff --check",
+    "exit_code": 0,
+    "output": "warning: in the working copy of 'docs/FRONTEND_HANDOFF.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/UI_UX_FUNCTIONAL_IMPROVEMENTS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'public/css/modern-theme.css', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'public/css/review-polish.css', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'public/js/app-ui.js', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/roles/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/_form.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/create.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/edit.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/tree.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/workflow.blade.php', CRLF will be replaced by LF the next time Git touches it\n"
+  },
+  {
+    "step": "COMPLETE",
+    "no_test_classes": true,
+    "main_data_not_mutated": true
+  }
+]

@@ -1,0 +1,58 @@
+{
+  "review_date": "2026-10-23",
+  "flows": {
+    "flow-core.json": {
+      "assertions_passed": 32,
+      "http_requests_recorded": 84
+    },
+    "flow-calendar-plan.json": {
+      "assertions_passed": 11,
+      "http_requests_recorded": 35
+    },
+    "flow-reports-queue.json": {
+      "assertions_passed": 11,
+      "http_requests_recorded": 28
+    },
+    "flow-admin.json": {
+      "assertions_passed": 21,
+      "http_requests_recorded": 44
+    },
+    "flow-boundaries.json": {
+      "assertions_passed": 29,
+      "http_requests_recorded": 84
+    },
+    "flow-github.json": {
+      "assertions_passed": 9,
+      "http_requests_recorded": 6
+    },
+    "quick-flow-http.json": {
+      "assertions_passed": 29,
+      "http_requests_recorded": 66
+    },
+    "flow-pages.json": {
+      "assertions_passed": 2,
+      "http_requests_recorded": 42
+    }
+  },
+  "assertions_passed": 144,
+  "http_requests_recorded": 389,
+  "php_files_linted": 212,
+  "compiled_blades_linted": 144,
+  "routes": 145,
+  "review_database_counts": {
+    "users": 8,
+    "workspaces": 13,
+    "projects": 8,
+    "tasks": 71,
+    "plans": 7,
+    "calendar_events": 23,
+    "task_activities": 87,
+    "notifications": 3,
+    "time_entries": 1,
+    "task_reminders": 2
+  },
+  "test_classes_added": 0,
+  "main_tables_preserved": 31,
+  "provider_keys_configured": false,
+  "production_verified": false
+}

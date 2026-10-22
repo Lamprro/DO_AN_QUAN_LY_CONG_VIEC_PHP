@@ -1,0 +1,30 @@
+{
+  "mobile": {
+    "dialogOpen": true,
+    "duplicates": [],
+    "estimate": "90",
+    "focus": "quick_title",
+    "overflow": false,
+    "width": 390
+  },
+  "desktop": {
+    "dialogOpen": true,
+    "estimate": "90",
+    "overflow": false,
+    "title": "Nghiệm thu UI — sửa nhanh đã kiểm chứng",
+    "width": 1366
+  },
+  "escape": {
+    "dialogOpen": false,
+    "focusRestored": true
+  },
+  "console": [],
+  "observedFlow": [
+    "demo login",
+    "mobile header and link navigation",
+    "mobile sidebar open/escape",
+    "quick modal 1 hour +30 minutes",
+    "Ctrl+Enter saved title and 90 minutes",
+    "SQL readback in technical.json"
+  ]
+}

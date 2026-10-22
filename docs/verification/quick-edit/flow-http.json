@@ -1,0 +1,521 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted QuickEdit1792513236 original",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "deadline reason rejection keeps draft, old revision and reopens modal",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "quick PATCH persists metadata and preserves description/tree",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "FormRequest required title reopens quick form and keeps blank input",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 409
+  },
+  {
+    "step": "stale quick edit shows escaped comparisons without writes",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 422
+  },
+  {
+    "step": "forged comparison revision rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 422
+  },
+  {
+    "step": "injected comparison field rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 422
+  },
+  {
+    "step": "missing field selection rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 404
+  },
+  {
+    "step": "comparison token cannot cross sessions",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-6f5b-71c1-9d21-dba0a54c1dfa/resolve-edit",
+    "status": 404
+  },
+  {
+    "step": "comparison token cannot cross tasks",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 409
+  },
+  {
+    "step": "third edit during comparison causes another conflict without writes",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 200
+  },
+  {
+    "step": "explicit mixed choices save with one revision and history",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 404
+  },
+  {
+    "step": "successful token replay rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 404
+  },
+  {
+    "step": "replaced token replay rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 409
+  },
+  {
+    "step": "full form stale uses comparison and preserves server",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0/resolve-edit",
+    "status": 200
+  },
+  {
+    "step": "full edit chosen fields persisted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a159d7-5b10-7394-a25d-bf46f987f178/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a159d7-5b10-7394-a25d-bf46f987f178/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted QuickEdit1792513236 viewer target",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a159d7-5b10-7394-a25d-bf46f987f178/tasks/01a15a1d-9a3b-735f-b7ae-3ee551275c64",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a159d7-5afd-70ec-9989-54bf0d6f90d3/projects/01a159d7-5b10-7394-a25d-bf46f987f178/tasks/01a15a1d-9a3b-735f-b7ae-3ee551275c64",
+    "status": 403
+  },
+  {
+    "step": "Viewer forged PATCH denied with no writes",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 419
+  },
+  {
+    "step": "CSRF enforced on quick PATCH",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-6f5b-71c1-9d21-dba0a54c1dfa",
+    "status": 200
+  },
+  {
+    "step": "GROUP quick form omits assignment and estimate",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-69d2-730b-bc17-458abad1be77/projects/01a15a1d-6c7c-72fe-b516-a962c0395218/tasks/01a15a1d-7246-7328-93d8-2e371f14bbf0",
+    "status": 200
+  },
+  {
+    "step": "ineligible assignment rejected, retained for correction",
+    "verified": true
+  },
+  {
+    "step": "Friday includes today; Saturday selects following Friday from calendar date data",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-a65e-725f-917f-5bad3fb191d2/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-a65e-725f-917f-5bad3fb191d2/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-a65e-725f-917f-5bad3fb191d2/projects/01a15a1d-a8fd-72f7-a5a5-0001d3918bbe/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-a65e-725f-917f-5bad3fb191d2/projects/01a15a1d-a8fd-72f7-a5a5-0001d3918bbe/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted QuickEdit1792513236 zoned task",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-a65e-725f-917f-5bad3fb191d2/projects/01a15a1d-a8fd-72f7-a5a5-0001d3918bbe/tasks/01a15a1d-abcf-7170-9043-02e62772a37b",
+    "status": 200
+  },
+  {
+    "step": "server preset matches workspace date Pacific/Kiritimati",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-a65e-725f-917f-5bad3fb191d2/projects/01a15a1d-a8fd-72f7-a5a5-0001d3918bbe/tasks/01a15a1d-abcf-7170-9043-02e62772a37b",
+    "status": 200
+  },
+  {
+    "step": "actual saved UTC matches local preset Pacific/Kiritimati",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-b1f8-70e6-a7fb-131c36dca0f7/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-b1f8-70e6-a7fb-131c36dca0f7/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-b1f8-70e6-a7fb-131c36dca0f7/projects/01a15a1d-b4b0-727a-bb9c-ef27bbacd041/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-b1f8-70e6-a7fb-131c36dca0f7/projects/01a15a1d-b4b0-727a-bb9c-ef27bbacd041/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted QuickEdit1792513236 zoned task",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a15a1d-b1f8-70e6-a7fb-131c36dca0f7/projects/01a15a1d-b4b0-727a-bb9c-ef27bbacd041/tasks/01a15a1d-b7b3-7184-8abc-980663ca6ec4",
+    "status": 200
+  },
+  {
+    "step": "server preset matches workspace date Pacific/Pago_Pago",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a15a1d-b1f8-70e6-a7fb-131c36dca0f7/projects/01a15a1d-b4b0-727a-bb9c-ef27bbacd041/tasks/01a15a1d-b7b3-7184-8abc-980663ca6ec4",
+    "status": 200
+  },
+  {
+    "step": "actual saved UTC matches local preset Pacific/Pago_Pago",
+    "verified": true
+  },
+  {
+    "step": "isolated foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "no_test_classes": true,
+    "real_http_sessions": true,
+    "real_database": true,
+    "calendar_date_rules": "explicit dates only; server clock unchanged"
+  }
+]

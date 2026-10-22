@@ -1,0 +1,134 @@
+[
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe vendor/bin/pint app/Http/Controllers/TaskController.php app/Http/Requests/TaskRequest.php app/Services/TaskEditConflict.php app/Services/TaskEditData.php routes/task_workflow.php",
+    "exit_code": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"passed\"}"
+  },
+  {
+    "step": "PHP source lint",
+    "files": 5,
+    "all_passed": true
+  },
+  {
+    "step": "command",
+    "command": "node --check public/js/app-ui.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "node --check public/js/theme.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "node --check public/js/plan-editor.js",
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:cache",
+    "exit_code": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan config:cache",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cached successfully.  \n\n"
+  },
+  {
+    "step": "compiled Blade lint",
+    "files": 144,
+    "all_passed": true
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan schedule:list",
+    "exit_code": 0,
+    "output": "\n  0 * * * *  php artisan tasks:remind .......................................................... Next Due: 31 phút tới\n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan config:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cache cleared successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan route:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Route cache cleared successfully.  \n\n"
+  },
+  {
+    "step": "command",
+    "command": "C:\\xampp\\php\\php.exe artisan view:clear",
+    "exit_code": 0,
+    "output": "\n   INFO  Compiled views cleared successfully.  \n\n"
+  },
+  {
+    "step": "main business unchanged tasks",
+    "verified": true,
+    "count": 112
+  },
+  {
+    "step": "main business unchanged projects",
+    "verified": true,
+    "count": 16
+  },
+  {
+    "step": "main business unchanged plans",
+    "verified": true,
+    "count": 23
+  },
+  {
+    "step": "main business unchanged task_activities",
+    "verified": true,
+    "count": 284
+  },
+  {
+    "step": "main business unchanged calendar_events",
+    "verified": true,
+    "count": 50
+  },
+  {
+    "step": "main business unchanged time_entries",
+    "verified": true,
+    "count": 11
+  },
+  {
+    "step": "main business unchanged workspace_members",
+    "verified": true,
+    "count": 50
+  },
+  {
+    "step": "main business unchanged project_members",
+    "verified": true,
+    "count": 33
+  },
+  {
+    "step": "main env/key and FK preserved",
+    "verified": true
+  },
+  {
+    "step": "provider flags unchanged",
+    "flags": {
+      "ai": false,
+      "integrations": false
+    }
+  },
+  {
+    "step": "COMPLETE",
+    "no_test_classes": true,
+    "main_business_not_mutated": true
+  }
+]

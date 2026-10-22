@@ -430,3 +430,74 @@ Flow nối nhau: project/show → plans.index(project_id) → create/store → s
 FE nên nâng cấp: bảng/cây soạn plan thay JSON, diff trực quan theo ref/task_id, badges status kèm chữ, modal xác nhận apply, busy/loading/empty/error states, breadcrumb workspace/project, label và lỗi cạnh từng trường, bảng cuộn trên mobile. Giữ tên form field/action/CSRF, logic duyệt và ngưỡng backend. Theme đã có settings; không phải thêm Node/Vite để chạy bản bàn giao. Screenshot functional không phải thiết kế giao diện cuối.
 
 History Task Blade đã thêm nhãn và nội dung escape cho github.commit, timer.started/stopped, plan.applied và plan.calendar_replaced; plan activity có link phiên bản khi người xem có plan.view. FE có thể đổi bố cục nhưng phải giữ kiểm tra quyền và escaping.
+
+## Bổ sung cải tiến Chỉnh sửa & Quản lý trường dữ liệu (Field Editing UX)
+
+Phía Frontend đã hoàn thiện các tiện ích chỉnh sửa trực quan (Presets thời lượng, Presets hạn chót, Segmented Priority, Quick Edit Slide-over modal, Sticky action bar, phím tắt Ctrl+Enter). Hợp đồng dữ liệu gửi lên backend được giữ nguyên 100% theo chuẩn Laravel form (PATCH/POST + CSRF + expected_revision).
+
+**Dành cho AI/Kỹ sư Backend:** Chi tiết đặc tả về các API mở rộng (Partial Inline Field Update, Auto-save Draft API, Realtime Events, Optimistic Lock Conflict Diff) đã được lưu đầy đủ tại **`docs/UI_UX_FUNCTIONAL_IMPROVEMENTS.md` (Mục 17)**. Hãy đọc kỹ trước khi thiết kế các endpoint xử lý tiếp theo.
+
+
+
+## Hiện hành — Sửa nhanh, preset workspace và đối chiếu phiên bản (20/10/2026)
+
+Mục này thay thế hợp đồng Quick Edit và đề xuất API ở phần Field Editing UX phía trên. Giữ Laravel MVC/Blade: form web/session/CSRF, không cần REST API, autosave hoặc realtime để dùng các chức năng đã bàn giao. Minh chứng thực thi: [verification/quick-edit/README.md](verification/quick-edit/README.md).
+
+### Các trang và dữ liệu
+
+| Tệp | Vai trò / hợp đồng FE phải giữ |
+|---|---|
+| `tasks/show.blade.php` | Trang chi tiết, nút `data-open-quick-edit`; quyền `@can('update',$task)`; toolbar đã cân bằng thẻ HTML |
+| `tasks/_quick-edit.blade.php` | Native `<dialog id="quick-edit-modal">`, header, form `data-form="task-quick-edit"`, `data-dirty-form`, nút đóng; không gắn `.open` của modal cũ |
+| `tasks/_form.blade.php` | Form tạo/sửa đầy đủ. Khi sửa gửi `edit_surface=full`, giữ `old(expected_revision)` khi có lỗi |
+| `tasks/_deadline-presets.blade.php` | Dùng chung full/quick. Nhận `$deadlinePresets` từ controller; chip `data-preset`, `data-value`. Wrapper cùng input có `data-edit-field` |
+| `tasks/conflict.blade.php` | Response HTML **409**, dữ liệu `task`, `conflict{token,revision,submitted_revision,rows,deadline_reason,surface}`; mỗi row `{field,label,mine,server}` đã hiển thị an toàn |
+| `tasks/conflict-unavailable.blade.php` | **422** khi bản đối chiếu hết hạn/sai dữ liệu. Có link mở bản hiện tại; token không thuộc phiên/scope trả **404**, mất quyền trả **403** |
+
+`TaskController::context()` cấp `people`, `reviewers`, `canAssign`, `deadlinePresets`, `workspace`, `project`, `routePrefix`, `routeParams`. FE không truy vấn service/DB từ modal. Người không còn đủ điều kiện nhưng đang được phân công có option “Giữ người đã phân công”; không tự bỏ chọn họ khi chỉ sửa tiêu đề. GROUP không gửi estimate/assignee/reviewer; MILESTONE không gửi estimate. Server vẫn kiểm tra loại và quyền khi lưu.
+
+### Form sửa nhanh
+
+- Action giữ nguyên `PATCH workspaces.projects.tasks.update` hoặc `workspaces.tasks.update` cho workspace cá nhân. Native POST có `_method=PATCH`, `_token`, `expected_revision` và `edit_surface=quick`.
+- Luôn có `title`, `priority`; tùy loại/quyền có `estimate_minutes`, `deadline_at`, `deadline_reason`, `assignee_id`, `reviewer_id`. Không thêm hidden description/code/cấu trúc cây để giả partial update. Service giữ các trường không được gửi.
+- ID modal có tiền tố `quick_` để không trùng các form workflow. Component input/textarea dùng `old()`; select ưu tiên/người làm/người duyệt cũng dùng `old()`.
+- Lỗi FormRequest hoặc nghiệp vụ: redirect về show, flash `task_edit_error{task_id,surface=quick}`, giữ bản nhập **và revision cũ**, `data-reopen=1` tự mở dialog + focus vùng lỗi. Không lấy revision mới để “sửa hộ” lỗi stale.
+- `showModal()` giữ focus trong hộp thoại, Escape/nút Đóng đóng và trả focus về nút mở. Đóng chỉ ẩn, giữ draft trên trang hiện tại. Draft không được lưu bền qua tải lại/rời trang; cảnh báo thay đổi chưa lưu vẫn có. Có link form đầy đủ trong `noscript`.
+- Ctrl/Cmd+Enter chỉ lưu form metadata trong allowlist task/project/role; không gửi form workflow, xóa, đăng nhập hay duyệt. Native validation vẫn hoạt động. Không dùng global “submit form bất kỳ”.
+
+### Preset và múi giờ
+
+`TaskEditData::presets(workspace)` → `forDate(CarbonImmutable::now(workspace.timezone))` cấp chuỗi local `Y-m-dTH:i`. JS chỉ sao chép `data-value`, phát `input/change`, nhắc ô lý do đổi hạn. Tuyệt đối không tính ngày bằng `new Date()` theo máy người dùng và không thêm `Z` vào datetime-local.
+
+Hôm nay/ngày mai/Thứ Sáu/+7 ngày đều gợi ý 17:30 theo workspace. Thứ Sáu ngay hôm nay được chọn hôm nay; thứ Bảy/Chủ Nhật chọn Thứ Sáu kế tiếp. Server `TaskService::save()` đổi giờ workspace sang UTC khi lưu; Blade đổi UTC về workspace khi đọc. Preset tính tại thời điểm render: nếu để trang qua nửa đêm, tải lại trước khi dùng. 17:30 không đại diện lịch làm việc và có thể đã qua; không tự dời sang ngày khác. Thời lượng chỉ hiển thị phút/giờ, không quy ước 480 phút luôn là một ngày công.
+
+### Đối chiếu xung đột
+
+Flow: `TaskRequest` → `TaskController::update()` → `saveEdit()` → `TaskService::save()` (lock Workspace/Project/Task, policy, `EditRevision::check()`). Nếu revision cũ, transaction không ghi dữ liệu; controller lấy bản hiện tại, `TaskEditConflict::prepare()` cất bản nhập trong session và trả `tasks.conflict` **409**.
+
+Trang so từng trường đã gửi khác máy chủ, mặc định **giữ máy chủ**. Đây là so bản nhập với bản hiện tại, không phải phép gộp ba phiên bản có bản gốc. FE luôn escape `{{ }}`, kể cả title/description; không dịch nội dung title trùng từ enum.
+
+Submit native **POST** `workspaces.projects.tasks.resolve-edit` / `workspaces.tasks.resolve-edit` (`.../tasks/{task}/resolve-edit` trong `routes/task_workflow.php`): `_token`, `conflict_token`, `expected_revision` của snapshot, `choices[field]=mine|server` cho đúng các dòng khác nhau, `deadline_reason` khi đổi hạn. Không gửi lại các giá trị merge từ browser; server dựng payload từ snapshot đã giữ.
+
+`resolveEdit()` → `TaskEditConflict::resolve()` kiểm tra token gắn user/session/workspace/project/task, TTL **20 phút**, tối đa **5** bản đang giữ/phiên, revision và đúng tập choices → `TaskRequest::fieldRules()` validate lại → cùng `saveEdit()/TaskService::save()`. Có chỉnh sửa thứ ba thì trả bản đối chiếu **409 mới**, không tự ghi đè. Token cũ bị thay khi đối chiếu lại, bị tiêu thụ sau lưu thành công; replay không có hiệu lực. Policy được kiểm tra lại ở controller và transaction. Các lỗi nghiệp vụ khác giữ lựa chọn đã dựng trong form sửa để tiếp tục điều chỉnh.
+
+### Những phần FE được thay đổi
+
+Có thể chỉnh màu, khoảng cách, layout, icon và vị trí lỗi. Giữ IDs/hooks/action/name, `old()`/revision, `@can`, CSRF, dialog focus/đóng, preset server, choices mặc định server và escaping. Ưu tiên có `aria-pressed`; chọn quyền nhóm chỉ tác động checkbox không disabled, phát change; tìm quyền chỉ lọc label chứa `permissions[]`. Calendar giữ lại sync event type/project/task và Tree giữ Expand/Collapse sau khi sửa cú pháp JS.
+
+Các đề xuất autosave dài hạn, SSE/Reverb và inline JSON API trong mục 17 của tài liệu cải tiến vẫn là backlog, chưa phải route đang tồn tại. Không tạo nút gọi các endpoint đó hoặc dọn/xóa dữ liệu tự động. Luồng archive/restore đã có tiếp tục dùng quyền và route hiện hữu.
+
+
+## Nghiệm thu toàn hệ thống 23/10/2026 — hợp đồng FE bổ sung
+
+Trạng thái mới nhất: [báo cáo nghiệm thu](COMPLETION_REPORT_2026-10-23.md) và [thiết kế hiện hành](design/CURRENT_SYSTEM.md). Các mục chờ duyệt theo giai đoạn phía trên là lịch sử; chủ dự án đã cho triển khai toàn bộ.
+
+- Task list/Kanban, project list, workspace list, tìm kiếm tổng và bộ chọn nguồn Plan dùng `SearchTerm::contains()`. `%`, `_`, `!` là ký tự tìm kiếm thông thường. Giữ request GET và query string/phân trang, không tự wildcard hóa dữ liệu ở JS.
+- `TaskController::show()` chỉ dịch enum `status/priority/task_type` trong lịch sử; title, description, code và note phải giữ nguyên, tiếp tục escape Blade. Không áp dụng `UiLabels` cho chuỗi do người dùng nhập.
+- `UiLabels` có `on_hold → Tạm hoãn`; giá trị gửi server vẫn `on_hold`.
+- Form sửa comment có label liên kết ID riêng của activity. Giữ label khi thiết kế lại textarea.
+- Header <=900px dùng `position:relative;z-index:20`, drawer `z-index:42`; <=680px bố trí grid và tên workspace ellipsis. Không khôi phục sticky header nhiều dòng gây che nút/link. Card heading link có `display:block` để vùng bấm liên tục khi xuống dòng.
+- Quick edit tiếp tục native `<dialog>`, PATCH form hiện có, `expected_revision`, `edit_surface`, lỗi 409 qua trang đối chiếu. Preset server đã tính timezone; FE chỉ chép giá trị. Ctrl+Enter là gửi form thật. Đợt này đã kiểm UI390/1366px và SQL sau khi lưu90phút.
+- Không bổ sung API, dependency JS hoặc migration trong đợt này. Không đổi cơ chế provider/key. Không có lớp TestCase mới.
+
+Kịch bản FE phải giữ khi chỉnh giao diện: mobile mở menu/Escape → click tiêu đề dài → mở sửa nhanh → 1giờ +30phút → Ctrl+Enter → flash thành công → SQL/chi tiết90phút; thêm một phiên khác sửa cùng task phải đi qua409. Kiểm CSS không tràn ngang, Tab/Escape và label/error summary sau mọi sửa modal.

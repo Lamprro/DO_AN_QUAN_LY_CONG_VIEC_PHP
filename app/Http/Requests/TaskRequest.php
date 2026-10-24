@@ -10,6 +10,7 @@ use App\Policies\TaskPolicy;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class TaskRequest extends FormRequest
 {
@@ -45,6 +46,9 @@ class TaskRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+        if ($this->wantsJson() || $this->ajax()) {
+            throw new ValidationException($validator);
+        }
         $task = $this->route('task');
         if ($task) {
             $surface = $this->input('edit_surface') === 'quick' ? 'quick' : 'full';

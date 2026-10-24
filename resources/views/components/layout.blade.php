@@ -48,7 +48,7 @@
 @endforeach</nav>
 @endif
 @foreach(['success','warning'] as $flash)
-@if(session($flash))<div class="notice {{ $flash }}" role="status">{{ session($flash) }}</div>
+@if(session($flash))<div class="notice {{ $flash }}" role="status" data-flash-type="{{ $flash }}" data-flash-message="{{ session($flash) }}">{{ session($flash) }}</div>
 @endif
 @endforeach
 @if(isset($errors)&&$errors->any())<section class="notice errors" role="alert" tabindex="-1" id="error-summary"><h2>Vui lòng kiểm tra lại</h2><p>Dữ liệu nhập được giữ lại. Chọn một lỗi để đến trường cần sửa.</p><ul>
@@ -57,4 +57,4 @@
 @endforeach
 @endforeach</ul></section>
 @endif
-{{ $slot }}<footer>Quản lý công việc cá nhân và nhóm.</footer></main></div></body></html>
+{{ $slot }}<div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div><footer>Quản lý công việc cá nhân và nhóm.</footer></main></div></body></html>

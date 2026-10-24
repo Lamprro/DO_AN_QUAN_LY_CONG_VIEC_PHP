@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\TaskActivity;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
@@ -18,7 +19,7 @@ use Illuminate\Validation\ValidationException;
 
 class TaskService
 {
-    public function __construct(private ProjectAccess $access, private TaskPolicy $policy, private TaskTreeService $tree, private TaskHistory $history) {}
+    public function __construct(private ProjectAccess $access, private TaskPolicy $policy, private TaskTreeService $tree, private ?TaskHistory $history = null) {}
 
     public function save(User $actor, Workspace $workspace, ?Project $project, array $data, ?Task $task = null): Task
     {
@@ -123,5 +124,66 @@ class TaskService
             $task->delete();
             $this->tree->sync($actor, $task);
         });
+    }
+
+    public function recordHistory(User $actor, Task $task, string $event, array $data = []): TaskActivity
+    {
+        $activity = TaskActivity::create([
+            'task_id' => $task->id,
+            'actor_id' => $actor->id,
+            'type' => 'HISTORY',
+            'source' => 'user',
+            'event_type' => $event,
+            'data' => $data,
+        ]);
+
+        app(NotificationService::class)->taskEvent($activity, $task, $actor, $data);
+
+        return $activity;
+    }
+
+    public function presets(Workspace $workspace): array
+    {
+        return $this->presetsForDate(CarbonImmutable::now($workspace->timezone));
+    }
+
+    public function presetsForDate(CarbonImmutable $date): array
+    {
+        $day = $date->startOfDay();
+        $friday = (5 - $day->isoWeekday() + 7) % 7;
+
+        return [
+            ['key' => 'today', 'label' => 'Hôm nay 17:30', 'value' => $day->setTime(17, 30)->format('Y-m-d\TH:i')],
+            ['key' => 'tomorrow', 'label' => 'Ngày mai 17:30', 'value' => $day->addDay()->setTime(17, 30)->format('Y-m-d\TH:i')],
+            ['key' => 'friday', 'label' => $friday === 0 ? 'Hôm nay (Thứ Sáu)' : ($day->isoWeekday() < 5 ? 'Thứ Sáu tuần này' : 'Thứ Sáu tuần sau'), 'value' => $day->addDays($friday)->setTime(17, 30)->format('Y-m-d\TH:i')],
+            ['key' => 'week', 'label' => '+7 ngày', 'value' => $day->addDays(7)->setTime(17, 30)->format('Y-m-d\TH:i')],
+        ];
+    }
+
+    public function deadlineInsight(Task $task): array
+    {
+        $overdue = $task->task_type->value === 'WORK' && ! $task->archived_at && ! in_array($task->status->value, ['DONE', 'CANCELLED'], true) && $task->deadline_at?->isPast();
+        $conditions = [];
+        if ($task->blockers()->where('status', 'open')->exists()) {
+            $conditions[] = 'Có blocker đang mở';
+        }
+        foreach ($task->incomingDependencies()->with('predecessor')->get() as $edge) {
+            $pre = $edge->predecessor;
+            if ($pre->status->value !== 'DONE' || ! $pre->completed_at || $pre->completed_at->addMinutes($edge->lag_minutes)->isFuture()) {
+                $conditions[] = 'Đang chờ '.$pre->code.' hoàn tất và đủ FS/lag';
+            }
+        }
+        if ($task->status->value === 'REVIEW') {
+            $conditions[] = 'Đang chờ duyệt';
+        }
+        if (! $task->assignee_id) {
+            $conditions[] = 'Chưa phân công';
+        }
+
+        return [
+            'overdue' => (bool) $overdue,
+            'conditions' => $conditions,
+            'history' => $task->activities()->with('actor')->where('event_type', 'task.deadline_changed')->latest('created_at')->latest('id')->limit(20)->get(),
+        ];
     }
 }

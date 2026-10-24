@@ -19,6 +19,7 @@ use App\Policies\RolePolicy;
 use App\Policies\TaskPolicy;
 use App\Policies\WorkspacePolicy;
 use App\Services\AppShell;
+use App\Services\GeminiAiProvider;
 use App\Services\HttpAiProvider;
 use App\Services\NotificationService;
 use App\Services\SettingService;
@@ -40,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(AiProvider::class, function () {
             if (config('ai.provider') === 'gemini') {
-                return $this->app->make(\App\Services\GeminiAiProvider::class);
+                return $this->app->make(GeminiAiProvider::class);
             }
 
             return $this->app->make(HttpAiProvider::class);

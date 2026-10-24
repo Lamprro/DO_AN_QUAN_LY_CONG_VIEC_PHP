@@ -10,9 +10,6 @@ class TaskHistory
 {
     public function record(User $actor, Task $task, string $event, array $data = []): TaskActivity
     {
-        $history = TaskActivity::create(['task_id' => $task->id, 'actor_id' => $actor->id, 'type' => 'HISTORY', 'source' => 'user', 'event_type' => $event, 'data' => $data]);
-        app(NotificationService::class)->taskEvent($history, $task, $actor, $data);
-
-        return $history;
+        return app(TaskService::class)->recordHistory($actor, $task, $event, $data);
     }
 }

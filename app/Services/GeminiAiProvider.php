@@ -65,19 +65,19 @@ class GeminiAiProvider implements AiProvider
                     ],
                 ]);
         } catch (\Throwable $e) {
-            Log::error('Gemini API connection error: ' . $e->getMessage());
+            Log::error('Gemini API connection error: '.$e->getMessage());
             throw new \RuntimeException('Không thể kết nối đến máy chủ Gemini API.');
         }
 
         if (in_array($response->status(), [400, 401, 403, 404, 422], true)) {
             $errorBody = $response->json();
             $msg = $errorBody['error']['message'] ?? 'Gemini API từ chối yêu cầu.';
-            Log::warning('Gemini API error: ' . $msg);
-            throw new AiProviderUnavailable('Gemini API từ chối yêu cầu: ' . $msg);
+            Log::warning('Gemini API error: '.$msg);
+            throw new AiProviderUnavailable('Gemini API từ chối yêu cầu: '.$msg);
         }
 
         if (! $response->successful()) {
-            throw new \RuntimeException('Gemini API trả về lỗi HTTP: ' . $response->status());
+            throw new \RuntimeException('Gemini API trả về lỗi HTTP: '.$response->status());
         }
 
         $data = $response->json();

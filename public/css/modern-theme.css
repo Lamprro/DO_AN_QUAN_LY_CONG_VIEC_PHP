@@ -1529,3 +1529,74 @@ html[data-theme='dark'] .sticky-form-bar {
   animation: pulseBorder 1.5s infinite;
   border-color: #f59e0b !important;
 }
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.app-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md, 10px);
+  background: var(--surface, #ffffff);
+  color: var(--text, #0f172a);
+  border: 1px solid var(--border, #e2e8f0);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transform: translateY(20px) scale(0.95);
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 420px;
+}
+
+.app-toast.show {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.toast-success {
+  border-left: 4px solid var(--success, #10b981);
+}
+
+.toast-error {
+  border-left: 4px solid var(--danger, #ef4444);
+}
+
+.toast-warning {
+  border-left: 4px solid var(--warning, #f59e0b);
+}
+
+/* Row Flash Highlight */
+@keyframes rowHighlight {
+  0% { background-color: rgba(99, 102, 241, 0.25); }
+  100% { background-color: transparent; }
+}
+
+.row-highlight-pulse {
+  animation: rowHighlight 2s ease-out;
+}
+
+/* Status Dropdown Menu */
+.status-dropdown-menu {
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #e2e8f0);
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.18);
+  border-radius: var(--radius-md, 8px);
+}
+
+.status-option-btn:hover {
+  background: var(--surface-hover, #f1f5f9) !important;
+  color: var(--primary, #4f46e5) !important;
+}

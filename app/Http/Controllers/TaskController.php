@@ -93,6 +93,15 @@ class TaskController extends Controller
         $context = $this->context($request, $workspace, $project);
         $task = $this->service->save($request->user(), $workspace, $project, $request->validated());
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã tạo công việc mới thành công.',
+                'task' => $task->load('assignee', 'reviewer'),
+                'redirect' => route($context['routePrefix'].'.show', [...$context['routeParams'], $task]),
+            ], 201);
+        }
+
         return to_route($context['routePrefix'].'.show', [...$context['routeParams'], $task])->with('success', 'Đã tạo công việc.');
     }
 
@@ -170,7 +179,22 @@ class TaskController extends Controller
                     app(TaskEditConflict::class)->forget($request, $token);
                 }
 
+                if ($request->wantsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'conflict' => true,
+                        'message' => 'Công việc đã được cập nhật bởi một phiên làm việc khác.',
+                    ], 409);
+                }
+
                 return response()->view('tasks.conflict', $this->context($request, $workspace, $project) + compact('task', 'conflict'), 409);
+            }
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.',
+                    'errors' => $e->errors(),
+                ], 422);
             }
             $request->session()->flash('task_edit_error', ['task_id' => $task->id, 'surface' => $surface]);
             $context = $this->context($request, $workspace, $project);
@@ -179,6 +203,33 @@ class TaskController extends Controller
         }
         if ($token) {
             app(TaskEditConflict::class)->forget($request, $token);
+        }
+        if ($request->wantsJson() || $request->ajax()) {
+            $task = $task->fresh(['assignee', 'reviewer']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã lưu cập nhật công việc thành công.',
+                'task' => [
+                    'id' => $task->id,
+                    'code' => $task->code,
+                    'title' => $task->title,
+                    'status' => $task->status->value,
+                    'status_label' => UiLabels::text($task->status),
+                    'priority' => $task->priority->value,
+                    'priority_label' => UiLabels::text($task->priority),
+                    'task_type' => $task->task_type->value,
+                    'task_type_label' => UiLabels::text($task->task_type),
+                    'assignee_id' => $task->assignee_id,
+                    'assignee_name' => $task->assignee?->name ?? 'Chưa phân công',
+                    'reviewer_id' => $task->reviewer_id,
+                    'reviewer_name' => $task->reviewer?->name ?? 'Chưa phân công',
+                    'deadline_formatted' => $task->deadline_at ? $task->deadline_at->setTimezone($workspace->timezone)->format('d/m/Y H:i') : null,
+                    'deadline_at' => $task->deadline_at ? $task->deadline_at->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') : '',
+                    'estimate_minutes' => $task->estimate_minutes,
+                    'revision' => $task->revision,
+                ],
+            ]);
         }
         $context = $this->context($request, $workspace, $project);
 

@@ -105,6 +105,101 @@
 
 @include('projects._guide')
 
+<!-- Recent Tasks Section with Quick Edit -->
+@if($canViewTasks)
+<section class="card" style="margin-top: 1.5rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+            <h2 style="margin: 0; font-size: 1.25rem;">Công việc trong Dự án</h2>
+            <p class="muted" style="margin: 0.2rem 0 0; font-size: 0.85rem;">Các công việc gần đây, có thể sửa nhanh trực tiếp ngay tại đây</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+            @if($canCreateTask)
+                <button type="button" class="button" id="btn-trigger-quick-create" style="font-size: 0.825rem; padding: 0.35rem 0.75rem; background: var(--primary); color: #fff;">
+                    ⚡ Tạo nhanh
+                </button>
+            @endif
+            <a href="{{ route('workspaces.projects.tasks.index',[$workspace,$project]) }}" class="button secondary" style="font-size: 0.825rem; padding: 0.35rem 0.75rem;">
+                Xem tất cả ({{ $project->tasks_count ?? count($recentTasks) }}) ›
+            </a>
+        </div>
+    </div>
+
+    @if(count($recentTasks) > 0)
+        <div class="table-wrap mobile-data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã & Tiêu đề</th>
+                        <th>Trạng thái</th>
+                        <th>Người thực hiện</th>
+                        <th>Hạn chót</th>
+                        <th style="text-align: right;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($recentTasks as $task)
+                        @php($deadlineFormatted = $task->deadline_at ? $task->deadline_at->setTimezone($workspace->timezone)->format('d/m/Y H:i') : null)
+                        @php($deadlineLocal = $task->deadline_at ? $task->deadline_at->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') : '')
+                        <tr data-task-id="{{ $task->id }}"
+                            data-code="{{ $task->code }}"
+                            data-title="{{ $task->title }}"
+                            data-status="{{ $task->status->value }}"
+                            data-priority="{{ $task->priority->value }}"
+                            data-assignee-id="{{ $task->assignee_id }}"
+                            data-reviewer-id="{{ $task->reviewer_id }}"
+                            data-deadline="{{ $deadlineLocal }}"
+                            data-estimate="{{ $task->estimate_minutes }}"
+                            data-revision="{{ $task->revision }}"
+                            data-update-url="{{ route('workspaces.projects.tasks.update', [$workspace, $project, $task]) }}"
+                            data-status-url="{{ route('workspaces.projects.tasks.status.update', [$workspace, $project, $task]) }}">
+                            <td>
+                                <a href="{{ route('workspaces.projects.tasks.show',[$workspace,$project,$task]) }}" style="text-decoration: none; font-weight: 700;">
+                                    <span class="task-row-code" style="color: var(--primary); font-family: var(--font-mono); margin-right: 0.35rem;">{{ $task->code }}</span>
+                                    <span class="task-row-title">{{ $task->title }}</span>
+                                </a>
+                            </td>
+                            <td>
+                                <span class="status-pill status-{{ strtolower(str_replace('_','-',$task->status->value)) }}">
+                                    {{ \App\Support\UiLabels::text($task->status->value) }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="task-row-assignee">
+                                    @if($task->assignee)
+                                        <span>{{ $task->assignee->name }}</span>
+                                    @else
+                                        <span class="muted" style="font-style: italic; font-size: 0.8rem;">Chưa phân công</span>
+                                    @endif
+                                </div>
+                            </td>
+                            <td>
+                                <div class="task-row-deadline">
+                                    @if($task->deadline_at)
+                                        <span style="font-family: var(--font-mono); font-size: 0.8rem;">{{ $deadlineFormatted }}</span>
+                                    @else
+                                        <span class="muted" style="font-size: 0.8rem;">Chưa có</span>
+                                    @endif
+                                </div>
+                            </td>
+                            <td style="text-align: right;">
+                                @can('update', $task)
+                                    <button type="button" class="btn-quick-edit preset-chip" style="font-size: 0.72rem; padding: 0.15rem 0.45rem; cursor: pointer; background: var(--primary-light); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25);" title="Sửa nhanh công việc này">
+                                        ⚡ Sửa
+                                    </button>
+                                @endcan
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <p class="muted" style="margin: 0.5rem 0 0;">Chưa có công việc nào trong dự án này.</p>
+    @endif
+</section>
+@endif
+
 <!-- Sub-projects Section -->
 <section class="card">
     <h2>Dự án con (Sub-projects)</h2>
@@ -147,4 +242,8 @@
         </form>
     </details>
 @endcan
+
+@if($canViewTasks)
+    @include('tasks._quick-modal')
+@endif
 </x-layout>

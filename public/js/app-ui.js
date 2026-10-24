@@ -224,4 +224,337 @@
     e.preventDefault();
     document.querySelectorAll('.task-tree details').forEach(d => d.open = false);
   });
+
+  // 9. Modern Toast Notification System
+  window.showToast = (message, type = 'success') => {
+    const container = document.querySelector('#toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = `app-toast toast-${type}`;
+    const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
+    toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-message">${message}</span>`;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 350);
+    }, 4000);
+  };
+
+  // Trigger flash message as toast on load if present
+  const flashEl = document.querySelector('[data-flash-message]');
+  if (flashEl) {
+    const msg = flashEl.dataset.flashMessage;
+    const typ = flashEl.dataset.flashType || 'success';
+    if (msg) setTimeout(() => window.showToast(msg, typ), 200);
+  }
+
+  // 10. Universal Quick Edit Modal & Inline Editing
+  const qmBackdrop = document.querySelector('#quick-edit-modal-backdrop');
+  const qmForm = document.querySelector('#universal-quick-edit-form');
+  let qmTargetRow = null;
+
+  const closeQm = () => {
+    if (!qmBackdrop) return;
+    qmBackdrop.classList.remove('open');
+    setTimeout(() => {
+      qmBackdrop.style.display = 'none';
+      document.body.classList.remove('quick-edit-open');
+    }, 200);
+  };
+
+  document.querySelectorAll('#qm-close-btn, #qm-cancel-btn').forEach(b => b.addEventListener('click', closeQm));
+  qmBackdrop?.addEventListener('click', e => {
+    if (e.target === qmBackdrop) closeQm();
+  });
+
+  document.addEventListener('click', e => {
+    const editBtn = e.target.closest('.btn-quick-edit');
+    if (editBtn && qmBackdrop && qmForm) {
+      e.preventDefault();
+      const row = editBtn.closest('[data-task-id]');
+      if (!row) return;
+      qmTargetRow = row;
+
+      // Extract attributes
+      const code = row.dataset.code || '';
+      const title = row.dataset.title || '';
+      const priority = row.dataset.priority || 'medium';
+      const status = row.dataset.status || 'TODO';
+      const assigneeId = row.dataset.assigneeId || '';
+      const reviewerId = row.dataset.reviewerId || '';
+      const deadline = row.dataset.deadline || '';
+      const estimate = row.dataset.estimate || '';
+      const revision = row.dataset.revision || '1';
+      const updateUrl = row.dataset.updateUrl || '';
+
+      // Populate form
+      document.querySelector('#qm-task-code').textContent = code;
+      document.querySelector('#qm-title').value = title;
+      document.querySelector('#qm-priority').value = priority;
+      document.querySelector('#qm-assignee').value = assigneeId;
+      document.querySelector('#qm-reviewer').value = reviewerId;
+      document.querySelector('#qm-estimate').value = estimate;
+      document.querySelector('#qm-deadline').value = deadline;
+      document.querySelector('#qm-expected-revision').value = revision;
+      document.querySelector('#qm-deadline-reason').value = '';
+
+      const statusBadge = document.querySelector('#qm-status-badge');
+      if (statusBadge) {
+        statusBadge.className = `status-pill status-${status.toLowerCase().replace(/_/g, '-')}`;
+        statusBadge.textContent = names[status] || status;
+      }
+
+      const errNotice = document.querySelector('#qm-error-notice');
+      if (errNotice) errNotice.style.display = 'none';
+
+      qmForm.action = updateUrl;
+      qmBackdrop.style.display = 'flex';
+      requestAnimationFrame(() => {
+        qmBackdrop.classList.add('open');
+        document.body.classList.add('quick-edit-open');
+        document.querySelector('#qm-title')?.focus();
+      });
+    }
+  });
+
+  qmForm?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const submitBtn = document.querySelector('#qm-submit-btn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Đang lưu…</span>';
+
+    try {
+      const response = await fetch(qmForm.action, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        body: new FormData(qmForm)
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        window.showToast(result.message || 'Đã lưu cập nhật công việc thành công!', 'success');
+
+        if (qmTargetRow && result.task) {
+          const t = result.task;
+          qmTargetRow.dataset.title = t.title;
+          qmTargetRow.dataset.priority = t.priority;
+          qmTargetRow.dataset.revision = t.revision;
+          qmTargetRow.dataset.assigneeId = t.assignee_id || '';
+          qmTargetRow.dataset.reviewerId = t.reviewer_id || '';
+          qmTargetRow.dataset.deadline = t.deadline_at || '';
+          qmTargetRow.dataset.estimate = t.estimate_minutes || '';
+
+          // Update row visual fields
+          const titleEl = qmTargetRow.querySelector('.task-row-title');
+          if (titleEl) titleEl.textContent = t.title;
+
+          const prioEl = qmTargetRow.querySelector('.task-row-priority');
+          if (prioEl) prioEl.textContent = t.priority_label || t.priority;
+
+          const assigneeEl = qmTargetRow.querySelector('.task-row-assignee');
+          if (assigneeEl) {
+            if (t.assignee_name && t.assignee_id) {
+              assigneeEl.innerHTML = `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-size:0.7rem;font-weight:700;">${t.assignee_name.charAt(0)}</span><span>${t.assignee_name}</span>`;
+            } else {
+              assigneeEl.innerHTML = `<span class="muted" style="font-style:italic;font-size:0.85rem;">Chưa phân công</span>`;
+            }
+          }
+
+          const deadlineEl = qmTargetRow.querySelector('.task-row-deadline');
+          if (deadlineEl) {
+            deadlineEl.innerHTML = t.deadline_formatted ? `<span style="font-family:var(--font-mono);font-size:0.85rem;">${t.deadline_formatted}</span>` : `<span class="muted" style="font-size:0.85rem;">Chưa có hạn</span>`;
+          }
+
+          qmTargetRow.classList.add('row-highlight-pulse');
+          setTimeout(() => qmTargetRow.classList.remove('row-highlight-pulse'), 2000);
+        }
+
+        closeQm();
+      } else {
+        const errNotice = document.querySelector('#qm-error-notice');
+        const errMsg = document.querySelector('#qm-error-message');
+        if (errNotice && errMsg) {
+          let errText = result.message || 'Có lỗi xảy ra khi lưu.';
+          if (result.errors) {
+            errText = Object.values(result.errors).flat().join('<br>');
+          }
+          errMsg.innerHTML = errText;
+          errNotice.style.display = 'block';
+        }
+      }
+    } catch (err) {
+      window.showToast('Không thể kết nối đến máy chủ. Vui lòng thử lại.', 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }
+  });
+
+  // 11. Universal Quick Create Modal
+  const qcBackdrop = document.querySelector('#quick-create-modal-backdrop');
+  const qcForm = document.querySelector('#quick-create-form');
+
+  const openQc = () => {
+    if (!qcBackdrop) return;
+    qcBackdrop.style.display = 'flex';
+    requestAnimationFrame(() => {
+      qcBackdrop.classList.add('open');
+      document.body.classList.add('quick-edit-open');
+      document.querySelector('#qc-title')?.focus();
+    });
+  };
+
+  const closeQc = () => {
+    if (!qcBackdrop) return;
+    qcBackdrop.classList.remove('open');
+    setTimeout(() => {
+      qcBackdrop.style.display = 'none';
+      document.body.classList.remove('quick-edit-open');
+    }, 200);
+  };
+
+  document.querySelectorAll('#btn-trigger-quick-create, #btn-trigger-quick-create-empty').forEach(b => b.addEventListener('click', openQc));
+  document.querySelectorAll('#qc-close-btn, #qc-cancel-btn').forEach(b => b.addEventListener('click', closeQc));
+  qcBackdrop?.addEventListener('click', e => {
+    if (e.target === qcBackdrop) closeQc();
+  });
+
+  qcForm?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const submitBtn = document.querySelector('#qc-submit-btn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Đang tạo…</span>';
+
+    try {
+      const response = await fetch(qcForm.action, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        body: new FormData(qcForm)
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        window.showToast(result.message || 'Đã tạo công việc mới!', 'success');
+        closeQc();
+        setTimeout(() => window.location.reload(), 500);
+      } else {
+        const errNotice = document.querySelector('#qc-error-notice');
+        const errMsg = document.querySelector('#qc-error-message');
+        if (errNotice && errMsg) {
+          let errText = result.message || 'Có lỗi xảy ra.';
+          if (result.errors) {
+            errText = Object.values(result.errors).flat().join('<br>');
+          }
+          errMsg.innerHTML = errText;
+          errNotice.style.display = 'block';
+        }
+      }
+    } catch (err) {
+      window.showToast('Lỗi kết nối máy chủ khi tạo việc.', 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }
+  });
+
+  // 12. Interactive Inline Status Dropdown
+  document.addEventListener('click', async e => {
+    // Open/Close status menu
+    const statusBtn = e.target.closest('.interactive-status-pill');
+    if (statusBtn) {
+      e.stopPropagation();
+      const wrap = statusBtn.closest('.interactive-status-wrap');
+      const menu = wrap?.querySelector('.status-dropdown-menu');
+      const isOpen = menu && menu.style.display === 'block';
+
+      // Close all other menus first
+      document.querySelectorAll('.status-dropdown-menu').forEach(m => m.style.display = 'none');
+
+      if (menu) {
+        menu.style.display = isOpen ? 'none' : 'block';
+      }
+      return;
+    }
+
+    // Option selected
+    const optionBtn = e.target.closest('.status-option-btn');
+    if (optionBtn) {
+      e.stopPropagation();
+      const newStatus = optionBtn.dataset.status;
+      const row = optionBtn.closest('[data-task-id]');
+      const menu = optionBtn.closest('.status-dropdown-menu');
+      if (menu) menu.style.display = 'none';
+      if (!row || !newStatus) return;
+
+      const currentStatus = row.dataset.status;
+      const statusUrl = row.dataset.statusUrl;
+
+      if (newStatus === currentStatus) return;
+
+      const formData = new FormData();
+      formData.append('_token', document.querySelector('meta[name="csrf-token"]')?.content || '');
+      formData.append('_method', 'PATCH');
+      formData.append('expected_status', currentStatus);
+      formData.append('status', newStatus);
+
+      try {
+        const response = await fetch(statusUrl, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          window.showToast(result.message || 'Đã chuyển trạng thái!', 'success');
+          row.dataset.status = newStatus;
+
+          const pill = row.querySelector('.interactive-status-pill');
+          if (pill) {
+            pill.className = `status-pill status-${newStatus.toLowerCase().replace(/_/g, '-')} interactive-status-pill`;
+            const textEl = pill.querySelector('.status-text') || pill;
+            textEl.textContent = result.status_label || names[newStatus] || newStatus;
+          }
+
+          row.classList.add('row-highlight-pulse');
+          setTimeout(() => row.classList.remove('row-highlight-pulse'), 2000);
+        } else {
+          window.showToast(result.message || 'Không thể đổi trạng thái. Hãy kiểm tra các điều kiện (blocker, người duyệt).', 'error');
+        }
+      } catch (err) {
+        window.showToast('Lỗi kết nối khi cập nhật trạng thái.', 'error');
+      }
+      return;
+    }
+
+    // Click outside closes dropdowns
+    document.querySelectorAll('.status-dropdown-menu').forEach(m => m.style.display = 'none');
+  });
+
+  // Global Escape Key to close modals
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeQm();
+      closeQc();
+      document.querySelectorAll('.status-dropdown-menu').forEach(m => m.style.display = 'none');
+    }
+  });
 })();
+

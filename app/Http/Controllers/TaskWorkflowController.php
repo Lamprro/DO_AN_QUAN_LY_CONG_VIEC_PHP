@@ -10,6 +10,7 @@ use App\Policies\TaskPolicy;
 use App\Services\TaskAttachmentService;
 use App\Services\TaskTreeService;
 use App\Services\TaskWorkflowService;
+use App\Support\UiLabels;
 use Illuminate\Http\Request;
 
 class TaskWorkflowController extends Controller
@@ -35,6 +36,18 @@ class TaskWorkflowController extends Controller
     {
         $this->bound($workspace, $project, $task);
         $this->workflow->status($request->user(), $task, $request->validated());
+
+        if ($request->wantsJson() || $request->ajax()) {
+            $task = $task->fresh(['assignee', 'reviewer']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã chuyển trạng thái sang '.UiLabels::text($task->status),
+                'status' => $task->status->value,
+                'status_label' => UiLabels::text($task->status),
+                'task' => $task,
+            ]);
+        }
 
         return back()->with('success', 'Đã xử lý trạng thái công việc.');
     }

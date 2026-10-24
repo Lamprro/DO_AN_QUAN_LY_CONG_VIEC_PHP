@@ -20,7 +20,6 @@ use Carbon\CarbonImmutable;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class RichDataSeeder extends Seeder
 {
@@ -213,7 +212,7 @@ class RichDataSeeder extends Seeder
                         'parent_task_id' => $t['group']->id,
                         'task_type' => 'WORK',
                         'title' => $t['title'],
-                        'description' => 'Mô tả chi tiết cho công việc: ' . $t['title'] . '. Đảm bảo đáp ứng đầy đủ tiêu chí chất lượng và hoàn thành đúng hạn.',
+                        'description' => 'Mô tả chi tiết cho công việc: '.$t['title'].'. Đảm bảo đáp ứng đầy đủ tiêu chí chất lượng và hoàn thành đúng hạn.',
                         'created_by' => $owner->id,
                         'assignee_id' => $t['assignee']->id,
                         'reviewer_id' => $t['reviewer']->id,
@@ -266,7 +265,7 @@ class RichDataSeeder extends Seeder
                         'parent_task_id' => $groupAiCore->id,
                         'task_type' => 'WORK',
                         'title' => $t['title'],
-                        'description' => 'Triển khai tính năng AI: ' . $t['title'],
+                        'description' => 'Triển khai tính năng AI: '.$t['title'],
                         'created_by' => $owner->id,
                         'assignee_id' => $t['assignee']->id,
                         'reviewer_id' => $t['reviewer']->id,
@@ -352,7 +351,7 @@ class RichDataSeeder extends Seeder
 
             foreach ($notifs as $idx => $n) {
                 Notification::firstOrCreate(
-                    ['workspace_id' => $workspace->id, 'recipient_id' => $owner->id, 'dedupe_key' => 'rich_notif_' . $idx],
+                    ['workspace_id' => $workspace->id, 'recipient_id' => $owner->id, 'dedupe_key' => 'rich_notif_'.$idx],
                     [
                         'project_id' => $pEcom->id,
                         'type' => 'task_assigned',

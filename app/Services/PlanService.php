@@ -43,7 +43,7 @@ class PlanService
             $project?->fresh()->getRawOriginal(),
             $project ? DB::table('project_members')->where('project_id', $project->id)->orderBy('id')->get()->toArray() : [],
             CalendarEvent::where('user_id', $actor->id)->orderBy('id')->get()->map(fn ($e) => $e->getRawOriginal())->all(),
-            config('work_schedule')];
+            app(WorkHoursService::class)->values($actor, $workspace->timezone)];
 
         return hash('sha256', json_encode($data));
     }
@@ -175,7 +175,7 @@ class PlanService
             }
 
             return Plan::create(['workspace_id' => $workspace->id, 'project_id' => $project?->id, 'plan_group_id' => $group, 'parent_plan_id' => $base?->id, 'version_no' => $version,
-                'created_by' => $actor->id, 'ai_run_id' => $aiRunId, 'name' => $name, 'status' => 'draft', 'data' => ['schema_version' => 1, 'payload' => $payload, 'fingerprint' => $this->fingerprint($actor, $workspace, $project), 'snapshot_actor_id' => $actor->id, 'base_active_id' => $active, 'work_schedule' => config('work_schedule'), 'source' => $aiRunId ? 'ai' : 'manual']]);
+                'created_by' => $actor->id, 'ai_run_id' => $aiRunId, 'name' => $name, 'status' => 'draft', 'data' => ['schema_version' => 1, 'payload' => $payload, 'fingerprint' => $this->fingerprint($actor, $workspace, $project), 'snapshot_actor_id' => $actor->id, 'base_active_id' => $active, 'work_schedule' => app(WorkHoursService::class)->values($actor, $workspace->timezone), 'source' => $aiRunId ? 'ai' : 'manual']]);
         }, 3);
     }
 

@@ -3,15 +3,22 @@
 namespace App\Models;
 
 use App\Enums\UserStatus;
+use App\Services\AccountMailService;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, HasUuids;
+
+    public function sendEmailVerificationNotification(): void
+    {
+        app(AccountMailService::class)->verification($this);
+    }
 
     protected $fillable = ['name', 'email', 'password', 'timezone', 'status'];
 

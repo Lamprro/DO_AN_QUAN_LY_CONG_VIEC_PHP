@@ -89,6 +89,8 @@
     </div>
 </section>
 
+@include('tasks._journey')
+
 <!-- Deadlines & Insights -->
 @include('tasks._deadline')
 
@@ -96,7 +98,7 @@
 @include('tasks.workflow')
 
 <!-- Time Tracking & Real Hours Section -->
-<section class="card" style="border-left: 4px solid #0284c7;">
+<section id="task-time" tabindex="-1" class="card" style="border-left: 4px solid #0284c7;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <div>
             <h2 style="font-size: 1.15rem; margin-bottom: 0.25rem;">⏱️ Ghi nhận thời gian thực tế (Time Tracking)</h2>
@@ -144,5 +146,6 @@
     @endcan
 </div>
 
+@include('tasks._collaboration')
 @include('tasks._quick-edit')
 </x-layout>

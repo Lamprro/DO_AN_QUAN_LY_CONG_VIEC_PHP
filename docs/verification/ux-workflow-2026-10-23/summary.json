@@ -1,0 +1,30 @@
+{
+  "http_assertions": 30,
+  "http_requests": 59,
+  "main_tables_checked": 31,
+  "main_database_unchanged": true,
+  "main_env_unchanged": true,
+  "browser_sql_confirmed": true,
+  "browser_console_errors": 0,
+  "no_test_classes": true,
+  "schema_changed": false,
+  "technical_checks_passed": true,
+  "runtime_files": {
+    "app/Services/AppShell.php": "bb40259f738312b4fd2a402c85ba4d060a1879c9dbd4808f78f6e24ece994414",
+    "public/css/workflow-experience.css": "833817e1386dff536557588dcaf3f3b3c26d1d045e1b8f6a668f0a1ce9a4374d",
+    "public/js/app-ui.js": "472231faaeed3283b40f08371e30df9fe4d8c0476123757792893e3663ac306d",
+    "resources/views/components/layout.blade.php": "ff10afebfc4994eef2ecf5384966f166318096d7f19e2133b14975dda1a26de9",
+    "resources/views/projects/_guide.blade.php": "99b30503726cc7b4e4f321ecbb2c78ff363de27e24b8c02439d277d8bbed5a0b",
+    "resources/views/projects/show.blade.php": "c703b319cd936841453e6eac4000cf5e943d8ebf0833e2f643982d6ffac2a09b",
+    "resources/views/tasks/_filters.blade.php": "4b462db540d0958eb05b793ac6e6f65fc7373148018f1201e1e300156b05a8f4",
+    "resources/views/tasks/_journey.blade.php": "d5d6cceaee5569d69ffecb7a9d93fc6b8b73bf5570fec4c62482a4613b9c039b",
+    "resources/views/tasks/_view-nav.blade.php": "7c8c98ad49469b17d1b93f72e1297b5c312a41ca93c7f4d1d4a5a62533895efd",
+    "resources/views/tasks/board.blade.php": "6deea0cbcd21cac3ce534d80112e7331e524d23d747b168bc53dea1e2e8a3080",
+    "resources/views/tasks/index.blade.php": "12dce5d1c9fbdbcf118fb565f975c64cd8c515eff8a74e11548dafb517976bed",
+    "resources/views/tasks/show.blade.php": "6ac78db9973d213eca1f407f1fdfc62db53e1c45f8cd196fcf5c91c47fa6c291",
+    "resources/views/tasks/tree.blade.php": "9fddb28e407dc476db0f7a85e9856e6edc4afa17bcaa99b2e333946d7db00217",
+    "resources/views/tasks/workflow.blade.php": "c71c8bb618849eb22e705caf3c33e74bd829bee2bb510dc7b29e3be5128147d0"
+  },
+  "additional_scope_assertions": 5,
+  "additional_scope_requests": 9
+}

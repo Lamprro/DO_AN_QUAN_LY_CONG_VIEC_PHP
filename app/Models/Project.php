@@ -94,4 +94,14 @@ class Project extends DomainModel
     {
         return $query->where($this->qualifyColumn('workspace_id'), $workspaceId);
     }
+
+    public function taskTemplates(): HasMany
+    {
+        return $this->hasMany(TaskTemplate::class, 'project_id');
+    }
+
+    public function calendarProposals(): HasMany
+    {
+        return $this->hasMany(CalendarProposal::class, 'project_id');
+    }
 }

@@ -2,8 +2,9 @@
  'use strict';
  const toggle=document.querySelector('#nav-toggle'),aside=document.querySelector('#app-sidebar'),backdrop=document.querySelector('.nav-backdrop');
  const closeNav=()=>{document.body.classList.remove('nav-open');toggle?.setAttribute('aria-expanded','false');if(backdrop)backdrop.hidden=true;toggle?.focus();};
- toggle?.addEventListener('click',()=>{if(document.body.classList.contains('nav-open'))return closeNav();document.body.classList.add('nav-open');toggle.setAttribute('aria-expanded','true');backdrop.hidden=false;aside.querySelector('a')?.focus();});
+ toggle?.addEventListener('click',()=>{if(document.body.classList.contains('nav-open'))return closeNav();document.body.classList.add('nav-open');toggle.setAttribute('aria-expanded','true');backdrop.hidden=false;(aside.querySelector('[data-close-nav]')||aside.querySelector('a'))?.focus();});
  backdrop?.addEventListener('click',closeNav);
+ document.querySelector('[data-close-nav]')?.addEventListener('click',closeNav);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('nav-open'))closeNav();if(e.key==='Tab'&&document.body.classList.contains('nav-open')){const items=[...aside.querySelectorAll('a,button')];if(e.shiftKey&&document.activeElement===items[0]){e.preventDefault();items.at(-1)?.focus();}else if(!e.shiftKey&&document.activeElement===items.at(-1)){e.preventDefault();items[0]?.focus();}}});
  const names={TODO:'Chưa bắt đầu',IN_PROGRESS:'Đang thực hiện',REVIEW:'Chờ duyệt',DONE:'Hoàn thành',CANCELLED:'Đã hủy',GROUP:'Nhóm việc',WORK:'Công việc',MILESTONE:'Mốc',low:'Thấp',medium:'Vừa',high:'Cao',urgent:'Khẩn cấp'};
  document.querySelectorAll('select[name="status"] option,select[name="priority"] option,select[name="task_type"] option').forEach(o=>{if(names[o.value]&&o.textContent.trim()===o.value)o.textContent=names[o.value];});
@@ -49,8 +50,8 @@
  const type=document.querySelector('select[name=task_type]');if(type){const sync=()=>{const work=type.value==='WORK',group=type.value==='GROUP';for(const name of ['estimate_minutes','assignee_id','reviewer_id']){const input=type.form.querySelector(`[name="${name}"]`);if(!input)continue;const off=name==='estimate_minutes'?!work:group;input.closest('.field')?.classList.toggle('unsupported-field',off);input.disabled=off;}};type.addEventListener('change',sync);sync();}
  document.querySelectorAll('form[data-form="task-search"],form[data-form="project-search"]').forEach(f=>{
   f.classList.add('filter-bar');const active=[...f.elements].filter(el=>el.name&&!['page','per_page','sort','direction','view'].includes(el.name)&&el.value&&!(el.name==='preset'&&el.value==='all')&&!(el.name==='archived'&&el.value==='active'));
-  if(active.length){const note=document.createElement('p');note.className='filter-active';note.textContent='Bộ lọc: '+active.map(el=>(f.querySelector('label[for="'+el.id+'"]')?.textContent||el.name)+': '+(el.tagName==='SELECT'?el.selectedOptions[0]?.textContent:el.value)).join(' · ');f.prepend(note);}
-  if(![...f.querySelectorAll('a')].some(a=>a.href===f.action)){const a=document.createElement('a');a.href=f.action;a.textContent='Xóa bộ lọc';a.className='button secondary';f.append(a);}
+  if(active.length){const note=document.createElement('p');note.className='filter-active';note.textContent='Bộ lọc: '+active.map(el=>(el.dataset.filterLabel||f.querySelector('label[for="'+el.id+'"]')?.textContent||el.name)+': '+(el.dataset.filterValue||(el.tagName==='SELECT'?el.selectedOptions[0]?.textContent:el.value))).join(' · ');f.prepend(note);}
+  if(!f.querySelector('[data-filter-reset]')&&![...f.querySelectorAll('a')].some(a=>a.href===f.action)){const a=document.createElement('a');a.href=f.action;a.textContent='Xóa bộ lọc';a.className='button secondary';f.append(a);}
  });
   document.querySelectorAll('#theme-toggle,#theme-toggle-guest').forEach(btn=>btn.addEventListener('click',()=>window.WorkTheme?.toggle()));
   const settingsForm=document.querySelector('form[data-form="settings-update"]');
@@ -60,7 +61,7 @@
     const boxes=[...document.querySelectorAll('input[type="checkbox"][form="bulk-tasks"][name^="items["]')];
     const count=document.querySelector('#bulk-count'),all=document.querySelector('#bulk-select-page'),action=bulk.elements.action;
     const sync=()=>{const n=boxes.filter(b=>b.checked).length;if(count)count.textContent=`Đã chọn ${n} công việc trên trang này`;if(all){all.checked=boxes.length>0&&n===boxes.length;all.indeterminate=n>0&&n<boxes.length;}for(const name of ['priority','assignee_id']){const input=bulk.elements[name];const relevant=(name==='priority'&&action.value==='priority')||(name==='assignee_id'&&action.value==='assign');input.disabled=!relevant;input.closest('div').hidden=!relevant;}};
-    boxes.forEach(b=>b.addEventListener('change',sync));all?.addEventListener('change',()=>{boxes.forEach(b=>b.checked=all.checked);sync();});action.addEventListener('change',sync);sync();
+    boxes.forEach(b=>b.addEventListener('change',()=>{sync();const tools=bulk.closest('.task-tools');if(b.checked&&tools)tools.open=true;}));all?.addEventListener('change',()=>{boxes.forEach(b=>b.checked=all.checked);sync();});action.addEventListener('change',sync);sync();
     bulk.addEventListener('submit',e=>{if(!boxes.some(b=>b.checked)){e.preventDefault();count.textContent='Hãy chọn ít nhất một công việc ở bảng bên dưới.';count.focus();}},true);
   }
   const calendarForm=document.querySelector('form[data-form="calendar-save"]');

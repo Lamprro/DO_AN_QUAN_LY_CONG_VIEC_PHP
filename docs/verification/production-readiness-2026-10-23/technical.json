@@ -1,0 +1,206 @@
+[
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "vendor/bin/pint",
+      "app/Console/Commands/BackupSqlite.php",
+      "app/Console/Commands/ProductionPreflight.php",
+      "app/Http/Controllers/Auth/EmailVerificationController.php",
+      "app/Http/Controllers/Auth/PasswordRecoveryController.php",
+      "app/Http/Middleware/RequireVerifiedAccount.php",
+      "app/Http/Middleware/SecurityHeaders.php",
+      "app/Http/Middleware/TrustedProxyConfiguration.php",
+      "app/Services/AccountMailService.php",
+      "config/security.php",
+      "routes/account_security.php",
+      "app/Http/Controllers/Auth/RegisteredUserController.php",
+      "app/Http/Controllers/ProfileController.php",
+      "app/Http/Requests/LoginRequest.php",
+      "app/Models/User.php",
+      "app/Providers/AppServiceProvider.php",
+      "app/Services/AppShell.php",
+      "bootstrap/app.php",
+      "routes/console.php",
+      "routes/web.php",
+      "scripts/setup-local.php"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "{\"tool\":\"pint\",\"result\":\"fixed\",\"files\":[{\"path\":\"app\\\\Console\\\\Commands\\\\BackupSqlite.php\",\"fixers\":[\"class_attributes_separation\",\"blank_line_after_opening_tag\",\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"statement_indentation\",\"not_operator_with_successor_space\",\"blank_line_before_statement\"]},{\"path\":\"app\\\\Console\\\\Commands\\\\ProductionPreflight.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"not_operator_with_successor_space\"]},{\"path\":\"app\\\\Http\\\\Middleware\\\\TrustedProxyConfiguration.php\",\"fixers\":[\"blank_line_after_opening_tag\",\"line_ending\",\"blank_line_before_statement\"]},{\"path\":\"routes\\\\account_security.php\",\"fixers\":[\"line_ending\"]},{\"path\":\"app\\\\Providers\\\\AppServiceProvider.php\",\"fixers\":[\"fully_qualified_strict_types\",\"line_ending\",\"ordered_imports\"]},{\"path\":\"bootstrap\\\\app.php\",\"fixers\":[\"fully_qualified_strict_types\",\"line_ending\",\"ordered_imports\"]},{\"path\":\"routes\\\\web.php\",\"fixers\":[\"line_ending\"]},{\"path\":\"scripts\\\\setup-local.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"not_operator_with_successor_space\"]}]}"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "vendor/bin/pint",
+      "--test",
+      "app/Console/Commands/BackupSqlite.php",
+      "app/Console/Commands/ProductionPreflight.php",
+      "app/Http/Controllers/Auth/EmailVerificationController.php",
+      "app/Http/Controllers/Auth/PasswordRecoveryController.php",
+      "app/Http/Middleware/RequireVerifiedAccount.php",
+      "app/Http/Middleware/SecurityHeaders.php",
+      "app/Http/Middleware/TrustedProxyConfiguration.php",
+      "app/Services/AccountMailService.php",
+      "config/security.php",
+      "routes/account_security.php",
+      "app/Http/Controllers/Auth/RegisteredUserController.php",
+      "app/Http/Controllers/ProfileController.php",
+      "app/Http/Requests/LoginRequest.php",
+      "app/Models/User.php",
+      "app/Providers/AppServiceProvider.php",
+      "app/Services/AppShell.php",
+      "bootstrap/app.php",
+      "routes/console.php",
+      "routes/web.php",
+      "scripts/setup-local.php"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "{\"tool\":\"pint\",\"result\":\"passed\"}"
+  },
+  {
+    "step": "PHP syntax",
+    "passed": true,
+    "files": 222
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\js\\app-ui.js"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\js\\form-confirm.js"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\js\\plan-editor.js"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\js\\theme.js"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": ""
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "D:/Composer/composer.phar",
+      "validate",
+      "--no-check-publish"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "./composer.json is valid\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "D:/Composer/composer.phar",
+      "check-platform-reqs",
+      "--lock",
+      "--no-dev"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "composer-runtime-api 2.2.2      success                                       \next-ctype            *          success provided by symfony/polyfill-ctype    \next-dom              20031129   success                                       \next-fileinfo         8.2.12     success                                       \next-filter           8.2.12     success                                       \next-hash             8.2.12     success                                       \next-iconv            8.2.12     success                                       \next-json             8.2.12     success                                       \next-libxml           8.2.12     success                                       \next-mbstring         *          success provided by symfony/polyfill-mbstring \next-openssl          8.2.12     success                                       \next-pcre             8.2.12     success                                       \next-session          8.2.12     success                                       \next-tokenizer        8.2.12     success                                       \nphp                  8.2.12     success                                       \nChecking non-dev platform requirements using the lock file\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "D:/Composer/composer.phar",
+      "audit",
+      "--locked",
+      "--format=json"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "{\n    \"advisories\": [],\n    \"abandoned\": [],\n    \"filter\": []\n}\n"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "warning: in the working copy of 'docs/FRONTEND_HANDOFF.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/IMPLEMENTATION_PROGRESS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/verification/README.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'public/js/app-ui.js', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/auth/login.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/layout.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/errors/419.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/board.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/tree.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/workflow.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'scripts/package-source.py', CRLF will be replaced by LF the next time Git touches it\n"
+  },
+  {
+    "command": [
+      "python",
+      "-X",
+      "utf8",
+      "C:\\Users\\maiva\\.codex\\.chatgpt-projects\\g-p-6ac9f1ab7ff88191b43033b8bc45d9d6\\output\\production_sync.py"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "Runtime files synchronized; routes/views compiled and local preflight passed.\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "config:cache"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "\n   INFO  Configuration cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "route:cache"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "view:cache"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "schedule:list"
+    ],
+    "exit_code": 0,
+    "passed": true,
+    "output": "\n  0 * * * *  php artisan tasks:remind .......................................................... Next Due: 10 phút tới\n  * * * * *  php artisan ai:recover-stale ...................................................... Next Due: 10 giây tới\n  0 * * * *  php artisan auth:clear-resets ..................................................... Next Due: 10 phút tới\n  * * * * *  ops:heartbeat ..................................................................... Next Due: 10 giây tới\n\n"
+  },
+  {
+    "step": "No PHPUnit or TestCase added/executed",
+    "passed": true
+  }
+]

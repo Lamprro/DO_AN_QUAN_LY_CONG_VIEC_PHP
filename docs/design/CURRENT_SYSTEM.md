@@ -1,3 +1,5 @@
+**Cập nhật cuối đợt:** schema nguồn/review là **27 bảng nghiệp vụ + 8 hạ tầng = 35 bảng**, bổ sung calendar_proposals, task_watchers, task_templates, task_template_runs. Migration chính đang chờ xác nhận, hiện vẫn31bảng. ERD/schema JSON đã sinh lại từ PRAGMA review. [Báo cáo F11–F14](../FULL_FUNCTIONAL_COMPLETION_2026-10-23.md) thay mô tả31bảng ở bản lịch sử bên dưới.
+
 # Thiết kế hệ thống hiện hành — 23/10/2026
 
 Tài liệu này mô tả bản đã triển khai. Kế hoạch V3 và sơ đồ 20 bảng cũ là mốc thiết kế; migration hiện hành có **23 bảng nghiệp vụ + 8 bảng hạ tầng Laravel = 31 bảng**. Ba bảng nghiệp vụ bổ sung là saved_task_filters, task_reminders, time_entry_adjustments. Không có migration mới trong đợt nghiệm thu này.
@@ -98,3 +100,7 @@ sequenceDiagram
 ## Giới hạn thiết kế
 
 SQLite đã kiểm local; chưa đánh giá nhiều instance hoặc tải lớn. Tree/plan/search còn tải tập dữ liệu phạm vi để tính quyền/cấu trúc, cần profiling trước khi vận hành hàng chục nghìn task. Không có Google Calendar/Telegram hay email digest; SMTP, Redis production, AI bridge và webhook công khai là các mục cấu hình/kiểm chứng sau.
+
+## Bổ sung kiến trúc tài khoản/vận hành
+
+Không đổi31 bảng. Password broker dùng password_reset_tokens có sẵn; email_verified_at của users dùng xác minh email. User implements MustVerifyEmail, dùng AccountMailService thay vì đổi quan hệ notifications hiện hành. Recovery xóa session cũ; middleware RequireVerifiedAccount mặc định chặn nghiệp vụ ở production khi chưa xác minh. Lịch Laravel đã có recover-stale, clear-resets và heartbeat; preflight kiểm DB/cache/session/host/config. SQLite backup bao gồm private task-files và đối chiếu hash. Chi tiết flow ở báo cáo readiness23/10/2026.

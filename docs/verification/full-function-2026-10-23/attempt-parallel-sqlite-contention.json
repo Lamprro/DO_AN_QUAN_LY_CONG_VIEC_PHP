@@ -1,0 +1,42 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "two actual PHP processes generate one occurrence and three tasks",
+    "verified": false,
+    "processes": [
+      {
+        "exit": 1,
+        "stdout": "Illuminate\\Database\\DeadlockException \n\n  SQLSTATE[HY000]: General error: 5 database is locked (Connection: sqlite, Database: C:/Users/maiva/AppData/Local/Temp/wm-release-253tpyr7/project/database/work_management.sqlite, SQL: insert into \"task_template_runs\" (\"task_template_id\", \"occurrence_key\", \"status\", \"error\", \"id\", \"updated_at\", \"created_at\") values (01a16655-db83-735d-bfa1-52d9fb60317d, schedule:2026-10-22T00:00:00Z, failed, Không tạo được kỳ này. Kiểm tra quyền người tạo, người được giao/reviewer, trạng thái project và cấu trúc mẫu; không có task nào được ghi một phần., 01a16655-df86-733a-b2ed-d0a903acc88f, 2026-10-23 01:17:46, 2026-10-23 01:17:46))\n\n  at vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php:101\n     97▕             $this->transactionsManager?->rollback(\n     98▕                 $this->getName(), $this->transactions\n     99▕             );\n    100▕ \n  ➜ 101▕             throw new DeadlockException($e->getMessage(), is_int($e->getCode()) ? $e->getCode() : 0, $e);\n    102▕         }\n    103▕ \n    104▕         // If there was an exception we will rollback this transaction and then we\n    105▕         // can check if we have exceeded the maximum attempt count for this and\n\n  1   vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\ManagesTransactions.php:42\n      Illuminate\\Database\\Connection::handleTransactionException(Object(Illuminate\\Database\\QueryException))\n\n  2   vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:838\n      Illuminate\\Database\\QueryException::(\"SQLSTATE[HY000]: General error: 5 database is locked (Connection: sqlite, Database: C:/Users/maiva/AppData/Local/Temp/wm-release-253tpyr7/project/database/work_management.sqlite, SQL: insert into \"task_template_runs\" (\"task_template_id\", \"occurrence_key\", \"status\", \"error\", \"id\", \"updated_at\", \"created_at\") values (01a16655-db83-735d-bfa1-52d9fb60317d, schedule:2026-10-22T00:00:00Z, failed, Không tạo được kỳ này. Kiểm tra quyền người tạo, người được giao/reviewer, trạng thái project và cấu trúc mẫu; không có task nào được ghi một phần., 01a16655-df86-733a-b2ed-d0a903acc88f, 2026-10-23 01:17:46, 2026-10-23 01:17:46))\")",
+        "stderr": ""
+      },
+      {
+        "exit": 0,
+        "stdout": "{\"succeeded\":1,\"failed\":0}",
+        "stderr": ""
+      }
+    ]
+  }
+]

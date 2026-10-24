@@ -1,0 +1,78 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "SMTP outage returns generic response and removes unusable reset token",
+    "verified": true
+  },
+  {
+    "step": "mail failure diagnostic excludes address and reset URL",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "disabled account cannot obtain reset token",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/reset-password",
+    "status": 200
+  },
+  {
+    "step": "token issued before disabling account cannot change password",
+    "verified": true
+  },
+  {
+    "step": "database outage renders safe Vietnamese 500 without stack trace",
+    "verified": true
+  },
+  {
+    "step": "restored APP_KEY actually decrypts existing integration credentials",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "external_mail_sent": false
+  }
+]

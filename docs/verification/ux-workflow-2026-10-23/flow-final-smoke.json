@@ -1,0 +1,81 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16498-9633-710e-ad98-1bb223c69c9e/tasks",
+    "status": 200
+  },
+  {
+    "step": "personal scope renders shared navigation /tasks",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16498-9633-710e-ad98-1bb223c69c9e/tasks",
+    "status": 200
+  },
+  {
+    "step": "personal scope renders shared navigation /tasks?view=board",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a16498-9633-710e-ad98-1bb223c69c9e/tasks/tree",
+    "status": 200
+  },
+  {
+    "step": "personal scope renders shared navigation /tasks/tree",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c4-3ce2-7247-a71f-32f38835cc6f/dashboard",
+    "status": 200
+  },
+  {
+    "step": "team dashboard belongs to workspace navigation group",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c4-3ce2-7247-a71f-32f38835cc6f/projects/01a164c4-406a-7325-af31-f7b6bb15a9bc/tasks/01a164c4-4908-71f1-8cc2-7503d71fb099",
+    "status": 200
+  },
+  {
+    "step": "final detail contains mobile close action and journey",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/css/workflow-experience.css",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/js/app-ui.js",
+    "status": 200
+  },
+  {
+    "step": "COMPLETE",
+    "assertions": 5,
+    "requests": 9
+  }
+]

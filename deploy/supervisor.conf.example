@@ -1,0 +1,28 @@
+# Replace /srv/work-management/current and service user for the actual host.
+[program:work-management-ai]
+command=/usr/bin/php /srv/work-management/current/artisan queue:work database --queue=work-management-ai --sleep=3 --tries=3 --timeout=45 --max-time=3600
+directory=/srv/work-management/current
+user=www-data
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stopwaitsecs=90
+redirect_stderr=true
+stdout_logfile=/srv/work-management/shared/storage/logs/worker-ai.log
+stdout_logfile_maxbytes=10MB
+stdout_logfile_backups=5
+
+[program:work-management-reminders]
+command=/usr/bin/php /srv/work-management/current/artisan queue:work database --queue=work-management-reminders --sleep=3 --tries=3 --timeout=45 --max-time=3600
+directory=/srv/work-management/current
+user=www-data
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stopwaitsecs=90
+redirect_stderr=true
+stdout_logfile=/srv/work-management/shared/storage/logs/worker-reminders.log
+stdout_logfile_maxbytes=10MB
+stdout_logfile_backups=5

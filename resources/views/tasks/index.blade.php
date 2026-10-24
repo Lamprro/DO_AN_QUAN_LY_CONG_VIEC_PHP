@@ -5,91 +5,19 @@
         <h1 style="margin: 0;">Quản lý Công việc</h1>
         <p class="muted" style="margin-top: 0.25rem;">Danh sách công việc, phân quyền thực hiện và theo dõi tiến độ</p>
     </div>
-    <div class="actions"><a class="button secondary" href="{{ route($routePrefix.'.index',array_merge($routeParams,$filters,['view'=>'board'])) }}">Bảng Kanban</a>
-        <a class="button secondary" href="{{ route($routePrefix.'.tree',$routeParams) }}">
-            🌳 Xem cây công việc
-        </a>
-        <a class="button secondary" href="{{ $project ? route('workspaces.projects.show',[$workspace,$project]) : route('workspaces.show',$workspace) }}">
-            ‹ Về tổng quan
-        </a>
+    <div class="actions">
         @if($canCreate)
             <a class="button" href="{{ route($routePrefix.'.create',$routeParams) }}">
-                <span>+</span> Tạo task mới
+                <span>+</span> Tạo công việc
             </a>
         @endif
     </div>
 </div>
 
-<!-- Preset Quick Filters -->
-<div class="preset-bar">
-    @foreach(['all'=>'📋 Tất cả việc','mine'=>'👤 Việc của tôi','review'=>'⏳ Chờ tôi duyệt','blocked'=>'🚫 Đang bị chặn','overdue'=>'⚠️ WORK quá hạn'] as $value=>$label)
-        <a class="preset-chip {{ ($filters['preset']??'all') === $value ? 'active' : '' }}"
-           href="{{ route($routePrefix.'.index', array_merge($routeParams, ['preset'=>$value])) }}">
-            {{ $label }}
-        </a>
-    @endforeach
-</div>
-
-@include('tasks._utilities')
-
-<!-- Search & Advanced Filter Form -->
-<form method="GET" action="{{ route($routePrefix.'.index',$routeParams) }}" class="card" data-form="task-search" style="margin-bottom: 1.5rem; padding: 1.25rem;">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 1rem; align-items: end;">
-        <div>
-            <label for="preset">Bộ lọc nhanh</label>
-            <select name="preset" id="preset">
-                @foreach(['all'=>'Tất cả','mine'=>'Việc của tôi','review'=>'Chờ tôi duyệt','blocked'=>'Đang bị chặn','overdue'=>'WORK quá hạn'] as $key=>$label)
-                    <option value="{{ $key }}" @selected(($filters['preset']??'all')===$key)>{{ $label }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <x-input name="q" label="Tìm tiêu đề hoặc mã" :value="$filters['q']??''" placeholder="Nhập từ khóa hoặc mã..." />
-        </div>
-        <div>
-            <label for="status">Trạng thái</label>
-            <select id="status" name="status">
-                <option value="">Tất cả trạng thái</option>
-                @foreach(\App\Enums\TaskStatus::cases() as $s)
-                    <option value="{{ $s->value }}" @selected(($filters['status']??'')===$s->value)>{{ \App\Support\UiLabels::text($s) }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <label for="priority">Mức ưu tiên</label>
-            <select id="priority" name="priority">
-                <option value="">Tất cả ưu tiên</option>
-                @foreach(\App\Enums\TaskPriority::cases() as $p)
-                    <option value="{{ $p->value }}" @selected(($filters['priority']??'')===$p->value)>{{ \App\Support\UiLabels::text($p) }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <label for="assignee_id">Người thực hiện</label>
-            <select id="assignee_id" name="assignee_id">
-                <option value="">Tất cả thành viên</option>
-                @foreach($people as $person)
-                    <option value="{{ $person->user_id }}" @selected(($filters['assignee_id']??'')===$person->user_id)>{{ $person->user->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            @include('shared.list-controls',['sortOptions'=>['created_at'=>'Ngày tạo','code'=>'Mã task','title'=>'Tiêu đề','priority'=>'Mức ưu tiên','deadline_at'=>'Hạn hoàn thành']])
-        </div>
-        <div>
-            <label for="per_page">Hiển thị mỗi trang</label>
-            <select id="per_page" name="per_page">
-                @foreach([10,25,50] as $n)
-                    <option value="{{ $n }}" @selected((int)($filters['per_page']??10)===$n)>{{ $n }} dòng</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-    <div class="actions" style="margin-top: 1.25rem; margin-bottom: 0;">
-        <button type="submit">Lọc công việc</button>
-        <a href="{{ route($routePrefix.'.index',$routeParams) }}" class="button secondary">Xóa bộ lọc</a>
-    </div>
-</form>
+@include('tasks._view-nav')
+@include('tasks._filters')
+<details class="card task-tools" @if($errors->any()) open @endif><summary>Bộ lọc đã lưu và cập nhật hàng loạt</summary><div class="task-tools-content">@include('tasks._utilities')</div></details>
+<p class="result-summary" role="status"><strong>{{ $tasks->total() }}</strong> công việc phù hợp · {{ $tasks->firstItem()??0 }}–{{ $tasks->lastItem()??0 }} trên trang này</p>
 
 <!-- Task Data Table -->
 <section class="card table-wrap mobile-data-table" data-page="tasks-index">
@@ -175,7 +103,7 @@
                         <p class="muted">Thử thay đổi bộ lọc hoặc tạo công việc mới để bắt đầu theo dõi.</p>
                         @if($canCreate)
                             <div style="margin-top: 1rem;">
-                                <a class="button" href="{{ route($routePrefix.'.create',$routeParams) }}">Tạo task mới</a>
+                                <a class="button" href="{{ route($routePrefix.'.create',$routeParams) }}">Tạo công việc</a>
                             </div>
                         @endif
                     </td>

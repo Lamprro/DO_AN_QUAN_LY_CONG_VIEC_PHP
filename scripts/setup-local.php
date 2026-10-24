@@ -21,6 +21,14 @@ function artisan(array $args): void
         exit(1);
     }
 }
+// Check the effective cached environment before changing cache, keys or schema.
+require $root.'/vendor/autoload.php';
+$guardApp = require $root.'/bootstrap/app.php';
+$guardApp->make(Kernel::class)->bootstrap();
+if (! $guardApp->environment(['local', 'testing'])) {
+    fwrite(STDERR, "Local setup is disabled outside local/testing. Use the production runbook.\n");
+    exit(1);
+}
 artisan(['config:clear', '--no-ansi']);
 require $root.'/vendor/autoload.php';
 $app = require $root.'/bootstrap/app.php';

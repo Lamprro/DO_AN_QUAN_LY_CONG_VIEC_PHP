@@ -1,0 +1,113 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16667-f3de-725b-a1c5-4e411bfd6f2c/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16667-f3de-725b-a1c5-4e411bfd6f2c/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/team-calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/team-calendar",
+    "status": 200
+  },
+  {
+    "step": "draft has proposal but no old blocking relations",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16667-f3de-725b-a1c5-4e411bfd6f2c",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16667-f3de-725b-a1c5-4e411bfd6f2c",
+    "status": 200
+  },
+  {
+    "step": "delete returns business feedback and keeps proposal history",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "foreign keys valid",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE"
+  }
+]

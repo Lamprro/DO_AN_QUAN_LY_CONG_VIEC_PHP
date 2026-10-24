@@ -1,0 +1,176 @@
+{
+  "configuration_passed": false,
+  "production_mode": true,
+  "runtime_checked": false,
+  "checks": [
+    {
+      "check": "php",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.pdo",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.mbstring",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.openssl",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.fileinfo",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.ctype",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.tokenizer",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.xml",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.dom",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "extension.session",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "app_key",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "storage",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "private_files",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "database.tables",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "database.migrations",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "no_demo_accounts",
+      "passed": false,
+      "action": "Use a clean production database; do not publish public demo accounts."
+    },
+    {
+      "check": "cache.database",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "cache.file",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "session_revocation",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "queue_database",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "queue_retry_after",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "environment",
+      "passed": false,
+      "action": "Set APP_ENV=production."
+    },
+    {
+      "check": "debug_off",
+      "passed": false,
+      "action": "Set APP_DEBUG=false."
+    },
+    {
+      "check": "https_origin",
+      "passed": false,
+      "action": "Set APP_URL to the actual HTTPS origin; confirm certificate and reverse proxy separately."
+    },
+    {
+      "check": "secure_sessions",
+      "passed": false,
+      "action": "Enable secure, HTTP-only encrypted sessions and SameSite=Lax or Strict."
+    },
+    {
+      "check": "email_verified",
+      "passed": false,
+      "action": "Require verified emails and configure delivery before opening registration."
+    },
+    {
+      "check": "invitation_redis",
+      "passed": false,
+      "action": "Configure shared Redis for invitation locks and records."
+    },
+    {
+      "check": "shared_cache",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "mail_delivery_config",
+      "passed": false,
+      "action": "Configure the shipped SMTP transport and a real sender; deliver/receive a real verification mail before launch."
+    },
+    {
+      "check": "config_cached",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "routes_cached",
+      "passed": true,
+      "action": ""
+    },
+    {
+      "check": "worker_timeout_support",
+      "passed": false,
+      "action": "Run production queue workers on Linux with pcntl; Windows timeout semantics are not validated."
+    },
+    {
+      "check": "explicit_proxy_list",
+      "passed": true,
+      "action": ""
+    }
+  ],
+  "limits": [
+    "This is not a production certification. Verify HTTP/TLS, actual mail receipt, backup restoration, load and third-party integrations on the target infrastructure.",
+    "Heartbeat freshness is recent worker activity, not proof of future availability."
+  ]
+}

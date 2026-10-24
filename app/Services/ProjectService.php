@@ -12,6 +12,7 @@ use App\Support\ProjectAccess;
 use App\Support\WorkspaceAccess;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 
 class ProjectService
@@ -72,8 +73,8 @@ class ProjectService
             if ($project->status !== ProjectStatus::DRAFT) {
                 throw ValidationException::withMessages(['project' => 'Chỉ xóa project nháp trống; hãy dùng lưu trữ.']);
             }
-            foreach (['projects' => 'parent_project_id', 'tasks' => 'project_id', 'plans' => 'project_id', 'ai_runs' => 'project_id', 'calendar_events' => 'project_id', 'github_logs' => 'project_id', 'report_snapshots' => 'project_id', 'notifications' => 'project_id'] as $table => $field) {
-                if (DB::table($table)->where($field, $project->id)->exists()) {
+            foreach (['projects' => 'parent_project_id', 'tasks' => 'project_id', 'plans' => 'project_id', 'ai_runs' => 'project_id', 'calendar_events' => 'project_id', 'github_logs' => 'project_id', 'report_snapshots' => 'project_id', 'notifications' => 'project_id', 'calendar_proposals' => 'project_id', 'task_templates' => 'project_id'] as $table => $field) {
+                if (Schema::hasTable($table) && DB::table($table)->where($field, $project->id)->exists()) {
                     throw ValidationException::withMessages(['project' => 'Project có dữ liệu liên quan; hãy dùng lưu trữ.']);
                 }
             }

@@ -1,0 +1,28 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/register",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/register",
+    "status": 200
+  },
+  {
+    "step": "registration requires verification",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "unverified cannot enter business pages",
+    "verified": true
+  }
+]

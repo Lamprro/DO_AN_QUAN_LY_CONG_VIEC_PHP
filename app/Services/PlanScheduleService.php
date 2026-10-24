@@ -16,6 +16,7 @@ class PlanScheduleService
         $payload = app(PlanService::class)->payload($base);
         $payload['slots'] = [];
         $zone = $base->workspace->timezone;
+        $hours = app(WorkHoursService::class)->values($actor, $zone);
         $start = CarbonImmutable::createFromFormat('!Y-m-d', $from, $zone);
         if ($start->lt(CarbonImmutable::now($zone)->startOfDay())) {
             throw ValidationException::withMessages(['from' => 'Chọn hôm nay hoặc ngày tương lai.']);
@@ -59,15 +60,19 @@ class PlanScheduleService
                 }
                 $remaining = (int) $row['estimate_minutes'];
                 $last = $earliest;
-                for ($day = $start; $remaining > 0 && $day->lt($start->addDays(93)); $day = $day->addDay()) {
-                    if (! in_array($day->dayOfWeekIso, config('work_schedule.weekdays'), true)) {
+                for ($day = $start->setTimezone($hours['timezone'])->startOfDay(); $remaining > 0 && $day->lt($start->addDays(93)); $day = $day->addDay()) {
+                    if (! in_array($day->dayOfWeekIso, $hours['weekdays'], true)) {
                         continue;
                     }
-                    foreach (config('work_schedule.windows') as $window) {
-                        $cursor = CarbonImmutable::parse($day->format('Y-m-d').' '.$window['start'], $zone);
-                        $end = CarbonImmutable::parse($day->format('Y-m-d').' '.$window['end'], $zone);
+                    foreach ($hours['windows'] as $window) {
+                        try {
+                            $cursor = app(CalendarService::class)->localTime($day->format('Y-m-d').'T'.$window['start'], $hours['timezone'], false)->setTimezone($hours['timezone']);
+                            $end = app(CalendarService::class)->localTime($day->format('Y-m-d').'T'.$window['end'], $hours['timezone'], false)->setTimezone($hours['timezone']);
+                        } catch (ValidationException) {
+                            continue;
+                        }
                         while ($remaining > 0 && $cursor->lt($end)) {
-                            $size = min((int) config('work_schedule.slot_minutes'), $remaining);
+                            $size = min((int) $hours['slot_minutes'], $remaining);
                             $next = $cursor->addMinutes($size);
                             if ($next->gt($end)) {
                                 break;
@@ -75,12 +80,20 @@ class PlanScheduleService
                             if ($cursor->gte($earliest) && $cursor->gte(CarbonImmutable::now($zone))) {
                                 $conflict = $busy->contains(fn ($e) => $e->starts_at->lt($next->utc()) && $e->ends_at->gt($cursor->utc()));
                                 foreach ($payload['slots'] as $s) {
-                                    if ($s['starts_at'] < $next->format('Y-m-d\TH:i') && $s['ends_at'] > $cursor->format('Y-m-d\TH:i')) {
+                                    if ($s['starts_at'] < $next->setTimezone($zone)->format('Y-m-d\TH:i') && $s['ends_at'] > $cursor->setTimezone($zone)->format('Y-m-d\TH:i')) {
                                         $conflict = true;
                                     }
                                 }
                                 if (! $conflict) {
-                                    $payload['slots'][] = ['task_ref' => $ref, 'starts_at' => $cursor->format('Y-m-d\TH:i'), 'ends_at' => $next->format('Y-m-d\TH:i')];
+                                    try {
+                                        app(CalendarService::class)->localTime($cursor->setTimezone($zone)->format('Y-m-d\TH:i'), $zone, false);
+                                        app(CalendarService::class)->localTime($next->setTimezone($zone)->format('Y-m-d\TH:i'), $zone, false);
+                                    } catch (ValidationException) {
+                                        $cursor = $next;
+
+                                        continue;
+                                    }
+                                    $payload['slots'][] = ['task_ref' => $ref, 'starts_at' => $cursor->setTimezone($zone)->format('Y-m-d\TH:i'), 'ends_at' => $next->setTimezone($zone)->format('Y-m-d\TH:i')];
                                     $remaining -= $size;
                                     $last = $next;
                                 }

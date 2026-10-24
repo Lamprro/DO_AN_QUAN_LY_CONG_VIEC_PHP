@@ -1,0 +1,219 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/dashboard",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/reports",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers/01a164e7-1ce9-713f-8bee-b8aecd6f2efc/adjust",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers/01a164e7-1ce9-713f-8bee-b8aecd6f2efc/adjust",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers/01a164e7-1ce9-713f-8bee-b8aecd6f2efc/adjust",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/timers/01a164e7-1ce9-713f-8bee-b8aecd6f2efc/adjust",
+    "status": 200
+  },
+  {
+    "step": "own time correction persists audit",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/timers/01a164e7-1ce9-713f-8bee-b8aecd6f2efc/adjust",
+    "status": 200
+  },
+  {
+    "step": "correction stale preserves entry and audit",
+    "verified": true
+  },
+  {
+    "step": "saved report remains byte-identical",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/dashboard",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/reports",
+    "status": 200
+  },
+  {
+    "step": "fresh report follows actual corrected time",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/reports/01a164e9-3d7a-7277-ab45-f48b4eb1f15a/export",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/reports/01a164e9-3d7a-7277-ab45-f48b4eb1f15a/print",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/ai-runs/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/ai-runs",
+    "status": 200
+  },
+  {
+    "step": "actual AI request queued",
+    "verified": true
+  },
+  {
+    "step": "actual worker leaves disabled provider failed not fabricated",
+    "verified": true,
+    "worker_output": "  2026-10-22 18:39:35 App\\Jobs\\ProcessAiRun .................................................................. RUNNING\n  2026-10-22 18:39:35 App\\Jobs\\ProcessAiRun ............................................................ 125.43ms DONE\n"
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/operations",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/operations",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted ProductionReview1792694197 due reminder",
+    "verified": true
+  },
+  {
+    "step": "reminder ledger queued",
+    "verified": true
+  },
+  {
+    "step": "actual reminder sent in-app",
+    "verified": true
+  },
+  {
+    "step": "repeat scan does not duplicate reminders",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/notifications",
+    "status": 200
+  },
+  {
+    "step": "COMPLETE",
+    "real_timer_and_worker": true
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  }
+]

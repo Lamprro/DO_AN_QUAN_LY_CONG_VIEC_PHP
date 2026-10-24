@@ -1,0 +1,29 @@
+[
+  {
+    "command": [
+      "C:/xampp/php/php.exe",
+      "-l",
+      "app/Services/AppShell.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/AppShell.php\n"
+  },
+  {
+    "command": [
+      "C:/xampp/php/php.exe",
+      "artisan",
+      "view:clear"
+    ],
+    "exit": 0,
+    "output": "\n   INFO  Compiled views cleared successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:/xampp/php/php.exe",
+      "artisan",
+      "view:cache"
+    ],
+    "exit": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  }
+]

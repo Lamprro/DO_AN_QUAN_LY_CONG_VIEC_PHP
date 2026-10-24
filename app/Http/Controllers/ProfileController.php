@@ -24,6 +24,7 @@ class ProfileController extends Controller
             $changed = $user->email !== $request->validated('email');
             $user->fill($request->safe()->only(['name', 'email', 'timezone']));
             if ($changed) {
+                DB::table('password_reset_tokens')->whereIn('email', [$user->getOriginal('email'), $user->email])->delete();
                 $user->email_verified_at = null;
                 $user->remember_token = Str::random(60);
             }
@@ -34,6 +35,12 @@ class ProfileController extends Controller
         });
         $request->session()->regenerate();
 
+        if (config('security.require_verified_email') && ! $request->user()->hasVerifiedEmail()) {
+            $request->user()->sendEmailVerificationNotification();
+
+            return to_route('verification.notice');
+        }
+
         return back()->with('success', 'Đã cập nhật hồ sơ.');
     }
 
@@ -41,6 +48,7 @@ class ProfileController extends Controller
     {
         DB::transaction(function () use ($request) {
             $user = $request->user();
+            DB::table('password_reset_tokens')->where('email', $user->email)->delete();
             $user->password = $request->validated('password');
             $user->remember_token = Str::random(60);
             $user->save();

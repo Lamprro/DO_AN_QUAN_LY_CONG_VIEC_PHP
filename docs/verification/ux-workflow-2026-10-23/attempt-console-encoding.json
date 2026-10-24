@@ -1,0 +1,76 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164bf-8a4a-71e6-b30a-b1d4325e2f56/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164bf-8a4a-71e6-b30a-b1d4325e2f56/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164bf-8a4a-71e6-b30a-b1d4325e2f56/projects/01a164bf-8e9d-7241-ac53-bc009bf362ae",
+    "status": 200
+  },
+  {
+    "step": "project guide renders four real steps and permission-aware links",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164bf-8a4a-71e6-b30a-b1d4325e2f56/projects/01a164bf-8e9d-7241-ac53-bc009bf362ae/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164bf-8a4a-71e6-b30a-b1d4325e2f56/projects/01a164bf-8e9d-7241-ac53-bc009bf362ae/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Chuẩn bị nội dung ra mắt",
+    "verified": true
+  }
+]

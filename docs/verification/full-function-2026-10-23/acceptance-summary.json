@@ -1,0 +1,74 @@
+{
+  "flows": {
+    "flow-setup.json": {
+      "checks": 8,
+      "http_requests": 30,
+      "completed": true
+    },
+    "flow-hours.json": {
+      "checks": 8,
+      "http_requests": 22,
+      "completed": true
+    },
+    "flow-team.json": {
+      "checks": 12,
+      "http_requests": 35,
+      "completed": true
+    },
+    "flow-watchers.json": {
+      "checks": 10,
+      "http_requests": 28,
+      "completed": true
+    },
+    "flow-templates.json": {
+      "checks": 13,
+      "http_requests": 29,
+      "completed": true
+    },
+    "flow-edges.json": {
+      "checks": 10,
+      "http_requests": 47,
+      "completed": true
+    },
+    "flow-parallel.json": {
+      "checks": 3,
+      "http_requests": 4,
+      "completed": true
+    },
+    "flow-operations.json": {
+      "checks": 40,
+      "http_requests": 8,
+      "completed": true
+    },
+    "flow-delete-guard.json": {
+      "checks": 3,
+      "http_requests": 16,
+      "completed": true
+    },
+    "flow-cancel-history.json": {
+      "checks": 4,
+      "http_requests": 18,
+      "completed": true
+    },
+    "regression-core.json": {
+      "checks": 32,
+      "http_requests": 84,
+      "completed": true
+    },
+    "regression-calendar-plan.json": {
+      "checks": 11,
+      "http_requests": 35,
+      "completed": true
+    },
+    "regression-reports-queue.json": {
+      "checks": 11,
+      "http_requests": 28,
+      "completed": true
+    }
+  },
+  "totals": {
+    "checks": 165,
+    "http_requests": 384
+  },
+  "method": "Actual Laravel HTTP/session/CSRF, SQLite read-back, PHP CLI/worker; no test classes/mocks. Attempts and fixture repair excluded."
+}

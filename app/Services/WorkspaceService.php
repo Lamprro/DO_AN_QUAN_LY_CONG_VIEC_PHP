@@ -11,6 +11,7 @@ use App\Models\Workspace;
 use App\Models\WorkspaceMember;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 
 class WorkspaceService
@@ -70,8 +71,8 @@ class WorkspaceService
             if ($workspace->kind === WorkspaceKind::PERSONAL) {
                 throw ValidationException::withMessages(['workspace' => 'Không được xóa workspace cá nhân.']);
             }
-            foreach (['projects', 'tasks', 'ai_runs', 'plans', 'calendar_events', 'notifications', 'report_snapshots', 'integration_connections'] as $table) {
-                if (DB::table($table)->where('workspace_id', $workspace->id)->exists()) {
+            foreach (['projects', 'tasks', 'ai_runs', 'plans', 'calendar_events', 'notifications', 'report_snapshots', 'integration_connections', 'calendar_proposals', 'task_templates'] as $table) {
+                if (Schema::hasTable($table) && DB::table($table)->where('workspace_id', $workspace->id)->exists()) {
                     throw ValidationException::withMessages(['workspace' => 'Workspace có dữ liệu nghiệp vụ; không thể xóa.']);
                 }
             }

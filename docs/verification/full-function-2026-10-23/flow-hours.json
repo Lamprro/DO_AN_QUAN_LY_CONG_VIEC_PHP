@@ -1,0 +1,169 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/plans/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/plans",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "custom weekday and window persisted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "stale hours form cannot overwrite",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "overlap rejected without writes",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "general settings do not erase working hours",
+    "verified": true
+  },
+  {
+    "step": "existing plan snapshot remains unchanged",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/plans/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/plans",
+    "status": 200
+  },
+  {
+    "step": "new plan stores custom hours snapshot",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/plans/01a16643-ac7c-7259-bc63-1fbebc1822aa",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/plans/01a16643-ac7c-7259-bc63-1fbebc1822aa/schedule",
+    "status": 200
+  },
+  {
+    "step": "scheduler uses Saturday 10-11 and estimate duration",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE"
+  },
+  {
+    "step": "foreign keys valid",
+    "verified": true
+  }
+]

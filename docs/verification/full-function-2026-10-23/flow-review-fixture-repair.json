@@ -1,0 +1,34 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/calendar/01a16644-220c-724e-8073-c882043abdb7/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/calendar/01a16644-220c-724e-8073-c882043abdb7",
+    "status": 200
+  },
+  {
+    "step": "original review meeting cancelled through calendar edit",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "scope": "Disposable review fixture from failed attempt; no main data modified"
+  }
+]

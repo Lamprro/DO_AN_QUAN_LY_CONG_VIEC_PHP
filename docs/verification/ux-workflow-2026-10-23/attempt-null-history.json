@@ -1,0 +1,422 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192",
+    "status": 200
+  },
+  {
+    "step": "project guide renders four real steps and permission-aware links",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Chuẩn bị nội dung ra mắt",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Kiểm tra trải nghiệm đăng ký",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted Đối soát dữ liệu và báo cáo",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 200
+  },
+  {
+    "step": "flow is connected to isolated SQL database",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192",
+    "status": 200
+  },
+  {
+    "step": "one active sidebar section: Tổng quan dự án",
+    "verified": true,
+    "active": [
+      "Tổng quan dự án"
+    ]
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 200
+  },
+  {
+    "step": "one active sidebar section: Công việc",
+    "verified": true,
+    "active": [
+      "Công việc"
+    ]
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "one active sidebar section: Công việc",
+    "verified": true,
+    "active": [
+      "Công việc"
+    ]
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/edit",
+    "status": 200
+  },
+  {
+    "step": "one active sidebar section: Công việc",
+    "verified": true,
+    "active": [
+      "Công việc"
+    ]
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/tree",
+    "status": 200
+  },
+  {
+    "step": "one active sidebar section: Cây công việc",
+    "verified": true,
+    "active": [
+      "Cây công việc"
+    ]
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/members",
+    "status": 200
+  },
+  {
+    "step": "one active sidebar section: Thành viên dự án",
+    "verified": true,
+    "active": [
+      "Thành viên dự án"
+    ]
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/plans/create",
+    "status": 200
+  },
+  {
+    "step": "one active sidebar section: Kế hoạch",
+    "verified": true,
+    "active": [
+      "Kế hoạch"
+    ]
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/calendar/create",
+    "status": 200
+  },
+  {
+    "step": "one active sidebar section: Lịch",
+    "verified": true,
+    "active": [
+      "Lịch"
+    ]
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 200
+  },
+  {
+    "step": "Kanban filter matches SQL leaf rows and workspace timezone",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 200
+  },
+  {
+    "step": "list preserves search and priority when switching",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 200
+  },
+  {
+    "step": "empty board shows zero count and no task cards",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/tree",
+    "status": 200
+  },
+  {
+    "step": "tree gives unfiltered context notice and current view",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/blockers",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "journey explains actual blocker and links to its section",
+    "verified": true
+  },
+  {
+    "step": "start action is disabled in actual form",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/status",
+    "status": 200
+  },
+  {
+    "step": "forged transition cannot bypass blocker",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/blockers/01a164c1-6114-70a8-a2b8-4addf65854a2",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "real transition and journey agree: IN_PROGRESS",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "real transition and journey agree: REVIEW",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/status",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "real transition and journey agree: DONE",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/status",
+    "status": 200
+  },
+  {
+    "step": "reopen still requires reason",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164c1-2e6b-7055-a440-d9e5a6f6774b/projects/01a164c1-330b-70f5-aaa7-28e0ab562192/tasks/01a164c1-394f-7214-a406-8181efc0b705/status",
+    "status": 200
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "mobile": {
+    "width": 390,
+    "height": 844,
+    "noHorizontalOverflow": true,
+    "title": "T-01M5JC56ZDCWSKWE9022TQGDJA — Kiểm tra trải nghiệm đăng ký — đã cập nhật trên điện thoại",
+    "currentStep": "2\nThực hiện\nHiện tại",
+    "task": "01a164c2-9bfc-72e8-ad6f-1d0b36fd6a50",
+    "menuCloseVerified": true,
+    "anchorFocus": "task-workflow",
+    "quickEditSubmitted": true,
+    "listNoOverflow": true,
+    "boardNoPageOverflow": true,
+    "boardHasScrollableColumns": true
+  },
+  "desktop": {
+    "width": 1366,
+    "height": 900,
+    "noHorizontalOverflow": true,
+    "activeNavigation": "Công việc",
+    "singleResetLink": true
+  },
+  "consoleErrors": [],
+  "filters": {
+    "listToBoardPreserved": true,
+    "resetKeepsBoard": true,
+    "onlyOneReset": true,
+    "bulkToolsOpenedOnSelection": true
+  },
+  "database_readback": {
+    "id": "01a164c2-9bfc-72e8-ad6f-1d0b36fd6a50",
+    "title": "Kiểm tra trải nghiệm đăng ký — đã cập nhật trên điện thoại",
+    "status": "IN_PROGRESS",
+    "estimate_minutes": 120,
+    "revision": 3
+  },
+  "foreign_key_violations": 0
+}

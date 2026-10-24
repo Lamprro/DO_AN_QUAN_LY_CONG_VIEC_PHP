@@ -1,6 +1,7 @@
 
 @props(['title'=>'Quản lý công việc'])
-<!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}" data-theme-preference="{{ $preferences['theme']??'system' }}" data-theme-owner="{{ auth()->id()??'guest' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ asset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ asset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ asset('css/p1-observation.css') }}"><link rel="stylesheet" href="{{ asset('css/modern-theme.css') }}"><link rel="stylesheet" href="{{ asset('css/review-polish.css') }}"><script src="{{ asset('js/theme.js') }}"></script><script src="{{ asset('js/app-ui.js') }}" defer></script></head>
+@php($versionedAsset = fn (string $path) => asset($path).'?v='.(is_file(public_path($path)) ? filemtime(public_path($path)) : 'missing'))
+<!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}" data-theme-preference="{{ $preferences['theme']??'system' }}" data-theme-owner="{{ auth()->id()??'guest' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ $versionedAsset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p1-observation.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/modern-theme.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/review-polish.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/workflow-experience.css') }}"><script src="{{ $versionedAsset('js/theme.js') }}"></script><script src="{{ $versionedAsset('js/app-ui.js') }}" defer></script></head>
 <body><a href="#main-content" class="skip-link">Tới nội dung chính</a><header class="app-header"><a href="{{ route('home') }}" class="brand">Work Management</a>
 @auth
 <button type="button" class="secondary nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="app-sidebar">Menu</button>
@@ -26,11 +27,15 @@
 @endauth
 <div class="app-frame {{ auth()->check()?'':'guest-frame' }}">
 @auth
-<button type="button" class="nav-backdrop" aria-label="Đóng menu" hidden></button><aside id="app-sidebar" class="app-sidebar" aria-label="Điều hướng ứng dụng"><p class="eyebrow">{{ $shell['project']?'Project':($shell['workspace']?'Workspace':'Cá nhân') }}</p><nav>
-@foreach($shell['menu'] as $item)<a href="{{ $item['url'] }}"
-@if($item['active']) aria-current="page"
-@endif>{{ $item['label'] }}</a>
-@endforeach</nav><p class="muted">Quyền project được quản lý riêng với workspace.</p></aside>
+<button type="button" class="nav-backdrop" aria-label="Đóng menu" hidden></button><aside id="app-sidebar" class="app-sidebar" aria-label="Điều hướng ứng dụng">
+<button type="button" class="secondary nav-close" data-close-nav>Đóng điều hướng</button>
+<div class="nav-context"><span class="eyebrow">{{ $shell['project']?'Dự án hiện tại':($shell['workspace']?'Không gian hiện tại':'Khu vực cá nhân') }}</span><strong>{{ $shell['project']?->name ?? $shell['workspace']?->name ?? 'Công việc của bạn' }}</strong></div>
+@foreach(collect($shell['menu'])->groupBy('group')->sortBy(fn($items,$group)=>array_search($group,['Dự án hiện tại','Công việc cá nhân','Không gian làm việc','Cá nhân'])) as $group=>$items)
+<nav class="nav-group" aria-label="{{ $group }}"><h2>{{ $group }}</h2>
+@foreach($items as $item)<a href="{{ $item['url'] }}" @if($item['active']) aria-current="page" @endif>{{ $item['label'] }}</a>@endforeach
+</nav>
+@endforeach
+</aside>
 @endauth
 <main id="main-content" tabindex="-1">
 @if(!empty($shell['breadcrumbs']))<nav class="breadcrumbs" aria-label="Đường dẫn">

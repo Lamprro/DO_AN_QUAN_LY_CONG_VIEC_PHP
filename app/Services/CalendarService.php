@@ -106,7 +106,8 @@ class CalendarService
             $eligible = $project ? $this->projects->eligibleMembers($workspace, $project)->pluck('user_id')->all()
                 : $workspace->members()->where('status', 'active')->with('user')->get()
                     ->filter(fn ($member) => $this->workspaces->allows($member->user, $workspace, 'workspace.view') && $this->workspaces->allows($member->user, $workspace, 'calendar.view'))->pluck('user_id')->all();
-            if (array_diff($participants, $eligible)) {
+            $keepsHistoricalParticipants = $event && $data['status'] === 'cancelled' && $participants === array_values($event->participants ?? []);
+            if (array_diff($participants, $eligible) && ! $keepsHistoricalParticipants) {
                 $this->fail('participants', 'Người tham gia phải đang hoạt động, có quyền xem task trong phạm vi.');
             }
             $start = $this->localTime($data['starts_at'], $data['timezone'], (bool) $data['all_day']);

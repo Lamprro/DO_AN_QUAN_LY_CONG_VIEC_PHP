@@ -15,7 +15,7 @@ class LoginRequest extends EmailFormRequest
 
     public function rules(): array
     {
-        return ['email' => ['required', 'string', 'email'], 'password' => ['required', 'string'], 'remember' => ['sometimes', 'boolean']];
+        return ['email' => ['required', 'string', 'email', 'max:255'], 'password' => ['required', 'string'], 'remember' => ['sometimes', 'boolean']];
     }
 
     public function authenticate(): void

@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
 use App\Services\DeadlineInsight;
+use App\Services\TaskCollaborationService;
 use App\Services\TaskEditConflict;
 use App\Services\TaskEditData;
 use App\Services\TaskService;
@@ -133,7 +134,7 @@ class TaskController extends Controller
         $workflowUi = app(TaskWorkflowService::class)->availability($request->user(), $task);
         $statusOptions = app(TaskWorkflowService::class)->options($request->user(), $task);
 
-        return view('tasks.show', $this->context($request, $workspace, $project) + compact('deadlineInsight', 'activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'workflowUi', 'deletable'));
+        return view('tasks.show', $this->context($request, $workspace, $project) + compact('deadlineInsight', 'activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'workflowUi', 'deletable') + app(TaskCollaborationService::class)->viewData($task));
     }
 
     public function edit(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)

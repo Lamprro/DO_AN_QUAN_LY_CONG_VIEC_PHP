@@ -31,7 +31,7 @@ class AppShell
         if (! $workspace instanceof Workspace || ! $access->allows($actor, $workspace, 'workspace.view')) {
             $workspace = null;
         }
-        $project = $request->route('project');
+        $project = $request->route('project') ?? $request->attributes->get('scope_project');
         if (! $project instanceof Project && $workspace) {
             $plan = $request->route('plan');
             $query = $request->query('project_id');
@@ -47,12 +47,22 @@ class AppShell
         $shell['workspace'] = $workspace;
         $shell['project'] = $project;
         $menu = [];
-        $add = function ($label, $route, $params = []) use (&$menu) {
-            $menu[] = ['label' => $label, 'url' => route($route, $params), 'active' => url()->current() === strtok(route($route, $params), '?')];
+        $currentRoute = $request->route()?->getName() ?? '';
+        $add = function ($label, $route, $params = []) use (&$menu, $currentRoute, $project, $workspace) {
+            $prefix = Str::beforeLast($route, '.');
+            $score = $currentRoute === $route ? 1000 + strlen($route)
+                : (str_ends_with($route, '.index') && str_starts_with($currentRoute, $prefix.'.') ? strlen($prefix) : 0);
+            $group = match (true) {
+                ! str_starts_with($route, 'workspaces.') || in_array($route, ['workspaces.index', 'workspaces.operations', 'workspaces.reminders'], true) => 'Cá nhân',
+                in_array($route, ['workspaces.show', 'workspaces.projects.index', 'workspaces.members.index', 'workspaces.roles.index'], true) => 'Không gian làm việc',
+                default => $project ? 'Dự án hiện tại' : ($workspace?->kind->value === 'personal' ? 'Công việc cá nhân' : 'Không gian làm việc'),
+            };
+            $menu[] = ['label' => $label, 'url' => route($route, $params), 'active' => false, 'group' => $group, 'score' => $score];
         };
-        $add('Workspace', 'workspaces.index');
+        $add('Không gian làm việc', 'workspaces.index');
         $add('Giờ thực tế của tôi', 'timers.index');
         $add('Thông báo', 'notifications.index');
+        $add('Giờ làm việc', 'work-hours.edit');
         $crumb = [['label' => 'Workspace', 'url' => route('workspaces.index')]];
         if ($workspace) {
             $crumb[] = ['label' => $workspace->name, 'url' => route('workspaces.show', $workspace)];
@@ -60,17 +70,17 @@ class AppShell
                 $add('Vận hành của tôi', 'workspaces.operations', $workspace);
             }
             $add('Nhắc việc của tôi', 'workspaces.reminders', $workspace);
-            $add('Tổng quan workspace', 'workspaces.show', $workspace);
-            $add('Projects', 'workspaces.projects.index', $workspace);
+            $add('Tổng quan không gian', 'workspaces.show', $workspace);
+            $add('Dự án', 'workspaces.projects.index', $workspace);
             if ($access->allows($actor, $workspace, 'workspace.manage_members')) {
-                $add('Thành viên workspace', 'workspaces.members.index', $workspace);
+                $add('Thành viên không gian', 'workspaces.members.index', $workspace);
             }
             if ($access->allows($actor, $workspace, 'workspace.manage_roles')) {
                 $add('Vai trò', 'workspaces.roles.index', $workspace);
             }
             if ($project) {
                 $crumb[] = ['label' => $project->name, 'url' => route('workspaces.projects.show', [$workspace, $project])];
-                $add('Tổng quan project', 'workspaces.projects.show', [$workspace, $project]);
+                $add('Tổng quan dự án', 'workspaces.projects.show', [$workspace, $project]);
             }
             if ($project || $workspace->kind->value === 'personal') {
                 $params = $project ? [$workspace, $project] : [$workspace];
@@ -78,6 +88,7 @@ class AppShell
                 if (app(TaskPolicy::class)->scope($actor, $workspace, $project, 'task.view')) {
                     $add('Công việc', $prefix.'.index', $params);
                     $add('Cây công việc', $prefix.'.tree', $params);
+                    $add('Mẫu / công việc lặp', 'workspaces.templates.index', [$workspace, 'project_id' => $project?->id]);
                 }
                 $scope = [$workspace, 'project_id' => $project?->id];
                 if (app(PlanService::class)->allowed($actor, $workspace, $project)) {
@@ -86,6 +97,7 @@ class AppShell
                 }
                 if (app(CalendarEventPolicy::class)->scope($actor, $workspace, $project, 'calendar.view')) {
                     $add('Lịch', 'workspaces.calendar.index', $scope);
+                    $add('Lịch nhóm / lời mời', 'workspaces.calendar.team', $scope);
                     if ($project) {
                         $add('Timeline', 'workspaces.projects.timeline', [$workspace, $project]);
                     }
@@ -94,17 +106,23 @@ class AppShell
                     $add('Dashboard / báo cáo', 'workspaces.dashboard', $scope);
                 }
                 if ($project && $projects->allows($actor, $project, 'project.manage_members')) {
-                    $add('Thành viên project', 'workspaces.projects.members.index', [$workspace, $project]);
+                    $add('Thành viên dự án', 'workspaces.projects.members.index', [$workspace, $project]);
                 }
                 if ($project && $projects->allows($actor, $project, 'integration.view')) {
-                    $add('GitHub logs', 'workspaces.projects.github.show', [$workspace, $project]);
+                    $add('Nhật ký GitHub', 'workspaces.projects.github.show', [$workspace, $project]);
                 }
             } elseif (app(ReportAccess::class)->scope($actor, $workspace, null)) {
                 $add('Dashboard workspace', 'workspaces.dashboard', $workspace);
             }
         }
+        $bestScore = max(array_column($menu, 'score'));
+        foreach ($menu as &$item) {
+            $item['active'] = $bestScore > 0 && $item['score'] === $bestScore;
+        }
+        unset($item);
         $task = $request->route('task');
         if ($task instanceof Task && $actor->can('view', $task)) {
+            $crumb[] = ['label' => 'Công việc', 'url' => route($project ? 'workspaces.projects.tasks.index' : 'workspaces.tasks.index', $project ? [$workspace, $project] : [$workspace])];
             $crumb[] = ['label' => $task->code, 'url' => null];
         }
         $plan = $request->route('plan');

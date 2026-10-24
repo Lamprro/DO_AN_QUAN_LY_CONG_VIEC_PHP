@@ -1,0 +1,129 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/team-calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/team-calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/team-calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/team-calendar/01a16669-7fb5-7333-b9c9-e1dc7e466d07/accept",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/calendar/01a16669-8343-7139-af1b-f9758e43fad6/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/calendar/01a16669-8343-7139-af1b-f9758e43fad6",
+    "status": 200
+  },
+  {
+    "step": "event participant saved while eligible",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/members/01a16641-fc9d-7192-8413-84e9bcd6327c",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/team-calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/team-calendar/01a16669-7fb5-7333-b9c9-e1dc7e466d07/cancel",
+    "status": 200
+  },
+  {
+    "step": "cancellation still works after attendee left without erasing history",
+    "verified": true
+  },
+  {
+    "step": "same accepted event cancelled, not a second event created",
+    "verified": true
+  },
+  {
+    "step": "foreign keys valid",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE"
+  }
+]

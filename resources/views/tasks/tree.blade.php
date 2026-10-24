@@ -31,6 +31,8 @@
     </div>
 </div>
 
+@include('tasks._view-nav',['taskView'=>'tree'])
+
 {{-- Thống kê tiến độ WORK lá --}}
 <section class="card" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">

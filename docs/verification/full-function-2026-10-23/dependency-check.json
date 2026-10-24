@@ -1,0 +1,8 @@
+{
+  "composer_validate_strict": true,
+  "platform_requirements": true,
+  "composer_audit_advisories": 0,
+  "php_version": "8.2.12",
+  "diff_check": true,
+  "scope": "Results from actual CLI on Windows23Oct2026; no dependency versions changed."
+}

@@ -1,0 +1,247 @@
+[
+  {
+    "step": "Artisan",
+    "command": "app:preflight --json",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "local preflight verifies DB/cache/lock/session wiring",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "app:preflight --production --json",
+    "exit_code": 1,
+    "verified": true
+  },
+  {
+    "step": "unsafe local configuration cannot claim production readiness",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "app:preflight --runtime --json",
+    "exit_code": 1,
+    "verified": true
+  },
+  {
+    "step": "missing scheduler and workers detected",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "schedule:run",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "queue:work database --queue=work-management-ai --stop-when-empty --tries=3",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "queue:work database --queue=work-management-reminders --stop-when-empty --tries=3",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "app:preflight --runtime --json",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "actual scheduler and worker invocations produce fresh heartbeats",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "schedule:list",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "recovery and token cleanup registered in actual schedule",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "config:clear",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "config:cache",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "production rejects hostile Host without debug details",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "db:seed --force",
+    "exit_code": 1,
+    "verified": true
+  },
+  {
+    "step": "production demo seeding refuses without writes",
+    "verified": true
+  },
+  {
+    "step": "local setup refuses production before mutations",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "config:clear",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "config:cache",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "app:backup-sqlite C:\\Users\\maiva\\AppData\\Local\\Temp\\wm-release-253tpyr7\\private-snapshot --workers-stopped",
+    "exit_code": 1,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "down --retry=60",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "maintenance gives standalone Vietnamese 503",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "app:backup-sqlite C:\\Users\\maiva\\AppData\\Local\\Temp\\wm-release-253tpyr7\\project\\public\\unsafe-backup --workers-stopped",
+    "exit_code": 1,
+    "verified": true
+  },
+  {
+    "step": "backup refuses web/source destination",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "app:backup-sqlite C:\\Users\\maiva\\AppData\\Local\\Temp\\wm-release-253tpyr7\\private-snapshot --workers-stopped",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "snapshot matches every table and private attachment hash",
+    "verified": true
+  },
+  {
+    "step": "backup contains no env or key",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "config:cache",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "route:cache",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "view:cache",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/01a164e6-badc-7086-8fb2-b460f039aa61",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/reports/01a164e9-3d7a-7277-ab45-f48b4eb1f15a",
+    "status": 200
+  },
+  {
+    "step": "restored private attachment downloads original bytes through policy route",
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "app:preflight --json",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "restored application database/cache configuration valid",
+    "verified": true
+  },
+  {
+    "step": "restore COMPLETE",
+    "database_and_private_files": true,
+    "app_key_restored_from_separate_private_environment": true,
+    "second_physical_host": false
+  },
+  {
+    "step": "Artisan",
+    "command": "up",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "original isolated install available after drill",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "main_database_untouched": true,
+    "production_deployed": false
+  },
+  {
+    "step": "Artisan",
+    "command": "config:clear",
+    "exit_code": 0,
+    "verified": true
+  },
+  {
+    "step": "Artisan",
+    "command": "up",
+    "exit_code": 0,
+    "verified": true
+  }
+]

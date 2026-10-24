@@ -22,6 +22,12 @@ class RegisteredUserController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
+        if (config('security.require_verified_email')) {
+            $user->sendEmailVerificationNotification();
+
+            return to_route('verification.notice')->with('success', 'Tài khoản đã được tạo. Hãy xác minh email để tiếp tục.');
+        }
+
         return redirect()->intended(route('workspaces.index'))->with('success', 'Tài khoản và workspace cá nhân đã được tạo.');
     }
 }

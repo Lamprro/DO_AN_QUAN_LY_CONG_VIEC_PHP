@@ -23,7 +23,7 @@
                     <label for="notification-type">Loại thông báo</label>
                     <select id="notification-type" name="type" style="min-width: 170px;">
                         <option value="">Tất cả loại</option>
-                        @foreach(['task.created'=>'Giao việc mới','task.updated'=>'Thay đổi phân công','task.status_changed'=>'Thay đổi trạng thái / review','task.reminder_due'=>'Nhắc hạn','task.reminder_review'=>'Nhắc duyệt','task.comment_added'=>'Bình luận'] as $key=>$label)
+                        @foreach(['task.created'=>'Giao việc mới','task.updated'=>'Thay đổi phân công','task.status_changed'=>'Thay đổi trạng thái / review','task.reminder_due'=>'Nhắc hạn','task.reminder_review'=>'Nhắc duyệt','task.comment_added'=>'Bình luận','task.mentioned'=>'Nhắc tên','calendar.proposed'=>'Đề xuất lịch','calendar.responded'=>'Phản hồi lịch'] as $key=>$label)
                             <option value="{{ $key }}" @selected(request('type')===$key)>{{ $label }}</option>
                         @endforeach
                     </select>
@@ -53,7 +53,7 @@
                             {{ $notification->read_at ? 'Đã đọc' : 'Chưa đọc' }}
                         </span>
                         <span class="badge">
-                            {{ ['task.created'=>'Giao việc','task.updated'=>'Phân công','task.status_changed'=>'Trạng thái / review','task.reminder_due'=>'Nhắc hạn','task.reminder_review'=>'Nhắc duyệt','task.comment_added'=>'Bình luận'][$notification->type]??'Thông báo hệ thống' }}
+                            {{ ['task.created'=>'Giao việc','task.updated'=>'Phân công','task.status_changed'=>'Trạng thái / review','task.reminder_due'=>'Nhắc hạn','task.reminder_review'=>'Nhắc duyệt','task.comment_added'=>'Bình luận','task.mentioned'=>'Nhắc tên','calendar.proposed'=>'Đề xuất lịch','calendar.responded'=>'Phản hồi lịch'][$notification->type]??'Thông báo hệ thống' }}
                         </span>
                         <small class="muted" style="font-family: var(--font-mono); font-size: 0.75rem;">
                             {{ $notification->created_at->setTimezone(auth()->user()->timezone)->format('d/m/Y H:i') }}
@@ -64,6 +64,9 @@
                     <p style="margin: 0.25rem 0 0.5rem 0; color: var(--text-muted); font-size: 0.9rem;">{{ $notification->body }}</p>
 
                     <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem;">
+                        @if(str_starts_with($notification->type,'calendar.') && $notification->workspace)
+@php(preg_match('/^calendar-proposal:([a-f0-9-]{36}):/',$notification->dedupe_key??'',$proposalMatch))
+<a href="{{ route('workspaces.calendar.team',[$notification->workspace,'project_id'=>$notification->project_id,'focus'=>$proposalMatch[1]??null]) }}">Mở đề xuất lịch ›</a>@endif
                         @if($notification->task)
                             <a href="{{ route($notification->project_id?'workspaces.projects.tasks.show':'workspaces.tasks.show',$notification->project_id?[$notification->workspace,$notification->project,$notification->task]:[$notification->workspace,$notification->task]) }}" style="font-weight: 600; font-size: 0.85rem;">
                                 Mở công việc liên quan ›

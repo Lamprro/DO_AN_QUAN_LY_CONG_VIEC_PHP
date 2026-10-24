@@ -23,8 +23,14 @@ use App\Services\HttpAiProvider;
 use App\Services\NotificationService;
 use App\Services\SettingService;
 use App\Support\ReportAccess;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Queue\Events\Looping;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -37,6 +43,14 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Queue::looping(function (Looping $event) {
+            foreach (explode(',', (string) $event->queue) as $queue) {
+                Cache::put('ops:heartbeat:worker:'.$event->connectionName.':'.$queue, time(), 600);
+            }
+        });
+        foreach (['account-login' => 30, 'account-registration' => 10, 'account-recovery' => 5, 'account-reset' => 10, 'account-verification-mail' => 3, 'account-verification-link' => 10] as $name => $limit) {
+            RateLimiter::for($name, fn (Request $request) => Limit::perMinute($limit)->by($request->user()?->id ?? $request->ip()));
+        }
         Paginator::defaultView('pagination.native');
         Paginator::defaultSimpleView('pagination.simple');
         foreach (config('domain_schema.models') as $model) {

@@ -1,0 +1,1 @@
+<x-layout title="Cần cập nhật database"><section class="card"><h1>Cần cập nhật database</h1><p>Chức năng này đã có mã xử lý nhưng database của bản cài hiện tại chưa có các bảng bổ sung. Quản trị viên cần sao lưu và áp dụng migration trước khi sử dụng.</p><p>Các chức năng hiện có vẫn giữ dữ liệu cũ.</p><a href="{{ route('workspaces.index') }}">Về workspace</a></section></x-layout>

@@ -1,5 +1,5 @@
 <!-- Workflow State Machine & Leaf Progress -->
-<section class="card" style="border-top: 4px solid var(--primary);">
+<section id="task-workflow" tabindex="-1" class="card" style="border-top: 4px solid var(--primary);">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
         <div>
             <h2 style="font-size: 1.25rem; margin: 0;">Trạng thái & Tiến độ công việc</h2>
@@ -65,7 +65,7 @@
 </section>
 
 <!-- Blockers Section -->
-<section class="card" style="border-left: 4px solid var(--danger);">
+<section id="task-blockers" tabindex="-1" class="card" style="border-left: 4px solid var(--danger);">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <div>
             <h2 style="font-size: 1.15rem; margin: 0; color: var(--danger);">🚫 Vấn đề đang chặn (Blockers)</h2>
@@ -73,6 +73,7 @@
         </div>
     </div>
 
+    @if($blockers->isEmpty())<p class="muted">Chưa ghi nhận vấn đề đang chặn. Nếu gặp trở ngại, hãy mô tả để nhóm cùng xử lý.</p>@endif
     @foreach($blockers as $blocker)
         <article class="card" data-blocker-id="{{ $blocker->id }}" style="background: {{ $blocker->status->value==='open' ? 'var(--danger-bg)' : 'var(--bg-subtle)' }} !important; border-color: {{ $blocker->status->value==='open' ? 'var(--danger-border)' : 'var(--border)' }}; margin: 0.75rem 0; padding: 1rem;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem;">
@@ -114,7 +115,7 @@
 </section>
 
 <!-- Dependencies (FS) Section -->
-<section class="card" style="border-left: 4px solid #8b5cf6;">
+<section id="task-dependencies" tabindex="-1" class="card" style="border-left: 4px solid #8b5cf6;">
     <h2 style="font-size: 1.15rem; margin-bottom: 0.25rem;">🔗 Quan hệ phụ thuộc (Dependency FS)</h2>
     <p class="muted" style="margin-bottom: 1rem; font-size: 0.85rem;">Công việc này chỉ có thể bắt đầu sau khi các công việc tiên quyết (Predecessor) hoàn thành.</p>
 
@@ -170,7 +171,7 @@
 </section>
 
 <!-- Comments and Attachments -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.25rem;">
+<div id="task-discussion" tabindex="-1" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.25rem;">
     <!-- Comment Box -->
     <section class="card" style="margin: 0;">
         <h2 style="font-size: 1.15rem; margin-bottom: 0.5rem;">💬 Thêm bình luận</h2>
@@ -178,6 +179,7 @@
             <form method="POST" action="{{ route($routePrefix.'.comments.store',[...$routeParams,$task]) }}" data-form="comment-create">
                 @csrf
                 <x-textarea name="content" label="Nội dung trao đổi" required maxlength="10000" placeholder="Viết trao đổi hoặc ghi chú về công việc này..." />
+                <label for="comment-mentions">Nhắc tên (giữ Ctrl/Command để chọn nhiều, tối đa20)</label><select id="comment-mentions" name="mentions[]" multiple size="4">@foreach($collaborationPeople as $m)<option value="{{ $m->user_id }}" @selected(in_array($m->user_id,old('mentions',[])))>{{ $m->user->name }}</option>@endforeach</select>
                 <button type="submit">Gửi bình luận</button>
             </form>
         @else
@@ -207,7 +209,7 @@
 </div>
 
 <!-- Activity & History Stream -->
-<section class="card" data-page="task-activities" style="margin-top: 1.5rem;">
+<section id="task-activities" tabindex="-1" class="card" data-page="task-activities" style="margin-top: 1.5rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
         <h2 style="font-size: 1.25rem; margin: 0;">📜 Nhật ký hoạt động & Lịch sử</h2>
         <form method="GET" action="{{ route($routePrefix.'.show',[...$routeParams,$task]) }}" style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
@@ -286,7 +288,7 @@
                 @endcan
             @else
                 <p style="margin: 0.25rem 0; font-weight: 600;">
-                    {{ ['task.deadline_changed'=>'Thay đổi hạn có lý do','timer.corrected'=>'Điều chỉnh phiên giờ có audit','plan.applied'=>'Áp dụng kế hoạch','plan.calendar_replaced'=>'Thay lịch bằng phiên bản mới','timer.started'=>'Bắt đầu giờ làm','timer.stopped'=>'Kết thúc giờ làm','github.commit'=>'Commit GitHub liên quan','task.created'=>'Tạo công việc','task.updated'=>'Cập nhật công việc','task.status_changed'=>'Đổi trạng thái','task.group_synced'=>'Tổng hợp nhóm','task.archived'=>'Lưu trữ','task.restored'=>'Khôi phục','task.dependency_added'=>'Thêm dependency','task.dependency_removed'=>'Gỡ dependency','task.blocker_reported'=>'Báo blocker','task.blocker_updated'=>'Xử lý blocker','task.comment_added'=>'Thêm bình luận','task.comment_updated'=>'Sửa bình luận','task.comment_deleted'=>'Xóa bình luận','task.file_uploaded'=>'Thêm tệp','task.file_removed'=>'Gỡ tệp'][$activity->event_type] ?? 'Sự kiện hệ thống' }}
+                    {{ ['task.deadline_changed'=>'Thay đổi hạn có lý do','timer.corrected'=>'Điều chỉnh phiên giờ có audit','plan.applied'=>'Áp dụng kế hoạch','plan.calendar_replaced'=>'Thay lịch bằng phiên bản mới','timer.started'=>'Bắt đầu giờ làm','timer.stopped'=>'Kết thúc giờ làm','github.commit'=>'Commit GitHub liên quan','task.watcher_added'=>'Thêm người theo dõi','task.watcher_removed'=>'Dừng theo dõi','task.created'=>'Tạo công việc','task.updated'=>'Cập nhật công việc','task.status_changed'=>'Đổi trạng thái','task.group_synced'=>'Tổng hợp nhóm','task.archived'=>'Lưu trữ','task.restored'=>'Khôi phục','task.dependency_added'=>'Thêm dependency','task.dependency_removed'=>'Gỡ dependency','task.blocker_reported'=>'Báo blocker','task.blocker_updated'=>'Xử lý blocker','task.comment_added'=>'Thêm bình luận','task.comment_updated'=>'Sửa bình luận','task.comment_deleted'=>'Xóa bình luận','task.file_uploaded'=>'Thêm tệp','task.file_removed'=>'Gỡ tệp'][$activity->event_type] ?? 'Sự kiện hệ thống' }}
                 </p>
                 @if($activity->event_type==='github.commit')
                     <div style="background: var(--surface); padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light); font-size: 0.85rem; margin: 0.4rem 0;">

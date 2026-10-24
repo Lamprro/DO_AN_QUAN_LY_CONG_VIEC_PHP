@@ -1,0 +1,138 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/register",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/register",
+    "status": 200
+  },
+  {
+    "step": "registration requires verification",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "unverified cannot enter business pages",
+    "verified": true
+  },
+  {
+    "step": "HTTP private account link",
+    "status": 403,
+    "token_redacted": true
+  },
+  {
+    "step": "tampered signature changes no verification",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP private account link",
+    "status": 403,
+    "token_redacted": true
+  },
+  {
+    "step": "another account cannot verify this email",
+    "verified": true
+  },
+  {
+    "step": "HTTP private account link",
+    "status": 200,
+    "token_redacted": true
+  },
+  {
+    "step": "signed link verifies actual user row",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "unknown email receives generic response",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "known email same response and token hashed at rest",
+    "verified": true
+  },
+  {
+    "step": "HTTP private account link",
+    "status": 200,
+    "token_redacted": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/reset-password",
+    "status": 200
+  },
+  {
+    "step": "expired token rejects password mutation",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/forgot-password",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/forgot-password",
+    "status": 429
+  }
+]

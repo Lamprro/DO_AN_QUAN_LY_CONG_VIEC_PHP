@@ -1,0 +1,8 @@
+[Unit]
+Description=Work Management Laravel scheduler
+After=network.target
+[Service]
+Type=oneshot
+User=www-data
+WorkingDirectory=/srv/work-management/current
+ExecStart=/usr/bin/php artisan schedule:run

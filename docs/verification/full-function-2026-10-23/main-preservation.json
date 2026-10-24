@@ -1,0 +1,133 @@
+{
+  "main_database_tables": 31,
+  "all_original_tables_unchanged": true,
+  "env_and_app_key_unchanged": true,
+  "new_main_migration_applied": false,
+  "tables": {
+    "migrations": {
+      "rows": 25,
+      "unchanged": true
+    },
+    "users": {
+      "rows": 21,
+      "unchanged": true
+    },
+    "password_reset_tokens": {
+      "rows": 0,
+      "unchanged": true
+    },
+    "sessions": {
+      "rows": 5,
+      "unchanged": true
+    },
+    "cache": {
+      "rows": 2,
+      "unchanged": true
+    },
+    "cache_locks": {
+      "rows": 0,
+      "unchanged": true
+    },
+    "jobs": {
+      "rows": 0,
+      "unchanged": true
+    },
+    "job_batches": {
+      "rows": 0,
+      "unchanged": true
+    },
+    "failed_jobs": {
+      "rows": 0,
+      "unchanged": true
+    },
+    "user_settings": {
+      "rows": 21,
+      "unchanged": true
+    },
+    "workspaces": {
+      "rows": 32,
+      "unchanged": true
+    },
+    "roles": {
+      "rows": 131,
+      "unchanged": true
+    },
+    "workspace_members": {
+      "rows": 50,
+      "unchanged": true
+    },
+    "integration_connections": {
+      "rows": 2,
+      "unchanged": true
+    },
+    "projects": {
+      "rows": 16,
+      "unchanged": true
+    },
+    "project_members": {
+      "rows": 33,
+      "unchanged": true
+    },
+    "tasks": {
+      "rows": 112,
+      "unchanged": true
+    },
+    "task_dependencies": {
+      "rows": 6,
+      "unchanged": true
+    },
+    "task_blockers": {
+      "rows": 10,
+      "unchanged": true
+    },
+    "ai_runs": {
+      "rows": 10,
+      "unchanged": true
+    },
+    "ai_calls": {
+      "rows": 10,
+      "unchanged": true
+    },
+    "plans": {
+      "rows": 23,
+      "unchanged": true
+    },
+    "calendar_events": {
+      "rows": 50,
+      "unchanged": true
+    },
+    "time_entries": {
+      "rows": 11,
+      "unchanged": true
+    },
+    "task_activities": {
+      "rows": 284,
+      "unchanged": true
+    },
+    "notifications": {
+      "rows": 34,
+      "unchanged": true
+    },
+    "report_snapshots": {
+      "rows": 22,
+      "unchanged": true
+    },
+    "github_logs": {
+      "rows": 1,
+      "unchanged": true
+    },
+    "saved_task_filters": {
+      "rows": 4,
+      "unchanged": true
+    },
+    "time_entry_adjustments": {
+      "rows": 2,
+      "unchanged": true
+    },
+    "task_reminders": {
+      "rows": 5,
+      "unchanged": true
+    }
+  },
+  "foreign_keys_clean": true
+}

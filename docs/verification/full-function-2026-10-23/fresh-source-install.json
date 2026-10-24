@@ -1,0 +1,103 @@
+{
+  "completed": true,
+  "source_zip_extracted": true,
+  "vendor_reused": true,
+  "network_composer_install_claimed": false,
+  "setup_twice_preserved_env_and_key": true,
+  "tables": 35,
+  "users": 5,
+  "tasks": 40,
+  "foreign_key_check": true,
+  "preflight_configuration_passed": true,
+  "scheduler_recurring_registered": true,
+  "actual_http": [
+    {
+      "path": "/work-hours",
+      "status": 200
+    },
+    {
+      "path": "/workspaces/01a16676-96f2-731c-a227-ab666fe96010/team-calendar?project_id=01a16676-9704-7310-be63-7a9addf71874",
+      "status": 200
+    },
+    {
+      "path": "/workspaces/01a16676-96f2-731c-a227-ab666fe96010/task-templates?project_id=01a16676-9704-7310-be63-7a9addf71874",
+      "status": 200
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "python",
+        "-X",
+        "utf8",
+        "scripts/package-source.py"
+      ],
+      "exit_code": 0,
+      "output": "{\"archive\": \"D:\\\\HeThong_PhanTichTaiChinh\\\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\\\dist\\\\work-management-mvc-source.zip\", \"files\": 741, \"bytes\": 2926075, \"sha256\": \"f710fd0831d17bc4d7462126828906ba7709b0c21a980a2037bdf892ecc12ed0\", \"verified\": true}\n"
+    },
+    {
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "scripts/setup-local.php",
+        "--demo"
+      ],
+      "exit_code": 0,
+      "output": "........................................ 9.52ms DONE\n  2026_10_17_000014_create_calendar_events_table ......................................................... 9.25ms DONE\n  2026_10_17_000015_create_time_entries_table ............................................................ 4.49ms DONE\n  2026_10_17_000016_create_task_activities_table ......................................................... 4.59ms DONE\n  2026_10_17_000017_create_notifications_table ........................................................... 6.78ms DONE\n  2026_10_17_000018_create_report_snapshots_table ........................................................ 4.59ms DONE\n  2026_10_17_000019_create_github_logs_table ............................................................. 5.00ms DONE\n  2026_10_17_000020_add_edit_revisions ................................................................... 5.24ms DONE\n  2026_10_18_000021_add_task_utilities .................................................................. 25.93ms DONE\n  2026_10_18_000022_add_time_overlap_index ............................................................... 2.10ms DONE\n  2026_10_23_180000_add_collaboration_and_templates ..................................................... 21.15ms DONE\n\n\n   INFO  Seeding database.  \n\n  Database\\Seeders\\DemoSeeder ................................................................................ RUNNING  \n  Database\\Seeders\\DemoSeeder .......................................................................... 1,164 ms DONE  \n\nReady. Run scripts/serve-local.ps1 and scripts/work-ai.ps1 in separate terminals.\n"
+    },
+    {
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "scripts/setup-local.php",
+        "--demo"
+      ],
+      "exit_code": 0,
+      "output": "\n   INFO  Configuration cache cleared successfully.  \n\n\n   INFO  Nothing to migrate.  \n\n\n   INFO  Seeding database.  \n\n  Database\\Seeders\\DemoSeeder ................................................................................ RUNNING  \n  Database\\Seeders\\DemoSeeder .......................................................................... 1,066 ms DONE  \n\nReady. Run scripts/serve-local.ps1 and scripts/work-ai.ps1 in separate terminals.\n"
+    },
+    {
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "artisan",
+        "config:cache"
+      ],
+      "exit_code": 0,
+      "output": "\n   INFO  Configuration cached successfully.  \n\n"
+    },
+    {
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "artisan",
+        "route:cache"
+      ],
+      "exit_code": 0,
+      "output": "\n   INFO  Routes cached successfully.  \n\n"
+    },
+    {
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "artisan",
+        "view:cache"
+      ],
+      "exit_code": 0,
+      "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+    },
+    {
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "artisan",
+        "app:preflight",
+        "--json"
+      ],
+      "exit_code": 0,
+      "output": ",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.session\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"app_key\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"storage\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"private_files\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"database.tables\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"database.migrations\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"cache.database\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"cache.file\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"session_revocation\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"queue_database\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"queue_retry_after\",\n            \"passed\": true,\n            \"action\": \"\"\n        }\n    ],\n    \"limits\": [\n        \"This is not a production certification. Verify HTTP/TLS, actual mail receipt, backup restoration, load and third-party integrations on the target infrastructure.\",\n        \"Heartbeat freshness is recent worker activity, not proof of future availability.\"\n    ]\n}\n"
+    },
+    {
+      "command": [
+        "C:\\xampp\\php\\php.exe",
+        "artisan",
+        "schedule:list"
+      ],
+      "exit_code": 0,
+      "output": "\n  * * * * *  php artisan tasks:generate-recurring .............................................. Next Due: 23 giây tới\n  0 * * * *  php artisan tasks:remind ........................................................... Next Due: 6 phút tới\n  * * * * *  php artisan ai:recover-stale ...................................................... Next Due: 23 giây tới\n  0 * * * *  php artisan auth:clear-resets ...................................................... Next Due: 6 phút tới\n  * * * * *  ops:heartbeat ..................................................................... Next Due: 23 giây tới\n\n"
+    }
+  ]
+}

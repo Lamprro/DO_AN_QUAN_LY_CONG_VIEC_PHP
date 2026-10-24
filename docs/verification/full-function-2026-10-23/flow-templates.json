@@ -1,0 +1,232 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "template snapshot stored without task generation",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b/instantiate",
+    "status": 200
+  },
+  {
+    "step": "manual instantiation creates three fresh ids",
+    "verified": true
+  },
+  {
+    "step": "mapped tree and dependency preserve graph",
+    "verified": true
+  },
+  {
+    "step": "new tasks have no cloned actual or completed status",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b/instantiate",
+    "status": 200
+  },
+  {
+    "step": "same manual request key creates no duplicates",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b/instantiate",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "missing parent/predecessor template rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b",
+    "status": 200
+  },
+  {
+    "step": "template config stale rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "real scheduler command generates due occurrence once",
+    "verified": true,
+    "output": "{\"succeeded\":1,\"failed\":0}\n"
+  },
+  {
+    "step": "repeated scheduler does not create duplicate period",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-4154-7202-a9a4-68e77ebe9f7e",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-4154-7202-a9a4-68e77ebe9f7e/pause",
+    "status": 200
+  },
+  {
+    "step": "pause clears pending next run",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-4154-7202-a9a4-68e77ebe9f7e",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-4154-7202-a9a4-68e77ebe9f7e/resume",
+    "status": 200
+  },
+  {
+    "step": "resume schedules future occurrence",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates/01a1664a-2f56-7216-98f2-e6dac3f0364b/archive",
+    "status": 200
+  },
+  {
+    "step": "archive retains run history and prevents further manual generation",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE"
+  },
+  {
+    "step": "foreign keys valid",
+    "verified": true
+  }
+]

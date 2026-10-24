@@ -1,0 +1,15 @@
+{
+  "counts": {
+    "working_files": 677,
+    "outgoing_history_blobs": 0,
+    "archive_members": 698
+  },
+  "actual_env_secret_fields_checked": [
+    "APP_KEY",
+    "REVIEW_APP_KEY",
+    "RESTORED_APP_KEY"
+  ],
+  "findings": [],
+  "outgoing_commits": "0",
+  "env_sha256": "9a0768a72c85e056c2a9e2f5038f54a1931704327c8cafd68b845e9b920811c2"
+}

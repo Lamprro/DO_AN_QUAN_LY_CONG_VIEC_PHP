@@ -1,0 +1,9 @@
+{
+  "accepted": false,
+  "excluded_from_acceptance": true,
+  "issues": [
+    "Helper variable named http shadowed http.cookiejar module; renamed http_results.",
+    "Fresh smoke requested team-workspace task templates without project_id and received correct403; adjusted request to seeded project scope, no authorization guard removed."
+  ],
+  "resolution": "Fresh installation and actual HTTP succeeded in fresh-source-install.json."
+}

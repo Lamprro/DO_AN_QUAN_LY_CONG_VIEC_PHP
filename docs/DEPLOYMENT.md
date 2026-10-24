@@ -40,3 +40,7 @@ Sao lưu nhất quán DB cùng private storage và APP_KEY; giữ secret ngoài 
 ## Bổ sung đợt E
 
 Chạy migration bổ sung, không reset DB. Nhắc việc in-app cần scheduler và worker database `work-management-reminders`, độc lập queue AI. Hướng dẫn lệnh, quyền vận hành và giới hạn ở [PHASE_E_UTILITIES.md](PHASE_E_UTILITIES.md). `scripts/work-reminders.ps1 -Drain` chỉ xử lý queue rồi thoát; chưa tự cài service nền.
+
+## Runbook production hiện hành
+
+Trước khi đưa public, đọc [PRODUCTION_RUNBOOK.md](PRODUCTION_RUNBOOK.md) và [báo cáo readiness](PRODUCTION_READINESS_REVIEW_2026-10-23.md). Đã có mẫu env/Nginx/Supervisor/scheduler trong deploy/, lệnh app:preflight và app:backup-sqlite. Recovery AI đã được đăng ký trong Laravel Scheduler; **không thêm cron recover riêng chạy trùng**. Chỉ dùng một scheduler. REQUIRE_VERIFIED_EMAIL bật mặc định ở production, cần SMTP nhận thư thật; session revocation yêu cầu database driver trên database chính. Không chạy helper setup-local ở production.

@@ -176,6 +176,7 @@ class TaskWorkflowService
     public function comment(User $actor, Task $task, array $data, ?string $id = null, bool $delete = false): void
     {
         $this->locked($actor, $task, 'comment', function ($task) use ($actor, $data, $id, $delete) {
+            $mentions = ! $id && ! $delete ? app(TaskCollaborationService::class)->mentions($task, $data['mentions'] ?? []) : [];
             if ($id) {
                 $activity = $task->activities()->where('type', 'COMMENT')->findOrFail($id);
                 abort_unless($activity->actor_id === $actor->id || ($delete && $this->policy->scope($actor, $task->workspace, $task->project, 'task.assign')), 403);
@@ -186,10 +187,10 @@ class TaskWorkflowService
                 }
                 $event = $delete ? 'task.comment_deleted' : 'task.comment_updated';
             } else {
-                $activity = TaskActivity::create(['task_id' => $task->id, 'actor_id' => $actor->id, 'type' => 'COMMENT', 'source' => 'user', 'content' => $data['content']]);
+                $activity = TaskActivity::create(['task_id' => $task->id, 'actor_id' => $actor->id, 'type' => 'COMMENT', 'source' => 'user', 'content' => $data['content'], 'data' => ['mentions' => $mentions]]);
                 $event = 'task.comment_added';
             }
-            $this->history->record($actor, $task, $event, ['activity_id' => $activity->id]);
+            $this->history->record($actor, $task, $event, ['activity_id' => $activity->id, 'mentions' => $mentions]);
         });
     }
 

@@ -1,0 +1,16 @@
+{
+  "mobile": {
+    "heading": "Quên mật khẩu",
+    "passwordFields": 0,
+    "status": true,
+    "viewport": 390,
+    "width": 390
+  },
+  "console": [],
+  "desktop": {
+    "heading": "Xác minh email của bạn",
+    "steps": 3,
+    "viewport": 1366,
+    "width": 1351
+  }
+}

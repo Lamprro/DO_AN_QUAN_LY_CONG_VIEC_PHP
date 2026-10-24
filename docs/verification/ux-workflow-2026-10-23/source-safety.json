@@ -1,0 +1,9 @@
+{
+  "counts": {
+    "working_files": 622,
+    "outgoing_history_blobs": 0,
+    "archive_members": 20
+  },
+  "findings": [],
+  "no_live_env_database_or_key_detected": true
+}

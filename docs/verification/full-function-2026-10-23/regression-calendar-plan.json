@@ -1,0 +1,261 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/01a16663-534c-7379-be91-3b139ff3c9c4/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/01a16663-534c-7379-be91-3b139ff3c9c4/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/01a16663-534c-7379-be91-3b139ff3c9c4",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/01a16663-534c-7379-be91-3b139ff3c9c4",
+    "status": 200
+  },
+  {
+    "step": "calendar stale keeps version and text",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/01a16663-534c-7379-be91-3b139ff3c9c4",
+    "status": 200
+  },
+  {
+    "step": "repeated stale submit still cannot overwrite",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/01a16663-534c-7379-be91-3b139ff3c9c4/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/01a16663-534c-7379-be91-3b139ff3c9c4",
+    "status": 200
+  },
+  {
+    "step": "explicit fresh allows current version save",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/calendar",
+    "status": 200
+  },
+  {
+    "step": "busy conflict rejected without new event",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans",
+    "status": 200
+  },
+  {
+    "step": "draft persisted only",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d/preview",
+    "status": 200
+  },
+  {
+    "step": "preview validates real apply and rolls back all writes",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d/propose",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d/approve",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d/preview",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d/apply",
+    "status": 200
+  },
+  {
+    "step": "apply creates real task/event once",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/01a16663-6749-7358-a39a-990e075bcb5d/apply",
+    "status": 200
+  },
+  {
+    "step": "repeat apply idempotent",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/plans/01a164e6-2d26-73f1-a781-b84cad09048c/preview",
+    "status": 200
+  },
+  {
+    "step": "legacy empty fixture never falsely valid",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a1665f-4239-72a5-acea-50df46542cb2/plans",
+    "status": 200
+  },
+  {
+    "step": "empty plan HTTP rejected without writes",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "real_calendar_versions": true,
+    "real_plan_lifecycle": true
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  }
+]

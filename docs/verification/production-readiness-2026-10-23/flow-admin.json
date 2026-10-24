@@ -1,0 +1,355 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/01a164e6-c87a-7020-8274-56eca7e08035/edit",
+    "status": 200
+  },
+  {
+    "step": "fresh flag consumed task-edit",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/01a164e6-c87a-7020-8274-56eca7e08035/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/01a164e6-c87a-7020-8274-56eca7e08035",
+    "status": 200
+  },
+  {
+    "step": "failed form retains old input task-edit",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/edit",
+    "status": 200
+  },
+  {
+    "step": "fresh flag consumed project-edit",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c",
+    "status": 200
+  },
+  {
+    "step": "failed form retains old input project-edit",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/calendar/01a164e7-c468-7042-832c-c72bceb2fe51/edit",
+    "status": 200
+  },
+  {
+    "step": "fresh flag consumed calendar-save",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/calendar/01a164e7-c468-7042-832c-c72bceb2fe51/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/calendar/01a164e7-c468-7042-832c-c72bceb2fe51",
+    "status": 200
+  },
+  {
+    "step": "failed form retains old input calendar-save",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/roles/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/roles",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/roles/01a164ea-8020-7265-b5f0-dd4ddbc018ff/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/roles/01a164ea-8020-7265-b5f0-dd4ddbc018ff",
+    "status": 200
+  },
+  {
+    "step": "role create/edit through MVC",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/roles",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/roles/01a164ea-8020-7265-b5f0-dd4ddbc018ff",
+    "status": 200
+  },
+  {
+    "step": "unused role removed",
+    "verified": true
+  },
+  {
+    "step": "invitation does not send external mail",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/invitations",
+    "status": 200
+  },
+  {
+    "step": "actual invitation link returned privately",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/invitations/[redacted]",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/invitations/[redacted]/accept",
+    "status": 200
+  },
+  {
+    "step": "invitation acceptance active membership",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/members",
+    "status": 200
+  },
+  {
+    "step": "project membership created",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks",
+    "status": 200
+  },
+  {
+    "step": "task persisted ProductionReview1792694197 member queued then revoked",
+    "verified": true
+  },
+  {
+    "step": "current member reminder actually queued",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/members/01a164ea-9030-722c-96a5-8982b3349a7f",
+    "status": 200
+  },
+  {
+    "step": "worker rechecks revoked project permission",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/search",
+    "status": 200
+  },
+  {
+    "step": "revoked membership removes search title and count",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/01a164ea-9316-7226-a95e-f59f60c15b75",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/calendar/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/calendar",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/calendar",
+    "status": 200
+  },
+  {
+    "step": "private busy hides title/id/link",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/calendar/01a164ea-aa7f-728d-b7af-8a743536cf47",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/01a164e6-badc-7086-8fb2-b460f039aa61",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/01a164e6-badc-7086-8fb2-b460f039aa61",
+    "status": 200
+  },
+  {
+    "step": "multipart upload HTTP success",
+    "verified": true
+  },
+  {
+    "step": "authorized private download equals original bytes",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-b06f-71a5-9902-dd2149dc9091/projects/01a164e6-b3ba-7254-aaff-8ea939d7a63c/tasks/01a164e6-badc-7086-8fb2-b460f039aa61/attachments/01a164ea-b13d-702d-8fbd-fb053ed604e0",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/settings",
+    "status": 200
+  },
+  {
+    "step": "settings theme and notification saved",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/notifications",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/notifications/read-all",
+    "status": 200
+  },
+  {
+    "step": "foreign key integrity",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "actual_membership_and_file": true,
+    "main_database_untouched": true
+  }
+]

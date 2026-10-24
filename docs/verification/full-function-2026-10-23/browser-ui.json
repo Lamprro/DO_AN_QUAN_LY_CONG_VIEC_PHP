@@ -1,0 +1,21 @@
+{
+  "desktop": {
+    "viewport": [
+      1366,
+      900
+    ],
+    "scroll_width": 1351,
+    "page": "task-template detail",
+    "proof": "full-template-desktop.png"
+  },
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "scroll_width": 375,
+    "page": "work-hours",
+    "proof": "full-hours-mobile.png"
+  },
+  "console_errors_observed": []
+}

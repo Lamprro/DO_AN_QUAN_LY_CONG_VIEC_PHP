@@ -27,6 +27,7 @@
             <label style="margin: 0; font-weight: 500; cursor: pointer;">
                 <input type="checkbox" name="remember" value="1" @checked(old('remember'))> Ghi nhớ đăng nhập
             </label>
+            <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
         </div>
 
         <div class="actions" style="margin-top: 1.25rem;">

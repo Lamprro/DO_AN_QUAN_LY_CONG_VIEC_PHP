@@ -1,0 +1,8 @@
+[Unit]
+Description=Run Work Management scheduler every minute
+[Timer]
+OnCalendar=*-*-* *:*:00
+Persistent=true
+Unit=work-management-scheduler.service
+[Install]
+WantedBy=timers.target

@@ -3,6 +3,7 @@
 use App\Models\AiCall;
 use App\Models\AiRun;
 use App\Models\CalendarEvent;
+use App\Models\CalendarProposal;
 use App\Models\GithubLog;
 use App\Models\IntegrationConnection;
 use App\Models\Notification;
@@ -15,6 +16,9 @@ use App\Models\Task;
 use App\Models\TaskActivity;
 use App\Models\TaskBlocker;
 use App\Models\TaskDependency;
+use App\Models\TaskTemplate;
+use App\Models\TaskTemplateRun;
+use App\Models\TaskWatcher;
 use App\Models\TimeEntry;
 use App\Models\User;
 use App\Models\UserSetting;
@@ -22,8 +26,12 @@ use App\Models\Workspace;
 use App\Models\WorkspaceMember;
 
 return [
-    'models' => [User::class, UserSetting::class, Workspace::class, Role::class, WorkspaceMember::class, IntegrationConnection::class, Project::class, ProjectMember::class, Task::class, TaskDependency::class, TaskBlocker::class, AiRun::class, AiCall::class, Plan::class, CalendarEvent::class, TimeEntry::class, TaskActivity::class, Notification::class, ReportSnapshot::class, GithubLog::class],
+    'models' => [CalendarProposal::class, TaskWatcher::class, TaskTemplate::class, TaskTemplateRun::class, User::class, UserSetting::class, Workspace::class, Role::class, WorkspaceMember::class, IntegrationConnection::class, Project::class, ProjectMember::class, Task::class, TaskDependency::class, TaskBlocker::class, AiRun::class, AiCall::class, Plan::class, CalendarEvent::class, TimeEntry::class, TaskActivity::class, Notification::class, ReportSnapshot::class, GithubLog::class],
     'references' => [
+        'calendar_proposals' => ['workspace_id' => 'workspaces', 'project_id' => 'projects', 'task_id' => 'tasks', 'proposed_by' => 'users', 'recipient_id' => 'users', 'calendar_event_id' => 'calendar_events'],
+        'task_watchers' => ['task_id' => 'tasks', 'user_id' => 'users', 'added_by' => 'users'],
+        'task_templates' => ['workspace_id' => 'workspaces', 'project_id' => 'projects', 'created_by' => 'users'],
+        'task_template_runs' => ['task_template_id' => 'task_templates'],
         'user_settings' => ['user_id' => 'users'],
         'workspaces' => ['owner_id' => 'users'],
         'roles' => ['workspace_id' => 'workspaces', 'created_by' => 'users'],

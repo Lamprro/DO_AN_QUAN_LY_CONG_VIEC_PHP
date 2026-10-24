@@ -1,3 +1,5 @@
+**Cập nhật F11–F14 ngày 23/10/2026:** đã triển khai và kiểm tra trên bản review35bảng; database chính31bảng đang chờ xác nhận migration riêng. Đọc [báo cáo mới](FULL_FUNCTIONAL_COMPLETION_2026-10-23.md) và [bàn giao FE](FRONTEND_F11_F14_HANDOFF.md). Các mô tả F11–F14 “backlog/chưa triển khai” bên dưới là lịch sử.
+
 **20/10/2026 — Đã tích hợp và rà soát FE mới.** Sửa các lỗi nguồn/phiên bản/form và responsive; thêm tìm kiếm theo quyền, Kanban Blade. Xem [đánh giá và flow](POST_FE_REVIEW.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng mới](verification/post-fe/README.md). Các mô tả cũ là lịch sử, không là cam kết100%production.
 
 **18/10/2026 — Đợt E/F04–F10 đã triển khai:** presets, bộ lọc riêng, bulk nguyên tử, nhắc in-app qua queue, theo dõi hạn, quan sát vận hành có quyền và sửa giờ có lịch sử. Xem [flow E](PHASE_E_UTILITIES.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng thật](verification/phase-e/README.md). P2 và cấu hình dịch vụ ngoài vẫn theo backlog; chưa cài scheduler/worker thành service production.
@@ -101,3 +103,13 @@ Không thêm lớp test; chạy flow thật và lưu thao tác/dữ liệu/lỗi
 ## Nghiệm thu toàn hệ thống 23/10/2026
 
 Đã rà soát và sửa các lỗi cuối qua flow HTTP/browser/database/worker trên bản cài riêng. Trạng thái chi tiết mới nhất: `docs/COMPLETION_REPORT_2026-10-23.md`; minh chứng: `docs/verification/completion-2026-10-23/`; thiết kế/schema hiện hành: `docs/design/CURRENT_SYSTEM.md`. Các mục chờ duyệt trước đây là lịch sử. Không thêm lớp test, không thay dữ liệu chính hoặc APP_KEY.
+
+## Cải thiện trải nghiệm sau nghiệm thu — 23/10/2026
+
+Đã thêm menu theo nhóm/ngữ cảnh, active route con, đóng drawer rõ ràng; shared filter/view navigation list/Kanban; công cụ hàng loạt gọn; task journey theo service thật và các anchor; hướng dẫn bốn bước trong dự án. Sửa reset filter trùng và thống nhất deadline Kanban theo timezone workspace. Không đổi schema, API, key; không thêm lớp test.
+
+Lần cuối: 30 điểm xác nhận/59 HTTP request + thao tác browser390/1366 và SQL120phút/IN_PROGRESS; PHP/Pint/JS/Blade/diff đạt; 31 bảng chính và .env không đổi. Báo cáo bổ sung: [UX_WORKFLOW_UPDATE_2026-10-23.md](UX_WORKFLOW_UPDATE_2026-10-23.md); không thay thế kết quả nghiệm thu nghiệp vụ trước đó.
+
+## Rà soát chuẩn bị production — 23/10/2026
+
+Đã bổ sung recovery/verification, tách auth throttles, security headers/hosts/proxies, scheduler recovery/heartbeat, production preflight, SQLite backup/restore và mẫu vận hành. Giữ Laravel MVC/Blade, không thêm migration hay test class. 179 điểm xác nhận/339 HTTP log trong9 flow hoàn tất; dữ liệu/key chính được đối chiếu khi đóng vòng. [Báo cáo hiện hành](PRODUCTION_READINESS_REVIEW_2026-10-23.md) và [runbook](PRODUCTION_RUNBOOK.md) thay các khẳng định production chung chung. Hạ tầng đích/SMTP/Redis/AI/GitHub thật và tải production chưa được nghiệm thu; F11–F14 vẫn là backlog P2.

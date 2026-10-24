@@ -15,7 +15,6 @@ erDiagram
         datetime started_at
         datetime finished_at
     }
-    ai_runs ||--o{ ai_calls : "ai_run_id"
     ai_runs {
         varchar id PK
         varchar workspace_id FK
@@ -33,9 +32,16 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    users |o--o{ ai_runs : "requested_by"
-    projects |o--o{ ai_runs : "project_id"
-    workspaces ||--o{ ai_runs : "workspace_id"
+    cache {
+        varchar key PK
+        TEXT value
+        INTEGER expiration
+    }
+    cache_locks {
+        varchar key PK
+        varchar owner
+        INTEGER expiration
+    }
     calendar_events {
         varchar id PK
         varchar user_id FK
@@ -49,8 +55,8 @@ erDiagram
         datetime starts_at
         datetime ends_at
         varchar timezone
-        tinyint1 all_day
-        tinyint1 is_busy
+        tinyint_1_ all_day
+        tinyint_1_ is_busy
         varchar visibility
         varchar status
         TEXT participants
@@ -60,12 +66,36 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    integration_connections |o--o{ calendar_events : "integration_connection_id"
-    plans |o--o{ calendar_events : "plan_id"
-    tasks |o--o{ calendar_events : "task_id"
-    projects |o--o{ calendar_events : "project_id"
-    workspaces |o--o{ calendar_events : "workspace_id"
-    users ||--o{ calendar_events : "user_id"
+    calendar_proposals {
+        varchar id PK
+        varchar workspace_id FK
+        varchar project_id FK
+        varchar task_id FK
+        varchar proposed_by FK
+        varchar recipient_id FK
+        varchar calendar_event_id FK
+        varchar title
+        TEXT description
+        varchar event_type
+        datetime starts_at
+        datetime ends_at
+        varchar timezone
+        varchar visibility
+        varchar status
+        INTEGER revision
+        datetime responded_at
+        datetime created_at
+        datetime updated_at
+    }
+    failed_jobs {
+        INTEGER id PK
+        varchar uuid
+        TEXT connection
+        TEXT queue
+        TEXT payload
+        TEXT exception
+        datetime failed_at
+    }
     github_logs {
         varchar id PK
         varchar project_id FK
@@ -86,9 +116,6 @@ erDiagram
         datetime received_at
         datetime processed_at
     }
-    integration_connections ||--o{ github_logs : "integration_connection_id"
-    tasks |o--o{ github_logs : "task_id"
-    projects ||--o{ github_logs : "project_id"
     integration_connections {
         varchar id PK
         varchar workspace_id FK
@@ -102,8 +129,32 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    users |o--o{ integration_connections : "user_id"
-    workspaces ||--o{ integration_connections : "workspace_id"
+    job_batches {
+        varchar id PK
+        varchar name
+        INTEGER total_jobs
+        INTEGER pending_jobs
+        INTEGER failed_jobs
+        TEXT failed_job_ids
+        TEXT options
+        INTEGER cancelled_at
+        INTEGER created_at
+        INTEGER finished_at
+    }
+    jobs {
+        INTEGER id PK
+        varchar queue
+        TEXT payload
+        INTEGER attempts
+        INTEGER reserved_at
+        INTEGER available_at
+        INTEGER created_at
+    }
+    migrations {
+        INTEGER id PK
+        varchar migration
+        INTEGER batch
+    }
     notifications {
         varchar id PK
         varchar workspace_id FK
@@ -119,10 +170,11 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    projects |o--o{ notifications : "project_id"
-    tasks |o--o{ notifications : "task_id"
-    users ||--o{ notifications : "recipient_id"
-    workspaces |o--o{ notifications : "workspace_id"
+    password_reset_tokens {
+        varchar email PK
+        varchar token
+        datetime created_at
+    }
     plans {
         varchar id PK
         varchar plan_group_id
@@ -134,7 +186,7 @@ erDiagram
         varchar name
         TEXT data
         varchar status
-        tinyint1 is_active
+        tinyint_1_ is_active
         TEXT validation_errors
         TEXT change_summary
         varchar created_by FK
@@ -143,12 +195,6 @@ erDiagram
         datetime applied_at
         datetime created_at
     }
-    users |o--o{ plans : "reviewed_by"
-    users |o--o{ plans : "created_by"
-    ai_runs |o--o{ plans : "ai_run_id"
-    projects |o--o{ plans : "project_id"
-    workspaces ||--o{ plans : "workspace_id"
-    plans |o--o{ plans : "parent_plan_id"
     project_members {
         varchar id PK
         varchar project_id FK
@@ -157,9 +203,6 @@ erDiagram
         varchar status
         datetime joined_at
     }
-    roles ||--o{ project_members : "role_id"
-    workspace_members ||--o{ project_members : "workspace_member_id"
-    projects ||--o{ project_members : "project_id"
     projects {
         varchar id PK
         varchar workspace_id FK
@@ -177,10 +220,6 @@ erDiagram
         datetime updated_at
         INTEGER revision
     }
-    integration_connections |o--o{ projects : "github_connection_id"
-    users ||--o{ projects : "created_by"
-    projects |o--o{ projects : "parent_project_id"
-    workspaces ||--o{ projects : "workspace_id"
     report_snapshots {
         varchar id PK
         varchar workspace_id FK
@@ -196,23 +235,16 @@ erDiagram
         varchar storage_key
         datetime created_at
     }
-    ai_runs |o--o{ report_snapshots : "ai_run_id"
-    users |o--o{ report_snapshots : "generated_by"
-    users |o--o{ report_snapshots : "subject_user_id"
-    projects |o--o{ report_snapshots : "project_id"
-    workspaces ||--o{ report_snapshots : "workspace_id"
     roles {
         varchar id PK
         varchar workspace_id FK
         varchar name
         TEXT permissions
-        tinyint1 is_system
+        tinyint_1_ is_system
         varchar created_by FK
         datetime created_at
         datetime updated_at
     }
-    users |o--o{ roles : "created_by"
-    workspaces ||--o{ roles : "workspace_id"
     saved_task_filters {
         varchar id PK
         varchar user_id FK
@@ -223,9 +255,14 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    projects |o--o{ saved_task_filters : "project_id"
-    workspaces ||--o{ saved_task_filters : "workspace_id"
-    users ||--o{ saved_task_filters : "user_id"
+    sessions {
+        varchar id PK
+        varchar user_id FK
+        varchar ip_address
+        TEXT user_agent
+        TEXT payload
+        INTEGER last_activity
+    }
     task_activities {
         varchar id PK
         varchar task_id FK
@@ -240,9 +277,6 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    plans |o--o{ task_activities : "plan_id"
-    users |o--o{ task_activities : "actor_id"
-    tasks ||--o{ task_activities : "task_id"
     task_blockers {
         varchar id PK
         varchar task_id FK
@@ -254,9 +288,6 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    users |o--o{ task_blockers : "resolved_by"
-    users ||--o{ task_blockers : "reported_by"
-    tasks ||--o{ task_blockers : "task_id"
     task_dependencies {
         varchar id PK
         varchar predecessor_task_id FK
@@ -265,8 +296,6 @@ erDiagram
         INTEGER lag_minutes
         datetime created_at
     }
-    tasks ||--o{ task_dependencies : "successor_task_id"
-    tasks ||--o{ task_dependencies : "predecessor_task_id"
     task_reminders {
         varchar id PK
         varchar workspace_id FK
@@ -284,9 +313,45 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    users ||--o{ task_reminders : "user_id"
-    tasks ||--o{ task_reminders : "task_id"
-    workspaces ||--o{ task_reminders : "workspace_id"
+    task_template_runs {
+        varchar id PK
+        varchar task_template_id FK
+        varchar occurrence_key
+        varchar status
+        TEXT task_map
+        TEXT error
+        datetime created_at
+        datetime updated_at
+    }
+    task_templates {
+        varchar id PK
+        varchar workspace_id FK
+        varchar project_id FK
+        varchar created_by FK
+        varchar name
+        TEXT definition
+        varchar frequency
+        INTEGER interval
+        date starts_on
+        date ends_on
+        varchar local_time
+        varchar timezone
+        INTEGER deadline_offset_days
+        datetime next_run_at
+        varchar status
+        INTEGER revision
+        TEXT last_error
+        datetime created_at
+        datetime updated_at
+    }
+    task_watchers {
+        varchar id PK
+        varchar task_id FK
+        varchar user_id FK
+        varchar added_by FK
+        datetime created_at
+        datetime updated_at
+    }
     tasks {
         varchar id PK
         varchar workspace_id FK
@@ -312,12 +377,6 @@ erDiagram
         datetime updated_at
         INTEGER revision
     }
-    users ||--o{ tasks : "created_by"
-    users |o--o{ tasks : "reviewer_id"
-    users |o--o{ tasks : "assignee_id"
-    tasks |o--o{ tasks : "parent_task_id"
-    projects |o--o{ tasks : "project_id"
-    workspaces ||--o{ tasks : "workspace_id"
     time_entries {
         varchar id PK
         varchar task_id FK
@@ -329,9 +388,6 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    calendar_events |o--o{ time_entries : "calendar_event_id"
-    users ||--o{ time_entries : "user_id"
-    tasks ||--o{ time_entries : "task_id"
     time_entry_adjustments {
         varchar id PK
         varchar time_entry_id FK
@@ -341,8 +397,6 @@ erDiagram
         TEXT reason
         datetime created_at
     }
-    users ||--o{ time_entry_adjustments : "actor_id"
-    time_entries ||--o{ time_entry_adjustments : "time_entry_id"
     user_settings {
         varchar id PK
         varchar user_id FK
@@ -350,7 +404,6 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    users ||--o{ user_settings : "user_id"
     users {
         varchar id PK
         varchar name
@@ -373,9 +426,6 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
-    roles ||--o{ workspace_members : "role_id"
-    users ||--o{ workspace_members : "user_id"
-    workspaces ||--o{ workspace_members : "workspace_id"
     workspaces {
         varchar id PK
         varchar name
@@ -385,4 +435,86 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
+    ai_runs ||--o{ ai_calls : "ai_run_id"
+    users ||--o{ ai_runs : "requested_by"
+    projects ||--o{ ai_runs : "project_id"
+    workspaces ||--o{ ai_runs : "workspace_id"
+    integration_connections ||--o{ calendar_events : "integration_connection_id"
+    plans ||--o{ calendar_events : "plan_id"
+    tasks ||--o{ calendar_events : "task_id"
+    projects ||--o{ calendar_events : "project_id"
+    workspaces ||--o{ calendar_events : "workspace_id"
+    users ||--o{ calendar_events : "user_id"
+    calendar_events ||--o{ calendar_proposals : "calendar_event_id"
+    users ||--o{ calendar_proposals : "recipient_id"
+    users ||--o{ calendar_proposals : "proposed_by"
+    tasks ||--o{ calendar_proposals : "task_id"
+    projects ||--o{ calendar_proposals : "project_id"
+    workspaces ||--o{ calendar_proposals : "workspace_id"
+    integration_connections ||--o{ github_logs : "integration_connection_id"
+    tasks ||--o{ github_logs : "task_id"
+    projects ||--o{ github_logs : "project_id"
+    users ||--o{ integration_connections : "user_id"
+    workspaces ||--o{ integration_connections : "workspace_id"
+    projects ||--o{ notifications : "project_id"
+    tasks ||--o{ notifications : "task_id"
+    users ||--o{ notifications : "recipient_id"
+    workspaces ||--o{ notifications : "workspace_id"
+    users ||--o{ plans : "reviewed_by"
+    users ||--o{ plans : "created_by"
+    ai_runs ||--o{ plans : "ai_run_id"
+    projects ||--o{ plans : "project_id"
+    workspaces ||--o{ plans : "workspace_id"
+    plans ||--o{ plans : "parent_plan_id"
+    roles ||--o{ project_members : "role_id"
+    workspace_members ||--o{ project_members : "workspace_member_id"
+    projects ||--o{ project_members : "project_id"
+    integration_connections ||--o{ projects : "github_connection_id"
+    users ||--o{ projects : "created_by"
+    projects ||--o{ projects : "parent_project_id"
+    workspaces ||--o{ projects : "workspace_id"
+    ai_runs ||--o{ report_snapshots : "ai_run_id"
+    users ||--o{ report_snapshots : "generated_by"
+    users ||--o{ report_snapshots : "subject_user_id"
+    projects ||--o{ report_snapshots : "project_id"
+    workspaces ||--o{ report_snapshots : "workspace_id"
+    users ||--o{ roles : "created_by"
+    workspaces ||--o{ roles : "workspace_id"
+    projects ||--o{ saved_task_filters : "project_id"
+    workspaces ||--o{ saved_task_filters : "workspace_id"
+    users ||--o{ saved_task_filters : "user_id"
+    users ||--o{ sessions : "user_id"
+    plans ||--o{ task_activities : "plan_id"
+    users ||--o{ task_activities : "actor_id"
+    tasks ||--o{ task_activities : "task_id"
+    users ||--o{ task_blockers : "resolved_by"
+    users ||--o{ task_blockers : "reported_by"
+    tasks ||--o{ task_blockers : "task_id"
+    tasks ||--o{ task_dependencies : "successor_task_id"
+    tasks ||--o{ task_dependencies : "predecessor_task_id"
+    users ||--o{ task_reminders : "user_id"
+    tasks ||--o{ task_reminders : "task_id"
+    workspaces ||--o{ task_reminders : "workspace_id"
+    task_templates ||--o{ task_template_runs : "task_template_id"
+    users ||--o{ task_templates : "created_by"
+    projects ||--o{ task_templates : "project_id"
+    workspaces ||--o{ task_templates : "workspace_id"
+    users ||--o{ task_watchers : "added_by"
+    users ||--o{ task_watchers : "user_id"
+    tasks ||--o{ task_watchers : "task_id"
+    users ||--o{ tasks : "created_by"
+    users ||--o{ tasks : "reviewer_id"
+    users ||--o{ tasks : "assignee_id"
+    tasks ||--o{ tasks : "parent_task_id"
+    projects ||--o{ tasks : "project_id"
+    workspaces ||--o{ tasks : "workspace_id"
+    calendar_events ||--o{ time_entries : "calendar_event_id"
+    users ||--o{ time_entries : "user_id"
+    tasks ||--o{ time_entries : "task_id"
+    users ||--o{ time_entry_adjustments : "actor_id"
+    time_entries ||--o{ time_entry_adjustments : "time_entry_id"
+    users ||--o{ user_settings : "user_id"
+    roles ||--o{ workspace_members : "role_id"
+    users ||--o{ workspace_members : "user_id"
+    workspaces ||--o{ workspace_members : "workspace_id"
     users ||--o{ workspaces : "owner_id"

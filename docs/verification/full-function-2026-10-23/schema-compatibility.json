@@ -1,0 +1,21 @@
+{
+  "completed": true,
+  "database": "separate copy of before.sqlite in fresh review installation",
+  "main_untouched": true,
+  "checks": [
+    {
+      "check": "old task detail still renders on31tables",
+      "status": 200
+    },
+    {
+      "check": "new feature waits for migration",
+      "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/team-calendar",
+      "status": 503
+    },
+    {
+      "check": "new feature waits for migration",
+      "path": "/workspaces/01a147ea-0b1f-706e-8acb-617201a7540b/task-templates",
+      "status": 503
+    }
+  ]
+}

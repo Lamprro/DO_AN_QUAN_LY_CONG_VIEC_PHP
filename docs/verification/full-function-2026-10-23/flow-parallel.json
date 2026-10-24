@@ -1,0 +1,56 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/task-templates",
+    "status": 200
+  },
+  {
+    "step": "two actual PHP processes generate one occurrence and three tasks",
+    "verified": true,
+    "processes": [
+      {
+        "exit": 0,
+        "stdout": "{\"succeeded\":0,\"failed\":0,\"already_running\":true}",
+        "stderr": ""
+      },
+      {
+        "exit": 0,
+        "stdout": "{\"succeeded\":1,\"failed\":0}",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "step": "parallel generation creates no duplicate task UUIDs",
+    "verified": true
+  },
+  {
+    "step": "foreign keys valid after parallel workers",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "php_processes": 2,
+    "shared_real_database": true,
+    "no_mock": true
+  }
+]

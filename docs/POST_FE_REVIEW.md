@@ -1,3 +1,5 @@
+**Cập nhật F11–F14 ngày 23/10/2026:** đã triển khai và kiểm tra trên bản review35bảng; database chính31bảng đang chờ xác nhận migration riêng. Đọc [báo cáo mới](FULL_FUNCTIONAL_COMPLETION_2026-10-23.md) và [bàn giao FE](FRONTEND_F11_F14_HANDOFF.md). Các mô tả F11–F14 “backlog/chưa triển khai” bên dưới là lịch sử.
+
 # Rà soát và hoàn thiện sau bàn giao FE — 20/10/2026
 
 Giữ Laravel MVC/Blade, session/CSRF, Eloquent/service/policy. Tiếp nhận55 file FE đang thay đổi trên nền commit7f0867d, giữ thiết kế mới và sửa tích hợp. Không reset nguồn của AI FE, không sửa commit hoặc xóa báo cáo vòng trước. Patch FE đầu vào và bản sao database chính được giữ trong private runtime; không đưa dữ liệu/khóa vào source.

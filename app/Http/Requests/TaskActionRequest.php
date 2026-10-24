@@ -33,7 +33,7 @@ class TaskActionRequest extends FormRequest
             return ['status' => ['required', Rule::in(['open', 'resolved'])], 'reason' => ['nullable', 'string', 'max:4000']];
         }
         if (str_contains($name, '.comments.') && ! $this->isMethod('DELETE')) {
-            return ['content' => ['required', 'string', 'max:10000']];
+            return ['content' => ['required', 'string', 'max:10000'], 'mentions' => ['sometimes', 'array', 'max:20'], 'mentions.*' => ['required', 'uuid', 'distinct']];
         }
         if (str_ends_with($name, '.attachments.store')) {
             return ['file' => ['bail', 'required', 'file', 'max:'.config('tasks.attachment_max_kb'), new AttachmentFormat]];

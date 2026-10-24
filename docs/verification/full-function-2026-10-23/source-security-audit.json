@@ -1,0 +1,9 @@
+{
+  "findings": [],
+  "working_files_checked": 742,
+  "archive_members_checked": 762,
+  "actual_private_keys_checked_without_printing": true,
+  "env_database_private_storage_excluded": true,
+  "new_commits_created": false,
+  "note": "Scan includes working tree, outgoing commits and recursive ZIP contents. Final ZIP is scanned again after packaging."
+}

@@ -1,0 +1,567 @@
+[
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Console/Commands/BackupSqlite.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Console/Commands/BackupSqlite.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Console/Commands/ProductionPreflight.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Console/Commands/ProductionPreflight.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/Auth/EmailVerificationController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/Auth/EmailVerificationController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/Auth/PasswordRecoveryController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/Auth/PasswordRecoveryController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskCollaborationController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskCollaborationController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskTemplateController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskTemplateController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TeamCalendarController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TeamCalendarController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/WorkHoursController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/WorkHoursController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Middleware/RequireFullFeatureSchema.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Middleware/RequireFullFeatureSchema.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Middleware/RequireVerifiedAccount.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Middleware/RequireVerifiedAccount.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Middleware/SecurityHeaders.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Middleware/SecurityHeaders.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Middleware/TrustedProxyConfiguration.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Middleware/TrustedProxyConfiguration.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/CalendarProposal.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/CalendarProposal.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/TaskTemplate.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/TaskTemplate.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/TaskTemplateRun.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/TaskTemplateRun.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/TaskWatcher.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/TaskWatcher.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/AccountMailService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/AccountMailService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskCollaborationService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskCollaborationService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskTemplateService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskTemplateService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TeamCalendarService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TeamCalendarService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/WorkHoursService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/WorkHoursService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "config/security.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in config/security.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "database/migrations/2026_10_23_180000_add_collaboration_and_templates.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in database/migrations/2026_10_23_180000_add_collaboration_and_templates.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "routes/account_security.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in routes/account_security.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "routes/full_features.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in routes/full_features.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/Auth/RegisteredUserController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/Auth/RegisteredUserController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/NotificationController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/NotificationController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/ProfileController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/ProfileController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Requests/LoginRequest.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Requests/LoginRequest.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Requests/TaskActionRequest.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Requests/TaskActionRequest.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/Project.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/Project.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/Task.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/Task.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/User.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/User.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/Workspace.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/Workspace.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Observers/IntegrityObserver.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Observers/IntegrityObserver.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Providers/AppServiceProvider.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Providers/AppServiceProvider.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/AppShell.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/AppShell.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/CalendarService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/CalendarService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/NotificationService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/NotificationService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/PlanScheduleService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/PlanScheduleService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/PlanService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/PlanService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/ProjectService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/ProjectService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/SettingService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/SettingService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskWorkflowService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskWorkflowService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/WorkspaceService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/WorkspaceService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Support/ReferenceIntegrity.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Support/ReferenceIntegrity.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "bootstrap/app.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in bootstrap/app.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "config/domain_schema.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in config/domain_schema.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "routes/console.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in routes/console.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "routes/web.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in routes/web.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "scripts/setup-local.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in scripts/setup-local.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "vendor/bin/pint",
+      "app/Console/Commands/BackupSqlite.php",
+      "app/Console/Commands/ProductionPreflight.php",
+      "app/Http/Controllers/Auth/EmailVerificationController.php",
+      "app/Http/Controllers/Auth/PasswordRecoveryController.php",
+      "app/Http/Controllers/TaskCollaborationController.php",
+      "app/Http/Controllers/TaskTemplateController.php",
+      "app/Http/Controllers/TeamCalendarController.php",
+      "app/Http/Controllers/WorkHoursController.php",
+      "app/Http/Middleware/RequireFullFeatureSchema.php",
+      "app/Http/Middleware/RequireVerifiedAccount.php",
+      "app/Http/Middleware/SecurityHeaders.php",
+      "app/Http/Middleware/TrustedProxyConfiguration.php",
+      "app/Models/CalendarProposal.php",
+      "app/Models/TaskTemplate.php",
+      "app/Models/TaskTemplateRun.php",
+      "app/Models/TaskWatcher.php",
+      "app/Services/AccountMailService.php",
+      "app/Services/TaskCollaborationService.php",
+      "app/Services/TaskTemplateService.php",
+      "app/Services/TeamCalendarService.php",
+      "app/Services/WorkHoursService.php",
+      "config/security.php",
+      "database/migrations/2026_10_23_180000_add_collaboration_and_templates.php",
+      "routes/account_security.php",
+      "routes/full_features.php",
+      "app/Http/Controllers/Auth/RegisteredUserController.php",
+      "app/Http/Controllers/NotificationController.php",
+      "app/Http/Controllers/ProfileController.php",
+      "app/Http/Controllers/TaskController.php",
+      "app/Http/Requests/LoginRequest.php",
+      "app/Http/Requests/TaskActionRequest.php",
+      "app/Models/Project.php",
+      "app/Models/Task.php",
+      "app/Models/User.php",
+      "app/Models/Workspace.php",
+      "app/Observers/IntegrityObserver.php",
+      "app/Providers/AppServiceProvider.php",
+      "app/Services/AppShell.php",
+      "app/Services/CalendarService.php",
+      "app/Services/NotificationService.php",
+      "app/Services/PlanScheduleService.php",
+      "app/Services/PlanService.php",
+      "app/Services/ProjectService.php",
+      "app/Services/SettingService.php",
+      "app/Services/TaskWorkflowService.php",
+      "app/Services/WorkspaceService.php",
+      "app/Support/ReferenceIntegrity.php",
+      "bootstrap/app.php",
+      "config/domain_schema.php",
+      "routes/console.php",
+      "routes/web.php",
+      "scripts/setup-local.php"
+    ],
+    "exit": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"fixed\",\"files\":[{\"path\":\"app\\\\Services\\\\CalendarService.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"not_operator_with_successor_space\",\"single_line_empty_body\"]}]}"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "config:clear"
+    ],
+    "exit": 0,
+    "output": "\n   INFO  Configuration cache cleared successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "migrate",
+      "--force"
+    ],
+    "exit": 0,
+    "output": "\n   INFO  Nothing to migrate.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "route:cache"
+    ],
+    "exit": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "view:cache"
+    ],
+    "exit": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  }
+]

@@ -3,7 +3,7 @@ from pathlib import Path
 import zipfile,json,hashlib,datetime,re
 root=Path(__file__).resolve().parent.parent
 dist=root/'dist';dist.mkdir(exist_ok=True)
-folders=['app','bootstrap','config','database','docs','lang','public','resources','routes','scripts','storage']
+folders=['deploy','app','bootstrap','config','database','docs','lang','public','resources','routes','scripts','storage']
 selected=[]
 def allowed(path):
     rel=path.relative_to(root);parts=rel.parts
@@ -14,7 +14,7 @@ def allowed(path):
     if parts[0]=='storage' and path.name!='.gitignore':return False
     if parts[:2]==('bootstrap','cache') and path.name!='.gitignore':return False
     if parts[:2]==('public','storage'):return False
-    if any('.sqlite' in p.lower() for p in parts) or path.suffix.lower() in ['.log','.key','.cookies','.pyc','.db']:return False
+    if any('.sqlite' in p.lower() for p in parts) or path.suffix.lower() in ['.log','.key','.cookies','.pyc','.db','.pem','.p12','.pfx','.dump','.sql','.bak']:return False
     return True
 for name in folders:
     if (root/name).exists():selected.extend(p for p in (root/name).rglob('*') if allowed(p))

@@ -1,3 +1,5 @@
+**Mới nhất F11–F14:** [13flow/165điểm xác nhận/384HTTP, cài source mới và tương thích schema cũ](full-function-2026-10-23/README.md). Không cộng các attempt vào số đạt.
+
 # Xác minh trực tiếp phần 1 — 17/10/2026
 
 Theo yêu cầu chủ dự án, không dùng các lớp test làm căn cứ nghiệm thu. Hai lớp FoundationTest/FoundationLifecycleTest vừa tạo đã được gỡ khỏi dự án. Các bằng chứng dưới đây được tạo bằng chính Artisan/Eloquent/SQL của ứng dụng và file SQLite có dữ liệu thật đã ghi, không mock DB hay chạy flow trong TestCase.
@@ -82,3 +84,11 @@ Xem [minh chứng cuối](final/README.md) cho Plan/version/apply, scheduler loc
 ## Nghiệm thu toàn hệ thống 23/10/2026
 
 Đã rà soát và sửa các lỗi cuối qua flow HTTP/browser/database/worker trên bản cài riêng. Trạng thái chi tiết mới nhất: `docs/COMPLETION_REPORT_2026-10-23.md`; minh chứng: `docs/verification/completion-2026-10-23/`; thiết kế/schema hiện hành: `docs/design/CURRENT_SYSTEM.md`. Các mục chờ duyệt trước đây là lịch sử. Không thêm lớp test, không thay dữ liệu chính hoặc APP_KEY.
+
+## Cải thiện UI và luồng sử dụng sau nghiệm thu
+
+[ux-workflow-2026-10-23](ux-workflow-2026-10-23/README.md): 30 điểm xác nhận/59 HTTP request, browser desktop/mobile, SQL sau sửa nhanh và chuyển trạng thái, main DB/.env bất biến. Không có TestCase mới.
+
+## Rà soát trước production
+
+[production-readiness-2026-10-23](production-readiness-2026-10-23/README.md): flow thực toàn module, recovery/verification, vận hành, backup/restore và kiểm tra sự cố. Chỉ chứng nhận các kết quả ghi trong báo cáo; chưa có kết luận GO cho máy chủ thật.

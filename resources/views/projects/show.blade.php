@@ -103,6 +103,8 @@
     </div>
 </section>
 
+@include('projects._guide')
+
 <!-- Sub-projects Section -->
 <section class="card">
     <h2>Dự án con (Sub-projects)</h2>

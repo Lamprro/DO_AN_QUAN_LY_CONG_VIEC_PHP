@@ -17,6 +17,8 @@ use App\Models\Task;
 use App\Models\TaskActivity;
 use App\Models\TaskBlocker;
 use App\Models\TaskDependency;
+use App\Models\TaskTemplateRun;
+use App\Models\TaskWatcher;
 use App\Models\TimeEntry;
 use App\Models\Workspace;
 use Carbon\CarbonImmutable;
@@ -169,6 +171,8 @@ class ReferenceIntegrity
             $model instanceof ProjectMember, $model instanceof GithubLog => $model->project?->workspace_id,
             $model instanceof TaskDependency => $model->predecessor?->workspace_id,
             $model instanceof TaskActivity, $model instanceof TimeEntry, $model instanceof TaskBlocker => $model->task?->workspace_id,
+            $model instanceof TaskWatcher => $model->task?->workspace_id,
+            $model instanceof TaskTemplateRun => $model->template?->workspace_id,
             $model instanceof AiCall => $model->aiRun?->workspace_id,
             default => null,
         };

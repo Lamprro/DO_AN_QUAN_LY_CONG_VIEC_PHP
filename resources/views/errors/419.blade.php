@@ -9,9 +9,9 @@
             Mã xác thực bảo vệ CSRF đã hết hiệu lực do bạn không thao tác trong thời gian dài. Vui lòng tải lại trang để tiếp tục.
         </p>
         <div class="actions" style="display: flex; gap: 0.75rem; justify-content: center;">
-            <button onclick="window.location.reload();" class="button" style="display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.625rem 1.25rem;">
-                ↻ Tải lại trang
-            </button>
+            <a href="{{ route('home') }}" class="button" style="display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.625rem 1.25rem;">
+                Mở lại hệ thống
+            </a>
             <a class="button secondary" href="{{ route('home') }}">
                 Về trang chủ
             </a>

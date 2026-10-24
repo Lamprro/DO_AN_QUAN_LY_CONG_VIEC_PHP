@@ -1,0 +1,49 @@
+[
+  {
+    "command": [
+      "python",
+      "-X",
+      "utf8",
+      "scripts/package-source.py"
+    ],
+    "exit_code": 0,
+    "output": "{\"archive\": \"D:\\\\HeThong_PhanTichTaiChinh\\\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\\\dist\\\\work-management-mvc-source.zip\", \"files\": 638, \"bytes\": 2531349, \"sha256\": \"cb50dc0890a835ac151af089eeec49869c81f7a0aa78b5caf98bf377a1a03a95\", \"verified\": true}\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "scripts/setup-local.php",
+      "--demo"
+    ],
+    "exit_code": 0,
+    "output": "\n   INFO  Configuration cache cleared successfully.  \n\n\n   INFO  Application key set successfully.  \n\n\n   INFO  Preparing database.  \n\n  Creating migration table ............................................................................... 6.78ms DONE\n\n   INFO  Running migrations.  \n\n  0001_01_01_000000_create_users_table .................................................................. 13.44ms DONE\n  0001_01_01_000001_create_cache_table ................................................................... 9.11ms DONE\n  0001_01_01_000002_create_jobs_table ................................................................... 11.21ms DONE\n  2026_10_17_000001_create_user_settings_table ........................................................... 4.11ms DONE\n  2026_10_17_000002_create_workspaces_table .............................................................. 2.27ms DONE\n  2026_10_17_000003_create_roles_table ................................................................... 4.92ms DONE\n  2026_10_17_000004_create_workspace_members_table ....................................................... 6.31ms DONE\n  2026_10_17_000005_create_integration_connections_table ................................................. 2.46ms DONE\n  2026_10_17_000006_create_projects_table ................................................................ 5.19ms DONE\n  2026_10_17_000007_create_project_members_table ......................................................... 4.77ms DONE\n  2026_10_17_000008_create_tasks_table .................................................................. 11.18ms DONE\n  2026_10_17_000009_create_task_dependencies_table ....................................................... 4.76ms DONE\n  2026_10_17_000010_create_task_blockers_table ........................................................... 2.45ms DONE\n  2026_10_17_000011_create_ai_runs_table ................................................................. 7.57ms DONE\n  2026_10_17_000012_create_ai_calls_table ................................................................ 5.33ms DONE\n  2026_10_17_000013_create_plans_table ................................................................... 9.55ms DONE\n  2026_10_17_000014_create_calendar_events_table ........................................................ 10.15ms DONE\n  2026_10_17_000015_create_time_entries_table ............................................................ 4.73ms DONE\n  2026_10_17_000016_create_task_activities_table ......................................................... 5.22ms DONE\n  2026_10_17_000017_create_notifications_table ........................................................... 7.94ms DONE\n  2026_10_17_000018_create_report_snapshots_table ........................................................ 5.23ms DONE\n  2026_10_17_000019_create_github_logs_table ............................................................. 5.18ms DONE\n  2026_10_17_000020_add_edit_revisions ................................................................... 5.38ms DONE\n  2026_10_18_000021_add_task_utilities .................................................................. 27.59ms DONE\n  2026_10_18_000022_add_time_overlap_index ............................................................... 2.33ms DONE\n\n\n   INFO  Seeding database.  \n\n  Database\\Seeders\\DemoSeeder ................................................................................ RUNNING  \n  Database\\Seeders\\DemoSeeder .......................................................................... 1,213 ms DONE  \n\nReady. Run scripts/serve-local.ps1 and scripts/work-ai.ps1 in separate terminals.\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "route:cache"
+    ],
+    "exit_code": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "view:cache"
+    ],
+    "exit_code": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "app:preflight",
+      "--json"
+    ],
+    "exit_code": 0,
+    "output": "{\n    \"configuration_passed\": true,\n    \"production_mode\": false,\n    \"runtime_checked\": false,\n    \"checks\": [\n        {\n            \"check\": \"php\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.pdo\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.mbstring\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.openssl\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.fileinfo\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.ctype\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.tokenizer\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.xml\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.dom\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.session\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"app_key\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"storage\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"private_files\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"database.tables\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"database.migrations\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"cache.database\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"cache.file\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"session_revocation\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"queue_database\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"queue_retry_after\",\n            \"passed\": true,\n            \"action\": \"\"\n        }\n    ],\n    \"limits\": [\n        \"This is not a production certification. Verify HTTP/TLS, actual mail receipt, backup restoration, load and third-party integrations on the target infrastructure.\",\n        \"Heartbeat freshness is recent worker activity, not proof of future availability.\"\n    ]\n}\n"
+  }
+]

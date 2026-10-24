@@ -1,0 +1,227 @@
+[
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Console/Commands/BackupSqlite.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Console/Commands/BackupSqlite.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Console/Commands/ProductionPreflight.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Console/Commands/ProductionPreflight.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/Auth/EmailVerificationController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/Auth/EmailVerificationController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/Auth/PasswordRecoveryController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/Auth/PasswordRecoveryController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskCollaborationController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskCollaborationController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskTemplateController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskTemplateController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TeamCalendarController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TeamCalendarController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/WorkHoursController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/WorkHoursController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Middleware/RequireFullFeatureSchema.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Middleware/RequireFullFeatureSchema.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Middleware/RequireVerifiedAccount.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Middleware/RequireVerifiedAccount.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Middleware/SecurityHeaders.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Middleware/SecurityHeaders.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Middleware/TrustedProxyConfiguration.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Middleware/TrustedProxyConfiguration.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/CalendarProposal.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/CalendarProposal.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/TaskTemplate.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/TaskTemplate.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/TaskTemplateRun.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/TaskTemplateRun.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Models/TaskWatcher.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Models/TaskWatcher.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/AccountMailService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/AccountMailService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskCollaborationService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskCollaborationService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskTemplateService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskTemplateService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TeamCalendarService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TeamCalendarService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/WorkHoursService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/WorkHoursService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "config/security.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in config/security.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "database/migrations/2026_10_23_180000_add_collaboration_and_templates.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in database/migrations/2026_10_23_180000_add_collaboration_and_templates.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "routes/account_security.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in routes/account_security.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "routes/full_features.php"
+    ],
+    "exit": 255,
+    "output": "\nParse error: syntax error, unexpected token \"use\" in routes/full_features.php on line 14\nErrors parsing routes/full_features.php\nPHP Parse error:  syntax error, unexpected token \"use\" in routes/full_features.php on line 14\n"
+  }
+]

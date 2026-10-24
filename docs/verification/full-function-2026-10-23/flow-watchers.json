@@ -1,0 +1,213 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/collaboration/tasks/01a16642-04b8-717d-8c33-67f40e454171/watchers",
+    "status": 200
+  },
+  {
+    "step": "self watch stored with identity",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/collaboration/tasks/01a16642-04b8-717d-8c33-67f40e454171/watchers",
+    "status": 200
+  },
+  {
+    "step": "repeated subscribe idempotent",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/collaboration/tasks/01a16642-04b8-717d-8c33-67f40e454171/watchers",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/collaboration/tasks/01a16642-04b8-717d-8c33-67f40e454171/watchers",
+    "status": 200
+  },
+  {
+    "step": "authorized manager adds another eligible watcher",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171/comments",
+    "status": 200
+  },
+  {
+    "step": "mention stored with real comment",
+    "verified": true
+  },
+  {
+    "step": "watcher plus mention receives one deduplicated notice per actor",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171/comments",
+    "status": 200
+  },
+  {
+    "step": "out-of-scope mention rolls back entire comment",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/members/01a16641-f66b-7328-8a85-b8c76528dc2f",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171/comments",
+    "status": 200
+  },
+  {
+    "step": "revoked watcher receives no new notice",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/notifications",
+    "status": 200
+  },
+  {
+    "step": "revoked watcher old notifications hidden by current scope",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/projects/01a16641-f308-7201-a05b-157aecfae7a0/tasks/01a16642-04b8-717d-8c33-67f40e454171",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a164e6-2cc5-7145-9aaf-15ea48fab0ab/collaboration/tasks/01a16642-04b8-717d-8c33-67f40e454171/watchers/01a164e6-2bf8-7209-b2c7-f8f173e43938",
+    "status": 200
+  },
+  {
+    "step": "self unsubscribe persisted",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE"
+  },
+  {
+    "step": "foreign keys valid",
+    "verified": true
+  }
+]

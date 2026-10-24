@@ -1,3 +1,5 @@
+**Cập nhật F11–F14 ngày 23/10/2026:** đã triển khai và kiểm tra trên bản review35bảng; database chính31bảng đang chờ xác nhận migration riêng. Đọc [báo cáo mới](FULL_FUNCTIONAL_COMPLETION_2026-10-23.md) và [bàn giao FE](FRONTEND_F11_F14_HANDOFF.md). Các mô tả F11–F14 “backlog/chưa triển khai” bên dưới là lịch sử.
+
 # Bàn giao FE — Laravel MVC / Blade
 
 ## Cập nhật tiếp nhận FE và hoàn thiện — 20/10/2026
@@ -501,3 +503,45 @@ Trạng thái mới nhất: [báo cáo nghiệm thu](COMPLETION_REPORT_2026-10-2
 - Không bổ sung API, dependency JS hoặc migration trong đợt này. Không đổi cơ chế provider/key. Không có lớp TestCase mới.
 
 Kịch bản FE phải giữ khi chỉnh giao diện: mobile mở menu/Escape → click tiêu đề dài → mở sửa nhanh → 1giờ +30phút → Ctrl+Enter → flash thành công → SQL/chi tiết90phút; thêm một phiên khác sửa cùng task phải đi qua409. Kiểm CSS không tràn ngang, Tab/Escape và label/error summary sau mọi sửa modal.
+
+## Đợt UX luồng công việc — 23/10/2026 (sau nghiệm thu)
+
+Xem [báo cáo thay đổi và flow hàm](UX_WORKFLOW_UPDATE_2026-10-23.md), [hướng dẫn người dùng](USER_WORKFLOW_GUIDE.md) và [minh chứng](verification/ux-workflow-2026-10-23/README.md). Các contract cũ về quyền/revision/CSRF vẫn giữ nguyên.
+
+| File/selector | Trách nhiệm và contract phải giữ |
+| --- | --- |
+| `AppShell::build()` | Menu có `group`, `score`, `active`; dùng route name và prefix, chọn mục khớp cụ thể nhất. Chỉ dựng link sau kiểm quyền. Không đánh dấu active bằng so URL bỏ query ở FE. |
+| `components/layout` + `.nav-group` | Hiển thị nhóm dự án/công việc trước, workspace rồi cá nhân; `aria-current=page`, tên context, breadcrumb. Khi đổi nhãn group phải đổi thứ tự nhóm tương ứng. |
+| `[data-close-nav]`, `#nav-toggle`, `.nav-backdrop` | JS mở/đóng menu mobile; focus vào nút đóng, trở lại Menu; giữ Escape/Tab loop. Nút đóng ẩn trên desktop. |
+| `tasks/_view-nav` | Shared navigation list/board/tree. Truyền `taskView=tree` ở cây; chỉ dùng `$filters` đã clean. Link list/board giữ điều kiện, reset pagination. |
+| `tasks/_filters`, `data-form=task-search` | GET form native. `view` và `preset` hidden; trường q/status và disclosure điều kiện phụ. Không đổi tên server enum. `data-filter-reset` ngăn JS sinh reset trùng; `data-filter-label/value` là nhãn hiển thị của preset, không thay giá trị request. |
+| `.task-tools` | Disclosure chứa saved filter + bulk hiện có. Tick dòng mở công cụ bằng JS; giữ input `form=bulk-tasks`, revision, kiểm tối đa50 và transaction nguyên tử. |
+| `tasks/_journey` | Nhận `$task`, `$workflowUi`, `$blockers`, `$dependencies` từ controller; dùng cùng availability với form thật. Không tính quyền, thời gian FS hoặc state machine ở JS. GROUP không có stepper, CANCELLED/archived được giải thích riêng. |
+| Các ID `task-workflow`, `task-blockers`, `task-dependencies`, `task-discussion`, `task-activities`, `task-time` | Đích liên kết native và focus `tabindex=-1`. Nếu đổi layout phải giữ ID duy nhất và đủ scroll-margin. Không ẩn form khỏi link đích bằng tab UI chưa có phương án mở. |
+| `projects/_guide` | Bốn bước hướng dẫn sử dụng, không giả là checklist hoàn thành. Link được kiểm quyền tại Blade; tạo việc còn kiểm projectWritable. |
+| `public/css/workflow-experience.css` | CSS sau theme cũ; responsive390/1366, scope h2 menu vì theme cũ dùng!important. Không đưa state nghiệp vụ vào CSS. |
+
+Flow FE cần xác nhận sau mỗi chỉnh sửa: tìm tên → áp dụng → Kanban vẫn giữ tên → xóa filter vẫn ở Kanban; tick dòng mở bulk; chi tiết TODO/blocker có lý do và nút bị khóa; GROUP không chuyển trạng thái tay; Viewer không có form ghi; sửa nhanh thành công SQL khớp; phiên thứ hai gửi revision cũ trả409; mobile mở/đóng menu, anchor chuyển focus, không tràn ngang trang. JavaScript chỉ hỗ trợ thao tác; form GET/PATCH và authorization phía server là nguồn quyết định.
+
+Đợt này không đổi migration/dependency. Giữ assets `.css/.js` khi deploy, clear/rebuild Blade cache; không cần frontend API. Những hạn chế production/provider còn trong báo cáo nghiệm thu, không được đổi nhãn thành “đã kiểm chứng” chỉ vì giao diện đã đẹp hơn.
+
+## Bàn giao bổ sung: tài khoản và production — 23/10/2026
+
+Giữ MVC/Blade. Các trang đã render và POST thật; AI FE chỉ đổi bố cục/màu/spacing, không thay route, tên field, CSRF hoặc điều kiện quyền/version.
+
+| Trang | Route đọc / gửi | Field/flow cần giữ |
+|---|---|---|
+| `auth/forgot-password.blade.php` | password.request GET; password.email POST | email; data-form=forgot-password; phản hồi chung không tiết lộ tài khoản tồn tại |
+| `auth/reset-password.blade.php` | password.reset GET; password.reset.store POST | token hidden, email, password, password_confirmation; data-form=reset-password; không hiện lại mật khẩu |
+| `auth/verify-email.blade.php` | verification.notice GET; verification.send POST | data-form=verification-send; email hiện tại; hướng dẫn3 bước, link sửa profile, giới hạn gửi lại |
+| Liên kết email | verification.verify GET có chữ ký tương đối và expires | Không tự tạo signature/hash/URL ở JS; EmailVerificationRequest xác nhận user/email |
+| `errors/500`, `errors/503` | Exception/maintenance | HTML độc lập, không bọc x-layout vì DB có thể đang lỗi; không hiện stack/exception/key |
+| `mail/account-link.blade.php` | AccountMailService | heading/url/minutes/kind; dùng escaped Blade, không đưa token vào analytics/log frontend |
+
+Login có link “Quên mật khẩu?”. Production mặc định REQUIRE_VERIFIED_EMAIL=true: user chưa xác minh đi tới verification.notice; profile/password vẫn truy cập để sửa email/credential; logout vẫn hoạt động. Local mặc định không ép xác minh để giữ các fixture/flow cũ. Không giả đánh dấu email_verified_at từ FE. Đổi email cần current_password và sẽ cần xác minh lại.
+
+PasswordRecoveryController dùng Password broker, lock+transaction, token một lần và thu hồi session. Profile thay mật khẩu/email xóa reset token cũ. Các throttles đặt tên độc lập;429 là thông báo chờ, FE không auto retry liên tục. Mail lỗi có thông báo phù hợp, không được đổi thành “đã gửi thành công” từ JavaScript.
+
+Layout thêm `$versionedAsset` cho CSS/JS để tránh browser dùng code cũ sau release. Dynamic response có no-store/no-referrer; tránh thêm analytics/request logger thu URL reset/invitation. CSP hiện chỉ chặn frame ngoài origin, object và base URL sai; không tuyên bố là script CSP nghiêm ngặt vì FE hiện có script/style inline.
+
+Flow tổng thể, điều kiện production và hạn chế: [báo cáo mới](PRODUCTION_READINESS_REVIEW_2026-10-23.md), [runbook](PRODUCTION_RUNBOOK.md), [minh chứng](verification/production-readiness-2026-10-23/README.md). Không thay API/provider thật bằng dữ liệu giả để làm đẹp giao diện.

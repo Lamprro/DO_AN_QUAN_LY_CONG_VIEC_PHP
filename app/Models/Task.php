@@ -117,4 +117,14 @@ class Task extends DomainModel
     {
         return $query->where('task_type', TaskType::WORK)->whereDoesntHave('children');
     }
+
+    public function watchers(): HasMany
+    {
+        return $this->hasMany(TaskWatcher::class, 'task_id');
+    }
+
+    public function calendarProposals(): HasMany
+    {
+        return $this->hasMany(CalendarProposal::class, 'task_id');
+    }
 }

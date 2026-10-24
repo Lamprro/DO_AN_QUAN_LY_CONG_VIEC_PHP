@@ -25,8 +25,8 @@ class SettingService
     {
         DB::transaction(function () use ($user, $data) {
             User::lockForUpdate()->findOrFail($user->id);
-            UserSetting::updateOrCreate(['user_id' => $user->id], ['settings' => ['language' => $data['language'], 'theme' => $data['theme'],
-                'notifications' => ['in_app' => (bool) $data['notifications']['in_app'], 'email' => false, 'telegram' => false]]]);
+            UserSetting::updateOrCreate(['user_id' => $user->id], ['settings' => array_replace($user->settings()->value('settings') ?? [], ['language' => $data['language'], 'theme' => $data['theme'],
+                'notifications' => ['in_app' => (bool) $data['notifications']['in_app'], 'email' => false, 'telegram' => false]])]);
         }, 3);
     }
 }

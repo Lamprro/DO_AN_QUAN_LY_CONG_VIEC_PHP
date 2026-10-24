@@ -1,0 +1,27 @@
+[
+  {
+    "command": "C:/xampp/php/php.exe vendor/bin/pint app/Services/AppShell.php --test",
+    "exit": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"passed\"}"
+  },
+  {
+    "command": "node --check public/js/app-ui.js",
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": "C:/xampp/php/php.exe -l app/Services/AppShell.php",
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/AppShell.php\n"
+  },
+  {
+    "command": "C:/xampp/php/php.exe artisan view:cache",
+    "exit": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "command": "git diff --check",
+    "exit": 0,
+    "output": "warning: in the working copy of 'docs/FRONTEND_HANDOFF.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/IMPLEMENTATION_PROGRESS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/verification/README.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'public/js/app-ui.js', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/layout.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/board.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/tree.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/workflow.blade.php', CRLF will be replaced by LF the next time Git touches it\n"
+  }
+]

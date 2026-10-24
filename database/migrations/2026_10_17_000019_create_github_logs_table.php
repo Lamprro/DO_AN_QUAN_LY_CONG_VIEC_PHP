@@ -24,9 +24,9 @@ return new class extends Migration
             $table->string('status', 24)->default('pending');
             $table->unsignedInteger('attempt_count')->default(0);
             $table->text('error_message')->nullable();
-            $table->timestamp('occurred_at')->nullable();
-            $table->timestamp('received_at');
-            $table->timestamp('processed_at')->nullable();
+            $table->dateTime('occurred_at')->nullable();
+            $table->dateTime('received_at');
+            $table->dateTime('processed_at')->nullable();
             $table->unique(['integration_connection_id', 'delivery_id', 'project_id'], 'github_logs_uq_0');
         });
     }

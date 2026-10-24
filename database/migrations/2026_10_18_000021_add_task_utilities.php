@@ -25,7 +25,7 @@ return new class extends Migration
             $t->json('before');
             $t->json('after');
             $t->text('reason');
-            $t->timestamp('created_at');
+            $t->dateTime('created_at');
             $t->index(['time_entry_id', 'created_at']);
         });
         Schema::create('task_reminders', function (Blueprint $t) {

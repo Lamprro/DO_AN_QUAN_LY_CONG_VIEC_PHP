@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignUuid('generated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignUuid('ai_run_id')->nullable()->constrained('ai_runs')->restrictOnDelete();
             $table->string('scope', 20);
-            $table->timestamp('period_start');
-            $table->timestamp('period_end');
+            $table->dateTime('period_start');
+            $table->dateTime('period_end');
             $table->json('metrics_json');
             $table->text('ai_commentary')->nullable();
             $table->string('storage_key', 512)->nullable();

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('event_type', 24)->default('NOTE');
             $table->string('title', 200);
             $table->text('description')->nullable();
-            $table->timestamp('starts_at');
-            $table->timestamp('ends_at');
+            $table->dateTime('starts_at');
+            $table->dateTime('ends_at');
             $table->string('timezone', 64)->default('Asia/Ho_Chi_Minh');
             $table->boolean('all_day')->default(false);
             $table->boolean('is_busy')->default(false);

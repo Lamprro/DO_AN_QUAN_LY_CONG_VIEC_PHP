@@ -38,7 +38,13 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind(AiProvider::class, HttpAiProvider::class);
+        $this->app->bind(AiProvider::class, function () {
+            if (config('ai.provider') === 'gemini') {
+                return $this->app->make(\App\Services\GeminiAiProvider::class);
+            }
+
+            return $this->app->make(HttpAiProvider::class);
+        });
     }
 
     public function boot(): void

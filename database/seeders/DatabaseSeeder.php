@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DemoSeeder::class,
             FactorySeeder::class,
+            RichDataSeeder::class,
         ]);
     }
 }

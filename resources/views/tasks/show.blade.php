@@ -73,7 +73,7 @@
     <!-- Actions Toolbar -->
     <div class="actions">
         @can('update',$task)
-            <button type="button" class="button" data-open-quick-edit style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700;">
+            <button type="button" class="button" data-task-panel data-panel-url="{{ route($routePrefix.'.edit',[...$routeParams,$task]) }}" style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700;">
                 ⚡ Sửa nhanh
             </button>
             <a class="button secondary" href="{{ route($routePrefix.'.edit',[...$routeParams,$task]) }}">
@@ -147,5 +147,5 @@
 </div>
 
 @include('tasks._collaboration')
-@include('tasks._quick-edit')
+
 </x-layout>

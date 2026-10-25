@@ -7,8 +7,8 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
-use App\Services\TaskUtilityService;
 use App\Services\TaskTreeService;
+use App\Services\TaskUtilityService;
 use App\Services\TaskWorkflowService;
 use App\Support\UiLabels;
 use Illuminate\Http\Request;
@@ -32,6 +32,15 @@ class TaskWorkflowController extends Controller
         return view('tasks.tree', compact('workspace', 'project', 'tasks', 'nodes', 'progress') + ['routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace]]);
     }
 
+    public function statusForm(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
+    {
+        $this->bound($workspace, $project, $task);
+        $this->authorize('view', $task);
+        $data = compact('workspace', 'project', 'task') + ['panelMode' => 'status', 'workflowUi' => $this->workflow->availability($request->user(), $task), 'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace]];
+
+        return $request->boolean('panel') ? view('tasks.panel', $data) : redirect()->route($data['routePrefix'].'.show', [...$data['routeParams'], $task]);
+    }
+
     public function status(TaskActionRequest $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
     {
         $this->bound($workspace, $project, $task);
@@ -45,7 +54,7 @@ class TaskWorkflowController extends Controller
                 'message' => 'Đã chuyển trạng thái sang '.UiLabels::text($task->status),
                 'status' => $task->status->value,
                 'status_label' => UiLabels::text($task->status),
-                'task' => $task,
+                'task' => ['id' => $task->id, 'revision' => $task->revision],
             ]);
         }
 

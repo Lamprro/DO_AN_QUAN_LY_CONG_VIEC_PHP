@@ -10,10 +10,10 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
-use App\Services\TaskService;
-use App\Services\TaskUtilityService;
 use App\Services\TaskEditConflict;
+use App\Services\TaskService;
 use App\Services\TaskTreeService;
+use App\Services\TaskUtilityService;
 use App\Services\TaskWorkflowService;
 use App\Support\ProjectAccess;
 use App\Support\SearchTerm;
@@ -75,7 +75,7 @@ class TaskController extends Controller
         }
         $tasks = $query->orderBy('id')->paginate((int) ($filters['per_page'] ?? 10))->withQueryString();
 
-        return view('tasks.index', $context + compact('tasks', 'filters') + ['people' => $this->access->eligibleMembers($workspace, $project), 'savedFilters' => SavedTaskFilter::where('user_id', $request->user()->id)->where('workspace_id', $workspace->id)->where('project_id', $project?->id)->orderBy('name')->get()]);
+        return view('tasks.index', $context + compact('tasks', 'filters') + ['savedFilters' => SavedTaskFilter::where('user_id', $request->user()->id)->where('workspace_id', $workspace->id)->where('project_id', $project?->id)->orderBy('name')->get()]);
     }
 
     public function create(Request $request, Workspace $workspace, ?Project $project = null)
@@ -83,7 +83,7 @@ class TaskController extends Controller
         $context = $this->context($request, $workspace, $project);
         abort_unless($context['canCreate'], 403);
 
-        return view('tasks.create', $context + ['task' => null, 'people' => $this->access->eligibleMembers($workspace, $project)]);
+        return view($request->boolean('panel') ? 'tasks.panel' : 'tasks.create', $context + ['task' => null, 'panelMode' => 'create']);
     }
 
     public function store(TaskRequest $request, Workspace $workspace, ?Project $project = null)
@@ -95,7 +95,7 @@ class TaskController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Đã tạo công việc mới thành công.',
-                'task' => $task->load('assignee', 'reviewer'),
+                'task' => ['id' => $task->id, 'title' => $task->title],
                 'redirect' => route($context['routePrefix'].'.show', [...$context['routeParams'], $task]),
             ], 201);
         }
@@ -113,6 +113,13 @@ class TaskController extends Controller
         $this->bound($workspace, $project, $task);
         $this->authorize('view', $task);
         $task->load('assignee', 'reviewer', 'creator');
+        if ($request->boolean('panel')) {
+            return view('tasks.panel', $this->context($request, $workspace, $project) + [
+                'task' => $task, 'panelMode' => 'view',
+                'workflowUi' => app(TaskWorkflowService::class)->availability($request->user(), $task),
+                'recentComments' => $task->activities()->where('type', 'COMMENT')->with('actor')->latest()->limit(5)->get(),
+            ]);
+        }
 
         $all = $workspace->tasks()->where('project_id', $project?->id)->get();
         $activityType = $request->validate(['activity_type' => ['nullable', Rule::in(['COMMENT', 'HISTORY', 'ATTACHMENT'])]])['activity_type'] ?? null;
@@ -154,7 +161,7 @@ class TaskController extends Controller
         $this->bound($workspace, $project, $task);
         $this->authorize('update', $task);
 
-        return view('tasks.edit', $this->context($request, $workspace, $project) + compact('task') + ['people' => $this->access->eligibleMembers($workspace, $project)]);
+        return view($request->boolean('panel') ? 'tasks.panel' : 'tasks.edit', $this->context($request, $workspace, $project) + compact('task') + ['panelMode' => 'edit']);
     }
 
     public function update(TaskRequest $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
@@ -181,6 +188,7 @@ class TaskController extends Controller
                     return response()->json([
                         'success' => false,
                         'conflict' => true,
+                        'html' => view('tasks.conflict', $this->context($request, $workspace, $project) + compact('task', 'conflict'))->fragment('task-conflict'),
                         'message' => 'Công việc đã được cập nhật bởi một phiên làm việc khác.',
                     ], 409);
                 }
@@ -242,11 +250,18 @@ class TaskController extends Controller
             $input = $request->validate(['conflict_token' => 'required|uuid', 'expected_revision' => 'required|integer|min:1', 'choices' => 'sometimes|array', 'choices.*' => 'required|in:mine,server', 'deadline_reason' => 'nullable|string|max:2000']);
             $resolved = app(TaskEditConflict::class)->resolve($request, $task, $input);
         } catch (ValidationException $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Bản đối chiếu hết hiệu lực. Mở lại dữ liệu mới và thử lại.', 'errors' => $e->errors()], 422);
+            }
+
             return response()->view('tasks.conflict-unavailable', $this->context($request, $workspace, $project) + ['task' => $task, 'messages' => $e->errors()], 422);
         }
         try {
             $data = Validator::make($resolved['data'], TaskRequest::fieldRules($workspace, $task))->validate();
         } catch (ValidationException $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Kiểm tra lại lựa chọn.', 'errors' => $e->errors()], 422);
+            }
             $request->session()->flash('task_edit_error', ['task_id' => $task->id, 'surface' => $resolved['surface']]);
             $context = $this->context($request, $workspace, $project);
 

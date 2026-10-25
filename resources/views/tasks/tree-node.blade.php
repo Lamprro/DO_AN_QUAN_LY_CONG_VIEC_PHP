@@ -12,7 +12,7 @@
                             </span>
                             <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
                                 <x-status :value="$node->status" />
-                                <a href="{{ route($routePrefix.'.show', [...$routeParams, $node]) }}" style="font-size: 0.75rem; color: var(--color-primary); padding: 0.1875rem 0.5rem; background: var(--color-surface-hover); border-radius: var(--radius-xs); border: 1px solid var(--color-border); text-decoration: none;">
+                                <a data-task-panel href="{{ route($routePrefix.'.show', [...$routeParams, $node]) }}" style="font-size: 0.75rem; color: var(--color-primary); padding: 0.1875rem 0.5rem; background: var(--color-surface-hover); border-radius: var(--radius-xs); border: 1px solid var(--color-border); text-decoration: none;">
                                     Mở nhóm
                                 </a>
                             </span>
@@ -33,7 +33,7 @@
                             @else
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-primary); flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                             @endif
-                            <a href="{{ route($routePrefix.'.show', [...$routeParams, $node]) }}" style="font-weight: 600; color: var(--color-text); text-decoration: none; font-size: 0.875rem;">
+                            <a data-task-panel href="{{ route($routePrefix.'.show', [...$routeParams, $node]) }}" style="font-weight: 600; color: var(--color-text); text-decoration: none; font-size: 0.875rem;">
                                 <span style="font-family: var(--font-mono); color: var(--color-primary); margin-right: 0.25rem;">{{ $node->code }}</span>
                                 {{ $node->title }}
                             </a>

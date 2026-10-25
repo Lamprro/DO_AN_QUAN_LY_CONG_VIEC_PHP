@@ -66,17 +66,17 @@ class ProjectController extends Controller
         if (! $this->access->allows($request->user(), $project, 'task.view')) {
             $project->setAttribute('tasks_count', null);
         }
+        $parent = $project->parent_project_id ? $this->access->visible($request->user(), $workspace)->whereKey($project->parent_project_id)->first() : null;
+        $children = $this->access->visible($request->user(), $workspace)->where('parent_project_id', $project->id)->orderBy('name')->get();
         $canViewTasks = $this->access->allows($request->user(), $project, 'task.view');
         $canCreateTask = $canViewTasks && $this->access->allows($request->user(), $project, 'task.create') && app(TaskPolicy::class)->projectWritable($project);
         $recentTasks = $canViewTasks
             ? $project->tasks()->with('assignee')->latest('created_at')->limit(10)->get()
             : collect();
-        $people = $this->access->eligibleMembers($workspace, $project);
-        $reviewers = $this->access->eligibleMembers($workspace, $project, 'task.review');
         $routePrefix = 'workspaces.projects.tasks';
         $routeParams = [$workspace, $project];
 
-        return view('projects.show', compact('workspace', 'project', 'parent', 'children', 'canViewTasks', 'canCreateTask', 'recentTasks', 'people', 'reviewers', 'routePrefix', 'routeParams'));
+        return view('projects.show', compact('workspace', 'project', 'parent', 'children', 'canViewTasks', 'canCreateTask', 'recentTasks', 'routePrefix', 'routeParams'));
     }
 
     public function edit(Request $request, Workspace $workspace, Project $project)

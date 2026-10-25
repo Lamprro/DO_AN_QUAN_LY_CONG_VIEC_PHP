@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 foreach (['projects/{project}/tasks' => 'projects.tasks.', 'tasks' => 'tasks.'] as $path => $prefix) {
     Route::post($path.'/{task}/resolve-edit', [TaskController::class, 'resolveEdit'])->name($prefix.'resolve-edit');
     Route::get($path.'/tree', [Workflow::class, 'tree'])->name($prefix.'tree');
+    Route::get($path.'/{task}/status', [Workflow::class, 'statusForm'])->name($prefix.'status.edit');
     Route::patch($path.'/{task}/status', [Workflow::class, 'status'])->name($prefix.'status.update');
     Route::post($path.'/{task}/dependencies', [Workflow::class, 'dependency'])->name($prefix.'dependencies.store');
     Route::delete($path.'/{task}/dependencies/{dependency}', [Workflow::class, 'removeDependency'])->name($prefix.'dependencies.destroy');

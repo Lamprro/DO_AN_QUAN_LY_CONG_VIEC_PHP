@@ -115,9 +115,7 @@
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
             @if($canCreateTask)
-                <button type="button" class="button" id="btn-trigger-quick-create" style="font-size: 0.825rem; padding: 0.35rem 0.75rem; background: var(--primary); color: #fff;">
-                    ⚡ Tạo nhanh
-                </button>
+                <a class="button" data-task-panel href="{{ route('workspaces.projects.tasks.create',[$workspace,$project]) }}">+ Tạo công việc</a>
             @endif
             <a href="{{ route('workspaces.projects.tasks.index',[$workspace,$project]) }}" class="button secondary" style="font-size: 0.825rem; padding: 0.35rem 0.75rem;">
                 Xem tất cả ({{ $project->tasks_count ?? count($recentTasks) }}) ›
@@ -154,7 +152,7 @@
                             data-update-url="{{ route('workspaces.projects.tasks.update', [$workspace, $project, $task]) }}"
                             data-status-url="{{ route('workspaces.projects.tasks.status.update', [$workspace, $project, $task]) }}">
                             <td>
-                                <a href="{{ route('workspaces.projects.tasks.show',[$workspace,$project,$task]) }}" style="text-decoration: none; font-weight: 700;">
+                                <a data-task-panel href="{{ route('workspaces.projects.tasks.show',[$workspace,$project,$task]) }}" style="text-decoration: none; font-weight: 700;">
                                     <span class="task-row-code" style="color: var(--primary); font-family: var(--font-mono); margin-right: 0.35rem;">{{ $task->code }}</span>
                                     <span class="task-row-title">{{ $task->title }}</span>
                                 </a>
@@ -184,9 +182,7 @@
                             </td>
                             <td style="text-align: right;">
                                 @can('update', $task)
-                                    <button type="button" class="btn-quick-edit preset-chip" style="font-size: 0.72rem; padding: 0.15rem 0.45rem; cursor: pointer; background: var(--primary-light); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25);" title="Sửa nhanh công việc này">
-                                        ⚡ Sửa
-                                    </button>
+                                    <a class="button secondary compact" data-task-panel href="{{ route('workspaces.projects.tasks.edit',[$workspace,$project,$task]) }}">Sửa</a>
                                 @endcan
                             </td>
                         </tr>
@@ -244,6 +240,6 @@
 @endcan
 
 @if($canViewTasks)
-    @include('tasks._quick-modal')
+
 @endif
 </x-layout>

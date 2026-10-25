@@ -10,11 +10,9 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
-use App\Services\DeadlineInsight;
-use App\Services\TaskCollaborationService;
-use App\Services\TaskEditConflict;
-use App\Services\TaskEditData;
 use App\Services\TaskService;
+use App\Services\TaskUtilityService;
+use App\Services\TaskEditConflict;
 use App\Services\TaskTreeService;
 use App\Services\TaskWorkflowService;
 use App\Support\ProjectAccess;
@@ -34,7 +32,7 @@ class TaskController extends Controller
     {
         abort_unless($this->policy->scope($request->user(), $workspace, $project, 'task.view'), 403);
 
-        return ['deadlinePresets' => app(TaskEditData::class)->presets($workspace), 'workspace' => $workspace, 'project' => $project, 'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace],
+        return ['deadlinePresets' => app(TaskService::class)->presets($workspace), 'workspace' => $workspace, 'project' => $project, 'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace],
             'canCreate' => $this->policy->projectWritable($project) && $this->policy->scope($request->user(), $workspace, $project, 'task.create'),
             'parents' => $workspace->tasks()->where('project_id', $project?->id)->where('task_type', 'GROUP')->whereNull('archived_at')->orderBy('sort_order')->get(),
             'people' => $this->access->eligibleMembers($workspace, $project), 'reviewers' => $this->access->eligibleMembers($workspace, $project, 'task.review'),
@@ -139,11 +137,11 @@ class TaskController extends Controller
         $candidates = $all->filter(fn ($t) => $t->id !== $task->id && $t->task_type->value !== 'GROUP' && ! $t->archived_at);
         $progress = app(TaskTreeService::class)->progress(app(TaskTreeService::class)->descendants($task, $all));
         $deletable = $task->status->value === 'TODO' && ! $task->started_at && ! $task->completed_at && ! $task->activities()->withTrashed()->exists();
-        $deadlineInsight = app(DeadlineInsight::class)->build($task);
+        $deadlineInsight = app(TaskService::class)->deadlineInsight($task);
         $workflowUi = app(TaskWorkflowService::class)->availability($request->user(), $task);
         $statusOptions = app(TaskWorkflowService::class)->options($request->user(), $task);
 
-        return view('tasks.show', $this->context($request, $workspace, $project) + compact('deadlineInsight', 'activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'workflowUi', 'deletable') + app(TaskCollaborationService::class)->viewData($task));
+        return view('tasks.show', $this->context($request, $workspace, $project) + compact('deadlineInsight', 'activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'workflowUi', 'deletable') + app(TaskUtilityService::class)->viewData($task));
     }
 
     public function edit(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)

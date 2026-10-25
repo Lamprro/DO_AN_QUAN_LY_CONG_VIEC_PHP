@@ -16,7 +16,7 @@ class PlanScheduleService
         $payload = app(PlanService::class)->payload($base);
         $payload['slots'] = [];
         $zone = $base->workspace->timezone;
-        $hours = app(WorkHoursService::class)->values($actor, $zone);
+        $hours = app(TimeTrackingService::class)->workHoursValues($actor, $zone);
         $start = CarbonImmutable::createFromFormat('!Y-m-d', $from, $zone);
         if ($start->lt(CarbonImmutable::now($zone)->startOfDay())) {
             throw ValidationException::withMessages(['from' => 'Chọn hôm nay hoặc ngày tương lai.']);

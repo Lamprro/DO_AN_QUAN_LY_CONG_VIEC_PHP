@@ -7,7 +7,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
-use App\Services\TaskAttachmentService;
+use App\Services\TaskUtilityService;
 use App\Services\TaskTreeService;
 use App\Services\TaskWorkflowService;
 use App\Support\UiLabels;
@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 class TaskWorkflowController extends Controller
 {
-    public function __construct(private TaskWorkflowService $workflow, private TaskAttachmentService $files, private TaskTreeService $trees, private TaskPolicy $policy) {}
+    public function __construct(private TaskWorkflowService $workflow, private TaskUtilityService $files, private TaskTreeService $trees, private TaskPolicy $policy) {}
 
     private function bound(Workspace $workspace, ?Project $project, Task $task): void
     {
@@ -87,7 +87,7 @@ class TaskWorkflowController extends Controller
     public function upload(TaskActionRequest $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
     {
         $this->bound($workspace, $project, $task);
-        $this->files->store($request->user(), $task, $request->file('file'));
+        $this->files->storeAttachment($request->user(), $task, $request->file('file'));
 
         return back()->with('success', 'Đã tải tệp lên.');
     }
@@ -96,13 +96,13 @@ class TaskWorkflowController extends Controller
     {
         $this->bound($workspace, $project, $task);
 
-        return $this->files->download($request->user(), $task, $request->route('activity'));
+        return $this->files->downloadAttachment($request->user(), $task, $request->route('activity'));
     }
 
     public function removeFile(TaskActionRequest $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
     {
         $this->bound($workspace, $project, $task);
-        $this->files->remove($request->user(), $task, $request->route('activity'));
+        $this->files->removeAttachment($request->user(), $task, $request->route('activity'));
 
         return back()->with('success', 'Đã gỡ tệp đính kèm.');
     }

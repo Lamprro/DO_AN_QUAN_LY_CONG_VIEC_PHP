@@ -57,7 +57,7 @@
                                 <div style="font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; color: var(--text);">
                                     {{ round($entry->started_at->diffInSeconds($entry->ended_at)/60,2) }} <small style="font-size: 0.8rem; font-weight: 500;">phút</small>
                                 </div>
-                                @if(app(\App\Services\TimeAdjustmentService::class)->allowed(auth()->user(),$entry))
+                                @if(app(\App\Services\TimeTrackingService::class)->allowed(auth()->user(),$entry))
                                     <a href="{{ route('timers.adjust',$entry) }}" class="button secondary" style="min-height: 34px; padding: 0.35rem 0.75rem; font-size: 0.8rem;">
                                         ✏️ Điều chỉnh
                                     </a>

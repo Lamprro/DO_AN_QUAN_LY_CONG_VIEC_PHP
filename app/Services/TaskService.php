@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Project;
 use App\Models\Task;
-use App\Models\TaskActivity;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
@@ -19,7 +18,7 @@ use Illuminate\Validation\ValidationException;
 
 class TaskService
 {
-    public function __construct(private ProjectAccess $access, private TaskPolicy $policy, private TaskTreeService $tree, private ?TaskHistory $history = null) {}
+    public function __construct(private ProjectAccess $access, private TaskPolicy $policy, private TaskTreeService $tree, private TaskHistory $history) {}
 
     public function save(User $actor, Workspace $workspace, ?Project $project, array $data, ?Task $task = null): Task
     {
@@ -124,22 +123,6 @@ class TaskService
             $task->delete();
             $this->tree->sync($actor, $task);
         });
-    }
-
-    public function recordHistory(User $actor, Task $task, string $event, array $data = []): TaskActivity
-    {
-        $activity = TaskActivity::create([
-            'task_id' => $task->id,
-            'actor_id' => $actor->id,
-            'type' => 'HISTORY',
-            'source' => 'user',
-            'event_type' => $event,
-            'data' => $data,
-        ]);
-
-        app(NotificationService::class)->taskEvent($activity, $task, $actor, $data);
-
-        return $activity;
     }
 
     public function presets(Workspace $workspace): array

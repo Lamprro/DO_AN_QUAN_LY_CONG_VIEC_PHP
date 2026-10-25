@@ -111,7 +111,7 @@ class TaskUtilityService
                 $changed = TaskWatcher::where('task_id', $task->id)->where('user_id', $userId)->delete() > 0;
             }
             if ($changed) {
-                app(TaskService::class)->recordHistory($actor, $task, $remove ? 'task.watcher_removed' : 'task.watcher_added', ['user_id' => $userId]);
+                app(TaskHistory::class)->record($actor, $task, $remove ? 'task.watcher_removed' : 'task.watcher_added', ['user_id' => $userId]);
             }
         }, 3);
     }
@@ -140,7 +140,7 @@ class TaskUtilityService
                         'sha256' => hash_file('sha256', $file->getRealPath()),
                     ],
                 ]);
-                app(TaskService::class)->recordHistory($actor, $task, 'task.file_uploaded', ['activity_id' => $attachment->id, 'name' => $name, 'size' => $file->getSize()]);
+                app(TaskHistory::class)->record($actor, $task, 'task.file_uploaded', ['activity_id' => $attachment->id, 'name' => $name, 'size' => $file->getSize()]);
             });
         } catch (Throwable $error) {
             Storage::disk('task_files')->delete($path);
@@ -165,7 +165,7 @@ class TaskUtilityService
             $attachment = $task->activities()->where('type', 'ATTACHMENT')->findOrFail($id);
             abort_unless($attachment->actor_id === $actor->id || app(TaskPolicy::class)->scope($actor, $task->workspace, $task->project, 'task.assign'), 403);
             $attachment->delete();
-            app(TaskService::class)->recordHistory($actor, $task, 'task.file_removed', ['activity_id' => $id]);
+            app(TaskHistory::class)->record($actor, $task, 'task.file_removed', ['activity_id' => $id]);
         });
     }
 }

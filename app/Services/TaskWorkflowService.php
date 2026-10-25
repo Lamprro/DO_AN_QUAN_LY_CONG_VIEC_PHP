@@ -176,7 +176,7 @@ class TaskWorkflowService
     public function comment(User $actor, Task $task, array $data, ?string $id = null, bool $delete = false): void
     {
         $this->locked($actor, $task, 'comment', function ($task) use ($actor, $data, $id, $delete) {
-            $mentions = ! $id && ! $delete ? app(TaskCollaborationService::class)->mentions($task, $data['mentions'] ?? []) : [];
+            $mentions = ! $id && ! $delete ? app(TaskUtilityService::class)->mentions($task, $data['mentions'] ?? []) : [];
             if ($id) {
                 $activity = $task->activities()->where('type', 'COMMENT')->findOrFail($id);
                 abort_unless($activity->actor_id === $actor->id || ($delete && $this->policy->scope($actor, $task->workspace, $task->project, 'task.assign')), 403);

@@ -34,7 +34,7 @@ class TimeTrackingService
                 throw ValidationException::withMessages(['timer' => 'Cần xử lý blocker trước.']);
             }
             $entry = TimeEntry::create(['task_id' => $task->id, 'user_id' => $actor->id, 'started_at' => now()]);
-            app(TaskService::class)->recordHistory($actor, $task, 'timer.started', ['time_entry_id' => $entry->id]);
+            app(TaskHistory::class)->record($actor, $task, 'timer.started', ['time_entry_id' => $entry->id]);
 
             return $entry;
         }, 3);
@@ -53,7 +53,7 @@ class TimeTrackingService
                 throw ValidationException::withMessages(['timer' => 'Đợi ít nhất một giây trước khi dừng timer.']);
             }
             $entry->update(['ended_at' => now()]);
-            app(TaskService::class)->recordHistory($actor, $entry->task, 'timer.stopped', ['time_entry_id' => $entry->id]);
+            app(TaskHistory::class)->record($actor, $entry->task, 'timer.stopped', ['time_entry_id' => $entry->id]);
         }, 3);
     }
 
@@ -106,7 +106,7 @@ class TimeTrackingService
             $entry->save();
             $after = $this->value($entry);
             $audit = TimeEntryAdjustment::create(['time_entry_id' => $entry->id, 'actor_id' => $actor->id, 'before' => $before, 'after' => $after, 'reason' => $data['reason'], 'created_at' => now()]);
-            app(TaskService::class)->recordHistory($actor, $entry->task, 'timer.corrected', ['time_entry_id' => $entry->id, 'adjustment_id' => $audit->id, 'before' => $before, 'after' => $after, 'reason' => $data['reason']]);
+            app(TaskHistory::class)->record($actor, $entry->task, 'timer.corrected', ['time_entry_id' => $entry->id, 'adjustment_id' => $audit->id, 'before' => $before, 'after' => $after, 'reason' => $data['reason']]);
         }, 3);
     }
 

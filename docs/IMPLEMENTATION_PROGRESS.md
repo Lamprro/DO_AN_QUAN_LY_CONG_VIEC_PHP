@@ -1,3 +1,17 @@
+## Cập nhật 25/10/2026 — cửa sổ công việc dùng chung
+
+Đọc [báo cáo UI/UX mới](UI_UX_REVIEW_2026-10-25.md) trước các mô tả lịch sử bên dưới. Database chính hiện đã có đầy đủ các bảng F11–F14 và migration giữ timestamp ổn định; ghi chú “31 bảng chờ duyệt” bên dưới là trạng thái cũ.
+
+- `tasks/panel.blade.php`: mode create/edit/view/status. Link dùng `data-task-panel`, href vẫn là route web đầy đủ; có thể thêm `data-panel-field="priority"` để focus đúng trường. Không cần thêm endpoint cho mỗi nút.
+- `components/layout.blade.php`: dialog `#task-panel` nằm ngoài `#main-content`. `public/js/task-panel.js` quản lý tải/lưu/đối chiếu/đóng; `public/js/app-ui.js` cung cấp `WorkUI.mount(root)` để gắn lại preset/bulk/type sau khi thay HTML.
+- GET create/edit/show nhận `panel=1` trả fragment Blade. GET `*.tasks.status.edit` trả hành động hợp lệ từ backend. Khi không có JavaScript, href vẫn mở trang đầy đủ.
+- POST/PATCH giữ CSRF, `_method`, `expected_revision`, `expected_status`, deadline_reason và form action. Không tự đổi revision ở client hoặc suy luận trạng thái được phép.
+- Phản hồi 409 có `html` đối chiếu: tiếp tục dùng form `task-conflict`, không thay bằng ghi đè toàn bộ. 422 giữ bản nhập. Thành công mới gọi refreshPage; đọc lại server để tôn trọng filter/sort/pagination.
+- Đã bỏ `_quick-edit.blade.php`, `_quick-modal.blade.php` và các bộ handler tương ứng. Không thêm lại bản modal riêng theo từng trang.
+- CSS cuối trong `workflow-experience.css`; nút lưu cố định, preset là nút phụ, mobile một cột. Giữ focus, aria, Escape, cảnh báo dirty và liên kết mở chi tiết.
+- Sáu lớp forwarding đã gộp theo bảng trong báo cáo. Shared history gọi `TaskHistory::record()`; timer/adjust/work-hours gọi TimeTrackingService; watcher/file gọi TaskUtilityService.
+- Bằng chứng mới: [verification/ux25](verification/ux25/README.md). Không suy diễn các báo cáo “100%” lịch sử thành bảo đảm production cho môi trường chưa chạy thử.
+
 **Cập nhật F11–F14 ngày 23/10/2026:** đã triển khai và kiểm tra trên bản review35bảng; database chính31bảng đang chờ xác nhận migration riêng. Đọc [báo cáo mới](FULL_FUNCTIONAL_COMPLETION_2026-10-23.md) và [bàn giao FE](FRONTEND_F11_F14_HANDOFF.md). Các mô tả F11–F14 “backlog/chưa triển khai” bên dưới là lịch sử.
 
 **20/10/2026 — Đã tích hợp và rà soát FE mới.** Sửa các lỗi nguồn/phiên bản/form và responsive; thêm tìm kiếm theo quyền, Kanban Blade. Xem [đánh giá và flow](POST_FE_REVIEW.md), [bàn giao FE](FRONTEND_HANDOFF.md), [minh chứng mới](verification/post-fe/README.md). Các mô tả cũ là lịch sử, không là cam kết100%production.

@@ -1,0 +1,153 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17190-90c7-723e-b27a-409303492278/tasks/01a17190-a1d6-7375-b6ec-b2fef4508e16",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/collaboration/tasks/01a17190-a1d6-7375-b6ec-b2fef4508e16/watchers",
+    "status": 200
+  },
+  {
+    "step": "watcher and history persisted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17190-90c7-723e-b27a-409303492278/tasks/01a17190-a1d6-7375-b6ec-b2fef4508e16",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/timer/01a17190-a1d6-7375-b6ec-b2fef4508e16",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/timers/01a1719d-5c19-72fc-b4b7-220aa84398c8/stop",
+    "status": 200
+  },
+  {
+    "step": "start/stop timer and history persisted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers/01a1719d-5c19-72fc-b4b7-220aa84398c8/adjust",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/timers/01a1719d-5c19-72fc-b4b7-220aa84398c8/adjust",
+    "status": 200
+  },
+  {
+    "step": "time correction records immutable audit",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/timers/01a1719d-5c19-72fc-b4b7-220aa84398c8/adjust",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "work hours saved and version changed",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/work-hours",
+    "status": 200
+  },
+  {
+    "step": "stale work hours cannot overwrite",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17190-90c7-723e-b27a-409303492278/tasks/01a17190-a1d6-7375-b6ec-b2fef4508e16",
+    "status": 200
+  },
+  {
+    "step": "upload request succeeds",
+    "verified": true
+  },
+  {
+    "step": "attachment download matches bytes",
+    "verified": true
+  },
+  {
+    "step": "upload history persisted",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "real_http_and_mariadb": true,
+    "no_test_classes": true
+  }
+]

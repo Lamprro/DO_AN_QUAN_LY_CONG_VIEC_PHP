@@ -1,0 +1,53 @@
+[
+  {
+    "command": [
+      "artisan",
+      "route:cache"
+    ],
+    "exit": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "artisan",
+      "view:cache"
+    ],
+    "exit": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "artisan",
+      "app:preflight",
+      "--json"
+    ],
+    "exit": 0,
+    "output": "{\n    \"configuration_passed\": true,\n    \"production_mode\": false,\n    \"runtime_checked\": false,\n    \"checks\": [\n        {\n            \"check\": \"php\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.pdo\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.mbstring\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.openssl\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.fileinfo\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.ctype\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.tokenizer\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.xml\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.dom\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.session\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"app_key\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"storage\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"private_files\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"database.tables\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"database.migrations\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"cache.database\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"cache.file\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"session_revocation\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"queue_database\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"queue_retry_after\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"ai_config\",\n            \"passed\": true,\n            \"action\": \"\"\n        }\n    ],\n    \"limits\": [\n        \"This is not a production certification. Verify HTTP/TLS, actual mail receipt, backup restoration, load and third-party integrations on the target infrastructure.\",\n        \"Heartbeat freshness is recent worker activity, not proof of future availability.\"\n    ]\n}\n"
+  },
+  {
+    "command": [
+      "D:\\Composer\\composer.phar",
+      "validate",
+      "--no-check-publish"
+    ],
+    "exit": 0,
+    "output": "./composer.json is valid\n"
+  },
+  {
+    "command": [
+      "D:\\Composer\\composer.phar",
+      "audit",
+      "--format=json"
+    ],
+    "exit": 0,
+    "output": "{\n    \"advisories\": [],\n    \"abandoned\": [],\n    \"filter\": []\n}\n"
+  },
+  {
+    "command": [
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "output": "warning: in the working copy of 'docs/FRONTEND_HANDOFF.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'docs/IMPLEMENTATION_PROGRESS.md', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'public/css/workflow-experience.css', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'public/js/app-ui.js', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/components/layout.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/projects/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/board.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/conflict.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/index.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/show.blade.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'resources/views/tasks/tree-node.blade.php', CRLF will be replaced by LF the next time Git touches it\n"
+  }
+]

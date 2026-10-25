@@ -1,0 +1,1 @@
+{"issue":"ProjectController::show compact parent/children undefined caused500 after create; fixed scoped queries. Existing project modal include replaced with shared pane.","counted_as_pass":false}

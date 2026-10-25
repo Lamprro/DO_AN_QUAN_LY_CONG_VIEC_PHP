@@ -1,0 +1,30 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/login",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17190-90c7-723e-b27a-409303492278/tasks/01a17194-b0bd-7314-ba32-f61c39002890/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP JSON",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17190-90c7-723e-b27a-409303492278/tasks/01a17194-b0bd-7314-ba32-f61c39002890",
+    "status": 200
+  },
+  {
+    "step": "second session saved while browser editor was open",
+    "verified": true
+  }
+]

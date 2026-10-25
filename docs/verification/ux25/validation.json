@@ -1,0 +1,217 @@
+[
+  {
+    "command": [
+      "git",
+      "ls-files",
+      "--modified",
+      "--others",
+      "--exclude-standard"
+    ],
+    "exit": 0,
+    "output": "database/migrations/2026_10_25_000001_preserve_business_timestamps.php\ndocs/verification/ux25/attempt-project-show.json\ndocs/verification/ux25/flow-concurrent-browser.json\ndocs/verification/ux25/flow-panels.json\ndocs/verification/ux25/flow-services.json\ndocs/verification/ux25/validation.json\npublic/js/task-panel.js\nresources/views/tasks/panel.blade.php\napp/Http/Controllers/ProjectController.php\napp/Http/Controllers/TaskCollaborationController.php\napp/Http/Controllers/TaskController.php\napp/Http/Controllers/TaskWorkflowController.php\napp/Http/Controllers/TimeAdjustmentController.php\napp/Http/Controllers/WorkHoursController.php\napp/Services/DeadlineInsight.php\napp/Services/PlanScheduleService.php\napp/Services/PlanService.php\napp/Services/TaskAttachmentService.php\napp/Services/TaskCollaborationService.php\napp/Services/TaskEditData.php\napp/Services/TaskHistory.php\napp/Services/TaskService.php\napp/Services/TaskUtilityService.php\napp/Services/TaskWorkflowService.php\napp/Services/TimeAdjustmentService.php\napp/Services/TimeTrackingService.php\napp/Services/WorkHoursService.php\npublic/css/workflow-experience.css\npublic/js/app-ui.js\nresources/views/components/layout.blade.php\nresources/views/projects/show.blade.php\nresources/views/tasks/_quick-edit.blade.php\nresources/views/tasks/_quick-modal.blade.php\nresources/views/tasks/board.blade.php\nresources/views/tasks/conflict.blade.php\nresources/views/tasks/index.blade.php\nresources/views/tasks/show.blade.php\nresources/views/tasks/tree-node.blade.php\nresources/views/timers/index.blade.php\nroutes/task_workflow.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "database/migrations/2026_10_25_000001_preserve_business_timestamps.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in database/migrations/2026_10_25_000001_preserve_business_timestamps.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/ProjectController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/ProjectController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskCollaborationController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskCollaborationController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskWorkflowController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskWorkflowController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TimeAdjustmentController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TimeAdjustmentController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/WorkHoursController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/WorkHoursController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/PlanScheduleService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/PlanScheduleService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/PlanService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/PlanService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskHistory.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskHistory.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskUtilityService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskUtilityService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskWorkflowService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskWorkflowService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TimeTrackingService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TimeTrackingService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "routes/task_workflow.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in routes/task_workflow.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "vendor/bin/pint",
+      "database/migrations/2026_10_25_000001_preserve_business_timestamps.php",
+      "app/Http/Controllers/ProjectController.php",
+      "app/Http/Controllers/TaskCollaborationController.php",
+      "app/Http/Controllers/TaskController.php",
+      "app/Http/Controllers/TaskWorkflowController.php",
+      "app/Http/Controllers/TimeAdjustmentController.php",
+      "app/Http/Controllers/WorkHoursController.php",
+      "app/Services/PlanScheduleService.php",
+      "app/Services/PlanService.php",
+      "app/Services/TaskHistory.php",
+      "app/Services/TaskService.php",
+      "app/Services/TaskUtilityService.php",
+      "app/Services/TaskWorkflowService.php",
+      "app/Services/TimeTrackingService.php",
+      "routes/task_workflow.php"
+    ],
+    "exit": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"fixed\",\"files\":[{\"path\":\"database\\\\migrations\\\\2026_10_25_000001_preserve_business_timestamps.php\",\"fixers\":[\"class_definition\",\"line_ending\",\"unary_operator_spaces\",\"braces_position\",\"not_operator_with_successor_space\"]}]}"
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "public/js/task-panel.js"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      "--check",
+      "public/js/app-ui.js"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "route:cache"
+    ],
+    "exit": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "view:cache"
+    ],
+    "exit": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "app:preflight",
+      "--json"
+    ],
+    "exit": 0,
+    "output": ",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"extension.session\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"app_key\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"storage\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"private_files\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"database.tables\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"database.migrations\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"cache.database\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"cache.file\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"session_revocation\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"queue_database\",\n            \"passed\": true,\n            \"action\": \"\"\n        },\n        {\n            \"check\": \"queue_retry_after\",\n            \"passed\": true,\n            \"action\": \"\"\n        }\n    ],\n    \"limits\": [\n        \"This is not a production certification. Verify HTTP/TLS, actual mail receipt, backup restoration, load and third-party integrations on the target infrastructure.\",\n        \"Heartbeat freshness is recent worker activity, not proof of future availability.\"\n    ]\n}\n"
+  }
+]

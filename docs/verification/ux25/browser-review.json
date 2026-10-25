@@ -1,0 +1,54 @@
+{
+  "environment": "isolated MariaDB, localhost:8133, actual browser actions",
+  "checks": [
+    {
+      "flow": "Mở sửa từ danh sách; tên được focus, URL không đổi.",
+      "passed": true
+    },
+    {
+      "flow": "Nhập bản nháp rồi Escape: có Tiếp tục sửa/Bỏ thay đổi; tiếp tục giữ nguyên dữ liệu.",
+      "passed": true
+    },
+    {
+      "flow": "Đổi hạn thiếu lý do: 422 hiển thị trong cửa sổ, bản nhập còn nguyên.",
+      "passed": true
+    },
+    {
+      "flow": "Bổ sung lý do và lưu: tên/hạn trên danh sách đổi, dialog đóng.",
+      "passed": true
+    },
+    {
+      "flow": "Tạo việc từ danh sách: hàng mới và tổng số tăng từ 1 lên 2.",
+      "passed": true
+    },
+    {
+      "flow": "Kanban: TODO → IN_PROGRESS, số cột đổi 1/1 thành 0/2.",
+      "passed": true
+    },
+    {
+      "flow": "Hai phiên sửa cùng task: hiện so sánh ngay trong dialog; chọn tiêu đề của tôi và ưu tiên máy chủ, lưu đúng cả hai.",
+      "passed": true
+    },
+    {
+      "flow": "Chọn checkbox rồi sửa ưu tiên: checkbox giữ chọn, revision cập nhật lên 5.",
+      "passed": true
+    },
+    {
+      "flow": "Điện thoại 390×844: document scrollWidth=390; panel client/scrollWidth=375, không tràn ngang.",
+      "passed": true
+    },
+    {
+      "flow": "Chế độ sáng/tối đọc được; nút lưu cố định cuối cửa sổ; nút gợi ý là nút phụ.",
+      "passed": true
+    },
+    {
+      "flow": "Console trình duyệt không có error/warn trong các thao tác đã thực hiện.",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "desktop.png",
+    "mobile.png"
+  ],
+  "no_test_classes": true
+}

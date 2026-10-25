@@ -1,0 +1,8 @@
+{
+  "env_unchanged": true,
+  "business_tables_unchanged": 28,
+  "changed_business_tables": [],
+  "migration_count_before": 26,
+  "migration_count_after": 27,
+  "timestamp_fix": "applied; four affected tables byte-equivalent before/after; no ON UPDATE columns remain"
+}

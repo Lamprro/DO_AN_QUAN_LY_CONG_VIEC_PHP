@@ -13,7 +13,6 @@ use App\Policies\TaskPolicy;
 use App\Support\EditRevision;
 use App\Support\ProjectAccess;
 use App\Support\TaskFilters;
-use App\Support\TaskUtilityScope;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -29,7 +28,7 @@ class TaskUtilityService
     {
         return DB::transaction(function () use ($actor, $workspace, $project, $name, $query) {
             User::lockForUpdate()->findOrFail($actor->id);
-            TaskUtilityScope::check($actor, $workspace, $project);
+            self::checkScope($actor, $workspace, $project);
             $q = SavedTaskFilter::where('user_id', $actor->id)->where('workspace_id', $workspace->id)->where('project_id', $project?->id);
             if ((clone $q)->count() >= 20 || (clone $q)->where('name', $name)->exists()) {
                 throw ValidationException::withMessages(['name' => 'Tối đa 20 bộ lọc trong phạm vi; tên không được trùng.']);
@@ -43,7 +42,7 @@ class TaskUtilityService
     {
         return DB::transaction(function () use ($actor, $workspace, $project, $data) {
             Workspace::lockForUpdate()->findOrFail($workspace->id);
-            TaskUtilityScope::check($actor, $workspace, $project);
+            self::checkScope($actor, $workspace, $project);
             $items = $data['items'];
             if ($data['action'] === 'assign') {
                 abort_unless(app(TaskPolicy::class)->scope($actor, $workspace, $project, 'task.assign'), 403);
@@ -167,5 +166,16 @@ class TaskUtilityService
             $attachment->delete();
             app(TaskHistory::class)->record($actor, $task, 'task.file_removed', ['activity_id' => $id]);
         });
+    }
+
+    public static function checkScope(User $actor, Workspace $workspace, ?Project $project): void
+    {
+        abort_if($project && $project->workspace_id !== $workspace->id, 404);
+        abort_unless(app(TaskPolicy::class)->scope($actor, $workspace, $project, 'task.view'), 403);
+    }
+
+    public static function indexUrl(Workspace $workspace, ?Project $project, array $query = []): string
+    {
+        return route($project ? 'workspaces.projects.tasks.index' : 'workspaces.tasks.index', array_merge($project ? [$workspace, $project] : [$workspace], $query));
     }
 }

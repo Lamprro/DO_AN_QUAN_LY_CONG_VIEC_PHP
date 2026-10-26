@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RoleRequest;
 use App\Models\Role;
 use App\Models\Workspace;
-use App\Services\RoleService;
+use App\Services\WorkspaceService;
 use App\Support\WorkspaceAccess;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,9 +41,9 @@ class RoleController extends Controller
         return view('roles.create', ['workspace' => $workspace, 'permissionCatalog' => $access->permissions($request->user(), $workspace), 'permissionGroups' => $this->groups($access->permissions($request->user(), $workspace))]);
     }
 
-    public function store(RoleRequest $request, Workspace $workspace, RoleService $service): RedirectResponse
+    public function store(RoleRequest $request, Workspace $workspace, WorkspaceService $service): RedirectResponse
     {
-        $service->save($request->user(), $workspace, $request->validated());
+        $service->saveRole($request->user(), $workspace, $request->validated());
 
         return to_route('workspaces.roles.index', $workspace)->with('success', 'Đã tạo vai trò.');
     }
@@ -55,16 +55,16 @@ class RoleController extends Controller
         return view('roles.edit', ['workspace' => $workspace, 'role' => $role, 'permissionCatalog' => $access->permissions($request->user(), $workspace), 'permissionGroups' => $this->groups($access->permissions($request->user(), $workspace))]);
     }
 
-    public function update(RoleRequest $request, Workspace $workspace, Role $role, RoleService $service): RedirectResponse
+    public function update(RoleRequest $request, Workspace $workspace, Role $role, WorkspaceService $service): RedirectResponse
     {
-        $service->save($request->user(), $workspace, $request->validated(), $role);
+        $service->saveRole($request->user(), $workspace, $request->validated(), $role);
 
         return to_route('workspaces.roles.index', $workspace)->with('success', 'Đã cập nhật vai trò.');
     }
 
-    public function destroy(Request $request, Workspace $workspace, Role $role, RoleService $service): RedirectResponse
+    public function destroy(Request $request, Workspace $workspace, Role $role, WorkspaceService $service): RedirectResponse
     {
-        $service->delete($request->user(), $workspace, $role);
+        $service->deleteRole($request->user(), $workspace, $role);
 
         return to_route('workspaces.roles.index', $workspace)->with('success', 'Đã xóa vai trò chưa sử dụng.');
     }

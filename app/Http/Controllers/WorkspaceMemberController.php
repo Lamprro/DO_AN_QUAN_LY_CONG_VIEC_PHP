@@ -6,7 +6,7 @@ use App\Http\Requests\MemberRequest;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
 use App\Services\InvitationService;
-use App\Services\MemberService;
+use App\Services\WorkspaceService;
 use App\Support\WorkspaceAccess;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,16 +23,16 @@ class WorkspaceMemberController extends Controller
         return view('members.index', ['workspace' => $workspace, 'members' => $workspace->members()->with('user', 'role')->orderBy('joined_at')->get(), 'assignableRoles' => $roles, 'pendingInvitations' => $invitations->pending($workspace), 'actorPermissions' => $permissions]);
     }
 
-    public function update(MemberRequest $request, Workspace $workspace, WorkspaceMember $member, MemberService $service): RedirectResponse
+    public function update(MemberRequest $request, Workspace $workspace, WorkspaceMember $member, WorkspaceService $service): RedirectResponse
     {
-        $service->update($request->user(), $workspace, $member, $request->validated());
+        $service->updateMember($request->user(), $workspace, $member, $request->validated());
 
         return to_route('workspaces.members.index', $workspace)->with('success', 'Đã cập nhật thành viên.');
     }
 
-    public function destroy(Request $request, Workspace $workspace, WorkspaceMember $member, MemberService $service): RedirectResponse
+    public function destroy(Request $request, Workspace $workspace, WorkspaceMember $member, WorkspaceService $service): RedirectResponse
     {
-        $service->remove($request->user(), $workspace, $member);
+        $service->removeMember($request->user(), $workspace, $member);
 
         return to_route('workspaces.members.index', $workspace)->with('success', 'Đã đánh dấu thành viên rời workspace; lịch sử được giữ lại.');
     }

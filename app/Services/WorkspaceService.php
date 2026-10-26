@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
+use App\Support\WorkspaceAccess;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +17,8 @@ use Illuminate\Validation\ValidationException;
 
 class WorkspaceService
 {
+    public function __construct(private WorkspaceAccess $access) {}
+
     public function create(User $owner, string $name, string $timezone, bool $personal = false): Workspace
     {
         return DB::transaction(function () use ($owner, $name, $timezone, $personal) {
@@ -82,6 +85,78 @@ class WorkspaceService
             $workspace->members()->delete();
             $workspace->roles()->delete();
             $workspace->delete();
+        });
+    }
+
+    public function updateMember(User $actor, Workspace $workspace, WorkspaceMember $member, array $data): void
+    {
+        DB::transaction(function () use ($actor, $workspace, $member, $data) {
+            $workspace = Workspace::lockForUpdate()->findOrFail($workspace->id);
+            Gate::forUser($actor)->authorize('manageMembers', $workspace);
+            $member = $workspace->members()->with('role', 'user')->lockForUpdate()->findOrFail($member->id);
+            if ($member->user_id === $workspace->owner_id || $member->user_id === $actor->id) {
+                throw ValidationException::withMessages(['member' => 'Không được sửa owner hoặc tự đổi vai trò của mình qua chức năng này.']);
+            }
+            $this->access->assertGrantable($actor, $workspace, $member->role->permissions);
+            $role = $workspace->roles()->findOrFail($data['role_id']);
+            $this->access->assertAssignable($actor, $workspace, $role);
+            if ($data['status'] === 'active' && $member->user->status !== UserStatus::ACTIVE) {
+                throw ValidationException::withMessages(['status' => 'Tài khoản này đang bị vô hiệu hóa.']);
+            }
+            $member->update(['role_id' => $role->id, 'status' => $data['status']]);
+        });
+    }
+
+    public function removeMember(User $actor, Workspace $workspace, WorkspaceMember $member): void
+    {
+        $this->updateMember($actor, $workspace, $member, ['role_id' => $member->role_id, 'status' => 'left']);
+    }
+
+    public function leave(User $actor, Workspace $workspace): void
+    {
+        DB::transaction(function () use ($actor, $workspace) {
+            $workspace = Workspace::lockForUpdate()->findOrFail($workspace->id);
+            if ($workspace->owner_id === $actor->id) {
+                throw ValidationException::withMessages(['workspace' => 'Owner phải chuyển chủ sở hữu trước khi rời workspace.']);
+            }
+            $member = $workspace->members()->where('user_id', $actor->id)->where('status', MembershipStatus::ACTIVE)->lockForUpdate()->firstOrFail();
+            $member->update(['status' => 'left']);
+        });
+    }
+
+    public function saveRole(User $actor, Workspace $workspace, array $data, ?Role $role = null): Role
+    {
+        return DB::transaction(function () use ($actor, $workspace, $data, $role) {
+            $workspace = Workspace::lockForUpdate()->findOrFail($workspace->id);
+            Gate::forUser($actor)->authorize('manageRoles', $workspace);
+            $this->access->assertGrantable($actor, $workspace, $data['permissions']);
+            if ($workspace->roles()->where('name', $data['name'])->when($role, fn ($query) => $query->whereKeyNot($role->id))->exists()) {
+                throw ValidationException::withMessages(['name' => 'Tên vai trò đã được sử dụng trong workspace.']);
+            }
+            if ($role) {
+                $role = $workspace->roles()->lockForUpdate()->findOrFail($role->id);
+                Gate::forUser($actor)->authorize('update', $role);
+                $this->access->assertGrantable($actor, $workspace, $role->permissions);
+                $role->update(['name' => $data['name'], 'permissions' => array_values(array_unique($data['permissions']))]);
+            } else {
+                $role = Role::create(['workspace_id' => $workspace->id, 'name' => $data['name'], 'permissions' => array_values(array_unique($data['permissions'])), 'is_system' => false, 'created_by' => $actor->id]);
+            }
+
+            return $role;
+        });
+    }
+
+    public function deleteRole(User $actor, Workspace $workspace, Role $role): void
+    {
+        DB::transaction(function () use ($actor, $workspace, $role) {
+            $workspace = Workspace::lockForUpdate()->findOrFail($workspace->id);
+            $role = $workspace->roles()->lockForUpdate()->findOrFail($role->id);
+            Gate::forUser($actor)->authorize('delete', $role);
+            $this->access->assertGrantable($actor, $workspace, $role->permissions);
+            if ($role->workspaceMembers()->exists() || $role->projectMembers()->exists()) {
+                throw ValidationException::withMessages(['role' => 'Vai trò đang được gán cho thành viên; không thể xóa.']);
+            }
+            $role->delete();
         });
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TransferOwnerRequest;
 use App\Http\Requests\WorkspaceRequest;
 use App\Models\Workspace;
-use App\Services\MemberService;
 use App\Services\WorkspaceService;
 use App\Support\ProjectAccess;
 use App\Support\SearchTerm;
@@ -86,7 +85,7 @@ class WorkspaceController extends Controller
         return to_route('workspaces.show', $workspace)->with('success', 'Đã chuyển chủ sở hữu. Quyền của bạn đã được cập nhật.');
     }
 
-    public function leave(Request $request, Workspace $workspace, MemberService $service): RedirectResponse
+    public function leave(Request $request, Workspace $workspace, WorkspaceService $service): RedirectResponse
     {
         $service->leave($request->user(), $workspace);
         $request->session()->forget('current_workspace_id');

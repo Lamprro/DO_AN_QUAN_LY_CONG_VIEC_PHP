@@ -1,0 +1,146 @@
+[
+  {
+    "command": [
+      "git",
+      "diff",
+      "--name-only"
+    ],
+    "exit": 0,
+    "output": "app/Http/Controllers/ProjectMemberController.php\napp/Http/Controllers/RoleController.php\napp/Http/Controllers/TaskUtilityController.php\napp/Http/Controllers/WorkspaceController.php\napp/Http/Controllers/WorkspaceMemberController.php\napp/Services/MemberService.php\napp/Services/ProjectMemberService.php\napp/Services/ProjectService.php\napp/Services/RoleService.php\napp/Services/TaskUtilityService.php\napp/Services/WorkspaceService.php\napp/Support/TaskUtilityScope.php\nwarning: in the working copy of 'app/Http/Controllers/TaskUtilityController.php', CRLF will be replaced by LF the next time Git touches it\nwarning: in the working copy of 'app/Services/TaskUtilityService.php', CRLF will be replaced by LF the next time Git touches it\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "vendor/bin/pint",
+      "app/Http/Controllers/ProjectMemberController.php",
+      "app/Http/Controllers/RoleController.php",
+      "app/Http/Controllers/TaskUtilityController.php",
+      "app/Http/Controllers/WorkspaceController.php",
+      "app/Http/Controllers/WorkspaceMemberController.php",
+      "app/Services/ProjectService.php",
+      "app/Services/TaskUtilityService.php",
+      "app/Services/WorkspaceService.php"
+    ],
+    "exit": 0,
+    "output": "{\"tool\":\"pint\",\"result\":\"fixed\",\"files\":[{\"path\":\"app\\\\Http\\\\Controllers\\\\TaskUtilityController.php\",\"fixers\":[\"line_ending\"]},{\"path\":\"app\\\\Services\\\\TaskUtilityService.php\",\"fixers\":[\"line_ending\",\"unary_operator_spaces\",\"not_operator_with_successor_space\"]}]}"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/ProjectMemberController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/ProjectMemberController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/RoleController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/RoleController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/TaskUtilityController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/TaskUtilityController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/WorkspaceController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/WorkspaceController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Http/Controllers/WorkspaceMemberController.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Http/Controllers/WorkspaceMemberController.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/ProjectService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/ProjectService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/TaskUtilityService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/TaskUtilityService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "-l",
+      "app/Services/WorkspaceService.php"
+    ],
+    "exit": 0,
+    "output": "No syntax errors detected in app/Services/WorkspaceService.php\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "route:cache"
+    ],
+    "exit": 0,
+    "output": "\n   INFO  Routes cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "view:cache"
+    ],
+    "exit": 0,
+    "output": "\n\n   INFO  Blade templates cached successfully.  \n\n"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "C:\\Users\\maiva\\.codex\\.chatgpt-projects\\g-p-6ac9f1ab7ff88191b43033b8bc45d9d6\\output\\ux25_database.php",
+      "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP",
+      "baseline"
+    ],
+    "exit": 0,
+    "output": "{\"rows\":2,\"hash\":\"f43fc4e793d48ebc3625422093ddeed89216c87e363da92436af4b601cfffccd\"},\"task_reminders\":{\"rows\":0,\"hash\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\"},\"task_template_runs\":{\"rows\":0,\"hash\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\"},\"task_templates\":{\"rows\":1,\"hash\":\"6515d7427be8f70c9f9b08bdc01b23f6f30eeaf2727f27afc59fc052fd44cdc3\"},\"task_watchers\":{\"rows\":0,\"hash\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\"},\"tasks\":{\"rows\":85,\"hash\":\"453ab42eeafed703b1ed26c598c83e7aeba112c854e468cff35241d4ff1581dc\"},\"time_entries\":{\"rows\":0,\"hash\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\"},\"time_entry_adjustments\":{\"rows\":0,\"hash\":\"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\"},\"user_settings\":{\"rows\":16,\"hash\":\"f1852d5aa19eedfa2ec1765f2b5b178bac356497e7827efe2c94196c1700e156\"},\"users\":{\"rows\":16,\"hash\":\"2a4953276865a73968d3bc61a9231edfdaaf15b5cb970307a698e1a88fb4ffcc\"},\"workspace_members\":{\"rows\":23,\"hash\":\"c98168abf411696e5b23f840b33f5ff87245e6aac5eaabf67531d5f1bb430cb1\"},\"workspaces\":{\"rows\":6,\"hash\":\"669ab77758d2497c835c4620555757266e4689f002edf439a3550ec1940fdc2c\"}}"
+  },
+  {
+    "command": [
+      "C:\\xampp\\php\\php.exe",
+      "artisan",
+      "route:list",
+      "--json"
+    ],
+    "exit": 0,
+    "output": "ction\":\"App\\\\Http\\\\Controllers\\\\TeamCalendarController@store\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"App\\\\Http\\\\Middleware\\\\RequireVerifiedAccount\",\"workspace.member\",\"App\\\\Http\\\\Middleware\\\\RequireFullFeatureSchema\"],\"path\":null},{\"domain\":null,\"method\":\"POST\",\"uri\":\"workspaces\\/{workspace}\\/team-calendar\\/{proposal}\\/{action}\",\"name\":\"workspaces.calendar.respond\",\"action\":\"App\\\\Http\\\\Controllers\\\\TeamCalendarController@respond\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"App\\\\Http\\\\Middleware\\\\RequireVerifiedAccount\",\"workspace.member\",\"App\\\\Http\\\\Middleware\\\\RequireFullFeatureSchema\"],\"path\":null},{\"domain\":null,\"method\":\"POST\",\"uri\":\"workspaces\\/{workspace}\\/timer\\/{task}\",\"name\":\"workspaces.timer.start\",\"action\":\"App\\\\Http\\\\Controllers\\\\TimeTrackingController@start\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"App\\\\Http\\\\Middleware\\\\RequireVerifiedAccount\",\"workspace.member\"],\"path\":null},{\"domain\":null,\"method\":\"POST\",\"uri\":\"workspaces\\/{workspace}\\/transfer-owner\",\"name\":\"workspaces.transfer\",\"action\":\"App\\\\Http\\\\Controllers\\\\WorkspaceController@transfer\",\"middleware\":[\"web\",\"auth\",\"active.user\",\"App\\\\Http\\\\Middleware\\\\RequireVerifiedAccount\",\"workspace.member\"],\"path\":null}]\n"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "output": ""
+  }
+]

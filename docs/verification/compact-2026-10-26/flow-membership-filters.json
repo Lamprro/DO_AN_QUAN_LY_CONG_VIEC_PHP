@@ -1,0 +1,393 @@
+[
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles",
+    "status": 200
+  },
+  {
+    "step": "role creation stores unique permission set",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles/01a17822-7091-7032-bac8-4aad147462ac/edit",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles/01a17822-7091-7032-bac8-4aad147462ac",
+    "status": 200
+  },
+  {
+    "step": "role update persisted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles",
+    "status": 200
+  },
+  {
+    "step": "duplicate role rejected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members/01a17188-42ae-714a-8ea1-ff7451e88fe7",
+    "status": 200
+  },
+  {
+    "step": "workspace member assignment persisted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles/01a17822-7091-7032-bac8-4aad147462ac",
+    "status": 200
+  },
+  {
+    "step": "assigned role cannot be deleted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members/01a17188-42ae-714a-8ea1-ff7451e88fe7",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/roles/01a17822-7091-7032-bac8-4aad147462ac",
+    "status": 200
+  },
+  {
+    "step": "unused role can be deleted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members/01a17188-42ae-714a-8ea1-ff7451e88fe7",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members/01a17188-42ab-706f-9708-835fbe4a94e2",
+    "status": 200
+  },
+  {
+    "step": "owner cannot demote self",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members/01a17188-42ae-714a-8ea1-ff7451e88fe7",
+    "status": 200
+  },
+  {
+    "step": "remove member keeps history row with left status",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members/01a17188-42ae-714a-8ea1-ff7451e88fe7",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/leave",
+    "status": 200
+  },
+  {
+    "step": "member leave persists",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/members/01a17188-42ae-714a-8ea1-ff7451e88fe7",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/members/01a17821-f892-70ca-9234-2f68c4770f91",
+    "status": 200
+  },
+  {
+    "step": "project member suspension persisted",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72",
+    "status": 403
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/members/01a17821-f892-70ca-9234-2f68c4770f91",
+    "status": 200
+  },
+  {
+    "step": "project member removal retains record",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/members",
+    "status": 200
+  },
+  {
+    "step": "project member reactivation reuses same row and joined date",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/members",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/members",
+    "status": 200
+  },
+  {
+    "step": "duplicate project membership prevented",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/task-filters",
+    "status": 200
+  },
+  {
+    "step": "filter strips unknown query keys",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/task-filters/01a17822-b532-73b5-9f54-24d213876358/open",
+    "status": 200
+  },
+  {
+    "step": "filter redirects to correct project list",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/task-filters/01a17822-b532-73b5-9f54-24d213876358/open",
+    "status": 404
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/tasks/bulk",
+    "status": 200
+  },
+  {
+    "step": "bulk update persists through merged scope helper",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/tasks",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17188-428f-728a-ae5c-95cd6e62b4bd/projects/01a17821-e908-72d3-9242-750c283bbd72/task-filters/01a17822-b532-73b5-9f54-24d213876358",
+    "status": 200
+  },
+  {
+    "step": "filter deletion persists",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/create",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17822-c6f0-713e-acb7-2a351f98bc8e",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17822-c6f0-713e-acb7-2a351f98bc8e",
+    "status": 200
+  },
+  {
+    "step": "workspace update unaffected",
+    "verified": true
+  },
+  {
+    "step": "HTTP",
+    "method": "GET",
+    "path": "/workspaces/01a17822-c6f0-713e-acb7-2a351f98bc8e",
+    "status": 200
+  },
+  {
+    "step": "HTTP",
+    "method": "POST",
+    "path": "/workspaces/01a17822-c6f0-713e-acb7-2a351f98bc8e",
+    "status": 200
+  },
+  {
+    "step": "empty workspace deletion unaffected",
+    "verified": true
+  },
+  {
+    "step": "COMPLETE",
+    "real_http_and_mariadb": true,
+    "no_test_classes": true
+  },
+  {
+    "step": "main database business rows unchanged",
+    "verified": true
+  }
+]

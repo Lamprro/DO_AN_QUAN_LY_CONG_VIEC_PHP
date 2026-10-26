@@ -1,3 +1,9 @@
+## Cập nhật 26/10/2026 — tinh gọn lớp nghiệp vụ
+
+Đã gộp MemberService/RoleService vào WorkspaceService, ProjectMemberService vào ProjectService, TaskUtilityScope vào TaskUtilityService và đổi toàn bộ caller. Tên route, form Blade, payload, CSRF, JSON panel và chính sách quyền giữ nguyên; FE không cần đổi cách gửi form. Không dùng lại tên class cũ trong code mới.
+
+Xem [bản đồ hàm, flow và minh chứng](CODE_SIMPLIFICATION_2026-10-26.md). Các phần lịch sử phía dưới ghi nhận kiến trúc tại thời điểm cũ; bảng ánh xạ trong tài liệu ngày 26/10 là tên class hiện hành.
+
 ## Cập nhật 25/10/2026 — cửa sổ công việc dùng chung
 
 Đọc [báo cáo UI/UX mới](UI_UX_REVIEW_2026-10-25.md) trước các mô tả lịch sử bên dưới. Database chính hiện đã có đầy đủ các bảng F11–F14 và migration giữ timestamp ổn định; ghi chú “31 bảng chờ duyệt” bên dưới là trạng thái cũ.

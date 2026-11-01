@@ -66,4 +66,16 @@ class JiraBoardTest extends TestCase
             ]);
         }
     }
+
+    public function test_global_quick_create_and_view_switcher_are_rendered(): void
+    {
+        $user = User::where('email', 'demo1@example.test')->first();
+        $workspace = Workspace::first();
+
+        $response = $this->actingAs($user)->get("/workspaces/{$workspace->id}");
+
+        $response->assertStatus(200);
+        $response->assertSee('jira-quick-create-btn', false);
+        $response->assertSee('+ Tạo việc', false);
+    }
 }

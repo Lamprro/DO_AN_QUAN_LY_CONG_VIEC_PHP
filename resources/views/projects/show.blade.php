@@ -65,7 +65,10 @@
         <h3 style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Hành động Dự án</h3>
         <div class="actions">
             @if($canViewTasks)
-                <a class="button" href="{{ route('workspaces.projects.tasks.index',[$workspace,$project]) }}">
+                <a class="button" href="{{ route('workspaces.projects.tasks.index',[$workspace,$project,'view'=>'board']) }}" style="background: #0c66e4;">
+                    📊 Bảng Kanban (Jira Board)
+                </a>
+                <a class="button secondary" href="{{ route('workspaces.projects.tasks.index',[$workspace,$project]) }}">
                     📋 Xem Danh sách Công việc
                 </a>
             @endif

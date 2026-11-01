@@ -214,6 +214,29 @@
     }
   });
 
+  // 5. Jira Global Shortcuts: c for Quick Create, / or Ctrl+K for Global Search
+  document.addEventListener('keydown', e => {
+    const tag = (e.target?.tagName || '').toLowerCase();
+    const isEditable = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target?.isContentEditable;
+    
+    if ((e.key === 'c' || e.key === 'C') && !isEditable && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const createBtn = document.querySelector('.jira-quick-create-btn');
+      if (createBtn) {
+        e.preventDefault();
+        createBtn.click();
+      }
+    }
+
+    if (((e.key === '/' && !isEditable) || ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K'))) && !e.defaultPrevented) {
+      const searchInput = document.querySelector('#global-query') || document.querySelector('#q');
+      if (searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select?.();
+      }
+    }
+  });
+
   // 9. Modern Toast Notification System
   window.showToast = (message, type = 'success') => {
     const container = document.querySelector('#toast-container');

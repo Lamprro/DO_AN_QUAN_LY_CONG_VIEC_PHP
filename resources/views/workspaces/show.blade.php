@@ -60,7 +60,10 @@
                 </a>
             @endif
             @if($workspace->kind->value==='personal')
-                <a class="button" href="{{ route('workspaces.tasks.index',$workspace) }}">
+                <a class="button" href="{{ route('workspaces.tasks.index',[$workspace,'view'=>'board']) }}" style="background: #0c66e4;">
+                    📊 Bảng Kanban
+                </a>
+                <a class="button secondary" href="{{ route('workspaces.tasks.index',$workspace) }}">
                     👤 Công việc cá nhân
                 </a>
             @endif

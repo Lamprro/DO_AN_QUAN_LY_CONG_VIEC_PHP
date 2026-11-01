@@ -1,4 +1,3 @@
-
 @props(['title'=>'Quản lý công việc'])
 @php($versionedAsset = fn (string $path) => asset($path).'?v='.(is_file(public_path($path)) ? filemtime(public_path($path)) : 'missing'))
 <!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}" data-theme-preference="{{ $preferences['theme']??'system' }}" data-theme-owner="{{ auth()->id()??'guest' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ $versionedAsset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p1-observation.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/modern-theme.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/review-polish.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/workflow-experience.css') }}">@stack('styles')
@@ -10,10 +9,11 @@
 @forelse($shell['workspaces'] as $item)<a href="{{ route('workspaces.show',$item) }}">{{ $item->name }} <small>{{ \App\Support\UiLabels::text($item->kind) }}</small></a>
 @empty<p>Chưa có workspace truy cập được.</p>
 @endforelse<a href="{{ route('workspaces.index') }}">Tất cả workspace</a></nav></details>
-@if($shell['workspace'])
-<a href="{{ $shell['project'] ? route('workspaces.projects.tasks.create', [$shell['workspace'], $shell['project']]) : route('workspaces.tasks.create', $shell['workspace']) }}" class="jira-quick-create-btn" data-task-panel title="Tạo công việc mới">+ Tạo việc</a>
+<?php $quickCreateWorkspace = $shell['workspace'] ?? $shell['workspaces']->first(); ?>
+@if($quickCreateWorkspace)
+<a href="{{ ($shell['project'] && $quickCreateWorkspace->id === $shell['workspace']?->id) ? route('workspaces.projects.tasks.create', [$quickCreateWorkspace, $shell['project']]) : route('workspaces.tasks.create', $quickCreateWorkspace) }}" class="jira-quick-create-btn" data-task-panel title="Tạo công việc mới (Phím tắt: c)">+ Tạo việc</a>
 @endif
-<form method="get" action="{{ route('search.index') }}" class="global-search" role="search"><label class="sr-only" for="global-query">Tìm công việc và dự án</label><input type="search" id="global-query" name="q" maxlength="200" required placeholder="Tìm công việc, dự án…"><button class="secondary">Tìm</button></form>
+<form method="get" action="{{ route('search.index') }}" class="global-search" role="search"><label class="sr-only" for="global-query">Tìm công việc và dự án</label><div class="search-input-wrap"><input type="search" id="global-query" name="q" maxlength="200" required placeholder="Tìm công việc, dự án…"><kbd class="global-search-kbd" title="Nhấn / hoặc Ctrl+K để tìm">/</kbd></div><button class="secondary">Tìm</button></form>
 <nav aria-label="Tài khoản" class="account-nav"><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button><a href="{{ route('notifications.index') }}">Thông báo <span class="count" data-unread-count>{{ $unreadNotifications??0 }}</span></a><details><summary>{{ auth()->user()->name }}</summary><div class="account-menu"><a href="{{ route('profile.edit') }}">Hồ sơ</a><a href="{{ route('settings.edit') }}">Cấu hình</a><form action="{{ route('logout') }}" method="post" data-form="logout">
 @csrf<button class="secondary">Đăng xuất</button></form></div></details></nav>
 @else
@@ -36,7 +36,30 @@
 <div class="nav-context"><span class="eyebrow">{{ $shell['project']?'Dự án hiện tại':($shell['workspace']?'Không gian hiện tại':'Khu vực cá nhân') }}</span><strong>{{ $shell['project']?->name ?? $shell['workspace']?->name ?? 'Công việc của bạn' }}</strong></div>
 @foreach(collect($shell['menu'])->groupBy('group')->sortBy(fn($items,$group)=>array_search($group,['Dự án hiện tại','Công việc cá nhân','Không gian làm việc','Cá nhân'])) as $group=>$items)
 <nav class="nav-group" aria-label="{{ $group }}"><h2>{{ $group }}</h2>
-@foreach($items as $item)<a href="{{ $item['url'] }}" @if($item['active']) aria-current="page" @endif>{{ $item['label'] }}</a>@endforeach
+@foreach($items as $item)
+<?php
+$icon = match(true) {
+    str_contains($item['label'], 'Bảng') || str_contains($item['url'], 'board') => '📊',
+    str_contains($item['label'], 'Cây') || str_contains($item['url'], 'tree') => '🌲',
+    str_contains($item['label'], 'Công việc') || str_contains($item['label'], 'việc') => '📋',
+    str_contains($item['label'], 'Dự án') || str_contains($item['label'], 'Projects') => '📁',
+    str_contains($item['label'], 'Kế hoạch') => '📑',
+    str_contains($item['label'], 'Timeline') => '📊',
+    str_contains($item['label'], 'Lịch') => '📅',
+    str_contains($item['label'], 'Dashboard') || str_contains($item['label'], 'báo cáo') => '📈',
+    str_contains($item['label'], 'Thành viên') => '👥',
+    str_contains($item['label'], 'Vai trò') => '🛡️',
+    str_contains($item['label'], 'Tổng quan') => '🏠',
+    str_contains($item['label'], 'Giờ') || str_contains($item['label'], 'timer') => '⏱️',
+    str_contains($item['label'], 'Thông báo') => '🔔',
+    str_contains($item['label'], 'GitHub') => '🐙',
+    str_contains($item['label'], 'Mẫu') => '📝',
+    str_contains($item['label'], 'Vận hành') => '⚡',
+    default => '🔹',
+};
+?>
+<a href="{{ $item['url'] }}" @if($item['active']) aria-current="page" @endif><span class="nav-item-icon" aria-hidden="true">{{ $icon }}</span><span>{{ $item['label'] }}</span></a>
+@endforeach
 </nav>
 @endforeach
 </aside>

@@ -1630,3 +1630,89 @@ html[data-theme='dark'] .sticky-form-bar {
   background: #09326c !important;
   transform: translateY(0) !important;
 }
+
+/* Jira Global Search Input & Shortcut Badge */
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.search-input-wrap input {
+  padding-right: 32px !important;
+}
+.global-search-kbd {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1px 5px;
+  font-size: 11px;
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-subtle, #f1f5f9);
+  border: 1px solid var(--border, #cbd5e1);
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+  pointer-events: none;
+  line-height: 1.2;
+}
+
+/* Jira Segmented View Switcher */
+.jira-view-switcher {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  background: var(--bg-subtle, #f1f5f9) !important;
+  padding: 4px !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--border, #e2e8f0) !important;
+  margin-bottom: 14px !important;
+}
+.jira-view-switcher a {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 6px 14px !important;
+  border-radius: 6px !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  color: var(--text-muted) !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+}
+.jira-view-switcher a:hover {
+  color: var(--text) !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+.jira-view-switcher a.active,
+.jira-view-switcher a[aria-current="page"] {
+  background: var(--surface, #ffffff) !important;
+  color: #0c66e4 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Sidebar Nav Icons */
+.nav-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+.app-sidebar .nav-group a {
+  display: flex !important;
+  align-items: center !important;
+  border-radius: 6px !important;
+  transition: background 0.12s ease, color 0.12s ease !important;
+}
+.app-sidebar .nav-group a:hover {
+  background: var(--bg-subtle, #f1f5f9) !important;
+  color: var(--text) !important;
+}
+.app-sidebar .nav-group a[aria-current="page"] {
+  background: #e9f2ff !important;
+  color: #0c66e4 !important;
+  font-weight: 700 !important;
+}

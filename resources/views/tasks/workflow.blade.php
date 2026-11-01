@@ -1,3 +1,4 @@
+@if(!isset($jiraSection) || $jiraSection === 'progress')
 <!-- Workflow State Machine & Leaf Progress -->
 <section id="task-workflow" tabindex="-1" class="card" style="border-top: 4px solid var(--primary);">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
@@ -64,6 +65,8 @@
     @endif
 </section>
 
+@endif
+@if(!isset($jiraSection) || $jiraSection === 'constraints')
 <!-- Blockers Section -->
 <section id="task-blockers" tabindex="-1" class="card" style="border-left: 4px solid var(--danger);">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -170,6 +173,8 @@
     @endcan
 </section>
 
+@endif
+@if(!isset($jiraSection) || $jiraSection === 'discussion')
 <!-- Comments and Attachments -->
 <div id="task-discussion" tabindex="-1" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 1.25rem;">
     <!-- Comment Box -->
@@ -208,10 +213,13 @@
     </section>
 </div>
 
+@endif
+@if(!isset($jiraSection) || $jiraSection === 'activities')
 <!-- Activity & History Stream -->
 <section id="task-activities" tabindex="-1" class="card" data-page="task-activities" style="margin-top: 1.5rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
         <h2 style="font-size: 1.25rem; margin: 0;">📜 Nhật ký hoạt động & Lịch sử</h2>
+        @if(!isset($jiraSection))
         <form method="GET" action="{{ route($routePrefix.'.show',[...$routeParams,$task]) }}" style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
             <label for="activity_type" style="margin: 0; font-size: 0.85rem;">Lọc loại:</label>
             <select name="activity_type" id="activity_type" style="padding: 0.35rem 0.65rem; font-size: 0.85rem; min-height: 34px;">
@@ -222,9 +230,10 @@
             </select>
             <button type="submit" class="secondary" style="min-height: 34px; padding: 0.35rem 0.75rem; font-size: 0.8rem;">Lọc</button>
         </form>
+        @endif
     </div>
 
-    @foreach($activities as $activity)
+    @forelse($activities as $activity)
         <article class="card" data-activity-id="{{ $activity->id }}" style="margin: 0.85rem 0; padding: 1.15rem; background: var(--bg-subtle) !important; border-left: 3px solid var(--border);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -318,9 +327,12 @@
                 @endif
             @endif
         </article>
-    @endforeach
+    @empty
+        <p class="muted">Chưa có hoạt động thuộc mục này.</p>
+    @endforelse
 
     <div style="margin-top: 1.25rem;">
         {{ $activities->links() }}
     </div>
 </section>
+@endif

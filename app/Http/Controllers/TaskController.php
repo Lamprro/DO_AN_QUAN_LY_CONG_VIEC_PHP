@@ -147,12 +147,13 @@ class TaskController extends Controller
         $blockers = $task->blockers()->with('reporter', 'resolver')->orderByDesc('created_at')->get();
         $candidates = $all->filter(fn ($t) => $t->id !== $task->id && $t->task_type->value !== 'GROUP' && ! $t->archived_at);
         $progress = app(TaskTreeService::class)->progress(app(TaskTreeService::class)->descendants($task, $all));
+        $subtasks = $all->where('parent_task_id', $task->id)->sortBy('sort_order');
         $deletable = $task->status->value === 'TODO' && ! $task->started_at && ! $task->completed_at && ! $task->activities()->withTrashed()->exists();
         $deadlineInsight = app(TaskService::class)->deadlineInsight($task);
         $workflowUi = app(TaskWorkflowService::class)->availability($request->user(), $task);
         $statusOptions = app(TaskWorkflowService::class)->options($request->user(), $task);
 
-        return view('tasks.show', $this->context($request, $workspace, $project) + compact('deadlineInsight', 'activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'statusOptions', 'workflowUi', 'deletable') + app(TaskUtilityService::class)->viewData($task));
+        return view('tasks.show', $this->context($request, $workspace, $project) + compact('deadlineInsight', 'activityHuman', 'task', 'activities', 'dependencies', 'blockers', 'candidates', 'progress', 'subtasks', 'statusOptions', 'workflowUi', 'deletable') + app(TaskUtilityService::class)->viewData($task));
     }
 
     public function edit(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)

@@ -1,0 +1,200 @@
+/* Jira Issue View 2-Column Layout */
+.jira-issue-view {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .jira-issue-view {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Main Content */
+.jira-issue-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.jira-issue-header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.jira-issue-code-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.jira-issue-code {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary, #0c66e4);
+  background: var(--primary-light, #e9f2ff);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.jira-issue-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  color: var(--text);
+}
+
+/* Action Toolbar */
+.jira-action-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+
+.jira-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.jira-action-btn:hover {
+  background: var(--bg-subtle);
+  border-color: var(--border-focus);
+}
+
+.jira-action-btn.primary {
+  background: #0c66e4;
+  color: #fff;
+  border-color: #0c66e4;
+}
+
+.jira-action-btn.primary:hover {
+  background: #0055cc;
+}
+
+/* Description Card */
+.jira-desc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.jira-desc-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.jira-desc-content {
+  font-size: 0.925rem;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+/* Right Sidebar Details */
+.jira-issue-sidebar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.jira-sidebar-section h4 {
+  font-size: 0.8rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+
+.jira-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light, #f1f5f9);
+  font-size: 0.875rem;
+}
+
+.jira-detail-row:last-child {
+  border-bottom: none;
+}
+
+.jira-detail-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.jira-detail-value {
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Tabs for Comments, History, Attachments */
+.jira-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--border);
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.jira-tab-btn {
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.jira-tab-btn:hover {
+  color: var(--text);
+}
+
+.jira-tab-btn.active {
+  color: #0c66e4;
+  border-bottom-color: #0c66e4;
+}
+
+.jira-tab-pane {
+  display: none;
+  padding: 16px 0;
+}
+
+.jira-tab-pane.active {
+  display: block;
+}

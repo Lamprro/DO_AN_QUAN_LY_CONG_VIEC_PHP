@@ -6,7 +6,7 @@
         <p class="muted" style="margin-top: 0.25rem;">Soạn thảo, so sánh thay đổi và áp dụng các phiên bản kế hoạch vào dự án</p>
     </div>
     <div class="actions">
-        @if(app(\App\Services\PlanService::class)->allowed(auth()->user(),$workspace,$project,'plan.create'))
+        @if(app(\App\Services\Planning\PlanService::class)->allowed(auth()->user(),$workspace,$project,'plan.create'))
             <a class="button secondary" href="{{ route('workspaces.planning-ai.create',[$workspace,'project_id'=>$project?->id]) }}">
                 🤖 AI / Trợ lý blocker
             </a>
@@ -63,7 +63,7 @@
                         <p style="font-size: 2rem; margin-bottom: 0.5rem;">📑</p>
                         <h3>Chưa có bản kế hoạch nào</h3>
                         <p class="muted">Hãy tạo bản nháp đầu tiên để thiết lập cấu trúc công việc, quan hệ phụ thuộc và khung giờ.</p>
-                        @if(app(\App\Services\PlanService::class)->allowed(auth()->user(),$workspace,$project,'plan.create'))
+                        @if(app(\App\Services\Planning\PlanService::class)->allowed(auth()->user(),$workspace,$project,'plan.create'))
                             <div style="margin-top: 1rem;">
                                 <a class="button" href="{{ route('workspaces.plans.create',[$workspace,'project_id'=>$project?->id]) }}">
                                     Tạo kế hoạch nháp mới

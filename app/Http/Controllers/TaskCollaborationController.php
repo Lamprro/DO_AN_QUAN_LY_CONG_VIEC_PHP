@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Workspace;
-use App\Services\TaskUtilityService;
+use App\Services\Task\TaskUtilityService;
 use Illuminate\Http\Request;
 
 class TaskCollaborationController extends Controller

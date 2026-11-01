@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\InvitationRequest;
 use App\Models\Workspace;
-use App\Services\InvitationService;
+use App\Services\Workspace\InvitationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Services\ReportService;
+use App\Services\Report\ReportService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ReportRequest extends FormRequest

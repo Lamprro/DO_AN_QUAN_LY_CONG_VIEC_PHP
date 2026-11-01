@@ -296,7 +296,7 @@
                         <p style="white-space: pre-wrap; margin: 0.25rem 0 0 0;">{{ $activity->data['message']??'' }}</p>
                     </div>
                 @endif
-                @if($activity->plan_id && app(\App\Services\PlanService::class)->allowed(auth()->user(),$workspace,$project,'plan.view'))
+                @if($activity->plan_id && app(\App\Services\Planning\PlanService::class)->allowed(auth()->user(),$workspace,$project,'plan.view'))
                     <p style="margin: 0.35rem 0;"><a href="{{ route('workspaces.plans.show',[$workspace,$activity->plan_id]) }}">Xem phiên bản kế hoạch ›</a></p>
                 @endif
                 @if(isset($activity->data['from']))

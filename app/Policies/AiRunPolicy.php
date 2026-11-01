@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\AiRun;
 use App\Models\User;
-use App\Services\PlanningContext;
+use App\Services\Ai\PlanningContext;
 use App\Support\ReportAccess;
 
 class AiRunPolicy

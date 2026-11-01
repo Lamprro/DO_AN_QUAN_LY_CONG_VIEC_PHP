@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Contracts\AiProvider;
+use App\Services\Ai\Contracts\AiProvider;
 use App\Models\AiRun;
 use App\Models\CalendarEvent;
 use App\Models\Project;
@@ -10,7 +10,7 @@ use App\Models\ReportSnapshot;
 use App\Models\Role;
 use App\Models\Task;
 use App\Models\Workspace;
-use App\Observers\IntegrityObserver;
+use App\Services\Observers\IntegrityObserver;
 use App\Policies\AiRunPolicy;
 use App\Policies\CalendarEventPolicy;
 use App\Policies\ProjectPolicy;
@@ -18,11 +18,11 @@ use App\Policies\ReportSnapshotPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\TaskPolicy;
 use App\Policies\WorkspacePolicy;
-use App\Services\AppShell;
-use App\Services\GeminiAiProvider;
-use App\Services\HttpAiProvider;
-use App\Services\NotificationService;
-use App\Services\SettingService;
+use App\Support\AppShell;
+use App\Services\Ai\Providers\GeminiAiProvider;
+use App\Services\Ai\Providers\HttpAiProvider;
+use App\Services\Notification\NotificationService;
+use App\Services\Setting\SettingService;
 use App\Support\ReportAccess;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;

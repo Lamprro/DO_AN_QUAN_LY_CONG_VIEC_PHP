@@ -74,7 +74,7 @@
                     📊 Timeline Tiến độ
                 </a>
             @endif
-            @if(app(\App\Services\PlanService::class)->allowed(auth()->user(),$workspace,$project ?? null))
+            @if(app(\App\Services\Planning\PlanService::class)->allowed(auth()->user(),$workspace,$project ?? null))
                 <a class="button secondary" href="{{ route('workspaces.plans.index',[$workspace,'project_id'=>($project ?? null)?->id]) }}">
                     📑 Kế hoạch Dự án
                 </a>

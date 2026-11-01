@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Contracts\AiProvider;
-use App\Exceptions\AiProviderUnavailable;
-use App\Services\AiRunService;
+use App\Services\Ai\Contracts\AiProvider;
+use App\Services\Ai\Exceptions\AiProviderUnavailable;
+use App\Services\Ai\AiRunService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 

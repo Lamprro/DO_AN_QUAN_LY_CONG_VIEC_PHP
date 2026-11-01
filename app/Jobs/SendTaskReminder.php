@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\TaskReminder;
-use App\Services\TaskReminderService;
+use App\Services\Task\TaskReminderService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 

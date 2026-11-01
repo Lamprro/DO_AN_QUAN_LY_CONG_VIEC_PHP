@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\TaskReminder;
 use App\Models\Workspace;
-use App\Services\QueueObservation;
-use App\Services\TaskReminderService;
+use App\Services\Queue\QueueObservation;
+use App\Services\Task\TaskReminderService;
 use App\Support\WorkspaceAccess;
 use Illuminate\Http\Request;
 

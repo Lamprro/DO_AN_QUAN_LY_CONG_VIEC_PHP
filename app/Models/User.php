@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\UserStatus;
-use App\Services\AccountMailService;
+use App\Services\Account\AccountMailService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

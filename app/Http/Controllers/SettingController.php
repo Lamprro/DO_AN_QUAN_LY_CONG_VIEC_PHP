@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SettingRequest;
-use App\Services\SettingService;
+use App\Services\Setting\SettingService;
 use Illuminate\Http\Request;
 
 class SettingController extends Controller

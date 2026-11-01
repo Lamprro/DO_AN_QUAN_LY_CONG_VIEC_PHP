@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ReportRequest;
 use App\Models\ReportSnapshot;
 use App\Models\Workspace;
-use App\Services\ReportService;
+use App\Services\Report\ReportService;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;

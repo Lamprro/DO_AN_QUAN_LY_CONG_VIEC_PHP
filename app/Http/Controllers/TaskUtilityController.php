@@ -6,7 +6,7 @@ use App\Enums\TaskPriority;
 use App\Models\Project;
 use App\Models\SavedTaskFilter;
 use App\Models\Workspace;
-use App\Services\TaskUtilityService;
+use App\Services\Task\TaskUtilityService;
 use App\Support\TaskFilters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

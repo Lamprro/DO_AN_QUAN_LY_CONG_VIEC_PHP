@@ -6,7 +6,7 @@ use App\Models\Task;
 use App\Models\TaskTemplate;
 use App\Models\TaskTemplateRun;
 use App\Models\Workspace;
-use App\Services\TaskTemplateService;
+use App\Services\Task\TaskTemplateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 

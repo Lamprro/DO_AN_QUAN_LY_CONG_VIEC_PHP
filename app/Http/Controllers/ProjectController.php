@@ -7,7 +7,7 @@ use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
-use App\Services\ProjectService;
+use App\Services\Project\ProjectService;
 use App\Support\ProjectAccess;
 use App\Support\SearchTerm;
 use Illuminate\Http\Request;

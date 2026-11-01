@@ -2,9 +2,9 @@
 
 use App\Models\User;
 use App\Models\Workspace;
-use App\Services\AiRunService;
-use App\Services\TaskReminderService;
-use App\Services\TaskTemplateService;
+use App\Services\Ai\AiRunService;
+use App\Services\Task\TaskReminderService;
+use App\Services\Task\TaskTemplateService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;

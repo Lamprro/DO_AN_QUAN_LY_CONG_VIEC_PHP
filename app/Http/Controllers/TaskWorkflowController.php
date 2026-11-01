@@ -7,9 +7,9 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
-use App\Services\TaskTreeService;
-use App\Services\TaskUtilityService;
-use App\Services\TaskWorkflowService;
+use App\Services\Task\TaskTreeService;
+use App\Services\Task\TaskUtilityService;
+use App\Services\Task\TaskWorkflowService;
 use App\Support\UiLabels;
 use Illuminate\Http\Request;
 

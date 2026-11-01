@@ -6,7 +6,7 @@ use App\Http\Requests\ProjectMemberRequest;
 use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\Workspace;
-use App\Services\ProjectService;
+use App\Services\Project\ProjectService;
 use App\Support\ProjectAccess;
 use Illuminate\Http\Request;
 

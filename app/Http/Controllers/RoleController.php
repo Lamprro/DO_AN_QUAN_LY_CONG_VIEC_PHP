@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RoleRequest;
 use App\Models\Role;
 use App\Models\Workspace;
-use App\Services\WorkspaceService;
+use App\Services\Workspace\WorkspaceService;
 use App\Support\WorkspaceAccess;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

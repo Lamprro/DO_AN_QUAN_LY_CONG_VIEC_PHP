@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\Workspace;
-use App\Services\TimeTrackingService;
+use App\Services\TimeTracking\TimeTrackingService;
 use Illuminate\Http\Request;
 
 class TimeTrackingController extends Controller

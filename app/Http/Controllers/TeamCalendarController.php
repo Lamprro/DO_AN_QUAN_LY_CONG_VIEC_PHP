@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CalendarProposal;
 use App\Models\Workspace;
 use App\Policies\TaskPolicy;
-use App\Services\TeamCalendarService;
+use App\Services\Calendar\TeamCalendarService;
 use App\Support\ProjectAccess;
 use Illuminate\Http\Request;
 

@@ -28,7 +28,19 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Enums/ActivityEnums.php",
+            "app/Enums/AiEnums.php",
+            "app/Enums/CalendarEnums.php",
+            "app/Enums/IntegrationEnums.php",
+            "app/Enums/TaskEnums.php",
+            "app/Enums/WorkspaceEnums.php",
+            "app/Enums/PlanningEnums.php"
+        ],
+        "exclude-from-classmap": [
+            "app/Enums/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Workspace;
-use App\Services\CalendarViewService;
+use App\Services\Calendar\CalendarViewService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 

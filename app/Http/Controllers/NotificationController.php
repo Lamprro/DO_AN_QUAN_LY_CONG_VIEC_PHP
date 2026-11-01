@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\NotificationService;
+use App\Services\Notification\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 

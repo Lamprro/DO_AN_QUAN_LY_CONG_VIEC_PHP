@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\TimeTrackingService;
+use App\Services\TimeTracking\TimeTrackingService;
 use Illuminate\Http\Request;
 
 class WorkHoursController extends Controller

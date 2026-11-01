@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Plan;
 use App\Models\Workspace;
-use App\Services\AiRunService;
-use App\Services\PlanService;
+use App\Services\Ai\AiRunService;
+use App\Services\Planning\PlanService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 

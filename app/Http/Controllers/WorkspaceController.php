@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TransferOwnerRequest;
 use App\Http\Requests\WorkspaceRequest;
 use App\Models\Workspace;
-use App\Services\WorkspaceService;
+use App\Services\Workspace\WorkspaceService;
 use App\Support\ProjectAccess;
 use App\Support\SearchTerm;
 use App\Support\WorkspaceAccess;

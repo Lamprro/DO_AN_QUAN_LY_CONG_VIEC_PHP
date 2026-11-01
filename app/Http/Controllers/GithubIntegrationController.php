@@ -6,7 +6,7 @@ use App\Models\GithubLog;
 use App\Models\IntegrationConnection;
 use App\Models\Project;
 use App\Models\Workspace;
-use App\Services\GithubWebhookService;
+use App\Services\Integration\GithubWebhookService;
 use App\Support\ProjectAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

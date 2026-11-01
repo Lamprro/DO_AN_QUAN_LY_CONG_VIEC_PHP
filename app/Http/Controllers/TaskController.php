@@ -66,6 +66,10 @@ class TaskController extends Controller
             $query->orderBy($sort, $direction);
         }
         if (($filters['view'] ?? 'list') === 'board') {
+            $query->withCount([
+                'children',
+                'children as completed_children_count' => fn ($children) => $children->where('status', 'DONE'),
+            ]);
             $board = [];
             foreach (TaskStatus::cases() as $status) {
                 $board[$status->value] = (clone $query)->where('task_type', '!=', 'GROUP')->where('status', $status->value)->orderBy('id')->paginate(10, ['*'], 'page_'.strtolower($status->value))->withQueryString();

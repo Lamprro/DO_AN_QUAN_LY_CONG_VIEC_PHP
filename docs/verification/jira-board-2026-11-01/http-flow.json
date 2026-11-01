@@ -1,0 +1,781 @@
+[
+  {
+    "step": "create_MOVE",
+    "http": 201,
+    "persisted": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "TODO",
+      "revision": 1,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    }
+  },
+  {
+    "step": "create_BLOCK",
+    "http": 201,
+    "persisted": {
+      "id": "01a197e8-ca59-71c0-bc46-7ea28eb2715a",
+      "code": "JIRA-BLOCK-1793549977",
+      "status": "TODO",
+      "revision": 1,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "high",
+      "deadline_at": "2026-10-02 03:00:00"
+    }
+  },
+  {
+    "step": "create_FREE",
+    "http": 201,
+    "persisted": {
+      "id": "01a197e8-cbc0-70f3-8475-e866a4092083",
+      "code": "JIRA-FREE-1793549977",
+      "status": "TODO",
+      "revision": 1,
+      "assignee_id": null,
+      "priority": "low",
+      "deadline_at": null
+    }
+  },
+  {
+    "step": "create_SOON",
+    "http": 201,
+    "persisted": {
+      "id": "01a197e8-cd5a-7268-ab5e-8b5a82a57931",
+      "code": "JIRA-SOON-1793549977",
+      "status": "TODO",
+      "revision": 1,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "medium",
+      "deadline_at": "2026-11-02 04:19:00"
+    }
+  },
+  {
+    "step": "board_render",
+    "http": 200,
+    "columns": 5,
+    "chips": 5,
+    "stylesheet_in_head": true,
+    "script_before_body_end": true,
+    "escaped_title": true,
+    "pagination": true
+  },
+  {
+    "step": "transition_IN_PROGRESS",
+    "http": 200,
+    "request": {
+      "expected_status": "TODO",
+      "status": "IN_PROGRESS"
+    },
+    "before": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "TODO",
+      "revision": 1,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    },
+    "response": {
+      "success": true,
+      "message": "Đã chuyển trạng thái sang Đang thực hiện",
+      "status": "IN_PROGRESS",
+      "status_label": "Đang thực hiện",
+      "task": {
+        "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+        "revision": 2
+      }
+    },
+    "after": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "IN_PROGRESS",
+      "revision": 2,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    }
+  },
+  {
+    "step": "transition_REVIEW",
+    "http": 200,
+    "request": {
+      "expected_status": "IN_PROGRESS",
+      "status": "REVIEW"
+    },
+    "before": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "IN_PROGRESS",
+      "revision": 2,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    },
+    "response": {
+      "success": true,
+      "message": "Đã chuyển trạng thái sang Chờ duyệt",
+      "status": "REVIEW",
+      "status_label": "Chờ duyệt",
+      "task": {
+        "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+        "revision": 3
+      }
+    },
+    "after": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "REVIEW",
+      "revision": 3,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    }
+  },
+  {
+    "step": "transition_DONE",
+    "http": 200,
+    "request": {
+      "expected_status": "REVIEW",
+      "status": "DONE"
+    },
+    "before": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "REVIEW",
+      "revision": 3,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    },
+    "response": {
+      "success": true,
+      "message": "Đã chuyển trạng thái sang Hoàn thành",
+      "status": "DONE",
+      "status_label": "Hoàn thành",
+      "task": {
+        "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+        "revision": 4
+      }
+    },
+    "after": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "DONE",
+      "revision": 4,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    }
+  },
+  {
+    "step": "stale_rejected",
+    "http": 422,
+    "response": {
+      "message": "Trạng thái đã thay đổi; hãy tải lại trang trước khi thao tác.",
+      "errors": {
+        "status": [
+          "Trạng thái đã thay đổi; hãy tải lại trang trước khi thao tác."
+        ]
+      }
+    },
+    "after": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "DONE",
+      "revision": 4,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    }
+  },
+  {
+    "step": "reason_required",
+    "http": 422,
+    "response": {
+      "message": "Cần ghi lý do hủy, mở lại hoặc yêu cầu sửa.",
+      "errors": {
+        "reason": [
+          "Cần ghi lý do hủy, mở lại hoặc yêu cầu sửa."
+        ]
+      }
+    },
+    "after": {
+      "id": "01a197e8-c8ab-71b4-80a3-066995c27528",
+      "code": "JIRA-MOVE-1793549977",
+      "status": "DONE",
+      "revision": 4,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "urgent",
+      "deadline_at": "2026-10-01 03:00:00"
+    }
+  },
+  {
+    "step": "blocker_rejected",
+    "http": 422,
+    "response": {
+      "message": "Cần giải quyết blocker đang mở trước.",
+      "errors": {
+        "status": [
+          "Cần giải quyết blocker đang mở trước."
+        ]
+      }
+    },
+    "after": {
+      "id": "01a197e8-ca59-71c0-bc46-7ea28eb2715a",
+      "code": "JIRA-BLOCK-1793549977",
+      "status": "TODO",
+      "revision": 1,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "high",
+      "deadline_at": "2026-10-02 03:00:00"
+    }
+  },
+  {
+    "step": "viewer_render",
+    "http": 200,
+    "draggable_cards": 0,
+    "edit_or_status_links": 0
+  },
+  {
+    "step": "viewer_patch_rejected",
+    "http": 403,
+    "response": {
+      "message": "This action is unauthorized.",
+      "exception": "Symfony\\Component\\HttpKernel\\Exception\\AccessDeniedHttpException",
+      "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php",
+      "line": 672,
+      "trace": [
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php",
+          "line": 616,
+          "function": "prepareException",
+          "class": "Illuminate\\Foundation\\Exceptions\\Handler",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Pipeline.php",
+          "line": 51,
+          "function": "render",
+          "class": "Illuminate\\Foundation\\Exceptions\\Handler",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 182,
+          "function": "handleException",
+          "class": "Illuminate\\Routing\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\app\\Http\\Middleware\\EnsureWorkspaceMembership.php",
+          "line": 20,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "App\\Http\\Middleware\\EnsureWorkspaceMembership",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\app\\Http\\Middleware\\RequireVerifiedAccount.php",
+          "line": 18,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "App\\Http\\Middleware\\RequireVerifiedAccount",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\app\\Http\\Middleware\\EnsureUserIsActive.php",
+          "line": 22,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "App\\Http\\Middleware\\EnsureUserIsActive",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php",
+          "line": 50,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Routing\\Middleware\\SubstituteBindings",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php",
+          "line": 63,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Auth\\Middleware\\Authenticate",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php",
+          "line": 87,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php",
+          "line": 48,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\View\\Middleware\\ShareErrorsFromSession",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php",
+          "line": 120,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php",
+          "line": 63,
+          "function": "handleStatefulRequest",
+          "class": "Illuminate\\Session\\Middleware\\StartSession",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Session\\Middleware\\StartSession",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php",
+          "line": 36,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php",
+          "line": 74,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Cookie\\Middleware\\EncryptCookies",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 137,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php",
+          "line": 821,
+          "function": "then",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php",
+          "line": 800,
+          "function": "runRouteWithinStack",
+          "class": "Illuminate\\Routing\\Router",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php",
+          "line": 764,
+          "function": "runRoute",
+          "class": "Illuminate\\Routing\\Router",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php",
+          "line": 753,
+          "function": "dispatchToRoute",
+          "class": "Illuminate\\Routing\\Router",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php",
+          "line": 200,
+          "function": "dispatch",
+          "class": "Illuminate\\Routing\\Router",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 180,
+          "function": "Illuminate\\Foundation\\Http\\{closure}",
+          "class": "Illuminate\\Foundation\\Http\\Kernel",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\app\\Http\\Middleware\\SecurityHeaders.php",
+          "line": 13,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "App\\Http\\Middleware\\SecurityHeaders",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php",
+          "line": 21,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php",
+          "line": 31,
+          "function": "handle",
+          "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php",
+          "line": 21,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php",
+          "line": 51,
+          "function": "handle",
+          "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Foundation\\Http\\Middleware\\TrimStrings",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php",
+          "line": 27,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Http\\Middleware\\ValidatePostSize",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php",
+          "line": 109,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php",
+          "line": 61,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Http\\Middleware\\HandleCors",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php",
+          "line": 58,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\app\\Http\\Middleware\\TrustedProxyConfiguration.php",
+          "line": 16,
+          "function": "handle",
+          "class": "Illuminate\\Http\\Middleware\\TrustProxies",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "App\\Http\\Middleware\\TrustedProxyConfiguration",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustHosts.php",
+          "line": 78,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Http\\Middleware\\TrustHosts",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php",
+          "line": 22,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePathEncoding.php",
+          "line": 26,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 219,
+          "function": "handle",
+          "class": "Illuminate\\Http\\Middleware\\ValidatePathEncoding",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+          "line": 137,
+          "function": "Illuminate\\Pipeline\\{closure}",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php",
+          "line": 175,
+          "function": "then",
+          "class": "Illuminate\\Pipeline\\Pipeline",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php",
+          "line": 144,
+          "function": "sendRequestThroughRouter",
+          "class": "Illuminate\\Foundation\\Http\\Kernel",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php",
+          "line": 1220,
+          "function": "handle",
+          "class": "Illuminate\\Foundation\\Http\\Kernel",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\public\\index.php",
+          "line": 20,
+          "function": "handleRequest",
+          "class": "Illuminate\\Foundation\\Application",
+          "type": "->"
+        },
+        {
+          "file": "D:\\HeThong_PhanTichTaiChinh\\DO_AN_QUAN_LY_CONG_VIEC_PHP\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php",
+          "line": 23,
+          "function": "require_once"
+        }
+      ]
+    },
+    "after": {
+      "id": "01a197e8-ca59-71c0-bc46-7ea28eb2715a",
+      "code": "JIRA-BLOCK-1793549977",
+      "status": "TODO",
+      "revision": 1,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "high",
+      "deadline_at": "2026-10-02 03:00:00"
+    }
+  },
+  {
+    "step": "csrf_rejected",
+    "http": 419,
+    "after": {
+      "id": "01a197e8-ca59-71c0-bc46-7ea28eb2715a",
+      "code": "JIRA-BLOCK-1793549977",
+      "status": "TODO",
+      "revision": 1,
+      "assignee_id": "01a197e6-8f64-72fa-98bb-282bc18ab168",
+      "priority": "high",
+      "deadline_at": "2026-10-02 03:00:00"
+    }
+  },
+  {
+    "step": "advanced_search",
+    "http": 200,
+    "rendered_cards": 1
+  },
+  {
+    "step": "status_filter",
+    "http": 200,
+    "rendered_cards": 10
+  },
+  {
+    "step": "pagination",
+    "http": 200,
+    "rendered_cards": 32
+  },
+  {
+    "step": "existing_page",
+    "path": "/workspaces/01a197e6-92df-7293-8b36-4d78f76bb25b/projects/01a197e6-92f6-7026-a356-a2b5df0a3b6c/tasks",
+    "http": 200
+  },
+  {
+    "step": "existing_page",
+    "path": "/workspaces",
+    "http": 200
+  },
+  {
+    "step": "existing_page",
+    "path": "/workspaces/01a197e6-92e1-73cf-b968-7bf83ef57e97/tasks?view=board",
+    "http": 200
+  },
+  {
+    "step": "existing_page",
+    "path": "/workspaces/01a197e6-92df-7293-8b36-4d78f76bb25b/projects/01a197e6-92f6-7026-a356-a2b5df0a3b6c/tasks/01a197e8-ca59-71c0-bc46-7ea28eb2715a?panel=1",
+    "http": 200
+  },
+  {
+    "step": "existing_page",
+    "path": "/workspaces/01a197e6-92df-7293-8b36-4d78f76bb25b/projects/01a197e6-92f6-7026-a356-a2b5df0a3b6c/tasks/01a197e8-ca59-71c0-bc46-7ea28eb2715a/status?panel=1",
+    "http": 200
+  },
+  {
+    "step": "asset",
+    "path": "/css/jira-board.css",
+    "http": 200,
+    "bytes": 8289
+  },
+  {
+    "step": "asset",
+    "path": "/js/jira-board.js",
+    "http": 200,
+    "bytes": 10942
+  },
+  {
+    "step": "read_back_history",
+    "task": "JIRA-MOVE-1793549977",
+    "entries": [
+      {
+        "type": "HISTORY",
+        "content": null
+      },
+      {
+        "type": "HISTORY",
+        "content": null
+      },
+      {
+        "type": "HISTORY",
+        "content": null
+      },
+      {
+        "type": "HISTORY",
+        "content": null
+      }
+    ]
+  },
+  {
+    "step": "complete",
+    "review_database": "jira_board_review_20261101.sqlite",
+    "board_url": "http://127.0.0.1:8137/workspaces/01a197e6-92df-7293-8b36-4d78f76bb25b/projects/01a197e6-92f6-7026-a356-a2b5df0a3b6c/tasks?view=board",
+    "fixtures": {
+      "MOVE": "JIRA-MOVE-1793549977",
+      "BLOCK": "JIRA-BLOCK-1793549977",
+      "FREE": "JIRA-FREE-1793549977",
+      "SOON": "JIRA-SOON-1793549977"
+    },
+    "limitations": [
+      "Native browser tool denied Chrome access; drag/drop, instant filters and visual layout need browser verification."
+    ]
+  }
+]

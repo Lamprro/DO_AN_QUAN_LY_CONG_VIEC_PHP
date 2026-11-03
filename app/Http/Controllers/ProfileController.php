@@ -35,7 +35,7 @@ class ProfileController extends Controller
         });
         $request->session()->regenerate();
 
-        if (config('security.require_verified_email') && ! $request->user()->hasVerifiedEmail()) {
+        if (! $request->user()->hasVerifiedEmail()) {
             $request->user()->sendEmailVerificationNotification();
 
             return to_route('verification.notice');

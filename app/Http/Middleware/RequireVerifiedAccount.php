@@ -10,7 +10,7 @@ class RequireVerifiedAccount
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (config('security.require_verified_email') && ! $request->user()->hasVerifiedEmail()
+        if (! $request->user()->hasVerifiedEmail()
             && ! $request->routeIs('profile.*', 'password.update')) {
             return to_route('verification.notice');
         }

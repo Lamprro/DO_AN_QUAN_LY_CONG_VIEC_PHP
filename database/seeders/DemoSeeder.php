@@ -40,7 +40,7 @@ class DemoSeeder extends Seeder
             foreach (['Owner', 'Manager', 'Developer A', 'Developer B', 'Viewer'] as $index => $name) {
                 $users[] = User::firstOrCreate(['email' => 'demo'.($index + 1).'@example.test'], [
                     'name' => $name, 'password' => Hash::make('Demo@123456'), 'status' => 'active',
-                    'timezone' => 'Asia/Ho_Chi_Minh',
+                    'timezone' => 'Asia/Ho_Chi_Minh', 'email_verified_at' => now(),
                 ]);
                 UserSetting::firstOrCreate(['user_id' => $users[$index]->id], ['settings' => config('work_management.settings_defaults')]);
             }

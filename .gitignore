@@ -37,3 +37,6 @@ Thumbs.db
 *.pfx
 *.cookies
 /database/*.sql
+
+# Cheat sheet / local handover notes
+do_Not_push_or_commit_to_git.txt

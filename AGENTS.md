@@ -12,6 +12,7 @@
 
 ## Tài liệu chuẩn
 
+- docs/ARCHITECTURE.md: vai trò từng lớp (Route/Middleware/FormRequest/Controller/Service/Query/Authorization/Policy/View) và nơi kiểm quyền; code mới phải theo tài liệu này.
 - docs/IMPLEMENTATION_PROGRESS.md: trạng thái thực tế từng phần và điểm chờ duyệt.
 - docs/STAGE_01_DATABASE.md: hàm và luồng đã triển khai ở phần 1.
 - docs/verification/README.md: minh chứng kiểm tra trực tiếp và giới hạn.

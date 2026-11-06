@@ -2,16 +2,18 @@
 
 namespace App\Services\Planning;
 
+use App\Authorization\ProjectAccess;
+use App\Authorization\TaskAccess;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Policies\TaskPolicy;
-use App\Support\ProjectAccess;
 use App\Support\SearchTerm;
 
 class PlanEditorData
 {
-    public function build(User $actor, Workspace $workspace, ?Project $project, array $payload): array
+    public function __construct(private ProjectAccess $projects, private TaskAccess $tasks) {}
+
+    public function build(User $actor, Workspace $workspace, ?Project $project, array $payload, ?string $sourceQuery = null, array $sourceSelected = []): array
     {
         $rawDraft = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $renderable = true;
@@ -38,14 +40,13 @@ class PlanEditorData
         if (! $renderable) {
             $payload = ['schema_version' => 1, 'tasks' => [], 'dependencies' => [], 'slots' => []];
         }
-        $access = app(ProjectAccess::class);
-        $members = $access->eligibleMembers($workspace, $project);
-        $reviewers = $access->eligibleMembers($workspace, $project, 'task.review');
+        $members = $this->projects->eligibleMembers($workspace, $project);
+        $reviewers = $this->projects->eligibleMembers($workspace, $project, 'task.review');
         $query = $workspace->tasks()->where('project_id', $project?->id)->whereNull('archived_at');
-        if (! app(TaskPolicy::class)->scope($actor, $workspace, $project, 'task.view')) {
+        if (! $this->tasks->scope($actor, $workspace, $project, 'task.view')) {
             $query->whereRaw('1 = 0');
         }
-        $needle = request()->query('source_q');
+        $needle = $sourceQuery;
         $choices = (clone $query)->when(is_string($needle) && $needle !== '', fn ($q) => $q->where(fn ($q) => $q->whereRaw("code LIKE ? ESCAPE '!'", [SearchTerm::contains($needle)])->orWhereRaw("title LIKE ? ESCAPE '!'", [SearchTerm::contains($needle)])))->orderBy('code')->limit(201)->get();
         $hasMore = $choices->count() > 200;
         $choices = $choices->take(200);
@@ -55,7 +56,7 @@ class PlanEditorData
                 $selected[] = $row['task_id'];
             }
         }
-        $selected = array_unique(array_merge($selected, request()->query('source_selected', [])));
+        $selected = array_unique(array_merge($selected, $sourceSelected));
         if ($selected) {
             $choices = $choices->merge((clone $query)->whereIn('id', $selected)->limit(100)->get())->unique('id')->values();
         }

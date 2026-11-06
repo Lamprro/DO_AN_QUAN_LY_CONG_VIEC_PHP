@@ -53,7 +53,7 @@
             </p>
         </div>
 
-        @if(app(\App\Support\ProjectAccess::class)->allows(auth()->user(), $project, 'integration.manage'))
+        @if($canManage)
             <form method="post" action="{{ route('workspaces.projects.github.save', [$workspace, $project]) }}" style="display: flex; flex-direction: column; gap: 1rem;">
                 @csrf
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 1rem;">

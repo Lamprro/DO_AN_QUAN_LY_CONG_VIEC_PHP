@@ -2,8 +2,7 @@
 
 namespace App\Services\Planning;
 
-use App\Services\Planning\PlanService;
-
+use App\Authorization\PlanAccess;
 use App\Models\CalendarEvent;
 use App\Models\Plan;
 use App\Models\Task;
@@ -16,6 +15,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PlanReviewService
 {
+    public function __construct(private PlanAccess $plans, private PlanService $planService) {}
+
     public function diff(Plan $plan): array
     {
         $parent = $plan->parent;
@@ -69,8 +70,7 @@ class PlanReviewService
 
     public function preview(User $actor, Plan $plan): array
     {
-        $service = app(PlanService::class);
-        abort_unless($service->allowed($actor, $plan->workspace, $plan->project, 'plan.apply') && $service->allowed($actor, $plan->workspace, $plan->project, 'plan.approve'), 403);
+        abort_unless($this->plans->allows($actor, $plan->workspace, $plan->project, 'plan.apply') && $this->plans->allows($actor, $plan->workspace, $plan->project, 'plan.approve'), 403);
         if ($plan->applied_at || ! in_array($plan->status->value, ['draft', 'proposed', 'approved'], true)) {
             return ['valid' => false, 'errors' => ['Chỉ preview bản chưa áp dụng ở trạng thái nháp/chờ duyệt/đã duyệt.'], 'tasks' => [], 'events' => [], 'replaced' => []];
         }
@@ -85,13 +85,13 @@ class PlanReviewService
             if ($sim->applied_at || ! in_array($sim->status->value, ['draft', 'proposed', 'approved'], true)) {
                 return ['valid' => false, 'errors' => ['Trạng thái đã thay đổi; tải lại kế hoạch.'], 'tasks' => [], 'events' => [], 'replaced' => []];
             }
-            $payload = $service->payload($sim);
+            $payload = $this->planService->payload($sim);
             $before = Task::where('workspace_id', $sim->workspace_id)->where('project_id', $sim->project_id)->get()->keyBy('id');
             $oldEvents = CalendarEvent::where('workspace_id', $sim->workspace_id)->where('project_id', $sim->project_id)->get()->keyBy('id');
             if ($sim->status->value !== 'approved') {
                 $sim->update(['status' => 'approved']);
             }
-            $service->transition($actor, $sim, 'apply', 'approved');
+            $this->planService->transition($actor, $sim, 'apply', 'approved');
             $sim = $sim->fresh();
             $map = $sim->data['applied_task_ids'] ?? [];
             $after = Task::where('workspace_id', $sim->workspace_id)->where('project_id', $sim->project_id)->with('assignee', 'reviewer')->get();

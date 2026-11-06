@@ -1,0 +1,3444 @@
+{
+ "log": [
+  {
+   "step": "ws.update by viewer",
+   "user": "demo5@example.test",
+   "method": "PATCH",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "ws.update by owner",
+   "user": "demo1@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W",
+   "flash": [
+    [
+     "success",
+     "Đã cập nhật workspace."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "ws.show by outsider",
+   "user": "dev6@example.test",
+   "method": "GET",
+   "status": 302,
+   "location": "/email/verify",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "role.store by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "role.store by owner",
+   "user": "demo1@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/roles",
+   "flash": [
+    [
+     "success",
+     "Đã tạo vai trò."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "role.store duplicate",
+   "user": "demo1@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/roles/create",
+   "flash": [],
+   "errors": [
+    [
+     "name",
+     "Tên đã được sử dụng."
+    ]
+   ]
+  },
+  {
+   "step": "role.update",
+   "user": "demo1@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/roles",
+   "flash": [
+    [
+     "success",
+     "Đã cập nhật vai trò."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "member.demote demo4 to Viewer",
+   "user": "demo1@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/members",
+   "flash": [
+    [
+     "success",
+     "Đã cập nhật thành viên."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "task.store by demoted demo4",
+   "user": "demo4@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/<new-id>",
+   "flash": [
+    [
+     "success",
+     "Đã tạo công việc."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "member.restore demo4 to Member",
+   "user": "demo1@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/members",
+   "flash": [
+    [
+     "success",
+     "Đã cập nhật thành viên."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "member.edit self",
+   "user": "demo1@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/members",
+   "flash": [],
+   "errors": [
+    [
+     "member",
+     "Không được sửa owner hoặc tự đổi vai trò của mình qua chức năng này."
+    ]
+   ]
+  },
+  {
+   "step": "invite by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "invite by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/members",
+   "flash": [
+    [
+     "success",
+     "Đã tạo lời mời có thời hạn."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "invite bad email",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/members",
+   "flash": [],
+   "errors": [
+    [
+     "email",
+     "Email không đúng định dạng."
+    ]
+   ]
+  },
+  {
+   "step": "invite as Owner role",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/members",
+   "flash": [],
+   "errors": [
+    [
+     "role_id",
+     "Vai trò Owner chỉ được cấp qua chức năng chuyển chủ sở hữu."
+    ]
+   ]
+  },
+  {
+   "step": "role.delete QA2",
+   "user": "demo1@example.test",
+   "method": "DELETE",
+   "status": 302,
+   "location": "/workspaces/W/roles",
+   "flash": [
+    [
+     "success",
+     "Đã xóa vai trò chưa sử dụng."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "project.store by viewer",
+   "user": "demo5@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "project.store by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "project.store by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/<new-id>",
+   "flash": [
+    [
+     "success",
+     "Đã tạo project và membership của người tạo."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "project.update",
+   "user": "demo2@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/NP",
+   "flash": [
+    [
+     "success",
+     "Đã cập nhật project."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "project.update stale",
+   "user": "demo2@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/NP/edit",
+   "flash": [],
+   "errors": [
+    [
+     "expected_revision",
+     "Dữ liệu đã được cập nhật ở nơi khác. Bản nhập của bạn được giữ lại; mở dữ liệu mới để đối chiếu trước khi lưu."
+    ]
+   ]
+  },
+  {
+   "step": "project.member add demo3",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/NP/members",
+   "flash": [
+    [
+     "success",
+     "Đã thêm/kích hoạt lại thành viên project."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "project.member add by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "project.archive",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/NP",
+   "flash": [
+    [
+     "success",
+     "Đã lưu trữ project."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "project.restore",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/NP",
+   "flash": [
+    [
+     "success",
+     "Đã khôi phục project."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "project.delete by member",
+   "user": "demo3@example.test",
+   "method": "DELETE",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "project.delete by manager",
+   "user": "demo2@example.test",
+   "method": "DELETE",
+   "status": 302,
+   "location": "/workspaces/W/projects",
+   "flash": [
+    [
+     "success",
+     "Đã xóa project nháp trống."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "task.store by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/<new-id>",
+   "flash": [
+    [
+     "success",
+     "Đã tạo công việc."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "task.store by viewer",
+   "user": "demo5@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "task.store by outsider",
+   "user": "dev6@example.test",
+   "method": "POST",
+   "status": 419,
+   "location": null,
+   "title": "419 — Phiên làm việc đã hết hạn · Work Management"
+  },
+  {
+   "step": "task.store invalid",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/create",
+   "flash": [],
+   "errors": [
+    [
+     "priority",
+     "Ưu tiên không hợp lệ."
+    ],
+    [
+     "title",
+     "Vui lòng nhập tiêu đề."
+    ]
+   ]
+  },
+  {
+   "step": "task.update",
+   "user": "demo3@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/NT",
+   "flash": [
+    [
+     "success",
+     "Đã cập nhật task."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "task.update stale -> conflict",
+   "user": "demo3@example.test",
+   "method": "PATCH",
+   "status": 409,
+   "location": null,
+   "title": "Đối chiếu thay đổi công việc · Work Management"
+  },
+  {
+   "step": "task.update by viewer",
+   "user": "demo5@example.test",
+   "method": "PATCH",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "task.assign by member",
+   "user": "demo3@example.test",
+   "method": "PATCH",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "task.assign by manager",
+   "user": "demo2@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/NT",
+   "flash": [
+    [
+     "success",
+     "Đã cập nhật task."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "status 002 IN_PROGRESS->REVIEW",
+   "user": "demo3@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-002",
+   "flash": [],
+   "errors": [
+    [
+     "status",
+     "Cần giải quyết blocker đang mở trước."
+    ]
+   ]
+  },
+  {
+   "step": "status 006 stale expected",
+   "user": "demo3@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-006",
+   "flash": [],
+   "errors": [
+    [
+     "status",
+     "Trạng thái đã thay đổi; hãy tải lại trang trước khi thao tác."
+    ]
+   ]
+  },
+  {
+   "step": "status 010 by viewer",
+   "user": "demo5@example.test",
+   "method": "PATCH",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "status 003 approve by non-reviewer",
+   "user": "demo4@example.test",
+   "method": "PATCH",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "status 003 approve by reviewer",
+   "user": "demo2@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-003",
+   "flash": [
+    [
+     "success",
+     "Đã xử lý trạng thái công việc."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "status 004 reopen without reason",
+   "user": "demo2@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-004",
+   "flash": [],
+   "errors": [
+    [
+     "reason",
+     "Cần ghi lý do hủy, mở lại hoặc yêu cầu sửa."
+    ]
+   ]
+  },
+  {
+   "step": "comment.store",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-006",
+   "flash": [
+    [
+     "success",
+     "Đã xử lý bình luận."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "comment.store by viewer",
+   "user": "demo5@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "comment.store mention outsider",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-006",
+   "flash": [],
+   "errors": [
+    [
+     "mentions",
+     "Chỉ nhắc tên tối đa 20 thành viên đang có quyền xem task."
+    ]
+   ]
+  },
+  {
+   "step": "comment.update by author",
+   "user": "demo3@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-006",
+   "flash": [
+    [
+     "success",
+     "Đã xử lý bình luận."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "comment.delete by other member",
+   "user": "demo4@example.test",
+   "method": "DELETE",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "comment.delete by manager",
+   "user": "demo2@example.test",
+   "method": "DELETE",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-006",
+   "flash": [
+    [
+     "success",
+     "Đã xử lý bình luận."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "blocker.store",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-006",
+   "flash": [
+    [
+     "success",
+     "Đã xử lý blocker."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "blocker.update by viewer",
+   "user": "demo5@example.test",
+   "method": "PATCH",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "blocker.resolve by manager",
+   "user": "demo2@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-006",
+   "flash": [
+    [
+     "success",
+     "Đã xử lý blocker."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "dependency.store by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "dependency.store by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-009",
+   "flash": [
+    [
+     "success",
+     "Đã thêm dependency FS."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "dependency.store duplicate",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-009",
+   "flash": [],
+   "errors": [
+    [
+     "predecessor_task_id",
+     "Dependency đã tồn tại."
+    ]
+   ]
+  },
+  {
+   "step": "dependency.remove by member",
+   "user": "demo3@example.test",
+   "method": "DELETE",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "dependency.remove by manager",
+   "user": "demo2@example.test",
+   "method": "DELETE",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-009",
+   "flash": [
+    [
+     "success",
+     "Đã gỡ dependency."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "task.archive by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "task.archive by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-013",
+   "flash": [
+    [
+     "success",
+     "Đã lưu trữ task."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "task.restore by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-013",
+   "flash": [
+    [
+     "success",
+     "Đã khôi phục task."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "tasks.bulk priority",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks",
+   "flash": [
+    [
+     "success",
+     "Đã xử lý 2 công việc. Đã lưu đồng thời cả nhóm."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "tasks.bulk by viewer",
+   "user": "demo5@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "tasks.bulk stale revision",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks",
+   "flash": [],
+   "errors": [
+    [
+     "expected_revision",
+     "Dữ liệu đã được cập nhật ở nơi khác. Bản nhập của bạn được giữ lại; mở dữ liệu mới để đối chiếu trước khi lưu."
+    ]
+   ]
+  },
+  {
+   "step": "filter.store",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks?preset=mine",
+   "flash": [
+    [
+     "success",
+     "Đã lưu bộ lọc riêng của bạn."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "filter.open",
+   "user": "demo3@example.test",
+   "method": "GET",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks?preset=mine",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "filter.open by other user",
+   "user": "demo4@example.test",
+   "method": "GET",
+   "status": 404,
+   "location": null,
+   "title": "404 — Không tìm thấy · Work Management"
+  },
+  {
+   "step": "filter.delete",
+   "user": "demo3@example.test",
+   "method": "DELETE",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks",
+   "flash": [
+    [
+     "success",
+     "Đã xóa bộ lọc cá nhân."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "task.delete with history",
+   "user": "demo2@example.test",
+   "method": "DELETE",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/NT",
+   "flash": [],
+   "errors": [
+    [
+     "task",
+     "Task có lịch sử; hãy dùng lưu trữ."
+    ]
+   ]
+  },
+  {
+   "step": "watcher.add demo3",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/tasks/DEMO-006",
+   "flash": [
+    [
+     "success",
+     "Đã theo dõi công việc."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "watcher.add by viewer",
+   "user": "demo5@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "calendar.store by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/calendar/<new-id>",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "calendar.store by viewer",
+   "user": "demo5@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "calendar.store invalid range",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/calendar/create",
+   "flash": [],
+   "errors": [
+    [
+     "ends_at",
+     "Kết thúc phải sau bắt đầu, tối đa 93 ngày. Ngày kết thúc all-day không bao gồm."
+    ]
+   ]
+  },
+  {
+   "step": "calendar.update",
+   "user": "demo3@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/workspaces/W/calendar/event",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "calendar.delete by other",
+   "user": "demo4@example.test",
+   "method": "DELETE",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "calendar.delete by owner",
+   "user": "demo3@example.test",
+   "method": "DELETE",
+   "status": 302,
+   "location": "/workspaces/W/calendar/event",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "plan.store by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/plans/<new-id>",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "plan.store by viewer",
+   "user": "demo5@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "plan.store bad json",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/plans/create?project_id=P1",
+   "flash": [],
+   "errors": [
+    [
+     "payload",
+     "Nội dung JSON không hợp lệ. Chuyển về trình soạn hoặc kiểm tra JSON nâng cao."
+    ]
+   ]
+  },
+  {
+   "step": "plan.propose by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "plan.propose by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/plans/planA",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "plan.approve by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/plans/planA",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "plan.preview",
+   "user": "demo2@example.test",
+   "method": "GET",
+   "status": 200,
+   "location": null
+  },
+  {
+   "step": "plan.preview by member",
+   "user": "demo3@example.test",
+   "method": "GET",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "plan.schedule",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/plans/planA",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "report.store by manager",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/reports/<new-id>",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "report.store by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "report.store bad range",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/dashboard",
+   "flash": [],
+   "errors": [
+    [
+     "to",
+     "Kỳ phải tăng, tối đa một năm; ngày cuối không bao gồm."
+    ]
+   ]
+  },
+  {
+   "step": "ai-run.store (AI disabled)",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/ai-runs/<new-id>",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "planning-ai.store",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/ai-runs/<new-id>",
+   "flash": [],
+   "errors": []
+  },
+  {
+   "step": "timer.start on own IN_PROGRESS",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/timers",
+   "flash": [
+    [
+     "success",
+     "Đã bắt đầu timer."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "timer.start on others task",
+   "user": "demo4@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "timer.stop by other user",
+   "user": "demo4@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "timer.stop by owner",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/timers",
+   "flash": [],
+   "errors": [
+    [
+     "ended_at",
+     "Thời điểm kết thúc phải sau thời điểm bắt đầu."
+    ]
+   ]
+  },
+  {
+   "step": "timer.adjust page",
+   "user": "demo3@example.test",
+   "method": "GET",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "timer.adjust page by other",
+   "user": "demo4@example.test",
+   "method": "GET",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "template.store",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/task-templates?project_id=P1",
+   "flash": [],
+   "errors": [
+    [
+     "task_ids",
+     "Chọn cả GROUP cha để giữ cấu trúc cây."
+    ]
+   ]
+  },
+  {
+   "step": "template.store by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "github.save by owner",
+   "user": "demo1@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/github",
+   "flash": [
+    [
+     "success",
+     "Đã lưu cấu hình. Secret không hiển thị lại."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "github.enable without secret",
+   "user": "demo1@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/projects/P1/github",
+   "flash": [],
+   "errors": [
+    [
+     "enabled",
+     "Cần bật INTEGRATIONS_ENABLED và cấu hình secret trước."
+    ]
+   ]
+  },
+  {
+   "step": "github.save by member",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "reminders.scan",
+   "user": "demo3@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/W/reminders",
+   "flash": [
+    [
+     "success",
+     "Đã xếp 0 lời nhắc mới vào queue; chưa đồng nghĩa đã gửi."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "personal task.store",
+   "user": "demo1@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/PW/tasks/<new-id>",
+   "flash": [
+    [
+     "success",
+     "Đã tạo công việc."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "personal task.store by non-owner",
+   "user": "demo2@example.test",
+   "method": "POST",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "workspace.store",
+   "user": "demo1@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces/<new-id>",
+   "flash": [
+    [
+     "success",
+     "Đã tạo workspace nhóm."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "notifications.read-all",
+   "user": "demo1@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/notifications",
+   "flash": [
+    [
+     "success",
+     "Đã đánh dấu các thông báo được phép xem là đã đọc."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "profile.update",
+   "user": "demo2@example.test",
+   "method": "PATCH",
+   "status": 302,
+   "location": "/profile",
+   "flash": [
+    [
+     "success",
+     "Đã cập nhật hồ sơ."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "workspace.leave",
+   "user": "demo4@example.test",
+   "method": "POST",
+   "status": 302,
+   "location": "/workspaces",
+   "flash": [
+    [
+     "success",
+     "Đã rời workspace."
+    ]
+   ],
+   "errors": []
+  },
+  {
+   "step": "after leave: show",
+   "user": "demo4@example.test",
+   "method": "GET",
+   "status": 403,
+   "location": null,
+   "title": "403 — Không có quyền truy cập · Work Management"
+  },
+  {
+   "step": "workspace.delete non-empty",
+   "user": "demo1@example.test",
+   "method": "DELETE",
+   "status": 302,
+   "location": "/workspaces/W",
+   "flash": [],
+   "errors": [
+    [
+     "workspace",
+     "Workspace có dữ liệu nghiệp vụ; không thể xóa."
+    ]
+   ]
+  }
+ ],
+ "db": {
+  "workspaces": [
+   [
+    "AlphaTech Enterprise",
+    "Asia/Ho_Chi_Minh",
+    "team"
+   ],
+   [
+    "Demo Personal",
+    "Asia/Ho_Chi_Minh",
+    "personal"
+   ],
+   [
+    "Demo Team A edited",
+    "Asia/Ho_Chi_Minh",
+    "team"
+   ],
+   [
+    "Demo Team B",
+    "Asia/Ho_Chi_Minh",
+    "team"
+   ],
+   [
+    "Demo Tech Workspace",
+    "Asia/Ho_Chi_Minh",
+    "team"
+   ],
+   [
+    "New WS",
+    "Asia/Ho_Chi_Minh",
+    "team"
+   ]
+  ],
+  "roles": [
+   [
+    "AlphaTech Enterprise",
+    "Manager",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.manage_members\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\"]",
+    "1"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "Member",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\", \"task.create\", \"task.update\", \"task.comment\", \"task.attach\", \"calendar.create\", \"calendar.update\", \"plan.create\"]",
+    "1"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "Owner",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.archive\", \"workspace.manage_members\", \"workspace.manage_roles\", \"workspace.view_operations\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\", \"integration.manage\"]",
+    "1"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "Tech Lead",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.manage_members\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\"]",
+    "0"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "Viewer",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\"]",
+    "1"
+   ],
+   [
+    "Demo Personal",
+    "Manager",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.manage_members\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\"]",
+    "1"
+   ],
+   [
+    "Demo Personal",
+    "Member",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\", \"task.create\", \"task.update\", \"task.comment\", \"task.attach\", \"calendar.create\", \"calendar.update\", \"plan.create\"]",
+    "1"
+   ],
+   [
+    "Demo Personal",
+    "Owner",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.archive\", \"workspace.manage_members\", \"workspace.manage_roles\", \"workspace.view_operations\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\", \"integration.manage\"]",
+    "1"
+   ],
+   [
+    "Demo Personal",
+    "Viewer",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\"]",
+    "1"
+   ],
+   [
+    "Demo Team A edited",
+    "Manager",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.manage_members\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\"]",
+    "1"
+   ],
+   [
+    "Demo Team A edited",
+    "Member",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\", \"task.create\", \"task.update\", \"task.comment\", \"task.attach\", \"calendar.create\", \"calendar.update\", \"plan.create\"]",
+    "1"
+   ],
+   [
+    "Demo Team A edited",
+    "Owner",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.archive\", \"workspace.manage_members\", \"workspace.manage_roles\", \"workspace.view_operations\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\", \"integration.manage\"]",
+    "1"
+   ],
+   [
+    "Demo Team A edited",
+    "Viewer",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\"]",
+    "1"
+   ],
+   [
+    "Demo Team B",
+    "Manager",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.manage_members\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\"]",
+    "1"
+   ],
+   [
+    "Demo Team B",
+    "Member",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\", \"task.create\", \"task.update\", \"task.comment\", \"task.attach\", \"calendar.create\", \"calendar.update\", \"plan.create\"]",
+    "1"
+   ],
+   [
+    "Demo Team B",
+    "Owner",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.archive\", \"workspace.manage_members\", \"workspace.manage_roles\", \"workspace.view_operations\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\", \"integration.manage\"]",
+    "1"
+   ],
+   [
+    "Demo Team B",
+    "Viewer",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\"]",
+    "1"
+   ],
+   [
+    "Demo Tech Workspace",
+    "Manager",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.manage_members\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\"]",
+    "1"
+   ],
+   [
+    "Demo Tech Workspace",
+    "Member",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\", \"task.create\", \"task.update\", \"task.comment\", \"task.attach\", \"calendar.create\", \"calendar.update\", \"plan.create\"]",
+    "1"
+   ],
+   [
+    "Demo Tech Workspace",
+    "Owner",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.archive\", \"workspace.manage_members\", \"workspace.manage_roles\", \"workspace.view_operations\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\", \"integration.manage\"]",
+    "1"
+   ],
+   [
+    "Demo Tech Workspace",
+    "Viewer",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\"]",
+    "1"
+   ],
+   [
+    "New WS",
+    "Manager",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.manage_members\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\"]",
+    "1"
+   ],
+   [
+    "New WS",
+    "Member",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\", \"task.create\", \"task.update\", \"task.comment\", \"task.attach\", \"calendar.create\", \"calendar.update\", \"plan.create\"]",
+    "1"
+   ],
+   [
+    "New WS",
+    "Owner",
+    "[\"workspace.view\", \"workspace.update\", \"workspace.archive\", \"workspace.manage_members\", \"workspace.manage_roles\", \"workspace.view_operations\", \"project.view\", \"project.create\", \"project.update\", \"project.archive\", \"project.manage_members\", \"task.view\", \"task.create\", \"task.update\", \"task.assign\", \"task.review\", \"task.archive\", \"task.comment\", \"task.attach\", \"calendar.view\", \"calendar.create\", \"calendar.update\", \"calendar.delete\", \"plan.view\", \"plan.create\", \"plan.update\", \"plan.approve\", \"plan.apply\", \"report.view\", \"report.create\", \"integration.view\", \"integration.manage\"]",
+    "1"
+   ],
+   [
+    "New WS",
+    "Viewer",
+    "[\"workspace.view\", \"project.view\", \"task.view\", \"calendar.view\", \"plan.view\", \"report.view\"]",
+    "1"
+   ]
+  ],
+  "workspace_members": [
+   [
+    "AlphaTech Enterprise",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "demo2@example.test",
+    "Manager",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "demo3@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "demo4@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "demo5@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "dev10@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "dev6@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "dev7@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "dev8@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "dev9@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Demo Personal",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Demo Team A edited",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Demo Team A edited",
+    "demo2@example.test",
+    "Manager",
+    "active"
+   ],
+   [
+    "Demo Team A edited",
+    "demo3@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Demo Team A edited",
+    "demo4@example.test",
+    "Member",
+    "left"
+   ],
+   [
+    "Demo Team A edited",
+    "demo5@example.test",
+    "Viewer",
+    "active"
+   ],
+   [
+    "Demo Team B",
+    "demo2@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Demo Tech Workspace",
+    "jordyn.hackett@example.net",
+    "Owner",
+    "active"
+   ],
+   [
+    "Demo Tech Workspace",
+    "sofia.haag@example.com",
+    "Manager",
+    "active"
+   ],
+   [
+    "Demo Tech Workspace",
+    "veum.darion@example.net",
+    "Member",
+    "active"
+   ],
+   [
+    "New WS",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ]
+  ],
+  "projects": [
+   [
+    "AlphaTech Enterprise",
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "active",
+    "0",
+    "1"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "active",
+    "0",
+    "1"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "active",
+    "0",
+    "1"
+   ],
+   [
+    "AlphaTech Enterprise",
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "active",
+    "0",
+    "1"
+   ],
+   [
+    "Demo Team A edited",
+    "Demo Backend",
+    "active",
+    "0",
+    "1"
+   ],
+   [
+    "Demo Team A edited",
+    "Demo Work Management",
+    "active",
+    "0",
+    "2"
+   ],
+   [
+    "Demo Team B",
+    "Demo Isolated Project",
+    "active",
+    "0",
+    "1"
+   ],
+   [
+    "Demo Tech Workspace",
+    "Dự án Phát triển Web",
+    "active",
+    "0",
+    "1"
+   ]
+  ],
+  "project_members": [
+   [
+    "Demo Backend",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Demo Backend",
+    "demo3@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Demo Isolated Project",
+    "demo2@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Demo Work Management",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Demo Work Management",
+    "demo2@example.test",
+    "Manager",
+    "active"
+   ],
+   [
+    "Demo Work Management",
+    "demo3@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Demo Work Management",
+    "demo4@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Demo Work Management",
+    "demo5@example.test",
+    "Viewer",
+    "active"
+   ],
+   [
+    "Dự án Phát triển Web",
+    "jordyn.hackett@example.net",
+    "Owner",
+    "active"
+   ],
+   [
+    "Dự án Phát triển Web",
+    "sofia.haag@example.com",
+    "Manager",
+    "active"
+   ],
+   [
+    "Dự án Phát triển Web",
+    "veum.darion@example.net",
+    "Member",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "demo2@example.test",
+    "Manager",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "demo3@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "demo4@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "demo5@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "dev10@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "dev6@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "dev7@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "dev8@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "Nền tảng Thương mại Điện tử E-Commerce 2026",
+    "dev9@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "demo2@example.test",
+    "Manager",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "demo3@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "demo4@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "demo5@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "dev10@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "dev6@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "dev7@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "dev8@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "Tái cấu trúc Hạ tầng Cloud & DevOps CI/CD",
+    "dev9@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "demo2@example.test",
+    "Manager",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "demo3@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "demo4@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "demo5@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "dev10@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "dev6@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "dev7@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "dev8@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "Trợ lý Trí tuệ Nhân tạo Gemini Work Assistant",
+    "dev9@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "demo1@example.test",
+    "Owner",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "demo2@example.test",
+    "Manager",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "demo3@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "demo4@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "demo5@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "dev10@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "dev6@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "dev7@example.test",
+    "Member",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "dev8@example.test",
+    "Tech Lead",
+    "active"
+   ],
+   [
+    "Ứng dụng Di động AlphaTech Mobile App (iOS & Android)",
+    "dev9@example.test",
+    "Member",
+    "active"
+   ]
+  ],
+  "tasks": [
+   [
+    "1",
+    "",
+    "by demoted",
+    "TODO",
+    "medium",
+    "WORK",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "1",
+    "",
+    "Personal one",
+    "TODO",
+    "low",
+    "WORK",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "1",
+    "",
+    "Task by member edited",
+    "TODO",
+    "high",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "3"
+   ],
+   [
+    "0",
+    "AI-101",
+    "Cấu hình GeminiAiProvider kết nối Google Generative Language API",
+    "DONE",
+    "high",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "AI-102",
+    "Xây dựng Prompt System chuẩn cho tính năng AI Planning tự động tạo kế hoạch",
+    "DONE",
+    "high",
+    "WORK",
+    "demo3@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "AI-103",
+    "Phát triển tính năng AI Report phân tích tiến độ dự án theo tuần",
+    "IN_PROGRESS",
+    "high",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "AI-104",
+    "Xây dựng trợ lý phân tích blocker và đề xuất hướng xử lý kỹ thuật",
+    "TODO",
+    "medium",
+    "WORK",
+    "dev10@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "AI-105",
+    "Tối ưu hóa token tiêu thụ và cơ chế fallback model tự động",
+    "IN_PROGRESS",
+    "medium",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "AI-GRP-CORE",
+    "Tích hợp Gemini API & Xử lý Prompt",
+    "TODO",
+    "medium",
+    "GROUP",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-001",
+    "Công việc mẫu 1",
+    "TODO",
+    "medium",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-002",
+    "Công việc mẫu 2",
+    "IN_PROGRESS",
+    "high",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-003",
+    "Công việc mẫu 3",
+    "DONE",
+    "low",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "2"
+   ],
+   [
+    "0",
+    "DEMO-004",
+    "Công việc mẫu 4",
+    "DONE",
+    "medium",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-005",
+    "Công việc mẫu 5",
+    "TODO",
+    "high",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-006",
+    "Công việc mẫu 6",
+    "IN_PROGRESS",
+    "low",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-007",
+    "Công việc mẫu 7",
+    "REVIEW",
+    "medium",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-008",
+    "Công việc mẫu 8",
+    "DONE",
+    "high",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-009",
+    "Công việc mẫu 9",
+    "TODO",
+    "low",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-010",
+    "Công việc mẫu 10",
+    "IN_PROGRESS",
+    "medium",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-011",
+    "Công việc mẫu 11",
+    "REVIEW",
+    "high",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-012",
+    "Công việc mẫu 12",
+    "DONE",
+    "low",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-013",
+    "Công việc mẫu 13",
+    "TODO",
+    "medium",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "3"
+   ],
+   [
+    "0",
+    "DEMO-014",
+    "Công việc mẫu 14",
+    "IN_PROGRESS",
+    "high",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-015",
+    "Công việc mẫu 15",
+    "REVIEW",
+    "low",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-016",
+    "Công việc mẫu 16",
+    "DONE",
+    "medium",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-017",
+    "Công việc mẫu 17",
+    "TODO",
+    "urgent",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "2"
+   ],
+   [
+    "0",
+    "DEMO-018",
+    "Công việc mẫu 18",
+    "IN_PROGRESS",
+    "low",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-019",
+    "Công việc mẫu 19",
+    "REVIEW",
+    "medium",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-020",
+    "Công việc mẫu 20",
+    "DONE",
+    "high",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-021",
+    "Công việc mẫu 21",
+    "TODO",
+    "urgent",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "2"
+   ],
+   [
+    "0",
+    "DEMO-022",
+    "Công việc mẫu 22",
+    "IN_PROGRESS",
+    "medium",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-023",
+    "Công việc mẫu 23",
+    "REVIEW",
+    "high",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-024",
+    "Công việc mẫu 24",
+    "DONE",
+    "low",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-025",
+    "Công việc mẫu 25",
+    "TODO",
+    "medium",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-026",
+    "Công việc mẫu 26",
+    "IN_PROGRESS",
+    "high",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-027",
+    "Công việc mẫu 27",
+    "REVIEW",
+    "low",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-028",
+    "Công việc mẫu 28",
+    "DONE",
+    "medium",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-029",
+    "Công việc mẫu 29",
+    "TODO",
+    "high",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-030",
+    "Công việc mẫu 30",
+    "IN_PROGRESS",
+    "low",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-031",
+    "Công việc mẫu 31",
+    "REVIEW",
+    "medium",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-032",
+    "Công việc mẫu 32",
+    "DONE",
+    "high",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-033",
+    "Công việc mẫu 33",
+    "TODO",
+    "low",
+    "WORK",
+    "demo2@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-034",
+    "Công việc mẫu 34",
+    "IN_PROGRESS",
+    "medium",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-035",
+    "Công việc mẫu 35",
+    "REVIEW",
+    "high",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-036",
+    "Công việc mẫu 36",
+    "DONE",
+    "low",
+    "WORK",
+    "demo1@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "DEMO-GROUP",
+    "Hoàn thiện MVP",
+    "IN_PROGRESS",
+    "medium",
+    "GROUP",
+    "",
+    "",
+    "0",
+    "2"
+   ],
+   [
+    "0",
+    "DEMO-MILESTONE",
+    "Sẵn sàng demo",
+    "TODO",
+    "medium",
+    "MILESTONE",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-101",
+    "Thiết kế cơ sở dữ liệu MySQL chuẩn 3NF cho đơn hàng và giỏ hàng",
+    "DONE",
+    "high",
+    "WORK",
+    "demo3@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-102",
+    "Xây dựng API xác thực JWT và phân quyền RBAC đa cấp",
+    "DONE",
+    "high",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-103",
+    "Phát triển API quản lý danh mục sản phẩm và biến thể (SKU)",
+    "DONE",
+    "medium",
+    "WORK",
+    "dev10@example.test",
+    "demo3@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-104",
+    "Tích hợp cổng thanh toán VNPay và Stripe Checkout webhook",
+    "IN_PROGRESS",
+    "high",
+    "WORK",
+    "demo3@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-105",
+    "Tối ưu hóa truy vấn SQL tìm kiếm sản phẩm với Full-Text Search",
+    "TODO",
+    "medium",
+    "WORK",
+    "dev10@example.test",
+    "demo3@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-106",
+    "Xây dựng hàng đợi Queue gửi email hóa đơn và thông báo đơn hàng",
+    "REVIEW",
+    "medium",
+    "WORK",
+    "demo3@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-107",
+    "Viết unit test cho logic tính phí vận chuyển và mã giảm giá coupon",
+    "IN_PROGRESS",
+    "high",
+    "WORK",
+    "demo5@example.test",
+    "demo3@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-201",
+    "Thiết kế bộ UI Design System và Figma Prototype cho trang chủ",
+    "DONE",
+    "high",
+    "WORK",
+    "dev7@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-202",
+    "Xây dựng layout Responsive chuẩn Mobile-First cho trang xem chi tiết sản phẩm",
+    "DONE",
+    "high",
+    "WORK",
+    "demo4@example.test",
+    "dev7@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-203",
+    "Tạo module Giỏ hàng động với hiệu ứng trượt Offcanvas mượt mà",
+    "IN_PROGRESS",
+    "medium",
+    "WORK",
+    "demo4@example.test",
+    "demo2@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-204",
+    "Tích hợp bộ lọc đa tiêu chí (giá, thương hiệu, màu sắc, đánh giá sao)",
+    "REVIEW",
+    "medium",
+    "WORK",
+    "demo4@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-205",
+    "Tối ưu tốc độ tải trang Core Web Vitals (LCP dưới 1.5s, FID dưới 50ms)",
+    "TODO",
+    "high",
+    "WORK",
+    "demo4@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-301",
+    "Cài đặt cụm Redis Cache để lưu phiên đăng nhập và cache bảng giá",
+    "DONE",
+    "high",
+    "WORK",
+    "dev8@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-302",
+    "Cấu hình hệ thống sao lưu tự động MySQL Backup hàng ngày lên Cloud",
+    "IN_PROGRESS",
+    "high",
+    "WORK",
+    "dev8@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-303",
+    "Kiểm thử tải đồng thời 5.000 người dùng với Apache JMeter",
+    "TODO",
+    "medium",
+    "WORK",
+    "demo5@example.test",
+    "demo1@example.test",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-GRP-BE",
+    "Phát triển Hệ thống Backend & API",
+    "TODO",
+    "medium",
+    "GROUP",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-GRP-FE",
+    "Giao diện Người dùng & Trải nghiệm (UI/UX)",
+    "TODO",
+    "medium",
+    "GROUP",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-GRP-OPS",
+    "Cơ sở dữ liệu & Tích hợp Cổng thanh toán",
+    "TODO",
+    "medium",
+    "GROUP",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "ECOM-MLS-BETA",
+    "Cột mốc: Đóng gói bản Beta v1.0 ra mắt nội bộ",
+    "IN_PROGRESS",
+    "medium",
+    "MILESTONE",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "PERSONAL-001",
+    "Công việc cá nhân",
+    "TODO",
+    "medium",
+    "WORK",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "PRIVATE-001",
+    "Không thuộc Team A",
+    "TODO",
+    "medium",
+    "WORK",
+    "",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-3XAPD",
+    "Hic aut dolorum omnis quia.",
+    "REVIEW",
+    "low",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-CIJF3",
+    "Dolorem facilis ut quia.",
+    "DONE",
+    "low",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-FU0YT",
+    "Beatae blanditiis pariatur architecto.",
+    "REVIEW",
+    "low",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-GTTYH",
+    "Reprehenderit consequatur facilis eligendi laborum.",
+    "DONE",
+    "high",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-IDCMX",
+    "Deleniti magni et corporis repellat itaque.",
+    "DONE",
+    "medium",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-JCXOD",
+    "Aut ducimus ut.",
+    "DONE",
+    "high",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-LNELG",
+    "Est numquam voluptatibus voluptas repellat voluptates.",
+    "DONE",
+    "medium",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-MLB7Q",
+    "Est et eveniet ut sit necessitatibus.",
+    "TODO",
+    "medium",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-T9WPD",
+    "Est ut quis voluptatem saepe.",
+    "TODO",
+    "high",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "0",
+    "TASK-UUYWC",
+    "Aut laborum quibusdam nobis.",
+    "DONE",
+    "high",
+    "WORK",
+    "sofia.haag@example.com",
+    "",
+    "0",
+    "1"
+   ]
+  ],
+  "task_activities": [
+   [
+    "COMMENT",
+    "",
+    "Bản thiết kế rất tốt, đã approve để triển khai sang migration.",
+    "0",
+    "1"
+   ],
+   [
+    "COMMENT",
+    "",
+    "Bình luận demo cho giao diện.",
+    "0",
+    "1"
+   ],
+   [
+    "COMMENT",
+    "",
+    "Cập nhật tiến độ dự án.",
+    "0",
+    "1"
+   ],
+   [
+    "COMMENT",
+    "",
+    "Đã chuẩn hóa các bảng orders, order_items và vouchers theo đúng chuẩn schema 3NF.",
+    "0",
+    "1"
+   ],
+   [
+    "COMMENT",
+    "",
+    "Đã gửi thông tin đăng ký API sang bên VNPay, dự kiến nhận key test vào ngày mai.",
+    "0",
+    "1"
+   ],
+   [
+    "COMMENT",
+    "",
+    "Giao diện chi tiết sản phẩm đã responsive mượt trên cả iPhone 15 và Samsung Galaxy.",
+    "0",
+    "1"
+   ],
+   [
+    "COMMENT",
+    "",
+    "hello edited",
+    "1",
+    "1"
+   ],
+   [
+    "COMMENT",
+    "",
+    "Mình đã nhắc bên đối tác ưu tiên duyệt sớm cho team.",
+    "0",
+    "1"
+   ],
+   [
+    "COMMENT",
+    "",
+    "Typography và khoảng cách padding rất chuẩn với Figma.",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "fixture_created",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.archived",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.blocker_reported",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.blocker_updated",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.comment_added",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.comment_deleted",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.comment_updated",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.created",
+    "",
+    "0",
+    "3"
+   ],
+   [
+    "HISTORY",
+    "task.dependency_added",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.dependency_removed",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.group_synced",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.restored",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.status_changed",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "task.updated",
+    "",
+    "0",
+    "4"
+   ],
+   [
+    "HISTORY",
+    "task.watcher_added",
+    "",
+    "0",
+    "1"
+   ],
+   [
+    "HISTORY",
+    "timer.started",
+    "",
+    "0",
+    "1"
+   ]
+  ],
+  "task_blockers": [
+   [
+    "Đang chờ chốt đặc tả demo",
+    "open"
+   ],
+   [
+    "Đang chờ cổng thanh toán duyệt hồ sơ tài khoản merchant môi trường sandbox.",
+    "open"
+   ],
+   [
+    "waiting api",
+    "resolved"
+   ]
+  ],
+  "task_dependencies": [
+   [
+    "2"
+   ]
+  ],
+  "task_watchers": [
+   [
+    "1"
+   ]
+  ],
+  "saved_task_filters": [],
+  "calendar_events": [
+   [
+    "Daily Standup - Báo cáo tiến độ đầu ngày",
+    "planned",
+    "NOTE",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 1",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 10",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 11",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 12",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 13",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 14",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 15",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 16",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 17",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 18",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 19",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 2",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 20",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 3",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 4",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 5",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 6",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 7",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 8",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Demo slot 9",
+    "planned",
+    "TASK_BLOCK",
+    "project",
+    "manual"
+   ],
+   [
+    "Focus 2",
+    "planned",
+    "MEETING",
+    "project",
+    "manual"
+   ],
+   [
+    "Họp kế hoạch tuần",
+    "planned",
+    "NOTE",
+    "project",
+    "manual"
+   ],
+   [
+    "Họp Review Kiến trúc Cổng thanh toán",
+    "planned",
+    "NOTE",
+    "project",
+    "manual"
+   ],
+   [
+    "Họp Thử nghiệm Tích hợp Gemini AI Assistant",
+    "planned",
+    "NOTE",
+    "project",
+    "manual"
+   ],
+   [
+    "Sprint Planning - Kế hoạch Sprint tuần",
+    "planned",
+    "NOTE",
+    "project",
+    "manual"
+   ],
+   [
+    "Sprint Retrospective & Đánh giá kết quả",
+    "planned",
+    "NOTE",
+    "project",
+    "manual"
+   ],
+   [
+    "UI/UX Demo & Thẩm định giao diện Mobile",
+    "planned",
+    "NOTE",
+    "project",
+    "manual"
+   ]
+  ],
+  "plans": [
+   [
+    "Demo proposal (fixture)",
+    "proposed",
+    "1",
+    "0"
+   ],
+   [
+    "Plan A",
+    "approved",
+    "1",
+    "0"
+   ]
+  ],
+  "report_snapshots": [
+   [
+    "2"
+   ]
+  ],
+  "ai_runs": [
+   [
+    "planning",
+    "queued"
+   ],
+   [
+    "planning",
+    "succeeded"
+   ],
+   [
+    "report",
+    "queued"
+   ]
+  ],
+  "time_entries": [
+   [
+    "0",
+    "1"
+   ]
+  ],
+  "task_templates": [
+   [
+    "Quy trình Phát triển Tính năng mới (Feature Workflow)",
+    "active"
+   ]
+  ],
+  "integration_connections": [
+   [
+    "github",
+    "disabled",
+    "123"
+   ]
+  ],
+  "notifications": [
+   [
+    "task_assigned",
+    "0",
+    "2"
+   ],
+   [
+    "task_assigned",
+    "1",
+    "4"
+   ],
+   [
+    "task.comment_added",
+    "1",
+    "1"
+   ],
+   [
+    "task.mentioned",
+    "0",
+    "1"
+   ],
+   [
+    "task.status_changed",
+    "0",
+    "1"
+   ],
+   [
+    "task.status_changed",
+    "1",
+    "1"
+   ],
+   [
+    "task.updated",
+    "0",
+    "1"
+   ],
+   [
+    "task.watcher_added",
+    "0",
+    "1"
+   ]
+  ],
+  "task_reminders": [],
+  "users": [
+   [
+    "demo1@example.test",
+    "Nguyễn Văn An (Tech Lead)",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "demo2@example.test",
+    "Manager Renamed",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "demo3@example.test",
+    "Lê Hoàng Long (Senior Backend)",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "demo4@example.test",
+    "Phạm Thu Trang (Frontend Lead)",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "demo5@example.test",
+    "Đặng Minh Tuấn (QA/QC Lead)",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "dev10@example.test",
+    "Đỗ Khắc Nam",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "dev6@example.test",
+    "Vũ Hải Đăng",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "dev7@example.test",
+    "Bùi Lan Hương",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "dev8@example.test",
+    "Hoàng Anh Đức",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "dev9@example.test",
+    "Nguyễn Minh Châu",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "jordyn.hackett@example.net",
+    "Rene Braun",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "sofia.haag@example.com",
+    "Litzy Reilly",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ],
+   [
+    "veum.darion@example.net",
+    "Prof. Jayde Feest Jr.",
+    "Asia/Ho_Chi_Minh",
+    "active"
+   ]
+  ],
+  "jobs": [
+   [
+    "work-management-ai",
+    "2"
+   ]
+  ]
+ }
+}

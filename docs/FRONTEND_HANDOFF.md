@@ -1,3 +1,12 @@
+## Cập nhật 06/11/2026 — tái cấu trúc lớp (FE không cần đổi form)
+
+Tên route, URL, form action, field, CSRF, `_method`, `expected_revision`/`expected_status`, JSON panel giữ nguyên. Kiến trúc mới: [ARCHITECTURE.md](ARCHITECTURE.md).
+
+- **Blade không được gọi `app(...)` tới Service/Policy/Access.** Dùng `@can('ability', $model)` hoặc biến cờ do backend truyền: `$canViewPlans`, `$canViewReport`, `$canViewCalendar`, `$canViewIntegration` (trang tổng quan workspace/project, do `ScopeLinksComposer`), `$canCreateTask`, `$canReviewTasks` (trang project), `$canScheduleTask`, `$canViewPlans` (trang task), `$canCreatePlan` (danh sách kế hoạch), `$canManage` (GitHub), `@can('adjust', $entry)` (timer). Cần cờ mới thì yêu cầu backend thêm vào Query/Composer.
+- Xoá bình luận (`*.comments.destroy`) nay vào `TaskWorkflowController@deleteComment`; form không đổi.
+- Route nay nằm ở `routes/web.php`, `routes/auth.php`, `routes/workspace/*.php`. Các file `stage05/stage06/remaining/full_features/task_utilities/task_workflow/calendar/account_security.php` nhắc ở phần lịch sử bên dưới không còn.
+- Đã bỏ 7 route rác `workspaces.password.*`, `workspaces.verification.*`; không view nào dùng chúng.
+
 ## Cập nhật 26/10/2026 — tinh gọn lớp nghiệp vụ
 
 Đã gộp MemberService/RoleService vào WorkspaceService, ProjectMemberService vào ProjectService, TaskUtilityScope vào TaskUtilityService và đổi toàn bộ caller. Tên route, form Blade, payload, CSRF, JSON panel và chính sách quyền giữ nguyên; FE không cần đổi cách gửi form. Không dùng lại tên class cũ trong code mới.

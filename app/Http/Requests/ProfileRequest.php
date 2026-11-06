@@ -6,11 +6,6 @@ use Illuminate\Validation\Rule;
 
 class ProfileRequest extends EmailFormRequest
 {
-    public function authorize(): bool
-    {
-        return $this->user() !== null;
-    }
-
     public function rules(): array
     {
         $changingEmail = $this->input('email') !== $this->user()->email;

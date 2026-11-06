@@ -5,34 +5,33 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MemberRequest;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
-use App\Services\Workspace\InvitationService;
+use App\Services\Workspace\WorkspaceQuery;
 use App\Services\Workspace\WorkspaceService;
-use App\Support\WorkspaceAccess;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class WorkspaceMemberController extends Controller
 {
-    public function index(Request $request, Workspace $workspace, WorkspaceAccess $access, InvitationService $invitations): View
+    public function __construct(private WorkspaceService $service) {}
+
+    public function index(Request $request, Workspace $workspace, WorkspaceQuery $query): View
     {
         $this->authorize('manageMembers', $workspace);
-        $permissions = $access->permissions($request->user(), $workspace);
-        $roles = $workspace->roles()->orderBy('name')->get()->filter(fn ($r) => ! ($r->is_system && $r->name === 'Owner') && ! array_diff($r->permissions, $permissions));
 
-        return view('members.index', ['workspace' => $workspace, 'members' => $workspace->members()->with('user', 'role')->orderBy('joined_at')->get(), 'assignableRoles' => $roles, 'pendingInvitations' => $invitations->pending($workspace), 'actorPermissions' => $permissions]);
+        return view('members.index', $query->members($request->user(), $workspace));
     }
 
-    public function update(MemberRequest $request, Workspace $workspace, WorkspaceMember $member, WorkspaceService $service): RedirectResponse
+    public function update(MemberRequest $request, Workspace $workspace, WorkspaceMember $member): RedirectResponse
     {
-        $service->updateMember($request->user(), $workspace, $member, $request->validated());
+        $this->service->updateMember($request->user(), $workspace, $member, $request->validated());
 
         return to_route('workspaces.members.index', $workspace)->with('success', 'Đã cập nhật thành viên.');
     }
 
-    public function destroy(Request $request, Workspace $workspace, WorkspaceMember $member, WorkspaceService $service): RedirectResponse
+    public function destroy(Request $request, Workspace $workspace, WorkspaceMember $member): RedirectResponse
     {
-        $service->removeMember($request->user(), $workspace, $member);
+        $this->service->removeMember($request->user(), $workspace, $member);
 
         return to_route('workspaces.members.index', $workspace)->with('success', 'Đã đánh dấu thành viên rời workspace; lịch sử được giữ lại.');
     }

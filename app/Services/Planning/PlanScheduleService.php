@@ -2,25 +2,26 @@
 
 namespace App\Services\Planning;
 
-use App\Services\Calendar\CalendarService;
-use App\Services\TimeTracking\TimeTrackingService;
-use App\Services\Planning\PlanService;
-
+use App\Authorization\PlanAccess;
 use App\Models\CalendarEvent;
 use App\Models\Plan;
 use App\Models\User;
+use App\Services\TimeTracking\TimeTrackingService;
+use App\Support\LocalTime;
 use Carbon\CarbonImmutable;
 use Illuminate\Validation\ValidationException;
 
 class PlanScheduleService
 {
+    public function __construct(private PlanAccess $plans, private PlanService $planService, private TimeTrackingService $time) {}
+
     public function suggest(User $actor, Plan $base, string $from): Plan
     {
-        abort_unless(app(PlanService::class)->allowed($actor, $base->workspace, $base->project, 'plan.update'), 403);
-        $payload = app(PlanService::class)->payload($base);
+        abort_unless($this->plans->allows($actor, $base->workspace, $base->project, 'plan.update'), 403);
+        $payload = $this->planService->payload($base);
         $payload['slots'] = [];
         $zone = $base->workspace->timezone;
-        $hours = app(TimeTrackingService::class)->workHoursValues($actor, $zone);
+        $hours = $this->time->workHoursValues($actor, $zone);
         $start = CarbonImmutable::createFromFormat('!Y-m-d', $from, $zone);
         if ($start->lt(CarbonImmutable::now($zone)->startOfDay())) {
             throw ValidationException::withMessages(['from' => 'Chọn hôm nay hoặc ngày tương lai.']);
@@ -70,8 +71,8 @@ class PlanScheduleService
                     }
                     foreach ($hours['windows'] as $window) {
                         try {
-                            $cursor = app(CalendarService::class)->localTime($day->format('Y-m-d').'T'.$window['start'], $hours['timezone'], false)->setTimezone($hours['timezone']);
-                            $end = app(CalendarService::class)->localTime($day->format('Y-m-d').'T'.$window['end'], $hours['timezone'], false)->setTimezone($hours['timezone']);
+                            $cursor = LocalTime::parse($day->format('Y-m-d').'T'.$window['start'], $hours['timezone'], false)->setTimezone($hours['timezone']);
+                            $end = LocalTime::parse($day->format('Y-m-d').'T'.$window['end'], $hours['timezone'], false)->setTimezone($hours['timezone']);
                         } catch (ValidationException) {
                             continue;
                         }
@@ -90,8 +91,8 @@ class PlanScheduleService
                                 }
                                 if (! $conflict) {
                                     try {
-                                        app(CalendarService::class)->localTime($cursor->setTimezone($zone)->format('Y-m-d\TH:i'), $zone, false);
-                                        app(CalendarService::class)->localTime($next->setTimezone($zone)->format('Y-m-d\TH:i'), $zone, false);
+                                        LocalTime::parse($cursor->setTimezone($zone)->format('Y-m-d\TH:i'), $zone, false);
+                                        LocalTime::parse($next->setTimezone($zone)->format('Y-m-d\TH:i'), $zone, false);
                                     } catch (ValidationException) {
                                         $cursor = $next;
 
@@ -122,6 +123,6 @@ class PlanScheduleService
         }
         $payload['tasks'] = array_values($tasks);
 
-        return app(PlanService::class)->create($actor, $base->workspace, $base->project, $base->name.' — xếp lịch', $payload, $base);
+        return $this->planService->create($actor, $base->workspace, $base->project, $base->name.' — xếp lịch', $payload, $base);
     }
 }

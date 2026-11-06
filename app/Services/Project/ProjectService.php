@@ -2,14 +2,14 @@
 
 namespace App\Services\Project;
 
+use App\Authorization\ProjectAccess;
+use App\Authorization\WorkspaceAccess;
 use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Support\EditRevision;
-use App\Support\ProjectAccess;
-use App\Support\WorkspaceAccess;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;

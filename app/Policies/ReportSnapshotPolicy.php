@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
+use App\Authorization\ReportAccess;
 use App\Models\ReportSnapshot;
 use App\Models\User;
-use App\Support\ReportAccess;
 
 class ReportSnapshotPolicy
 {

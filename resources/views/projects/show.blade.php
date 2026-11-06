@@ -77,7 +77,7 @@
                     📊 Timeline Tiến độ
                 </a>
             @endif
-            @if(app(\App\Services\Planning\PlanService::class)->allowed(auth()->user(),$workspace,$project ?? null))
+            @if($canViewPlans)
                 <a class="button secondary" href="{{ route('workspaces.plans.index',[$workspace,'project_id'=>($project ?? null)?->id]) }}">
                     📑 Kế hoạch Dự án
                 </a>
@@ -97,7 +97,7 @@
                     ⚙️ Sửa thông tin
                 </a>
             @endcan
-            @if(app(\App\Support\ProjectAccess::class)->allows(auth()->user(),$project,'integration.view'))
+            @if($canViewIntegration)
                 <a class="button secondary" href="{{ route('workspaces.projects.github.show',[$workspace,$project]) }}">
                     🐙 GitHub Logs
                 </a>

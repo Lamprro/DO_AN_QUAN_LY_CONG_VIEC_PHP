@@ -1,0 +1,67 @@
+app/Http/Controllers/PlanningAiController.php:Access to an undefined property Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model::$id.
+app/Http/Controllers/ProjectController.php:Call to an undefined method Illuminate\Database\Query\Builder::whereKeyNot().
+app/Http/Controllers/SearchController.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$id.
+app/Http/Controllers/SearchController.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$id.
+app/Http/Controllers/SearchController.php:Call to an undefined method Illuminate\Database\Query\Builder::with().
+app/Http/Controllers/SearchController.php:Call to an undefined method Illuminate\Database\Query\Builder::with().
+app/Http/Controllers/TaskController.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$archived_at.
+app/Http/Controllers/TaskController.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$id.
+app/Http/Controllers/TaskController.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$task_type.
+app/Http/Controllers/TaskController.php:Call to an undefined method Illuminate\Contracts\View\View::fragment().
+app/Http/Controllers/TaskTemplateController.php:Access to an undefined property Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model::$id.
+app/Http/Controllers/TaskTemplateController.php:Access to an undefined property Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model::$id.
+app/Http/Controllers/TeamCalendarController.php:Access to an undefined property Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model::$id.
+app/Http/Controllers/TeamCalendarController.php:Access to an undefined property Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model::$id.
+app/Http/Requests/InvitationRequest.php:Cannot access property $id on object|string.
+app/Http/Requests/MemberRequest.php:Cannot access property $id on object|string.
+app/Http/Requests/ProjectMemberRequest.php:Cannot access property $id on object|string.
+app/Http/Requests/ProjectMemberRequest.php:Cannot access property $id on object|string.
+app/Http/Requests/ProjectRequest.php:Cannot access property $id on object|string.
+app/Http/Requests/RoleRequest.php:Cannot access property $id on object|string.
+app/Http/Requests/RoleRequest.php:Cannot access property $id on object|string.
+app/Http/Requests/TaskRequest.php:Cannot access property $id on object|string.
+app/Http/Requests/TaskRequest.php:Cannot access property $project_id on object|string.
+app/Http/Requests/TaskRequest.php:Cannot access property $project_id on object|string.
+app/Http/Requests/TaskRequest.php:Cannot access property $project_id on object|string.
+app/Http/Requests/TaskRequest.php:Cannot access property $workspace_id on object|string.
+app/Http/Requests/TaskRequest.php:Cannot access property $workspace_id on object|string.
+app/Http/Requests/TransferOwnerRequest.php:Cannot access property $id on object|string.
+app/Providers/AppServiceProvider.php:Call to an undefined method Illuminate\Contracts\Auth\Factory::check().
+app/Providers/AppServiceProvider.php:Call to an undefined method Illuminate\Contracts\Auth\Factory::check().
+app/Providers/AppServiceProvider.php:Call to an undefined method Illuminate\Contracts\Auth\Factory::user().
+app/Providers/AppServiceProvider.php:Call to an undefined method Illuminate\Contracts\Auth\Factory::user().
+app/Providers/AppServiceProvider.php:Call to an undefined method Illuminate\Contracts\Auth\Factory::user().
+app/Services/Ai/AiRunService.php:Access to an undefined property Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model::$id.
+app/Services/Ai/AiRunService.php:Access to an undefined property Illuminate\Database\Eloquent\Collection<int, Illuminate\Database\Eloquent\Model>|Illuminate\Database\Eloquent\Model::$id.
+app/Services/Ai/PlanningContext.php:Call to an undefined method Illuminate\Database\Query\Builder::with().
+app/Services/Calendar/CalendarService.php:Call to an undefined method Illuminate\Support\HigherOrderTapProxy::save().
+app/Services/Integration/GithubWebhookService.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$id.
+app/Services/Notification/NotificationService.php:Call to an undefined method Illuminate\Database\Query\Builder::findOrFail().
+app/Services/Planning/PlanService.php:Call to an undefined method Illuminate\Database\Query\Builder::with().
+app/Services/Planning/PlanService.php:Cannot call method getRawOriginal() on stdClass.
+app/Services/Project/ProjectService.php:Call to an undefined method Illuminate\Database\Query\Builder::findOrFail().
+app/Services/Project/ProjectService.php:Call to an undefined method Illuminate\Database\Query\Builder::findOrFail().
+app/Services/Task/TaskService.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$lag_minutes.
+app/Services/Task/TaskService.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$predecessor.
+app/Services/Task/TaskService.php:Call to an undefined method Illuminate\Database\Query\Builder::findOrFail().
+app/Services/Task/TaskService.php:Call to an undefined method Illuminate\Database\Query\Builder::findOrFail().
+app/Services/Task/TaskUtilityService.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$data.
+app/Services/Task/TaskUtilityService.php:Call to an undefined method Illuminate\Contracts\Filesystem\Filesystem::download().
+app/Services/Task/TaskWorkflowService.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$lag_minutes.
+app/Services/Task/TaskWorkflowService.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$lag_minutes.
+app/Services/Task/TaskWorkflowService.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$predecessor.
+app/Services/Workspace/InvitationService.php:Call to an undefined method Illuminate\Cache\Repository::lock().
+app/Services/Workspace/InvitationService.php:Call to an undefined method Illuminate\Cache\Repository::lock().
+app/Services/Workspace/InvitationService.php:Call to an undefined method Illuminate\Cache\Repository::lock().
+app/Support/AppShell.php:Cannot access property $id on null.
+app/Support/AppShell.php:Cannot access property $id on null.
+app/Support/EditRevision.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$revision.
+app/Support/ProjectAccess.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$role.
+app/Support/ProjectAccess.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$user.
+app/Support/ProjectAccess.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$user.
+app/Support/ProjectAccess.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$user_id.
+app/Support/ProjectAccess.php:Call to an undefined method Illuminate\Database\Query\Builder::getQuery().
+app/Support/ReferenceIntegrity.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$project_id.
+app/Support/ReferenceIntegrity.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$project_id.
+app/Support/ReferenceIntegrity.php:Access to an undefined property Illuminate\Database\Eloquent\Model::$workspace_id.
+routes/web.php:Call to an undefined method Illuminate\Contracts\Auth\Factory::check().

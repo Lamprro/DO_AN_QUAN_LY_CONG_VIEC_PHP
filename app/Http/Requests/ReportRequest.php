@@ -2,21 +2,19 @@
 
 namespace App\Http\Requests;
 
-use App\Services\Report\ReportService;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ReportRequest extends FormRequest
 {
+    /** GET screens default to the current month in the user's timezone. */
     protected function prepareForValidation(): void
     {
         if ($this->isMethod('GET')) {
-            $this->merge(array_replace(app(ReportService::class)->defaults($this->user()), $this->all()));
+            $month = CarbonImmutable::now($this->user()->timezone)->startOfMonth();
+            $defaults = ['from' => $month->format('Y-m-d'), 'to' => $month->addMonth()->format('Y-m-d'), 'project_id' => null, 'subject_user_id' => null, 'include_archived' => false];
+            $this->merge(array_replace($defaults, $this->all()));
         }
-    }
-
-    public function authorize(): bool
-    {
-        return $this->user() !== null;
     }
 
     public function rules(): array

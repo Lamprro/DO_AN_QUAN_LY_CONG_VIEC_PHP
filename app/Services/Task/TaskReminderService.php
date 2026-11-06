@@ -2,15 +2,15 @@
 
 namespace App\Services\Task;
 
-use App\Services\Setting\SettingService;
-
+use App\Authorization\TaskAccess;
+use App\Authorization\WorkspaceAccess;
 use App\Jobs\SendTaskReminder;
 use App\Models\Notification;
 use App\Models\Task;
 use App\Models\TaskReminder;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Policies\TaskPolicy;
+use App\Services\Setting\SettingService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
@@ -18,6 +18,8 @@ use Illuminate\Validation\ValidationException;
 
 class TaskReminderService
 {
+    public function __construct(private TaskAccess $tasks, private SettingService $settings, private WorkspaceAccess $workspaces) {}
+
     public function source(Task $task, string $kind): string
     {
         $value = $kind === 'due' ? $task->deadline_at?->toIso8601String() : ($task->activities()->where('event_type', 'task.status_changed')->where('data->to', 'REVIEW')->latest('created_at')->latest('id')->value('id') ?? $task->created_at->toIso8601String());
@@ -27,7 +29,7 @@ class TaskReminderService
 
     public function eligible(User $user, Task $task, string $kind, int $reviewAfter = 60): bool
     {
-        if ($user->status->value !== 'active' || ! $user->can('view', $task) || ! app(SettingService::class)->values($user)['notifications']['in_app'] || $task->archived_at || $task->task_type->value !== 'WORK' || in_array($task->status->value, ['DONE', 'CANCELLED'], true) || ! app(TaskPolicy::class)->projectWritable($task->project)) {
+        if ($user->status->value !== 'active' || ! $user->can('view', $task) || ! $this->settings->values($user)['notifications']['in_app'] || $task->archived_at || $task->task_type->value !== 'WORK' || in_array($task->status->value, ['DONE', 'CANCELLED'], true) || ! $this->tasks->projectWritable($task->project)) {
             return false;
         }
         if ($kind === 'due') {
@@ -39,6 +41,28 @@ class TaskReminderService
         $entered = $task->activities()->where('event_type', 'task.status_changed')->where('data->to', 'REVIEW')->latest('created_at')->value('created_at') ?? $task->created_at;
 
         return CarbonImmutable::parse($entered)->lte(now()->subMinutes($reviewAfter));
+    }
+
+    /** The actor's own reminders in a workspace, limited to tasks they can still see. */
+    public function visibleFor(User $actor, Workspace $workspace)
+    {
+        $this->assertWorkspace($actor, $workspace);
+
+        return TaskReminder::with('task')->where('workspace_id', $workspace->id)->where('user_id', $actor->id)->latest()->limit(100)->get()
+            ->filter(fn ($reminder) => $actor->can('view', Task::findOrFail($reminder->task_id)))->take(50);
+    }
+
+    /** Manual "scan now" from the reminders page of one workspace. */
+    public function scanWorkspace(User $actor, Workspace $workspace): int
+    {
+        $this->assertWorkspace($actor, $workspace);
+
+        return $this->scan($actor, $workspace);
+    }
+
+    private function assertWorkspace(User $actor, Workspace $workspace): void
+    {
+        abort_unless($this->workspaces->allows($actor, $workspace, 'workspace.view'), 403);
     }
 
     public function scan(User $user, ?Workspace $workspace = null, int $reviewAfter = 60): int

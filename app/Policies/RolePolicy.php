@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
+use App\Authorization\WorkspaceAccess;
 use App\Models\Role;
 use App\Models\User;
-use App\Support\WorkspaceAccess;
 
 class RolePolicy
 {

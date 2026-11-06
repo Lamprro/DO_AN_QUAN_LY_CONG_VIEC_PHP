@@ -2,14 +2,14 @@
 
 namespace App\Services\Workspace;
 
+use App\Authorization\WorkspaceAccess;
 use App\Enums\MembershipStatus;
 use App\Enums\UserStatus;
 use App\Enums\WorkspaceKind;
-use App\Services\Mail\WorkspaceInvitationMail;
+use App\Mail\WorkspaceInvitationMail;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
-use App\Support\WorkspaceAccess;
 use Illuminate\Cache\Repository;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;

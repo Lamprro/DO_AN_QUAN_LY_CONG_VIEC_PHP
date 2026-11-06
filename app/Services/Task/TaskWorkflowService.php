@@ -2,20 +2,20 @@
 
 namespace App\Services\Task;
 
+use App\Authorization\TaskAccess;
 use App\Models\Task;
 use App\Models\TaskActivity;
 use App\Models\TaskBlocker;
 use App\Models\TaskDependency;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Policies\TaskPolicy;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
 class TaskWorkflowService
 {
-    public function __construct(private TaskHistory $history, private TaskTreeService $tree, private TaskPolicy $policy) {}
+    public function __construct(private TaskHistory $history, private TaskTreeService $tree, private TaskAccess $tasks, private TaskParticipants $participants) {}
 
     public function locked(User $actor, Task $task, string $ability, callable $action): mixed
     {
@@ -38,7 +38,7 @@ class TaskWorkflowService
         $from = $task->status->value;
         foreach ($graph[$from] ?? [] as $to) {
             $review = ($from === 'REVIEW' && in_array($to, ['DONE', 'IN_PROGRESS'], true)) || $from === 'DONE';
-            if (! ($review ? $this->policy->review($actor, $task) : $this->policy->execute($actor, $task))) {
+            if (Gate::forUser($actor)->denies($review ? 'review' : 'execute', $task)) {
                 continue;
             }
             $reason = $this->blockingReason($actor, $task, $to);
@@ -176,10 +176,10 @@ class TaskWorkflowService
     public function comment(User $actor, Task $task, array $data, ?string $id = null, bool $delete = false): void
     {
         $this->locked($actor, $task, 'comment', function ($task) use ($actor, $data, $id, $delete) {
-            $mentions = ! $id && ! $delete ? app(TaskUtilityService::class)->mentions($task, $data['mentions'] ?? []) : [];
+            $mentions = ! $id && ! $delete ? $this->participants->mentions($task, $data['mentions'] ?? []) : [];
             if ($id) {
                 $activity = $task->activities()->where('type', 'COMMENT')->findOrFail($id);
-                abort_unless($activity->actor_id === $actor->id || ($delete && $this->policy->scope($actor, $task->workspace, $task->project, 'task.assign')), 403);
+                abort_unless($activity->actor_id === $actor->id || ($delete && $this->tasks->scope($actor, $task->workspace, $task->project, 'task.assign')), 403);
                 if ($delete) {
                     $activity->delete();
                 } else {

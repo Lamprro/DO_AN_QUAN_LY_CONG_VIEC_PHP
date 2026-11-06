@@ -2,28 +2,33 @@
 
 namespace App\Providers;
 
-use App\Services\Ai\Contracts\AiProvider;
+use App\Authorization\ProjectAccess;
+use App\Authorization\WorkspaceAccess;
 use App\Models\AiRun;
 use App\Models\CalendarEvent;
 use App\Models\Project;
+use App\Models\ProjectMember;
 use App\Models\ReportSnapshot;
 use App\Models\Role;
 use App\Models\Task;
+use App\Models\TimeEntry;
+use App\Models\User;
 use App\Models\Workspace;
-use App\Services\Observers\IntegrityObserver;
+use App\Models\WorkspaceMember;
+use App\Observers\IntegrityObserver;
 use App\Policies\AiRunPolicy;
 use App\Policies\CalendarEventPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\ReportSnapshotPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\TaskPolicy;
+use App\Policies\TimeEntryPolicy;
 use App\Policies\WorkspacePolicy;
-use App\Support\AppShell;
+use App\Services\Ai\Contracts\AiProvider;
 use App\Services\Ai\Providers\GeminiAiProvider;
 use App\Services\Ai\Providers\HttpAiProvider;
-use App\Services\Notification\NotificationService;
-use App\Services\Setting\SettingService;
-use App\Support\ReportAccess;
+use App\View\Composers\LayoutComposer;
+use App\View\Composers\ScopeLinksComposer;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -39,47 +44,69 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind(AiProvider::class, function () {
-            if (config('ai.provider') === 'gemini') {
-                return $this->app->make(GeminiAiProvider::class);
-            }
+        $this->app->bind(AiProvider::class, fn () => $this->app->make(config('ai.provider') === 'gemini' ? GeminiAiProvider::class : HttpAiProvider::class));
 
-            return $this->app->make(HttpAiProvider::class);
-        });
+        // Permission sources cache per request / queued job; see App\Authorization.
+        $this->app->scoped(WorkspaceAccess::class);
+        $this->app->scoped(ProjectAccess::class);
     }
 
     public function boot(): void
     {
+        $this->registerPolicies();
+        $this->registerModelHooks();
+        $this->registerRateLimits();
+        $this->registerViews();
+
         Queue::looping(function (Looping $event) {
             foreach (explode(',', (string) $event->queue) as $queue) {
                 Cache::put('ops:heartbeat:worker:'.$event->connectionName.':'.$queue, time(), 600);
             }
         });
-        foreach (['account-login' => 30, 'account-registration' => 10, 'account-recovery' => 5, 'account-reset' => 10, 'account-verification-mail' => 3, 'account-verification-link' => 10] as $name => $limit) {
-            RateLimiter::for($name, fn (Request $request) => Limit::perMinute($limit)->by($request->user()?->id ?? $request->ip()));
-        }
-        Paginator::defaultView('pagination.native');
-        Paginator::defaultSimpleView('pagination.simple');
-        foreach (config('domain_schema.models') as $model) {
-            $model::observe(IntegrityObserver::class);
-        }
+    }
+
+    private function registerPolicies(): void
+    {
         Gate::policy(Workspace::class, WorkspacePolicy::class);
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Project::class, ProjectPolicy::class);
         Gate::policy(Task::class, TaskPolicy::class);
+        Gate::policy(CalendarEvent::class, CalendarEventPolicy::class);
         Gate::policy(ReportSnapshot::class, ReportSnapshotPolicy::class);
         Gate::policy(AiRun::class, AiRunPolicy::class);
-        View::composer(['workspaces.show', 'projects.show'], function ($view) {
-            $data = $view->getData();
-            $view->with('canViewReport', auth()->check() && app(ReportAccess::class)->scope(auth()->user(), $data['workspace'], $data['project'] ?? null));
-            $view->with('canViewCalendar', auth()->check() && app(CalendarEventPolicy::class)->scope(auth()->user(), $data['workspace'], $data['project'] ?? null, 'calendar.view'));
-        });
-        Gate::policy(CalendarEvent::class, CalendarEventPolicy::class);
-        View::composer('components.layout', function ($view) {
-            $user = auth()->user();
-            $view->with('shell', app(AppShell::class)->build(request()));
-            $view->with('preferences', $user ? app(SettingService::class)->values($user) : config('work_management.settings_defaults'));
-            $view->with('unreadNotifications', $user ? app(NotificationService::class)->visible($user)->whereNull('read_at')->count() : 0);
-        });
+        Gate::policy(TimeEntry::class, TimeEntryPolicy::class);
+    }
+
+    private function registerModelHooks(): void
+    {
+        foreach (config('domain_schema.models') as $model) {
+            $model::observe(IntegrityObserver::class);
+        }
+        // Any change to who-can-do-what drops the per-request permission cache.
+        foreach ([User::class, Workspace::class, WorkspaceMember::class, Role::class, Project::class, ProjectMember::class] as $model) {
+            $model::saved(fn () => $this->flushPermissionCache());
+            $model::deleted(fn () => $this->flushPermissionCache());
+        }
+    }
+
+    private function flushPermissionCache(): void
+    {
+        $this->app->make(WorkspaceAccess::class)->flush();
+        $this->app->make(ProjectAccess::class)->flush();
+    }
+
+    private function registerRateLimits(): void
+    {
+        foreach (['account-login' => 30, 'account-registration' => 10, 'account-recovery' => 5, 'account-reset' => 10, 'account-verification-mail' => 3, 'account-verification-link' => 10] as $name => $limit) {
+            RateLimiter::for($name, fn (Request $request) => Limit::perMinute($limit)->by($request->user()?->id ?? $request->ip()));
+        }
+    }
+
+    private function registerViews(): void
+    {
+        Paginator::defaultView('pagination.native');
+        Paginator::defaultSimpleView('pagination.simple');
+        View::composer('components.layout', LayoutComposer::class);
+        View::composer(['workspaces.show', 'projects.show'], ScopeLinksComposer::class);
     }
 }

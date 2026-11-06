@@ -10,24 +10,24 @@ use Illuminate\Http\Request;
 
 class TimeTrackingController extends Controller
 {
+    public function __construct(private TimeTrackingService $service) {}
+
     public function index(Request $r)
     {
-        $entries = TimeEntry::where('user_id', $r->user()->id)->with('task')->latest('started_at')->paginate(25);
-
-        return view('timers.index', compact('entries'));
+        return view('timers.index', ['entries' => $this->service->entries($r->user())]);
     }
 
-    public function start(Request $r, Workspace $workspace, Task $task, TimeTrackingService $service)
+    public function start(Request $r, Workspace $workspace, Task $task)
     {
         abort_unless($task->workspace_id === $workspace->id, 404);
-        $service->start($r->user(), $task);
+        $this->service->start($r->user(), $task);
 
         return to_route('timers.index')->with('success', 'Đã bắt đầu timer.');
     }
 
-    public function stop(Request $r, TimeEntry $entry, TimeTrackingService $service)
+    public function stop(Request $r, TimeEntry $entry)
     {
-        $service->stop($r->user(), $entry);
+        $this->service->stop($r->user(), $entry);
 
         return to_route('timers.index')->with('success', 'Đã dừng timer.');
     }

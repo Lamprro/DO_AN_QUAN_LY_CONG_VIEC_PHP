@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Authorization\WorkspaceAccess;
 use App\Models\Workspace;
-use App\Support\WorkspaceAccess;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

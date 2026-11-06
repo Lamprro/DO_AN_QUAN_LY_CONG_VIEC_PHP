@@ -7,11 +7,6 @@ use Illuminate\Validation\Rule;
 
 class SettingRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return $this->user() !== null;
-    }
-
     public function rules(): array
     {
         return ['language' => ['required', Rule::in(['vi', 'en'])], 'theme' => ['required', Rule::in(['system', 'light', 'dark'])],

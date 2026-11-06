@@ -2,8 +2,8 @@
 
 namespace App\Services\Notification;
 
-use App\Services\Setting\SettingService;
-
+use App\Authorization\ProjectAccess;
+use App\Authorization\WorkspaceAccess;
 use App\Models\Notification;
 use App\Models\Project;
 use App\Models\Task;
@@ -11,16 +11,15 @@ use App\Models\TaskActivity;
 use App\Models\TaskWatcher;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Policies\TaskPolicy;
-use App\Support\ProjectAccess;
-use App\Support\WorkspaceAccess;
+use App\Services\Setting\SettingService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 
 class NotificationService
 {
-    public function __construct(private SettingService $settings, private TaskPolicy $tasks, private WorkspaceAccess $workspaces, private ProjectAccess $projects) {}
+    public function __construct(private SettingService $settings, private WorkspaceAccess $workspaces, private ProjectAccess $projects) {}
 
     public function taskEvent(TaskActivity $history, Task $task, User $actor, array $data): void
     {
@@ -46,7 +45,7 @@ class NotificationService
                 continue;
             }
             $recipient = User::find($id);
-            if (! $recipient || $recipient->status->value !== 'active' || ! $this->tasks->view($recipient, $task) || ! $this->settings->values($recipient)['notifications']['in_app']) {
+            if (! $recipient || $recipient->status->value !== 'active' || Gate::forUser($recipient)->denies('view', $task) || ! $this->settings->values($recipient)['notifications']['in_app']) {
                 continue;
             }
             Notification::firstOrCreate(['dedupe_key' => 'activity:'.$history->id.':'.$id], ['workspace_id' => $task->workspace_id, 'project_id' => $task->project_id, 'task_id' => $task->id,
@@ -63,10 +62,19 @@ class NotificationService
         Notification::firstOrCreate(['dedupe_key' => $key], ['recipient_id' => $user->id, 'workspace_id' => $workspace->id, 'project_id' => $project?->id, 'task_id' => $task?->id, 'type' => $type, 'title' => $title, 'body' => $body, 'deliveries' => [['channel' => 'in_app', 'status' => 'sent', 'attempts' => 1, 'sent_at' => now()->toIso8601String(), 'last_error' => null]]]);
     }
 
+    /** Inbox page: filter = all|unread|read, optional event type. */
+    public function inbox(User $user, array $filters)
+    {
+        return $this->visible($user)
+            ->when(($filters['filter'] ?? 'all') === 'unread', fn ($q) => $q->whereNull('read_at'))
+            ->when(($filters['filter'] ?? 'all') === 'read', fn ($q) => $q->whereNotNull('read_at'))
+            ->when($filters['type'] ?? null, fn ($q, $type) => $q->where('type', $type))
+            ->with(['workspace', 'project', 'task'])->orderByDesc('created_at')->orderByDesc('id')->paginate(20)->withQueryString();
+    }
+
     public function visible(User $user): Builder
     {
-        $spaces = Workspace::whereHas('members', fn ($q) => $q->where('user_id', $user->id)->where('status', 'active'))->get()
-            ->filter(fn ($w) => $this->workspaces->allows($user, $w, 'workspace.view'));
+        $spaces = $this->workspaces->visible($user);
         $projects = $spaces->flatMap(fn ($w) => $this->projects->visible($user, $w)->get());
         $taskProjects = $projects->filter(fn ($p) => $this->projects->allows($user, $p, 'task.view'))->pluck('id');
         $personal = $spaces->filter(fn ($w) => $w->kind->value === 'personal' && $w->owner_id === $user->id && $this->workspaces->allows($user, $w, 'task.view'))->pluck('id');

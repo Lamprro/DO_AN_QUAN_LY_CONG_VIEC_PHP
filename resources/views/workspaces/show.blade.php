@@ -44,7 +44,7 @@
             <a class="button" href="{{ route('workspaces.projects.index',$workspace) }}">
                 📁 Quản lý Projects
             </a>
-            @if(app(\App\Services\Planning\PlanService::class)->allowed(auth()->user(),$workspace,$project ?? null))
+            @if($canViewPlans)
                 <a class="button secondary" href="{{ route('workspaces.plans.index',[$workspace,'project_id'=>($project ?? null)?->id]) }}">
                     📊 Kế hoạch
                 </a>

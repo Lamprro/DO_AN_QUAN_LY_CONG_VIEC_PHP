@@ -2,12 +2,8 @@
 
 namespace App\Services\Planning;
 
-use App\Services\Calendar\CalendarService;
-use App\Services\Task\TaskHistory;
-use App\Services\Task\TaskService;
-use App\Services\Task\TaskWorkflowService;
-use App\Services\TimeTracking\TimeTrackingService;
-
+use App\Authorization\PlanAccess;
+use App\Authorization\TaskAccess;
 use App\Enums\BlockerStatus;
 use App\Models\CalendarEvent;
 use App\Models\Plan;
@@ -16,7 +12,12 @@ use App\Models\Task;
 use App\Models\TaskActivity;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Policies\TaskPolicy;
+use App\Services\Calendar\CalendarService;
+use App\Services\Task\TaskHistory;
+use App\Services\Task\TaskService;
+use App\Services\Task\TaskWorkflowService;
+use App\Services\TimeTracking\TimeTrackingService;
+use App\Support\LocalTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -25,10 +26,7 @@ use Illuminate\Validation\ValidationException;
 
 class PlanService
 {
-    public function allowed(User $actor, Workspace $workspace, ?Project $project, string $permission = 'plan.view'): bool
-    {
-        return app(TaskPolicy::class)->scope($actor, $workspace, $project, $permission);
-    }
+    public function __construct(private PlanAccess $plans, private TaskAccess $tasks, private TaskHistory $history, private TaskService $taskService, private TaskWorkflowService $workflow, private CalendarService $calendar, private TimeTrackingService $time) {}
 
     private function fail(string $text): never
     {
@@ -49,7 +47,7 @@ class PlanService
             $project?->fresh()->getRawOriginal(),
             $project ? DB::table('project_members')->where('project_id', $project->id)->orderBy('id')->get()->toArray() : [],
             CalendarEvent::where('user_id', $actor->id)->orderBy('id')->get()->map(fn ($e) => $e->getRawOriginal())->all(),
-            app(TimeTrackingService::class)->workHoursValues($actor, $workspace->timezone)];
+            $this->time->workHoursValues($actor, $workspace->timezone)];
 
         return hash('sha256', json_encode($data));
     }
@@ -137,8 +135,8 @@ class PlanService
             if ($slot['ends_at'] <= $slot['starts_at']) {
                 $this->fail('Slot phải kết thúc sau khi bắt đầu.');
             }
-            app(CalendarService::class)->localTime($slot['starts_at'], $timezone, false);
-            app(CalendarService::class)->localTime($slot['ends_at'], $timezone, false);
+            LocalTime::parse($slot['starts_at'], $timezone, false);
+            LocalTime::parse($slot['ends_at'], $timezone, false);
             $ref = $slot['task_ref'];
             $slotBounds[$ref] = ['start' => isset($slotBounds[$ref]) ? min($slotBounds[$ref]['start'], $slot['starts_at']) : $slot['starts_at'],
                 'end' => isset($slotBounds[$ref]) ? max($slotBounds[$ref]['end'], $slot['ends_at']) : $slot['ends_at']];
@@ -146,7 +144,7 @@ class PlanService
         foreach ($data['dependencies'] as $edge) {
             $a = $slotBounds[$edge['predecessor']] ?? null;
             $b = $slotBounds[$edge['successor']] ?? null;
-            if ($a && $b && app(CalendarService::class)->localTime($b['start'], $timezone, false)->lt(app(CalendarService::class)->localTime($a['end'], $timezone, false)->addMinutes($edge['lag_minutes']))) {
+            if ($a && $b && LocalTime::parse($b['start'], $timezone, false)->lt(LocalTime::parse($a['end'], $timezone, false)->addMinutes($edge['lag_minutes']))) {
                 $this->fail('Slot successor phải sau slot predecessor và đủ lag FS.');
             }
         }
@@ -158,14 +156,14 @@ class PlanService
     {
         return DB::transaction(function () use ($actor, $workspace, $project, $name, $input, $base, $aiRunId) {
             Workspace::lockForUpdate()->findOrFail($workspace->id);
-            abort_unless($this->allowed($actor, $workspace, $project, 'plan.create') && app(TaskPolicy::class)->projectWritable($project), 403);
+            abort_unless($this->plans->allows($actor, $workspace, $project, 'plan.create') && $this->tasks->projectWritable($project), 403);
             $payload = $this->validate($input, $workspace->timezone);
             $group = (string) Str::uuid();
             $version = 1;
             $active = null;
             if ($base) {
                 $base = Plan::lockForUpdate()->findOrFail($base->id);
-                abort_unless($base->workspace_id === $workspace->id && $base->project_id === $project?->id && $this->allowed($actor, $workspace, $project, 'plan.update'), 403);
+                abort_unless($base->workspace_id === $workspace->id && $base->project_id === $project?->id && $this->plans->allows($actor, $workspace, $project, 'plan.update'), 403);
                 $group = $base->plan_group_id;
                 if (Plan::where('plan_group_id', $group)->max('version_no') !== $base->version_no) {
                     $this->fail('Hãy tạo phiên bản từ bản mới nhất.');
@@ -181,7 +179,7 @@ class PlanService
             }
 
             return Plan::create(['workspace_id' => $workspace->id, 'project_id' => $project?->id, 'plan_group_id' => $group, 'parent_plan_id' => $base?->id, 'version_no' => $version,
-                'created_by' => $actor->id, 'ai_run_id' => $aiRunId, 'name' => $name, 'status' => 'draft', 'data' => ['schema_version' => 1, 'payload' => $payload, 'fingerprint' => $this->fingerprint($actor, $workspace, $project), 'snapshot_actor_id' => $actor->id, 'base_active_id' => $active, 'work_schedule' => app(TimeTrackingService::class)->workHoursValues($actor, $workspace->timezone), 'source' => $aiRunId ? 'ai' : 'manual']]);
+                'created_by' => $actor->id, 'ai_run_id' => $aiRunId, 'name' => $name, 'status' => 'draft', 'data' => ['schema_version' => 1, 'payload' => $payload, 'fingerprint' => $this->fingerprint($actor, $workspace, $project), 'snapshot_actor_id' => $actor->id, 'base_active_id' => $active, 'work_schedule' => $this->time->workHoursValues($actor, $workspace->timezone), 'source' => $aiRunId ? 'ai' : 'manual']]);
         }, 3);
     }
 
@@ -204,7 +202,7 @@ class PlanService
             $permission = match ($action) {
                 'propose' => 'plan.update','approve','reject' => 'plan.approve','apply' => 'plan.apply',default => abort(404)
             };
-            abort_unless($this->allowed($actor, $plan->workspace, $plan->project, $permission) && app(TaskPolicy::class)->projectWritable($plan->project), 403);
+            abort_unless($this->plans->allows($actor, $plan->workspace, $plan->project, $permission) && $this->tasks->projectWritable($plan->project), 403);
             if ($plan->status->value !== $expected) {
                 $this->fail('Trạng thái kế hoạch đã đổi; tải lại.');
             }
@@ -231,7 +229,7 @@ class PlanService
             if ($plan->applied_at) {
                 return;
             } // Idempotent replay; never duplicate tasks/events.
-            abort_unless($this->allowed($actor, $plan->workspace, $plan->project, 'plan.approve'), 403);
+            abort_unless($this->plans->allows($actor, $plan->workspace, $plan->project, 'plan.approve'), 403);
             $payload = $this->payload($plan);
             if (! is_string($plan->data['snapshot_actor_id'] ?? null) || ! is_string($plan->data['fingerprint'] ?? null)) {
                 $this->fail('Kế hoạch thiếu snapshot nguồn; hãy tạo phiên bản mới để rà soát.');
@@ -240,7 +238,7 @@ class PlanService
             if (! $snapshotActor) {
                 $this->fail('Người lập nguồn không còn hợp lệ; hãy tạo phiên bản mới.');
             }
-            if (! $this->allowed($snapshotActor, $plan->workspace, $plan->project) || $this->fingerprint($snapshotActor, $plan->workspace, $plan->project) !== $plan->data['fingerprint']) {
+            if (! $this->plans->allows($snapshotActor, $plan->workspace, $plan->project) || $this->fingerprint($snapshotActor, $plan->workspace, $plan->project) !== $plan->data['fingerprint']) {
                 $this->fail('Dữ liệu nguồn đã thay đổi. Tạo phiên bản mới để rà soát lại.');
             }
             $active = Plan::where('plan_group_id', $plan->plan_group_id)->where('is_active', true)->lockForUpdate()->first();
@@ -260,7 +258,7 @@ class PlanService
                     }
                     if ($event->status->value !== 'cancelled') {
                         $event->update(['status' => 'cancelled']);
-                        app(TaskHistory::class)->record($actor, $event->task, 'plan.calendar_replaced', ['event_id' => $event->id, 'new_plan_id' => $plan->id]);
+                        $this->history->record($actor, $event->task, 'plan.calendar_replaced', ['event_id' => $event->id, 'new_plan_id' => $plan->id]);
                     }
                 }
             }
@@ -280,7 +278,7 @@ class PlanService
                     if ($task) {
                         $values['expected_revision'] = $task->revision;
                     }
-                    $task = app(TaskService::class)->save($actor, $plan->workspace, $plan->project, $values, $task);
+                    $task = $this->taskService->save($actor, $plan->workspace, $plan->project, $values, $task);
                     $map[$row['ref']] = $task->id;
                     unset($pending[$key]);
                     $progress = true;
@@ -298,12 +296,12 @@ class PlanService
                         $this->fail('Dependency đã tồn tại với lag khác; sửa trực tiếp trước khi lập phiên bản.');
                     }
                 } else {
-                    app(TaskWorkflowService::class)->dependency($actor, $task, ['predecessor_task_id' => $pre, 'lag_minutes' => $edge['lag_minutes']]);
+                    $this->workflow->dependency($actor, $task, ['predecessor_task_id' => $pre, 'lag_minutes' => $edge['lag_minutes']]);
                 }
             }
             foreach ($payload['slots'] as $slot) {
                 $task = Task::findOrFail($map[$slot['task_ref']]);
-                $event = app(CalendarService::class)->save($actor, $plan->workspace, ['project_id' => $plan->project_id, 'task_id' => $task->id, 'event_type' => 'TASK_BLOCK', 'title' => $task->title, 'starts_at' => $slot['starts_at'], 'ends_at' => $slot['ends_at'], 'timezone' => $plan->workspace->timezone, 'all_day' => false, 'is_busy' => true, 'visibility' => $plan->project_id ? 'project' : 'private', 'status' => 'planned', 'participants' => []]);
+                $event = $this->calendar->save($actor, $plan->workspace, ['project_id' => $plan->project_id, 'task_id' => $task->id, 'event_type' => 'TASK_BLOCK', 'title' => $task->title, 'starts_at' => $slot['starts_at'], 'ends_at' => $slot['ends_at'], 'timezone' => $plan->workspace->timezone, 'all_day' => false, 'is_busy' => true, 'visibility' => $plan->project_id ? 'project' : 'private', 'status' => 'planned', 'participants' => []]);
                 $event->update(['plan_id' => $plan->id, 'source' => 'plan']);
             }
             if ($active) {
@@ -317,7 +315,7 @@ class PlanService
 
     public function impact(User $actor, Workspace $workspace, ?Project $project): array
     {
-        abort_unless($this->allowed($actor, $workspace, $project), 403);
+        abort_unless($this->plans->allows($actor, $workspace, $project), 403);
         $tasks = $workspace->tasks()->where('project_id', $project?->id)->whereNull('archived_at')->with('blockers', 'incomingDependencies.predecessor')->get();
         $result = [];
         foreach ($tasks as $task) {

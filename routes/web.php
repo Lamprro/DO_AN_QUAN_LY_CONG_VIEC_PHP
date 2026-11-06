@@ -1,24 +1,31 @@
 <?php
 
+/*
+| Route map
+|   web.php                 public pages, sign-in, account-level pages, workspace group
+|   auth.php                password reset + e-mail verification
+|   workspace/*.php         everything under /workspaces/{workspace} (membership checked by middleware)
+|
+| Authorization is NOT done here beyond authentication/membership:
+| services check writes, read models / controllers check reads (see docs/ARCHITECTURE.md).
+*/
+
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\GithubIntegrationController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\ProjectMemberController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TimeAdjustmentController;
 use App\Http\Controllers\TimeTrackingController;
 use App\Http\Controllers\WorkHoursController;
 use App\Http\Controllers\WorkspaceController;
-use App\Http\Controllers\WorkspaceMemberController;
 use App\Http\Middleware\RequireVerifiedAccount;
 use Illuminate\Support\Facades\Route;
 
-require __DIR__.'/account_security.php';
+require __DIR__.'/auth.php';
 
 Route::get('/', fn () => auth()->check() ? to_route('workspaces.index') : view('welcome'))->name('home');
 Route::middleware('guest')->group(function () {
@@ -29,8 +36,14 @@ Route::middleware('guest')->group(function () {
 });
 Route::get('/invitations/{token}', [InvitationController::class, 'show'])->where('token', '[A-Za-z0-9]{64}')->name('invitations.show');
 Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');
+
 Route::middleware(['auth', 'active.user', RequireVerifiedAccount::class])->group(function () {
-    require __DIR__.'/stage05.php';
+    // Account-level pages (not tied to one workspace).
+    Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
+    Route::patch('/settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+    Route::patch('/notifications/{notification}/read', [NotificationController::class, 'read'])->whereUuid('notification')->name('notifications.read');
     Route::get('/work-hours', [WorkHoursController::class, 'edit'])->name('work-hours.edit');
     Route::put('/work-hours', [WorkHoursController::class, 'update'])->name('work-hours.update');
     Route::get('/search', [SearchController::class, 'index'])->name('search.index');
@@ -45,43 +58,14 @@ Route::middleware(['auth', 'active.user', RequireVerifiedAccount::class])->group
     Route::get('/workspaces', [WorkspaceController::class, 'index'])->name('workspaces.index');
     Route::get('/workspaces/create', [WorkspaceController::class, 'create'])->name('workspaces.create');
     Route::post('/workspaces', [WorkspaceController::class, 'store'])->name('workspaces.store');
-    Route::prefix('/workspaces/{workspace}')->name('workspaces.')->middleware('workspace.member')->scopeBindings()->group(function () {
-        require __DIR__.'/account_security.php';
 
-        Route::get('/', [WorkspaceController::class, 'show'])->name('show');
-        Route::get('/edit', [WorkspaceController::class, 'edit'])->name('edit');
-        Route::patch('/', [WorkspaceController::class, 'update'])->name('update');
-        Route::delete('/', [WorkspaceController::class, 'destroy'])->name('destroy');
-        Route::post('/select', [WorkspaceController::class, 'select'])->name('select');
-        Route::post('/leave', [WorkspaceController::class, 'leave'])->name('leave');
-        Route::post('/transfer-owner', [WorkspaceController::class, 'transfer'])->name('transfer');
-        require __DIR__.'/task_workflow.php';
-        require __DIR__.'/calendar.php';
-        require __DIR__.'/full_features.php';
-        require __DIR__.'/stage06.php';
-        require __DIR__.'/remaining.php';
-        require __DIR__.'/task_utilities.php';
-        Route::resource('projects', ProjectController::class);
-        Route::post('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');
-        Route::post('/projects/{project}/restore', [ProjectController::class, 'restore'])->name('projects.restore');
-        Route::prefix('/projects/{project}')->name('projects.')->group(function () {
-            Route::get('/members', [ProjectMemberController::class, 'index'])->name('members.index');
-            Route::post('/members', [ProjectMemberController::class, 'store'])->name('members.store');
-            Route::patch('/members/{projectMember}', [ProjectMemberController::class, 'update'])->name('members.update');
-            Route::delete('/members/{projectMember}', [ProjectMemberController::class, 'destroy'])->name('members.destroy');
-            Route::resource('tasks', TaskController::class);
-            Route::post('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('tasks.archive');
-            Route::post('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
-        });
-        Route::resource('tasks', TaskController::class);
-        Route::post('/tasks/{task}/archive', [TaskController::class, 'archive'])->name('tasks.archive');
-        Route::post('/tasks/{task}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
-        Route::resource('roles', RoleController::class)->except('show');
-        Route::get('/members', [WorkspaceMemberController::class, 'index'])->name('members.index');
-        Route::patch('/members/{member}', [WorkspaceMemberController::class, 'update'])->name('members.update');
-        Route::delete('/members/{member}', [WorkspaceMemberController::class, 'destroy'])->name('members.destroy');
-        Route::post('/invitations', [InvitationController::class, 'store'])->middleware('throttle:10,1')->name('invitations.store');
-        Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy'])->whereUuid('invitation')->name('invitations.destroy');
+    Route::prefix('/workspaces/{workspace}')->name('workspaces.')->middleware('workspace.member')->scopeBindings()->group(function () {
+        require __DIR__.'/workspace/workspace.php';
+        require __DIR__.'/workspace/tasks.php';
+        require __DIR__.'/workspace/projects.php';
+        require __DIR__.'/workspace/calendar.php';
+        require __DIR__.'/workspace/planning.php';
+        require __DIR__.'/workspace/reports.php';
     });
 });
 

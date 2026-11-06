@@ -2,14 +2,15 @@
 
 namespace App\Services\Task;
 
-use App\Services\Notification\NotificationService;
-
 use App\Models\Task;
 use App\Models\TaskActivity;
 use App\Models\User;
+use App\Services\Notification\NotificationService;
 
 class TaskHistory
 {
+    public function __construct(private NotificationService $notifications) {}
+
     public function record(User $actor, Task $task, string $event, array $data = []): TaskActivity
     {
         $activity = TaskActivity::create([
@@ -21,7 +22,7 @@ class TaskHistory
             'data' => $data,
         ]);
 
-        app(NotificationService::class)->taskEvent($activity, $task, $actor, $data);
+        $this->notifications->taskEvent($activity, $task, $actor, $data);
 
         return $activity;
     }

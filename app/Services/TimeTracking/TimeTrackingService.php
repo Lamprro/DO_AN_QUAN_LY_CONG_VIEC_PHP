@@ -2,15 +2,14 @@
 
 namespace App\Services\TimeTracking;
 
-use App\Services\Calendar\CalendarService;
-use App\Services\Task\TaskHistory;
-
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\TimeEntryAdjustment;
 use App\Models\User;
 use App\Models\UserSetting;
 use App\Models\Workspace;
+use App\Services\Task\TaskHistory;
+use App\Support\LocalTime;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -20,6 +19,8 @@ use Illuminate\Validation\ValidationException;
 
 class TimeTrackingService
 {
+    public function __construct(private TaskHistory $history) {}
+
     public function start(User $actor, Task $task): TimeEntry
     {
         return DB::transaction(function () use ($actor, $task) {
@@ -37,7 +38,7 @@ class TimeTrackingService
                 throw ValidationException::withMessages(['timer' => 'Cần xử lý blocker trước.']);
             }
             $entry = TimeEntry::create(['task_id' => $task->id, 'user_id' => $actor->id, 'started_at' => now()]);
-            app(TaskHistory::class)->record($actor, $task, 'timer.started', ['time_entry_id' => $entry->id]);
+            $this->history->record($actor, $task, 'timer.started', ['time_entry_id' => $entry->id]);
 
             return $entry;
         }, 3);
@@ -56,13 +57,18 @@ class TimeTrackingService
                 throw ValidationException::withMessages(['timer' => 'Đợi ít nhất một giây trước khi dừng timer.']);
             }
             $entry->update(['ended_at' => now()]);
-            app(TaskHistory::class)->record($actor, $entry->task, 'timer.stopped', ['time_entry_id' => $entry->id]);
+            $this->history->record($actor, $entry->task, 'timer.stopped', ['time_entry_id' => $entry->id]);
         }, 3);
     }
 
-    public function allowed(User $actor, TimeEntry $entry): bool
+    public function entries(User $actor)
     {
-        return $entry->user_id === $actor->id && $entry->ended_at !== null && $actor->can('view', $entry->task);
+        return TimeEntry::where('user_id', $actor->id)->with('task')->latest('started_at')->paginate(25);
+    }
+
+    public function adjustments(TimeEntry $entry)
+    {
+        return TimeEntryAdjustment::where('time_entry_id', $entry->id)->latest('created_at')->latest('id')->paginate(15);
     }
 
     public function value(TimeEntry $entry): array
@@ -77,7 +83,7 @@ class TimeTrackingService
 
     private function local(string $input, string $zone): CarbonImmutable
     {
-        return app(CalendarService::class)->localTime(substr($input, 0, 16), $zone, false)->addSeconds((int) substr($input, 17, 2));
+        return LocalTime::parse(substr($input, 0, 16), $zone, false)->addSeconds((int) substr($input, 17, 2));
     }
 
     public function saveAdjustment(User $actor, TimeEntry $entry, array $data): void
@@ -86,7 +92,7 @@ class TimeTrackingService
             User::lockForUpdate()->findOrFail($actor->id);
             Workspace::lockForUpdate()->findOrFail($entry->task->workspace_id);
             $entry = TimeEntry::lockForUpdate()->findOrFail($entry->id);
-            abort_unless($this->allowed($actor, $entry), 403);
+            Gate::forUser($actor)->authorize('adjust', $entry);
             if (! hash_equals($this->version($entry), $data['version'])) {
                 throw ValidationException::withMessages(['version' => 'Phiên đã thay đổi; tải lại để đối chiếu.']);
             }
@@ -109,7 +115,7 @@ class TimeTrackingService
             $entry->save();
             $after = $this->value($entry);
             $audit = TimeEntryAdjustment::create(['time_entry_id' => $entry->id, 'actor_id' => $actor->id, 'before' => $before, 'after' => $after, 'reason' => $data['reason'], 'created_at' => now()]);
-            app(TaskHistory::class)->record($actor, $entry->task, 'timer.corrected', ['time_entry_id' => $entry->id, 'adjustment_id' => $audit->id, 'before' => $before, 'after' => $after, 'reason' => $data['reason']]);
+            $this->history->record($actor, $entry->task, 'timer.corrected', ['time_entry_id' => $entry->id, 'adjustment_id' => $audit->id, 'before' => $before, 'after' => $after, 'reason' => $data['reason']]);
         }, 3);
     }
 

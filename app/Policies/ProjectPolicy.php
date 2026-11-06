@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
+use App\Authorization\ProjectAccess;
 use App\Models\Project;
 use App\Models\User;
-use App\Support\ProjectAccess;
 
 class ProjectPolicy
 {

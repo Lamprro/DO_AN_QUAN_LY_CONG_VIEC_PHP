@@ -7,11 +7,6 @@ use Illuminate\Validation\Rule;
 
 class ProjectMemberRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return $this->user()->can('manageMembers', $this->route('project'));
-    }
-
     public function rules(): array
     {
         $workspace = $this->route('workspace');

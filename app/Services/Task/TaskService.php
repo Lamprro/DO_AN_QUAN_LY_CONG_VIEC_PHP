@@ -2,13 +2,13 @@
 
 namespace App\Services\Task;
 
+use App\Authorization\ProjectAccess;
+use App\Authorization\TaskAccess;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Policies\TaskPolicy;
 use App\Support\EditRevision;
-use App\Support\ProjectAccess;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +18,7 @@ use Illuminate\Validation\ValidationException;
 
 class TaskService
 {
-    public function __construct(private ProjectAccess $access, private TaskPolicy $policy, private TaskTreeService $tree, private TaskHistory $history) {}
+    public function __construct(private ProjectAccess $access, private TaskAccess $tasks, private TaskTreeService $tree, private TaskHistory $history) {}
 
     public function save(User $actor, Workspace $workspace, ?Project $project, array $data, ?Task $task = null): Task
     {
@@ -33,7 +33,7 @@ class TaskService
                     Gate::forUser($actor)->authorize('update', $task);
                     EditRevision::check($task, $data);
                 } else {
-                    abort_unless($this->policy->projectWritable($project) && $this->policy->scope($actor, $workspace, $project, 'task.create'), 403);
+                    abort_unless($this->tasks->projectWritable($project) && $this->tasks->scope($actor, $workspace, $project, 'task.create'), 403);
                 }
                 $values = array_intersect_key($data, array_flip(['code', 'title', 'description', 'priority', 'estimate_minutes', 'deadline_at', 'assignee_id', 'reviewer_id', 'task_type', 'parent_task_id', 'group_label', 'sort_order']));
                 if (empty($values['code'])) {
@@ -50,7 +50,7 @@ class TaskService
                         continue;
                     }
                     if ($values[$field] !== $task?->getAttribute($field)) {
-                        abort_unless($this->policy->scope($actor, $workspace, $project, 'task.assign'), 403);
+                        abort_unless($this->tasks->scope($actor, $workspace, $project, 'task.assign'), 403);
                         if ($values[$field] && ! $this->access->eligibleMembers($workspace, $project, $field === 'reviewer_id' ? 'task.review' : 'task.view')->contains('user_id', $values[$field])) {
                             throw ValidationException::withMessages([$field => 'Chọn người đang hoạt động và có quyền xem task trong phạm vi này.']);
                         }

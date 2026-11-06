@@ -2,18 +2,17 @@
 
 namespace App\Services\Ai;
 
-use App\Services\Planning\PlanService;
-use App\Services\Report\ReportService;
-
-use App\Services\Ai\Data\AiProviderResult;
-use App\Services\Ai\Exceptions\AiProviderUnavailable;
+use App\Authorization\PlanAccess;
+use App\Authorization\ReportAccess;
 use App\Jobs\ProcessAiRun;
 use App\Models\AiCall;
 use App\Models\AiRun;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Support\ReportAccess;
+use App\Services\Ai\Data\AiProviderResult;
+use App\Services\Ai\Exceptions\AiProviderUnavailable;
+use App\Services\Report\ReportService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Queue;
@@ -21,20 +20,20 @@ use Illuminate\Validation\ValidationException;
 
 class AiRunService
 {
-    public function __construct(private ReportService $reports, private ReportAccess $access) {}
+    public function __construct(private ReportService $reports, private ReportAccess $access, private PlanAccess $plans, private PlanningContext $planning) {}
 
     public function requestPlanning(User $actor, Workspace $workspace, array $data): AiRun
     {
         return DB::transaction(function () use ($actor, $workspace, $data) {
             Workspace::lockForUpdate()->findOrFail($workspace->id);
             $project = empty($data['project_id']) ? null : $workspace->projects()->findOrFail($data['project_id']);
-            abort_unless(app(PlanService::class)->allowed($actor, $workspace, $project, 'plan.create'), 403);
+            abort_unless($this->plans->allows($actor, $workspace, $project, 'plan.create'), 403);
             $base = empty($data['base_id']) ? null : Plan::findOrFail($data['base_id']);
             if ($data['operation'] === 'replanning' && ! $base) {
                 throw ValidationException::withMessages(['base_id' => 'Điều chỉnh cần phiên bản nền.']);
             }
             if ($base) {
-                abort_unless(($base->data['schema_version'] ?? null) === 1 && $base->workspace_id === $workspace->id && $base->project_id === $project?->id && app(PlanService::class)->allowed($actor, $workspace, $project, 'plan.update'), 403);
+                abort_unless(($base->data['schema_version'] ?? null) === 1 && $base->workspace_id === $workspace->id && $base->project_id === $project?->id && $this->plans->allows($actor, $workspace, $project, 'plan.update'), 403);
             }
             $key = hash('sha256', $actor->id.':'.$workspace->id.':'.$data['idempotency_token']);
             $digest = hash('sha256', json_encode(array_intersect_key($data, array_flip(['project_id', 'base_id', 'operation', 'user_prompt']))));
@@ -46,7 +45,7 @@ class AiRunService
 
                 return $existing;
             }
-            $context = app(PlanningContext::class)->capture($actor, $workspace, $project, $base);
+            $context = $this->planning->capture($actor, $workspace, $project, $base);
             $context['request_digest'] = $digest;
             $run = AiRun::create(['workspace_id' => $workspace->id, 'project_id' => $project?->id, 'requested_by' => $actor->id, 'operation' => $data['operation'], 'trigger_type' => 'manual', 'user_prompt' => $data['user_prompt'], 'context_snapshot' => $context, 'status' => 'queued', 'idempotency_key' => $key]);
             $this->enqueue($run);
@@ -63,7 +62,7 @@ class AiRunService
 
         return $run->operation->value === 'report'
             ? $this->access->manifest($run->requester, $run->workspace, $run->context_snapshot['metrics'] ?? [], 'report.create')
-            : app(PlanningContext::class)->allowed($run->requester, $run, 'plan.create');
+            : $this->plans->run($run->requester, $run, 'plan.create');
     }
 
     private function enqueue(AiRun $run): void
@@ -175,7 +174,7 @@ class AiRunService
             }
             if ($result && in_array($run->operation->value, ['planning', 'replanning'], true)) {
                 try {
-                    app(PlanningContext::class)->result($run, $result->text);
+                    $this->planning->result($run, $result->text);
                 } catch (AiProviderUnavailable $e) {
                     $result = null;
                     $error = $e->getMessage();

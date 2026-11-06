@@ -2,8 +2,7 @@
 
 namespace App\Services\Task;
 
-use App\Services\Calendar\CalendarService;
-
+use App\Authorization\TaskAccess;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskDependency;
@@ -11,7 +10,7 @@ use App\Models\TaskTemplate;
 use App\Models\TaskTemplateRun;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Policies\TaskPolicy;
+use App\Support\LocalTime;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -22,18 +21,13 @@ use Illuminate\Validation\ValidationException;
 
 class TaskTemplateService
 {
-    public function allowed(User $actor, Workspace $workspace, ?Project $project, bool $write = false): bool
-    {
-        $policy = app(TaskPolicy::class);
-
-        return $policy->scope($actor, $workspace, $project, 'task.view') && (! $write || $policy->projectWritable($project) && $policy->scope($actor, $workspace, $project, 'task.create') && $policy->scope($actor, $workspace, $project, 'task.assign'));
-    }
+    public function __construct(private TaskAccess $tasks, private TaskService $taskService, private TaskWorkflowService $workflow) {}
 
     public function settings(array $data): array
     {
         $v = Validator::make($data, ['name' => 'required|string|max:160', 'frequency' => ['nullable', Rule::in(['daily', 'weekly', 'monthly'])], 'interval' => 'required|integer|between:1,12', 'timezone' => 'required|timezone', 'starts_on' => 'nullable|required_with:frequency|date_format:Y-m-d', 'ends_on' => 'nullable|date_format:Y-m-d|after_or_equal:starts_on', 'local_time' => 'nullable|required_with:frequency|date_format:H:i', 'deadline_offset_days' => 'nullable|integer|between:0,365'])->validate();
         if (! empty($v['frequency'])) {
-            $start = app(CalendarService::class)->localTime($v['starts_on'].'T'.$v['local_time'], $v['timezone'], false);
+            $start = LocalTime::parse($v['starts_on'].'T'.$v['local_time'], $v['timezone'], false);
             if ($start->lt(now()->subYear()) || $start->gt(now()->addYears(2))) {
                 throw ValidationException::withMessages(['starts_on' => 'Ngày bắt đầu nằm trong khoảng một năm trước đến hai năm tới.']);
             }
@@ -55,7 +49,7 @@ class TaskTemplateService
 
         return DB::transaction(function () use ($actor, $workspace, $project, $settings, $ids) {
             Workspace::lockForUpdate()->findOrFail($workspace->id);
-            abort_unless($this->allowed($actor, $workspace, $project, true), 403);
+            abort_unless($this->tasks->templates($actor, $workspace, $project, true), 403);
             $tasks = $workspace->tasks()->where('project_id', $project?->id)->whereIn('id', $ids)->whereNull('archived_at')->lockForUpdate()->get();
             if ($tasks->count() !== count($ids)) {
                 throw ValidationException::withMessages(['task_ids' => 'Chọn task còn hoạt động trong cùng phạm vi.']);
@@ -85,7 +79,7 @@ class TaskTemplateService
         DB::transaction(function () use ($actor, $template, $settings, $revision) {
             Workspace::lockForUpdate()->findOrFail($template->workspace_id);
             $t = TaskTemplate::lockForUpdate()->findOrFail($template->id);
-            abort_unless($this->allowed($actor, $t->workspace, $t->project, true), 403);
+            abort_unless($this->tasks->templates($actor, $t->workspace, $t->project, true), 403);
             if ($t->status === 'archived' || $t->revision !== (int) $revision) {
                 throw ValidationException::withMessages(['revision' => 'Mẫu đã thay đổi hoặc lưu trữ. Tải lại trước khi lưu.']);
             }
@@ -110,7 +104,7 @@ class TaskTemplateService
         DB::transaction(function () use ($actor, $template, $action, $revision) {
             Workspace::lockForUpdate()->findOrFail($template->workspace_id);
             $t = TaskTemplate::lockForUpdate()->findOrFail($template->id);
-            abort_unless($this->allowed($actor, $t->workspace, $t->project, true), 403);
+            abort_unless($this->tasks->templates($actor, $t->workspace, $t->project, true), 403);
             if ($t->revision !== $revision || $t->status === 'archived') {
                 throw ValidationException::withMessages(['revision' => 'Mẫu đã thay đổi hoặc lưu trữ.']);
             }
@@ -145,7 +139,7 @@ class TaskTemplateService
                 return null;
             }
             try {
-                $at = app(CalendarService::class)->localTime($date->format('Y-m-d').'T'.$t->local_time, $t->timezone, false);
+                $at = LocalTime::parse($date->format('Y-m-d').'T'.$t->local_time, $t->timezone, false);
             } catch (ValidationException) {
                 $at = null;
             }
@@ -169,7 +163,7 @@ class TaskTemplateService
         return DB::transaction(function () use ($actor, $template, $key, $revision, $scheduled) {
             Workspace::lockForUpdate()->findOrFail($template->workspace_id);
             $t = TaskTemplate::lockForUpdate()->findOrFail($template->id);
-            abort_unless($this->allowed($actor, $t->workspace, $t->project, true), 403);
+            abort_unless($this->tasks->templates($actor, $t->workspace, $t->project, true), 403);
             $existing = TaskTemplateRun::where('task_template_id', $t->id)->where('occurrence_key', $key)->first();
             if ($existing) {
                 return $scheduled ? null : $existing;
@@ -195,7 +189,7 @@ class TaskTemplateService
                     if ($t->deadline_offset_days !== null && $row['task_type'] !== 'GROUP') {
                         $values['deadline_at'] = now($t->workspace->timezone)->addDays($t->deadline_offset_days)->format('Y-m-d\TH:i');
                     }
-                    $task = app(TaskService::class)->save($actor, $t->workspace, $t->project, $values);
+                    $task = $this->taskService->save($actor, $t->workspace, $t->project, $values);
                     $map[$ref] = $task->id;
                     unset($pending[$ref]);
                     $progress = true;
@@ -205,7 +199,7 @@ class TaskTemplateService
                 }
             }
             foreach ($definition['dependencies'] as $edge) {
-                app(TaskWorkflowService::class)->dependency($actor, Task::findOrFail($map[$edge['successor']]), ['predecessor_task_id' => $map[$edge['predecessor']], 'lag_minutes' => $edge['lag_minutes']]);
+                $this->workflow->dependency($actor, Task::findOrFail($map[$edge['successor']]), ['predecessor_task_id' => $map[$edge['predecessor']], 'lag_minutes' => $edge['lag_minutes']]);
             }
             $run = TaskTemplateRun::create(['task_template_id' => $t->id, 'occurrence_key' => $key, 'status' => 'succeeded', 'task_map' => $map]);
             if ($scheduled) {

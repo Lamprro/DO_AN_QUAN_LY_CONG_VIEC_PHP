@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plan;
 use App\Models\Workspace;
 use App\Services\Ai\AiRunService;
-use App\Services\Planning\PlanService;
+use App\Services\Planning\PlanQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class PlanningAiController extends Controller
 {
-    public function create(Request $r, Workspace $workspace)
+    public function create(Request $r, Workspace $workspace, PlanQuery $plans)
     {
         $r->validate(['project_id' => 'nullable|uuid']);
         $project = $r->filled('project_id') ? $workspace->projects()->findOrFail($r->input('project_id')) : null;
-        abort_unless(app(PlanService::class)->allowed($r->user(), $workspace, $project, 'plan.create'), 403);
-        $bases = Plan::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->where('data->schema_version', 1)->latest()->limit(100)->get();
-        $token = (string) Str::uuid();
+        $bases = $plans->bases($r->user(), $workspace, $project);
 
-        return view('plans.ai', compact('workspace', 'project', 'bases', 'token'));
+        return view('plans.ai', ['workspace' => $workspace, 'project' => $project, 'bases' => $bases, 'token' => (string) Str::uuid()]);
     }
 
     public function store(Request $r, Workspace $workspace, AiRunService $service)

@@ -10,11 +10,6 @@ use Illuminate\Validation\Rule;
 
 class CalendarEventRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return $this->user() !== null;
-    }
-
     public function rules(): array
     {
         $format = $this->boolean('all_day') ? 'Y-m-d' : 'Y-m-d\TH:i';

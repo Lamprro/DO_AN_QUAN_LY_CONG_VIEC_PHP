@@ -2,8 +2,7 @@
 
 namespace App\Services\Report;
 
-use App\Services\Task\TaskTreeService;
-
+use App\Authorization\ReportAccess;
 use App\Models\CalendarEvent;
 use App\Models\ReportSnapshot;
 use App\Models\Task;
@@ -11,7 +10,7 @@ use App\Models\TaskBlocker;
 use App\Models\TimeEntry;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Support\ReportAccess;
+use App\Services\Task\TaskTreeService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -20,13 +19,6 @@ use Illuminate\Validation\ValidationException;
 class ReportService
 {
     public function __construct(private ReportAccess $access, private TaskTreeService $trees) {}
-
-    public function defaults(User $actor): array
-    {
-        $today = CarbonImmutable::now($actor->timezone);
-
-        return ['from' => $today->startOfMonth()->format('Y-m-d'), 'to' => $today->startOfMonth()->addMonth()->format('Y-m-d'), 'project_id' => null, 'subject_user_id' => null, 'include_archived' => false];
-    }
 
     public function filters(User $actor, Workspace $workspace, array $data, string $permission = 'report.view'): array
     {

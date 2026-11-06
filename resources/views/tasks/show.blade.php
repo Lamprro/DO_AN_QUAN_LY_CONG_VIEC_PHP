@@ -87,7 +87,7 @@
                     <button type="submit" class="jira-action-btn">Bắt đầu bấm giờ</button>
                 </form>
             @endif
-            @if($task->assignee_id===auth()->id() && $task->task_type->value==='WORK' && in_array($task->status->value,['TODO','IN_PROGRESS','REVIEW'],true) && app(\App\Policies\TaskPolicy::class)->mutable(auth()->user(),$task,'task.update') && app(\App\Policies\CalendarEventPolicy::class)->scope(auth()->user(),$workspace,$project,'calendar.create'))
+            @if($canScheduleTask)
                 <a class="jira-action-btn" href="{{ route('workspaces.calendar.create', [$workspace, 'project_id' => $project?->id, 'task_id' => $task->id]) }}">Xếp lịch</a>
             @endif
         </div>

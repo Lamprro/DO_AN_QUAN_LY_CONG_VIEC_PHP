@@ -3,18 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Enums\ProjectStatus;
-use App\Support\ProjectAccess;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class ProjectRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return $this->route('project') ? $this->user()->can('update', $this->route('project'))
-            : app(ProjectAccess::class)->canCreate($this->user(), $this->route('workspace'));
-    }
-
     public function rules(): array
     {
         return ['expected_revision' => [$this->route('project') ? 'required' : 'prohibited', 'integer', 'min:1'], 'name' => ['required', 'string', 'max:180'], 'description' => ['nullable', 'string', 'max:20000'],

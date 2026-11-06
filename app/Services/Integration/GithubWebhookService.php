@@ -2,17 +2,19 @@
 
 namespace App\Services\Integration;
 
+use App\Authorization\ProjectAccess;
 use App\Models\GithubLog;
 use App\Models\Project;
 use App\Models\TaskActivity;
 use App\Models\Workspace;
-use App\Support\ProjectAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class GithubWebhookService
 {
+    public function __construct(private ProjectAccess $projects) {}
+
     public function receive(Request $request, Project $project): void
     {
         abort_unless(config('work_management.integrations_enabled'), 503);
@@ -21,7 +23,7 @@ class GithubWebhookService
         $connection = $project->githubConnection;
         abort_unless($connection && $connection->status->value === 'active' && $connection->provider->value === 'github', 403);
         $owner = $connection->user;
-        abort_unless($owner && app(ProjectAccess::class)->allows($owner, $project, 'integration.manage'), 403);
+        abort_unless($owner && $this->projects->allows($owner, $project, 'integration.manage'), 403);
         $secret = $connection->credentials_encrypted['webhook_secret'] ?? null;
         $signature = $request->header('X-Hub-Signature-256', '');
         abort_unless($secret && hash_equals('sha256='.hash_hmac('sha256', $raw, $secret), $signature), 403);
@@ -36,7 +38,7 @@ class GithubWebhookService
             Workspace::lockForUpdate()->findOrFail($project->workspace_id);
             $project = $project->fresh();
             $current = $project->githubConnection;
-            abort_unless($current && $current->id === $connection->id && $current->status->value === 'active' && $current->user && app(ProjectAccess::class)->allows($current->user, $project, 'integration.manage'), 403);
+            abort_unless($current && $current->id === $connection->id && $current->status->value === 'active' && $current->user && $this->projects->allows($current->user, $project, 'integration.manage'), 403);
             $currentSecret = $current->credentials_encrypted['webhook_secret'] ?? '';
             abort_unless($currentSecret && hash_equals('sha256='.hash_hmac('sha256', $raw, $currentSecret), $signature) && $current->account_ref === (string) $input['repository']['id'], 403);
 

@@ -2,6 +2,7 @@
 
 namespace App\Services\Workspace;
 
+use App\Authorization\WorkspaceAccess;
 use App\Enums\MembershipStatus;
 use App\Enums\UserStatus;
 use App\Enums\WorkspaceKind;
@@ -9,7 +10,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
-use App\Support\WorkspaceAccess;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +17,7 @@ use Illuminate\Validation\ValidationException;
 
 class WorkspaceService
 {
-    public function __construct(private WorkspaceAccess $access) {}
+    public function __construct(private WorkspaceAccess $access, private InvitationService $invitations) {}
 
     public function create(User $owner, string $name, string $timezone, bool $personal = false): Workspace
     {
@@ -79,7 +79,7 @@ class WorkspaceService
                     throw ValidationException::withMessages(['workspace' => 'Workspace có dữ liệu nghiệp vụ; không thể xóa.']);
                 }
             }
-            if (app(InvitationService::class)->pending($workspace)) {
+            if ($this->invitations->pending($workspace)) {
                 throw ValidationException::withMessages(['workspace' => 'Hãy thu hồi lời mời đang chờ trước khi xóa.']);
             }
             $workspace->members()->delete();

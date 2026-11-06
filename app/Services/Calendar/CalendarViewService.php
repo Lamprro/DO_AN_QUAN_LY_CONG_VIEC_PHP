@@ -2,19 +2,23 @@
 
 namespace App\Services\Calendar;
 
+use App\Authorization\CalendarAccess;
+use App\Authorization\ProjectAccess;
+use App\Authorization\TaskAccess;
 use App\Models\CalendarEvent;
+use App\Models\CalendarProposal;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Policies\CalendarEventPolicy;
-use App\Support\ProjectAccess;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
+/** Read model for calendar, timeline and team-calendar screens. */
 class CalendarViewService
 {
-    public function __construct(private CalendarEventPolicy $policy, private ProjectAccess $projects) {}
+    public function __construct(private CalendarAccess $calendars, private ProjectAccess $projects, private TaskAccess $tasks, private CalendarService $calendar) {}
 
     public function range(Request $request): array
     {
@@ -76,9 +80,9 @@ class CalendarViewService
 
     public function rows(User $actor, Workspace $workspace, array $range, ?Project $project = null): array
     {
-        $workspaceCalendar = $this->policy->scope($actor, $workspace, null, 'calendar.view');
-        $projectIds = $this->projects->visible($actor, $workspace)->get()->filter(fn ($p) => $this->policy->scope($actor, $workspace, $p, 'calendar.view'))->pluck('id');
-        abort_unless($project ? $this->policy->scope($actor, $workspace, $project, 'calendar.view') : ($workspaceCalendar || $projectIds->isNotEmpty()), 403);
+        $workspaceCalendar = $this->calendars->scope($actor, $workspace, null, 'calendar.view');
+        $projectIds = $this->projects->visible($actor, $workspace)->get()->filter(fn ($p) => $this->calendars->scope($actor, $workspace, $p, 'calendar.view'))->pluck('id');
+        abort_unless($project ? $this->calendars->scope($actor, $workspace, $project, 'calendar.view') : ($workspaceCalendar || $projectIds->isNotEmpty()), 403);
         $events = CalendarEvent::where('workspace_id', $workspace->id)
             ->when($project, fn ($q) => $q->where('project_id', $project->id), fn ($q) => $q->where(fn ($q) => $q->whereIn('project_id', $projectIds)->when($workspaceCalendar, fn ($q) => $q->orWhereNull('project_id'))))
             ->where('starts_at', '<', $range['end']->utc())->where('ends_at', '>', $range['start']->utc())
@@ -93,7 +97,7 @@ class CalendarViewService
             if (! $activeUsers->contains($event->user_id)) {
                 continue;
             }
-            $canView = $this->policy->view($actor, $event);
+            $canView = Gate::forUser($actor)->allows('view', $event);
             if (! $canView && (! $event->is_busy || $event->status->value === 'cancelled')) {
                 continue;
             }
@@ -106,5 +110,60 @@ class CalendarViewService
         }
 
         return $rows;
+    }
+
+    /** May create an event here: in the project, or (no project) in the workspace or any writable visible project. */
+    public function canCreate(User $actor, Workspace $workspace, ?Project $project = null): bool
+    {
+        if ($project) {
+            return $this->tasks->projectWritable($project) && $this->calendars->scope($actor, $workspace, $project, 'calendar.create');
+        }
+
+        return $this->calendars->scope($actor, $workspace, null, 'calendar.create')
+            || $this->projects->visible($actor, $workspace)->get()->contains(fn ($p) => $this->tasks->projectWritable($p) && $this->calendars->scope($actor, $workspace, $p, 'calendar.create'));
+    }
+
+    /** Options for the create/edit form: writable projects, the actor's open WORK tasks, members. */
+    public function formContext(User $actor, Workspace $workspace, ?CalendarEvent $event = null): array
+    {
+        $projects = $this->projects->visible($actor, $workspace)->get()->filter(fn ($p) => $this->tasks->projectWritable($p) && $this->calendars->scope($actor, $workspace, $p, $event ? 'calendar.update' : 'calendar.create'));
+        $tasks = $workspace->tasks()->where('assignee_id', $actor->id)->where('task_type', 'WORK')->whereIn('status', ['TODO', 'IN_PROGRESS', 'REVIEW'])->whereNull('archived_at')
+            ->where(fn ($q) => $q->whereIn('project_id', $projects->pluck('id'))->orWhereNull('project_id'))->get()->filter(fn ($t) => $this->tasks->mutable($actor, $t, 'task.update'));
+        if ($event?->task && ! $tasks->contains('id', $event->task_id)) {
+            $tasks->push($event->task);
+        }
+        $members = $workspace->members()->where('status', 'active')->whereHas('user', fn ($q) => $q->where('status', 'active'))->with('user')->get();
+
+        return compact('workspace', 'event', 'projects', 'tasks', 'members') + ['version' => $event ? $this->calendar->version($event) : null, 'timezones' => timezone_identifiers_list()];
+    }
+
+    /** Public TASK_BLOCK rows of a project laid out as percentages of the range. */
+    public function timeline(User $actor, Workspace $workspace, Project $project, array $range)
+    {
+        $rows = array_values(array_filter($this->rows($actor, $workspace, $range, $project), fn ($r) => $r['type'] === 'TASK_BLOCK' && ! $r['private']));
+        $span = $range['end']->timestamp - $range['start']->timestamp;
+        foreach ($rows as &$row) {
+            $start = max($row['starts_at']->timestamp, $range['start']->timestamp);
+            $end = min($row['ends_at']->timestamp, $range['end']->timestamp);
+            $row['offset_percent'] = round(($start - $range['start']->timestamp) * 100 / $span, 4);
+            $row['width_percent'] = round(($end - $start) * 100 / $span, 4);
+        }
+        unset($row);
+
+        return collect($rows)->groupBy(fn ($r) => $r['task']?->id ?? 'none');
+    }
+
+    /** Team calendar: proposals the actor sent or received, people and tasks to propose for. */
+    public function team(User $actor, Workspace $workspace, ?Project $project, ?string $focus): array
+    {
+        abort_unless($this->calendars->scope($actor, $workspace, $project), 403);
+        $proposals = CalendarProposal::when($focus, fn ($q, $id) => $q->whereKey($id))->where('workspace_id', $workspace->id)->where('project_id', $project?->id)
+            ->when(! $this->tasks->scope($actor, $workspace, $project, 'task.view'), fn ($q) => $q->whereNull('task_id'))
+            ->where(fn ($q) => $q->where('recipient_id', $actor->id)->orWhere('proposed_by', $actor->id))->with('recipient', 'proposer', 'event')->latest()->paginate(15)->withQueryString();
+        $people = $this->projects->eligibleMembers($workspace, $project, 'calendar.view')->filter(fn ($m) => $this->calendars->scope($m->user, $workspace, $project, 'calendar.create'));
+        $tasks = $workspace->tasks()->where('project_id', $project?->id)->where('task_type', 'WORK')->whereNull('archived_at')->whereNotIn('status', ['DONE', 'CANCELLED'])->orderBy('title')->get()
+            ->filter(fn ($task) => Gate::forUser($actor)->allows('view', $task));
+
+        return compact('workspace', 'project', 'proposals', 'people', 'tasks') + ['canPropose' => $this->calendars->scope($actor, $workspace, $project, 'calendar.create')];
     }
 }

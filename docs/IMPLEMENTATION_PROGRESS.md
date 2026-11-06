@@ -1,3 +1,9 @@
+## Cập nhật 06/11/2026 — tái cấu trúc lớp: mỗi lớp một việc, quyền kiểm một lần
+
+Đã tách phân quyền khỏi Policy-helper/Request/Controller/View vào `app/Authorization` (cache theo request, bỏ qua cache trong transaction); FormRequest chỉ validate; Service kiểm quyền khi ghi (dưới lock); lớp Query/PageData lo dữ liệu màn hình; Controller không còn query/transaction/`app()`; Blade không gọi Service/Policy; route chia theo nghiệp vụ và bỏ 7 route rác do require trùng. Hành vi giữ nguyên: 1.548/1.548 trang GET và 109/109 bước ghi (22/22 bảng DB) trùng khớp với bản trước khi sửa trên database review riêng.
+
+Xem [kiến trúc chuẩn](ARCHITECTURE.md) và [minh chứng](verification/architecture-2026-11-06/README.md). Tên class trong các mục lịch sử bên dưới có thể đã đổi; bảng "tên cũ → mới" ở ARCHITECTURE.md là hiện hành.
+
 ## Cập nhật 26/10/2026 — tinh gọn lớp nghiệp vụ
 
 Đã gộp MemberService/RoleService vào WorkspaceService, ProjectMemberService vào ProjectService, TaskUtilityScope vào TaskUtilityService và đổi toàn bộ caller. Tên route, form Blade, payload, CSRF, JSON panel và chính sách quyền giữ nguyên; FE không cần đổi cách gửi form. Không dùng lại tên class cũ trong code mới.

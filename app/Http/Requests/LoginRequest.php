@@ -8,11 +8,6 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends EmailFormRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return ['email' => ['required', 'string', 'email', 'max:255'], 'password' => ['required', 'string'], 'remember' => ['sometimes', 'boolean']];

@@ -3,17 +3,34 @@
 namespace App\Services\Setting;
 
 use App\Models\User;
-use App\Models\UserSetting;
 use Illuminate\Support\Facades\DB;
 
+/** Single entry point for users.settings (language, theme, notifications, work_hours). */
 class SettingService
 {
+    /** Raw stored JSON, always re-read from the database so callers inside a lock see committed values. */
+    public function stored(User $user): array
+    {
+        $stored = User::whereKey($user->id)->value('settings');
+        if (is_string($stored)) {
+            $stored = json_decode($stored, true);
+        }
+
+        return is_array($stored) ? $stored : [];
+    }
+
+    /** Replace the stored JSON. Caller must already hold the user row lock. */
+    public function store(User $user, array $settings): void
+    {
+        $fresh = User::findOrFail($user->id);
+        $fresh->settings = $settings;
+        $fresh->save();
+        $user->setAttribute('settings', $settings)->syncOriginalAttribute('settings');
+    }
+
     public function values(User $user): array
     {
-        $stored = $user->settings()->value('settings') ?? [];
-        if (is_string($stored)) {
-            $stored = json_decode($stored, true) ?? [];
-        }
+        $stored = $this->stored($user);
         $defaults = config('work_management.settings_defaults');
 
         return ['language' => in_array($stored['language'] ?? null, ['vi', 'en'], true) ? $stored['language'] : $defaults['language'],
@@ -25,8 +42,8 @@ class SettingService
     {
         DB::transaction(function () use ($user, $data) {
             User::lockForUpdate()->findOrFail($user->id);
-            UserSetting::updateOrCreate(['user_id' => $user->id], ['settings' => array_replace($user->settings()->value('settings') ?? [], ['language' => $data['language'], 'theme' => $data['theme'],
-                'notifications' => ['in_app' => (bool) $data['notifications']['in_app'], 'email' => false, 'telegram' => false]])]);
+            $this->store($user, array_replace($this->stored($user), ['language' => $data['language'], 'theme' => $data['theme'],
+                'notifications' => ['in_app' => (bool) $data['notifications']['in_app'], 'email' => false, 'telegram' => false]]));
         }, 3);
     }
 }

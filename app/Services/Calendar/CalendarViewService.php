@@ -6,7 +6,6 @@ use App\Authorization\CalendarAccess;
 use App\Authorization\ProjectAccess;
 use App\Authorization\TaskAccess;
 use App\Models\CalendarEvent;
-use App\Models\CalendarProposal;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Workspace;
@@ -157,13 +156,14 @@ class CalendarViewService
     public function team(User $actor, Workspace $workspace, ?Project $project, ?string $focus): array
     {
         abort_unless($this->calendars->scope($actor, $workspace, $project), 403);
-        $proposals = CalendarProposal::when($focus, fn ($q, $id) => $q->whereKey($id))->where('workspace_id', $workspace->id)->where('project_id', $project?->id)
+        $proposals = CalendarEvent::proposals()->when($focus, fn ($q, $id) => $q->whereKey($id))->where('workspace_id', $workspace->id)->where('project_id', $project?->id)
             ->when(! $this->tasks->scope($actor, $workspace, $project, 'task.view'), fn ($q) => $q->whereNull('task_id'))
-            ->where(fn ($q) => $q->where('recipient_id', $actor->id)->orWhere('proposed_by', $actor->id))->with('recipient', 'proposer', 'event')->latest()->paginate(15)->withQueryString();
+            ->where(fn ($q) => $q->where('user_id', $actor->id)->orWhere('proposed_by', $actor->id))->with('recipient', 'proposer')->latest()->paginate(15)->withQueryString();
+        $versions = $proposals->getCollection()->mapWithKeys(fn ($p) => [$p->id => $this->calendar->version($p)])->all();
         $people = $this->projects->eligibleMembers($workspace, $project, 'calendar.view')->filter(fn ($m) => $this->calendars->scope($m->user, $workspace, $project, 'calendar.create'));
         $tasks = $workspace->tasks()->where('project_id', $project?->id)->where('task_type', 'WORK')->whereNull('archived_at')->whereNotIn('status', ['DONE', 'CANCELLED'])->orderBy('title')->get()
             ->filter(fn ($task) => Gate::forUser($actor)->allows('view', $task));
 
-        return compact('workspace', 'project', 'proposals', 'people', 'tasks') + ['canPropose' => $this->calendars->scope($actor, $workspace, $project, 'calendar.create')];
+        return compact('workspace', 'project', 'proposals', 'versions', 'people', 'tasks') + ['canPropose' => $this->calendars->scope($actor, $workspace, $project, 'calendar.create')];
     }
 }

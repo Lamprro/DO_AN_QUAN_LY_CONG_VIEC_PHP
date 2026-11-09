@@ -4,6 +4,8 @@ namespace App\Services\Task;
 
 use App\Authorization\TaskAccess;
 use App\Authorization\WorkspaceAccess;
+use App\Enums\TaskReminderKind;
+use App\Enums\TaskReminderStatus;
 use App\Jobs\SendTaskReminder;
 use App\Models\Notification;
 use App\Models\Task;
@@ -20,15 +22,17 @@ class TaskReminderService
 {
     public function __construct(private TaskAccess $tasks, private SettingService $settings, private WorkspaceAccess $workspaces) {}
 
-    public function source(Task $task, string $kind): string
+    public function source(Task $task, TaskReminderKind|string $kind): string
     {
+        $kind = $kind instanceof TaskReminderKind ? $kind->value : $kind;
         $value = $kind === 'due' ? $task->deadline_at?->toIso8601String() : ($task->activities()->where('event_type', 'task.status_changed')->where('data->to', 'REVIEW')->latest('created_at')->latest('id')->value('id') ?? $task->created_at->toIso8601String());
 
         return hash('sha256', (string) $value);
     }
 
-    public function eligible(User $user, Task $task, string $kind, int $reviewAfter = 60): bool
+    public function eligible(User $user, Task $task, TaskReminderKind|string $kind, int $reviewAfter = 60): bool
     {
+        $kind = $kind instanceof TaskReminderKind ? $kind->value : $kind;
         if ($user->status->value !== 'active' || ! $user->can('view', $task) || ! $this->settings->values($user)['notifications']['in_app'] || $task->archived_at || $task->task_type->value !== 'WORK' || in_array($task->status->value, ['DONE', 'CANCELLED'], true) || ! $this->tasks->projectWritable($task->project)) {
             return false;
         }
@@ -86,7 +90,7 @@ class TaskReminderService
                         }$date = now($user->timezone)->toDateString();
                         $token = $this->source($task, $kind);
                         $key = hash('sha256', $user->id.'|'.$task->id.'|'.$kind.'|'.$date.'|'.$user->timezone.'|'.$token);
-                        $reminder = TaskReminder::firstOrCreate(['dedupe_key' => $key], ['workspace_id' => $task->workspace_id, 'task_id' => $task->id, 'user_id' => $user->id, 'kind' => $kind, 'local_date' => $date, 'timezone' => $user->timezone, 'source_token' => $token, 'review_after_minutes' => $reviewAfter, 'status' => 'queued']);
+                        $reminder = TaskReminder::firstOrCreate(['dedupe_key' => $key], ['workspace_id' => $task->workspace_id, 'task_id' => $task->id, 'user_id' => $user->id, 'kind' => $kind, 'local_date' => $date, 'timezone' => $user->timezone, 'source_token' => $token, 'review_after_minutes' => $reviewAfter, 'status' => TaskReminderStatus::QUEUED]);
                         if ($reminder->wasRecentlyCreated) {
                             Queue::connection('database')->pushOn('work-management-reminders', new SendTaskReminder($reminder->id));
 
@@ -112,16 +116,17 @@ class TaskReminderService
             $user = User::lockForUpdate()->findOrFail($seed->user_id);
             Workspace::lockForUpdate()->findOrFail($seed->workspace_id);
             $r = TaskReminder::lockForUpdate()->findOrFail($id);
-            if ($r->status !== 'queued') {
+            if ($r->status !== TaskReminderStatus::QUEUED) {
                 return;
-            }$task = Task::lockForUpdate()->findOrFail($r->task_id);
+            }
+            $task = Task::lockForUpdate()->findOrFail($r->task_id);
             if ($r->timezone !== $user->timezone || $r->local_date->toDateString() !== now($user->timezone)->toDateString() || $r->source_token !== $this->source($task, $r->kind) || ! $this->eligible($user, $task, $r->kind, $r->review_after_minutes)) {
-                $r->update(['status' => 'skipped', 'skip_reason' => 'Nguồn, quyền, ngày địa phương hoặc lựa chọn nhận nhắc không còn phù hợp.']);
+                $r->update(['status' => TaskReminderStatus::SKIPPED, 'skip_reason' => 'Nguồn, quyền, ngày địa phương hoặc lựa chọn nhận nhắc không còn phù hợp.']);
 
                 return;
             }
-            Notification::firstOrCreate(['dedupe_key' => 'reminder:'.$r->dedupe_key], ['recipient_id' => $user->id, 'workspace_id' => $task->workspace_id, 'project_id' => $task->project_id, 'task_id' => $task->id, 'type' => 'task.reminder_'.$r->kind, 'title' => $r->kind === 'review' ? 'Nhắc công việc chờ bạn duyệt' : ($task->deadline_at->isPast() ? 'Nhắc công việc quá hạn' : 'Nhắc hạn trong24 giờ'), 'body' => $task->code.' · '.$task->title, 'deliveries' => [['channel' => 'in_app', 'status' => 'sent', 'attempts' => 1, 'sent_at' => now()->toIso8601String()]]]);
-            $r->update(['status' => 'sent', 'sent_at' => now()]);
+            Notification::firstOrCreate(['dedupe_key' => 'reminder:'.$r->dedupe_key], ['recipient_id' => $user->id, 'workspace_id' => $task->workspace_id, 'project_id' => $task->project_id, 'task_id' => $task->id, 'type' => 'task.reminder_'.$r->kind->value, 'title' => $r->kind === TaskReminderKind::REVIEW ? 'Nhắc công việc chờ bạn duyệt' : ($task->deadline_at->isPast() ? 'Nhắc công việc quá hạn' : 'Nhắc hạn trong24 giờ'), 'body' => $task->code.' · '.$task->title, 'deliveries' => [['channel' => 'in_app', 'status' => 'sent', 'attempts' => 1, 'sent_at' => now()->toIso8601String()]]]);
+            $r->update(['status' => TaskReminderStatus::SENT, 'sent_at' => now()]);
         }, 3);
     }
 }

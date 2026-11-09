@@ -1,0 +1,23 @@
+APP: C:\Users\maiva\AppData\Local\Temp\claude\73d69cacba4359c6\71f12420-b19a-4ab8-840b-61fa5332b26a\scratchpad\oldcode | DB: sqlite C:/Users/maiva/AppData/Local/Temp/claude/73d69cacba4359c6/71f12420-b19a-4ab8-840b-61fa5332b26a/scratchpad/jira_board_review_20261101.copy.sqlite
+proposal 01a1c0dd-7c16-7161-bbc3-661e024fe688 | MERGE-P1 pending | pending | rev 1 | event -
+proposal 01a1c0dd-7c28-72a9-935c-9e0056a3dfe8 | MERGE-P2 declined | declined | rev 2 | event -
+proposal 01a1c0dd-7c3e-701c-9f7a-9f94c0d2dd0a | MERGE-P3 withdrawn | cancelled | rev 2 | event -
+proposal 01a1c0dd-7c60-7347-a7f3-3fe60307a3bf | MERGE-P4 accepted task block | accepted | rev 2 | event 01a1c0dd-7c7f-70ea-98df-e38afcaf8260
+proposal 01a1c0dd-7c96-7377-903b-c42923ea7978 | MERGE-P5 accepted then cancelled | cancelled | rev 3 | event 01a1c0dd-7cab-7324-aac1-b3834ae381f2
+proposal 01a1c0dd-7cd8-7062-bbc3-8c93f348f9a6 | MERGE-P6 accepted then event deleted | accepted | rev 2 | event -
+event 01a1c0dd-7c7f-70ea-98df-e38afcaf8260 | MERGE-P4 accepted task block | planned | owner demo3
+event 01a1c0dd-7cab-7324-aac1-b3834ae381f2 | MERGE-P5 accepted then cancelled | cancelled | owner demo3
+notif calendar-proposal:01a1c0dd-7c16-7161-bbc3-661e024fe688:pending
+notif calendar-proposal:01a1c0dd-7c28-72a9-935c-9e0056a3dfe8:pending
+notif calendar-proposal:01a1c0dd-7c28-72a9-935c-9e0056a3dfe8:2
+notif calendar-proposal:01a1c0dd-7c3e-701c-9f7a-9f94c0d2dd0a:pending
+notif calendar-proposal:01a1c0dd-7c3e-701c-9f7a-9f94c0d2dd0a:2
+notif calendar-proposal:01a1c0dd-7c60-7347-a7f3-3fe60307a3bf:pending
+notif calendar-proposal:01a1c0dd-7c60-7347-a7f3-3fe60307a3bf:2
+notif calendar-proposal:01a1c0dd-7c96-7377-903b-c42923ea7978:pending
+notif calendar-proposal:01a1c0dd-7c96-7377-903b-c42923ea7978:2
+notif calendar-proposal:01a1c0dd-7c96-7377-903b-c42923ea7978:3
+notif calendar-proposal:01a1c0dd-7cd8-7062-bbc3-8c93f348f9a6:pending
+notif calendar-proposal:01a1c0dd-7cd8-7062-bbc3-8c93f348f9a6:2
+demo3 settings: {"language":"vi","theme":"system","notifications":{"in_app":true,"email":false,"telegram":false},"work_hours":{"timezone":"Asia\/Ho_Chi_Minh","weekdays":[1,2,3,4,5],"windows":[{"start":"08:30","end":"12:00"},{"start":"13:30","end":"17:30"}],"slot_minutes":30}}
+user_settings rows: 5

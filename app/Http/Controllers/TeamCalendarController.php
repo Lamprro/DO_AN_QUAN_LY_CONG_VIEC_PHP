@@ -28,8 +28,8 @@ class TeamCalendarController extends Controller
 
     public function respond(Request $r, Workspace $workspace, string $proposal, string $action)
     {
-        $data = $r->validate(['revision' => 'required|integer|min:1']);
-        $this->service->respond($r->user(), $this->service->find($workspace, $proposal), $action, (int) $data['revision']);
+        $data = $r->validate(['version' => 'required|string|size:64']);
+        $this->service->respond($r->user(), $this->service->find($workspace, $proposal), $action, $data['version']);
 
         return back()->with('success', 'Đã xử lý đề xuất lịch.');
     }

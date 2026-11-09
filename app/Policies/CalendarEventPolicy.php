@@ -37,14 +37,15 @@ class CalendarEventPolicy
         return $this->write($user, $event, 'calendar.update');
     }
 
+    /** Events created from a Team Calendar proposal are kept as history: cancel them instead of deleting. */
     public function delete(User $user, CalendarEvent $event): bool
     {
-        return $this->write($user, $event, 'calendar.delete');
+        return ! $event->isProposal() && $this->write($user, $event, 'calendar.delete');
     }
 
     private function write(User $user, CalendarEvent $event, string $permission): bool
     {
-        return $event->user_id === $user->id && $event->source === 'manual' && ! $event->plan_id && ! $event->integration_connection_id
+        return $event->user_id === $user->id && $event->source === 'manual' && ! $event->status->isProposalOnly() && ! $event->plan_id && ! $event->integration_connection_id
             && $this->view($user, $event) && $this->tasks->projectWritable($event->project)
             && $this->calendars->scope($user, $event->workspace, $event->project, $permission);
     }

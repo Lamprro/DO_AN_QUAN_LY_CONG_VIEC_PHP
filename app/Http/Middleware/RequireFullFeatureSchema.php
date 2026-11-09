@@ -10,10 +10,14 @@ class RequireFullFeatureSchema
 {
     public function handle(Request $request, Closure $next)
     {
-        foreach (['task_watchers', 'calendar_proposals', 'task_templates', 'task_template_runs'] as $table) {
+        foreach (['task_watchers', 'task_templates', 'task_template_runs'] as $table) {
             if (! Schema::hasTable($table)) {
                 return response()->view('errors.schema-upgrade', [], 503);
             }
+        }
+        // Team calendar proposals live in calendar_events since 2026_11_09_000001.
+        if (! Schema::hasColumn('calendar_events', 'proposed_by')) {
+            return response()->view('errors.schema-upgrade', [], 503);
         }
 
         return $next($request);

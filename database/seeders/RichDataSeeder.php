@@ -13,7 +13,6 @@ use App\Models\TaskBlocker;
 use App\Models\TaskDependency;
 use App\Models\TaskTemplate;
 use App\Models\User;
-use App\Models\UserSetting;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
 use Carbon\CarbonImmutable;
@@ -45,10 +44,9 @@ class RichDataSeeder extends Seeder
                     'status' => 'active',
                     'timezone' => 'Asia/Ho_Chi_Minh',
                 ]);
-                UserSetting::firstOrCreate(
-                    ['user_id' => $user->id],
-                    ['settings' => config('work_management.settings_defaults')]
-                );
+                if ($user->settings === null) {
+                    $user->forceFill(['settings' => config('work_management.settings_defaults')])->save();
+                }
                 $extraUsers[] = $user;
             }
 

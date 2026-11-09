@@ -34,18 +34,18 @@
 
     <div style="display: flex; flex-direction: column; gap: 0.75rem;">
         @forelse($reminders as $r)
-            <article class="card" style="margin: 0; padding: 1rem 1.25rem; background: var(--bg-subtle) !important; border-left: 4px solid {{ $r->status==='sent' ? 'var(--success)' : ($r->status==='failed' ? 'var(--danger)' : 'var(--primary)') }};">
+            <article class="card" style="margin: 0; padding: 1rem 1.25rem; background: var(--bg-subtle) !important; border-left: 4px solid {{ $r->status->value==='sent' ? 'var(--success)' : ($r->status->value==='failed' ? 'var(--danger)' : 'var(--primary)') }};">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
                     <div>
                         <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.25rem;">
-                            <span class="badge" style="{{ $r->kind==='due' ? 'background: #fff1f2; color: #be123c;' : 'background: #eff6ff; color: #1d4ed8;' }}">
-                                {{ $r->kind==='due' ? '⏰ Nhắc hạn chót' : '👁️ Nhắc phê duyệt' }}
+                            <span class="badge" style="{{ $r->kind->value==='due' ? 'background: #fff1f2; color: #be123c;' : 'background: #eff6ff; color: #1d4ed8;' }}">
+                                {{ $r->kind->value==='due' ? '⏰ Nhắc hạn chót' : '👁️ Nhắc phê duyệt' }}
                             </span>
                             <span class="badge" style="font-family: var(--font-mono); font-size: 0.75rem;">
                                 {{ $r->local_date->format('d/m/Y') }} ({{ $r->timezone }})
                             </span>
-                            <span class="badge" style="{{ $r->status==='sent' ? 'background: #ecfdf5; color: #047857;' : ($r->status==='failed' ? 'background: #fff1f2; color: #be123c;' : '') }}">
-                                {{ ['queued'=>'Đang chờ worker','sent'=>'Đã gửi in-app','failed'=>'Job lỗi, chưa gửi','skipped'=>'Đã bỏ qua'][$r->status] ?? $r->status }}
+                            <span class="badge" style="{{ $r->status->value==='sent' ? 'background: #ecfdf5; color: #047857;' : ($r->status->value==='failed' ? 'background: #fff1f2; color: #be123c;' : '') }}">
+                                {{ ['queued'=>'Đang chờ worker','sent'=>'Đã gửi in-app','failed'=>'Job lỗi, chưa gửi','skipped'=>'Đã bỏ qua'][$r->status->value] ?? $r->status->value }}
                             </span>
                             @if($r->skip_reason)
                                 <small class="muted" style="font-size: 0.75rem;">({{ $r->skip_reason }})</small>

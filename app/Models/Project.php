@@ -99,9 +99,4 @@ class Project extends DomainModel
     {
         return $this->hasMany(TaskTemplate::class, 'project_id');
     }
-
-    public function calendarProposals(): HasMany
-    {
-        return $this->hasMany(CalendarProposal::class, 'project_id');
-    }
 }

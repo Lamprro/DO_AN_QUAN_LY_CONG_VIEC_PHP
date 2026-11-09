@@ -6,8 +6,8 @@ use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\TimeEntryAdjustment;
 use App\Models\User;
-use App\Models\UserSetting;
 use App\Models\Workspace;
+use App\Services\Setting\SettingService;
 use App\Services\Task\TaskHistory;
 use App\Support\LocalTime;
 use Carbon\CarbonImmutable;
@@ -19,7 +19,7 @@ use Illuminate\Validation\ValidationException;
 
 class TimeTrackingService
 {
-    public function __construct(private TaskHistory $history) {}
+    public function __construct(private TaskHistory $history, private SettingService $settings) {}
 
     public function start(User $actor, Task $task): TimeEntry
     {
@@ -121,14 +121,14 @@ class TimeTrackingService
 
     public function workHoursValues(User $user, ?string $timezone = null): array
     {
-        $settings = $user->settings()->value('settings') ?? [];
+        $settings = $this->settings->stored($user);
 
         return $settings['work_hours'] ?? (array_replace(config('work_schedule'), ['timezone' => $timezone ?? $user->timezone]));
     }
 
     public function workHoursVersion(User $user): string
     {
-        return hash('sha256', json_encode($user->settings()->value('settings')['work_hours'] ?? null));
+        return hash('sha256', json_encode($this->settings->stored($user)['work_hours'] ?? null));
     }
 
     public function saveWorkHours(User $user, array $data): void
@@ -157,9 +157,9 @@ class TimeTrackingService
             if (! hash_equals($this->workHoursVersion($user), $data['version'])) {
                 throw ValidationException::withMessages(['version' => 'Giờ làm đã thay đổi. Tải lại trước khi lưu.']);
             }
-            $settings = $user->settings()->value('settings') ?? config('work_management.settings_defaults');
+            $settings = $this->settings->stored($user) ?: config('work_management.settings_defaults');
             $settings['work_hours'] = ['timezone' => $data['timezone'], 'weekdays' => array_map('intval', $data['weekdays']), 'windows' => $data['windows'], 'slot_minutes' => (int) $data['slot_minutes']];
-            UserSetting::updateOrCreate(['user_id' => $user->id], ['settings' => $settings]);
+            $this->settings->store($user, $settings);
         }, 3);
     }
 }

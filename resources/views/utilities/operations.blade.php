@@ -114,8 +114,8 @@
         @forelse($reminders as $r)
             <div style="background: var(--bg-subtle); padding: 0.5rem 0.85rem; border-radius: var(--radius-sm); font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <span class="badge">{{ $r->kind }}</span>
-                    <span class="badge" style="margin-left: 0.35rem;">{{ $r->status }}</span>
+                    <span class="badge">{{ \App\Support\UiLabels::text($r->kind) }}</span>
+                    <span class="badge" style="margin-left: 0.35rem;">{{ \App\Support\UiLabels::text($r->status) }}</span>
                     <span style="font-family: var(--font-mono); margin-left: 0.5rem;">{{ $r->local_date->format('d/m/Y') }}</span>
                 </div>
                 @if($r->skip_reason)

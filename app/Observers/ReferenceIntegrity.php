@@ -20,6 +20,7 @@ use App\Models\TaskDependency;
 use App\Models\TaskTemplateRun;
 use App\Models\TaskWatcher;
 use App\Models\TimeEntry;
+use App\Models\TimeEntryAdjustment;
 use App\Models\Workspace;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
@@ -173,6 +174,7 @@ class ReferenceIntegrity
             $model instanceof TaskActivity, $model instanceof TimeEntry, $model instanceof TaskBlocker => $model->task?->workspace_id,
             $model instanceof TaskWatcher => $model->task?->workspace_id,
             $model instanceof TaskTemplateRun => $model->template?->workspace_id,
+            $model instanceof TimeEntryAdjustment => $model->timeEntry?->task?->workspace_id,
             $model instanceof AiCall => $model->aiRun?->workspace_id,
             default => null,
         };

@@ -65,9 +65,4 @@ class Workspace extends DomainModel
     {
         return $this->hasMany(TaskTemplate::class, 'workspace_id');
     }
-
-    public function calendarProposals(): HasMany
-    {
-        return $this->hasMany(CalendarProposal::class, 'workspace_id');
-    }
 }

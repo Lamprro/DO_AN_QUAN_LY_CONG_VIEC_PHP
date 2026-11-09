@@ -1,0 +1,6 @@
+
+   INFO  Running migrations.  
+
+  2026_11_09_000001_merge_calendar_proposals_into_calendar_events ....................................... 46.57ms DONE
+  2026_11_09_000002_merge_user_settings_into_users ....................................................... 7.90ms DONE
+

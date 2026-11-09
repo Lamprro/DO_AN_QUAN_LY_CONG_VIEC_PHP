@@ -1,3 +1,5 @@
+**Cập nhật 09/11/2026:** schema nguồn còn **25 bảng nghiệp vụ + 8 hạ tầng = 33 bảng**. `calendar_proposals` đã gộp vào `calendar_events` (`proposed_by`, `responded_at`, trạng thái proposed/declined/withdrawn), `user_settings` đã gộp vào `users.settings`. Migration chính chờ xác nhận. Chi tiết xem [MODEL_CONSOLIDATION_2026-11-09](../MODEL_CONSOLIDATION_2026-11-09.md). Các mô tả bên dưới là bản lịch sử.
+
 **Cập nhật cuối đợt:** schema nguồn/review là **27 bảng nghiệp vụ + 8 hạ tầng = 35 bảng**, bổ sung calendar_proposals, task_watchers, task_templates, task_template_runs. Migration chính đang chờ xác nhận, hiện vẫn31bảng. ERD/schema JSON đã sinh lại từ PRAGMA review. [Báo cáo F11–F14](../FULL_FUNCTIONAL_COMPLETION_2026-10-23.md) thay mô tả31bảng ở bản lịch sử bên dưới.
 
 # Thiết kế hệ thống hiện hành — 23/10/2026

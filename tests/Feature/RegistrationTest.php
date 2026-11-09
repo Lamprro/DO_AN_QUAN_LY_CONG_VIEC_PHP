@@ -60,3 +60,4 @@ class RegistrationTest extends TestCase
         $response->assertRedirect(route('verification.notice'));
     }
 }
+

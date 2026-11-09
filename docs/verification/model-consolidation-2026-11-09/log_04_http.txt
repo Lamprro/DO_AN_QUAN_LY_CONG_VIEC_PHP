@@ -1,0 +1,32 @@
+[PASS] demo3 đăng nhập (302)
+[PASS] GET team-calendar 200
+[PASS] Team calendar hiển thị nhãn trạng thái mới (Chờ xác nhận / Đã từ chối / Đã thu hồi)
+[PASS] Form phản hồi dùng hidden version (64 ký tự)
+[PASS] Lấy được token và version của P10 từ trang
+[PASS] POST accept P10 → 302
+[PASS] Gửi lại cùng form (version cũ) bị từ chối, không tạo lịch lần 2 (302 về kèm lỗi)
+[PASS] Sau khi nhận, P10 hiện 'Đã chấp thuận' và có link 'Mở lịch đã nhận'
+[PASS] GET calendar/{P10} (lịch đã nhận) 200
+[PASS] Trang lịch nhận từ đề xuất không có nút xóa
+[PASS] GET calendar/{P1} đã chấp thuận 200
+[PASS] GET calendar list 200
+[PASS] Calendar không lộ đề xuất đang chờ/từ chối/thu hồi
+[PASS] GET timeline 200
+[PASS] GET settings 200
+[PASS] GET work-hours 200
+[PASS] Work-hours hiển thị giờ đã lưu trong users.settings (09:00)
+[PASS] GET reminders 200
+[PASS] Reminders hiển thị ledger enum (Nhắc hạn chót / Đã gửi in-app)
+[PASS] GET notifications 200
+[PASS] Thông báo đề xuất có link focus tới team-calendar
+[PASS] demo1 đăng nhập (302)
+[PASS] GET task-templates 200
+[PASS] Template index hiển thị trạng thái + tần suất enum
+[PASS] GET task-template show 200
+[PASS] Template show hiển thị run thành công
+[PASS] GET operations 200
+[PASS] demo2 đăng nhập (302)
+[PASS] demo2 GET team-calendar 200
+[PASS] Người đề xuất thấy nút 'Thu hồi đề xuất', không thấy 'Chấp thuận'
+
+HTTP RESULT: 30 pass, 0 fail

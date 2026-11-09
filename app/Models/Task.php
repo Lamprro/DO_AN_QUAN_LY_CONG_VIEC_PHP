@@ -123,8 +123,8 @@ class Task extends DomainModel
         return $this->hasMany(TaskWatcher::class, 'task_id');
     }
 
-    public function calendarProposals(): HasMany
+    public function reminders(): HasMany
     {
-        return $this->hasMany(CalendarProposal::class, 'task_id');
+        return $this->hasMany(TaskReminder::class, 'task_id');
     }
 }

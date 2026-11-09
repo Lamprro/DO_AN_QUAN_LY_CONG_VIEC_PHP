@@ -65,27 +65,8 @@ erDiagram
         varchar source
         datetime created_at
         datetime updated_at
-    }
-    calendar_proposals {
-        varchar id PK
-        varchar workspace_id FK
-        varchar project_id FK
-        varchar task_id FK
         varchar proposed_by FK
-        varchar recipient_id FK
-        varchar calendar_event_id FK
-        varchar title
-        TEXT description
-        varchar event_type
-        datetime starts_at
-        datetime ends_at
-        varchar timezone
-        varchar visibility
-        varchar status
-        INTEGER revision
         datetime responded_at
-        datetime created_at
-        datetime updated_at
     }
     failed_jobs {
         INTEGER id PK
@@ -397,13 +378,6 @@ erDiagram
         TEXT reason
         datetime created_at
     }
-    user_settings {
-        varchar id PK
-        varchar user_id FK
-        TEXT settings
-        datetime created_at
-        datetime updated_at
-    }
     users {
         varchar id PK
         varchar name
@@ -415,6 +389,7 @@ erDiagram
         varchar remember_token
         datetime created_at
         datetime updated_at
+        TEXT settings
     }
     workspace_members {
         varchar id PK
@@ -444,13 +419,8 @@ erDiagram
     tasks ||--o{ calendar_events : "task_id"
     projects ||--o{ calendar_events : "project_id"
     workspaces ||--o{ calendar_events : "workspace_id"
+    users ||--o{ calendar_events : "proposed_by"
     users ||--o{ calendar_events : "user_id"
-    calendar_events ||--o{ calendar_proposals : "calendar_event_id"
-    users ||--o{ calendar_proposals : "recipient_id"
-    users ||--o{ calendar_proposals : "proposed_by"
-    tasks ||--o{ calendar_proposals : "task_id"
-    projects ||--o{ calendar_proposals : "project_id"
-    workspaces ||--o{ calendar_proposals : "workspace_id"
     integration_connections ||--o{ github_logs : "integration_connection_id"
     tasks ||--o{ github_logs : "task_id"
     projects ||--o{ github_logs : "project_id"
@@ -513,7 +483,6 @@ erDiagram
     tasks ||--o{ time_entries : "task_id"
     users ||--o{ time_entry_adjustments : "actor_id"
     time_entries ||--o{ time_entry_adjustments : "time_entry_id"
-    users ||--o{ user_settings : "user_id"
     roles ||--o{ workspace_members : "role_id"
     users ||--o{ workspace_members : "user_id"
     workspaces ||--o{ workspace_members : "workspace_id"

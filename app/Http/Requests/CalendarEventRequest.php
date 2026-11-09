@@ -15,14 +15,14 @@ class CalendarEventRequest extends FormRequest
         $format = $this->boolean('all_day') ? 'Y-m-d' : 'Y-m-d\TH:i';
 
         return ['title' => ['required', 'string', 'max:200'], 'description' => ['nullable', 'string', 'max:20000'],
-            'event_type' => ['required', Rule::enum(CalendarEventType::class)], 'status' => ['required', Rule::enum(CalendarEventStatus::class)],
+            'event_type' => ['required', Rule::enum(CalendarEventType::class)], 'status' => ['required', Rule::in(CalendarEventStatus::calendarValues())],
             'visibility' => ['required', Rule::enum(CalendarVisibility::class)], 'timezone' => ['required', 'timezone:all'],
             'all_day' => ['required', 'boolean'], 'is_busy' => ['required', 'boolean'],
             'starts_at' => ['required', 'date_format:'.$format], 'ends_at' => ['required', 'date_format:'.$format],
             'project_id' => ['nullable', 'uuid'], 'task_id' => ['nullable', 'uuid'],
             'participants' => ['sometimes', 'array', 'max:20'], 'participants.*' => ['required', 'uuid', 'distinct'],
             'version' => [$this->route('event') ? 'required' : 'nullable', 'string', 'size:64'],
-            'user_id' => ['prohibited'], 'workspace_id' => ['prohibited'], 'plan_id' => ['prohibited'], 'source' => ['prohibited'],
+            'user_id' => ['prohibited'], 'workspace_id' => ['prohibited'], 'plan_id' => ['prohibited'], 'source' => ['prohibited'], 'proposed_by' => ['prohibited'], 'responded_at' => ['prohibited'],
             'integration_connection_id' => ['prohibited'], 'external_id' => ['prohibited']];
     }
 }

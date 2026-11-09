@@ -3,7 +3,8 @@
 namespace App\Observers;
 
 use App\Enums\ActivityType;
-use App\Models\CalendarProposal;
+use App\Enums\CalendarEventStatus;
+use App\Models\CalendarEvent;
 use App\Models\Plan;
 use App\Models\ReportSnapshot;
 use App\Models\TaskActivity;
@@ -29,8 +30,18 @@ class IntegrityObserver
         if ($model instanceof TaskTemplate && ($model->isDirty('definition') || $model->isDirty('created_by'))) {
             throw ValidationException::withMessages(['template' => 'Nội dung mẫu và người tạo giữ nguyên; tạo mẫu mới khi muốn thay bộ công việc.']);
         }
-        if ($model instanceof CalendarProposal && array_diff(array_keys($model->getDirty()), ['status', 'revision', 'responded_at', 'calendar_event_id', 'updated_at'])) {
-            throw ValidationException::withMessages(['proposal' => 'Nội dung đề xuất giữ nguyên; thu hồi và gửi đề xuất mới nếu cần đổi giờ.']);
+        // A proposal keeps its original content until the recipient accepts it; afterwards it is the recipient's own event.
+        if ($model instanceof CalendarEvent && $model->getRawOriginal('proposed_by') !== null) {
+            if ($model->isDirty('proposed_by')) {
+                throw ValidationException::withMessages(['proposal' => 'Không đổi người đề xuất của lịch.']);
+            }
+            if (in_array($model->getRawOriginal('status'), CalendarEventStatus::proposalOnlyValues(), true)
+                && array_diff(array_keys($model->getDirty()), ['status', 'responded_at', 'updated_at'])) {
+                throw ValidationException::withMessages(['proposal' => 'Nội dung đề xuất giữ nguyên; thu hồi và gửi đề xuất mới nếu cần đổi giờ.']);
+            }
+            if (in_array($model->getRawOriginal('status'), [CalendarEventStatus::DECLINED->value, CalendarEventStatus::WITHDRAWN->value], true) && $model->isDirty('status')) {
+                throw ValidationException::withMessages(['proposal' => 'Đề xuất đã kết thúc; gửi đề xuất mới nếu cần.']);
+            }
         }
 
         if ($model instanceof Plan && $model->getRawOriginal('applied_at')) {
@@ -51,7 +62,7 @@ class IntegrityObserver
 
     public function deleting(Model $model): void
     {
-        if ($model instanceof TaskTemplateRun || $model instanceof TaskTemplate || $model instanceof CalendarProposal) {
+        if ($model instanceof TaskTemplateRun || $model instanceof TaskTemplate || ($model instanceof CalendarEvent && $model->getRawOriginal('proposed_by') !== null)) {
             throw ValidationException::withMessages(['history' => 'Giữ lịch sử tạo việc và đề xuất lịch; dùng hủy hoặc lưu trữ.']);
         }
 
@@ -66,4 +77,3 @@ class IntegrityObserver
         }
     }
 }
-

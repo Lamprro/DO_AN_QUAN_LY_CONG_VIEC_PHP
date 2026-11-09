@@ -16,7 +16,6 @@ use App\Models\TaskActivity;
 use App\Models\TaskBlocker;
 use App\Models\TaskDependency;
 use App\Models\User;
-use App\Models\UserSetting;
 use App\Models\Workspace;
 use App\Models\WorkspaceMember;
 use Carbon\CarbonImmutable;
@@ -42,7 +41,9 @@ class DemoSeeder extends Seeder
                     'name' => $name, 'password' => Hash::make('Demo@123456'), 'status' => 'active',
                     'timezone' => 'Asia/Ho_Chi_Minh', 'email_verified_at' => now(),
                 ]);
-                UserSetting::firstOrCreate(['user_id' => $users[$index]->id], ['settings' => config('work_management.settings_defaults')]);
+                if ($users[$index]->settings === null) {
+                    $users[$index]->forceFill(['settings' => config('work_management.settings_defaults')])->save();
+                }
             }
 
             $team = $this->workspace('Demo Team A', $users[0]);

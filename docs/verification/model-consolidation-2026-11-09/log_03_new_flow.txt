@@ -1,0 +1,56 @@
+APP: D:\HeThong_PhanTichTaiChinh\DO_AN_QUAN_LY_CONG_VIEC_PHP | DB: sqlite C:/Users/maiva/AppData/Local/Temp/claude/73d69cacba4359c6/71f12420-b19a-4ab8-840b-61fa5332b26a/scratchpad/jira_board_review_20261101.copy.sqlite
+== 1. Global scope: proposal-only rows never reach calendar queries
+[PASS] find() bỏ qua đề xuất đang chờ
+[PASS] proposals() vẫn đọc được đề xuất
+[PASS] Calendar project (kể cả đã hủy) chỉ thấy lịch thật P4, P5, P6; không có P1-P3 — MERGE-P4 accepted task block, MERGE-P5 accepted then cancelled, MERGE-P6 accepted then event deleted
+[PASS] Calendar mặc định (ẩn đã hủy) chỉ thấy P4 — MERGE-P4 accepted task block
+[PASS] Timeline không có dòng đề xuất
+== 2. Pending proposal does not block, accept re-checks busy overlap
+[PASS] Tạo lịch bận trùng giờ P1 thành công (đề xuất chờ không chiếm chỗ)
+[PASS] Chấp thuận P1 bị chặn do trùng lịch bận — {"starts_at":["Khoảng giờ này trùng lịch bận của bạn."]}
+[PASS] P1 vẫn proposed sau khi lỗi
+[PASS] Chấp thuận P1: cùng id, status planned, có responded_at
+[PASS] Thông báo phản hồi dùng khóa :planned
+[PASS] Người nhận sửa được lịch đã nhận (policy update)
+[PASS] Không xóa được lịch đến từ đề xuất (policy delete)
+== 3. New proposals: propose, decline, withdraw, accept TASK_BLOCK, cancel after accept
+[PASS] P7 lưu vào calendar_events với status proposed, user_id = người nhận
+[PASS] Thông báo đề xuất dùng khóa :proposed
+[PASS] Người đề xuất không được tự chấp thuận — Symfony\Component\HttpKernel\Exception\HttpException: 
+[PASS] Phiên bản cũ bị từ chối — {"version":["Đề xuất đã thay đổi. Tải lại trước khi xử lý."]}
+[PASS] P7 declined
+[PASS] Không xử lý lại đề xuất đã từ chối — {"proposal":["Đề xuất đã được xử lý. Không tạo lịch lần nữa."]}
+[PASS] P8 withdrawn
+[PASS] P9 TASK_BLOCK accepted thành lịch planned
+[PASS] P9 ghi lịch sử task calendar.saved
+[PASS] P9 hủy sau khi nhận → cancelled
+== 4. Integrity rules on proposal rows
+[PASS] Không sửa nội dung đề xuất đang chờ — {"proposal":["Nội dung đề xuất giữ nguyên; thu hồi và gửi đề xuất mới nếu cần đổi giờ."]}
+[PASS] Không xóa dòng đề xuất — {"history":["Giữ lịch sử tạo việc và đề xuất lịch; dùng hủy hoặc lưu trữ."]}
+[PASS] Không mở lại đề xuất đã từ chối — {"proposal":["Đề xuất đã kết thúc; gửi đề xuất mới nếu cần."]}
+[PASS] Form lịch thường từ chối status=proposed
+[PASS] Form lịch thường chấp nhận status=planned
+[PASS] Form lịch thường cấm truyền proposed_by
+== 5. Team calendar read model
+[PASS] Danh sách đề xuất của demo3 có đủ P1..P10 (trừ P6 của demo1) — total 9
+[PASS] Mỗi đề xuất có version
+[PASS] Liên kết thông báo cũ (đã trỏ sang id event) mở đúng P4
+== 6. users.settings
+[PASS] Đọc work_hours đã chuyển từ user_settings
+[PASS] Lưu settings giữ work_hours và cập nhật theme
+[PASS] Lưu giờ làm vào users.settings, giữ theme
+[PASS] Đăng ký mới ghi settings mặc định vào users
+== 7. Task templates with enums
+[PASS] Template active, frequency là enum
+[PASS] due() tạo kỳ đến hạn, run SUCCEEDED, next_run_at tiến lên — {"succeeded":1,"failed":0}
+[PASS] Đổi lịch daily→weekly (so sánh enum trong update)
+[PASS] Tạm dừng → paused
+[PASS] Tiếp tục → active có next_run_at
+[PASS] Tạo thủ công từ mẫu
+[PASS] Mẫu đã lưu trữ không tạo việc — {"revision":["Mẫu đã thay đổi hoặc bị lưu trữ."]}
+== 8. Task reminders with enums
+[PASS] scan tạo ledger kind=due, status=queued — count 1
+[PASS] deliver → sent và có thông báo task.reminder_due
+[PASS] Quan hệ mới: Task::reminders, TaskReminder::user/workspace
+
+RESULT: 45 pass, 0 fail

@@ -3,6 +3,9 @@
 namespace App\Services\Task;
 
 use App\Authorization\TaskAccess;
+use App\Enums\TaskTemplateFrequency;
+use App\Enums\TaskTemplateRunStatus;
+use App\Enums\TaskTemplateStatus;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskDependency;
@@ -32,11 +35,11 @@ class TaskTemplateService
                 throw ValidationException::withMessages(['starts_on' => 'Ngày bắt đầu nằm trong khoảng một năm trước đến hai năm tới.']);
             }
             $v['next_run_at'] = $start;
-            $v['status'] = 'active';
+            $v['status'] = TaskTemplateStatus::ACTIVE->value;
         } else {
             $v['frequency'] = null;
             $v['next_run_at'] = null;
-            $v['status'] = 'paused';
+            $v['status'] = TaskTemplateStatus::PAUSED->value;
         }
 
         return $v;
@@ -80,10 +83,14 @@ class TaskTemplateService
             Workspace::lockForUpdate()->findOrFail($template->workspace_id);
             $t = TaskTemplate::lockForUpdate()->findOrFail($template->id);
             abort_unless($this->tasks->templates($actor, $t->workspace, $t->project, true), 403);
-            if ($t->status === 'archived' || $t->revision !== (int) $revision) {
+            if ($t->status === TaskTemplateStatus::ARCHIVED || $t->revision !== (int) $revision) {
                 throw ValidationException::withMessages(['revision' => 'Mẫu đã thay đổi hoặc lưu trữ. Tải lại trước khi lưu.']);
             }
-            $scheduleChanged = collect(['frequency', 'interval', 'starts_on', 'ends_on', 'local_time', 'timezone'])->contains(fn ($key) => (string) ($settings[$key] ?? '') !== (string) ($t->{$key} instanceof \DateTimeInterface ? $t->{$key}->format('Y-m-d') : $t->{$key}));
+            $scheduleChanged = collect(['frequency', 'interval', 'starts_on', 'ends_on', 'local_time', 'timezone'])->contains(fn ($key) => (string) ($settings[$key] ?? '') !== (string) match (true) {
+                $t->{$key} instanceof \DateTimeInterface => $t->{$key}->format('Y-m-d'),
+                $t->{$key} instanceof \BackedEnum => $t->{$key}->value,
+                default => $t->{$key},
+            });
             if (! $scheduleChanged) {
                 unset($settings['next_run_at'],$settings['status']);
             }
@@ -94,8 +101,9 @@ class TaskTemplateService
             }
             $t->fill($settings + ['revision' => $t->revision + 1, 'last_error' => null]);
             if (! $t->next_run_at) {
-                $t->status = 'paused';
-            }$t->save();
+                $t->status = TaskTemplateStatus::PAUSED;
+            }
+            $t->save();
         }, 3);
     }
 
@@ -105,11 +113,11 @@ class TaskTemplateService
             Workspace::lockForUpdate()->findOrFail($template->workspace_id);
             $t = TaskTemplate::lockForUpdate()->findOrFail($template->id);
             abort_unless($this->tasks->templates($actor, $t->workspace, $t->project, true), 403);
-            if ($t->revision !== $revision || $t->status === 'archived') {
+            if ($t->revision !== $revision || $t->status === TaskTemplateStatus::ARCHIVED) {
                 throw ValidationException::withMessages(['revision' => 'Mẫu đã thay đổi hoặc lưu trữ.']);
             }
             $t->status = match ($action) {
-                'archive' => 'archived','resume' => 'active',default => 'paused'
+                'archive' => TaskTemplateStatus::ARCHIVED, 'resume' => TaskTemplateStatus::ACTIVE, default => TaskTemplateStatus::PAUSED,
             };
             if ($action === 'resume') {
                 if (! $t->frequency) {
@@ -147,7 +155,9 @@ class TaskTemplateService
                 return $at;
             }
             $date = match ($t->frequency) {
-                'daily' => $date->addDays($t->interval),'weekly' => $date->addWeeks($t->interval),default => $date->startOfMonth()->addMonths($t->interval)->day(min($anchor, $date->startOfMonth()->addMonths($t->interval)->daysInMonth))
+                TaskTemplateFrequency::DAILY => $date->addDays($t->interval),
+                TaskTemplateFrequency::WEEKLY => $date->addWeeks($t->interval),
+                TaskTemplateFrequency::MONTHLY => $date->startOfMonth()->addMonths($t->interval)->day(min($anchor, $date->startOfMonth()->addMonths($t->interval)->daysInMonth)),
             };
         }
         throw ValidationException::withMessages(['frequency' => 'Không xác định được kỳ tiếp theo.']);
@@ -168,10 +178,10 @@ class TaskTemplateService
             if ($existing) {
                 return $scheduled ? null : $existing;
             }
-            if ($scheduled && ($t->status !== 'active' || ! $t->next_run_at || $t->next_run_at->isFuture() || $key !== 'schedule:'.$t->next_run_at->utc()->format('Y-m-d\TH:i:s\Z'))) {
+            if ($scheduled && ($t->status !== TaskTemplateStatus::ACTIVE || ! $t->next_run_at || $t->next_run_at->isFuture() || $key !== 'schedule:'.$t->next_run_at->utc()->format('Y-m-d\TH:i:s\Z'))) {
                 return null;
             }
-            if ($t->status === 'archived' || (! $scheduled && $t->revision !== $revision)) {
+            if ($t->status === TaskTemplateStatus::ARCHIVED || (! $scheduled && $t->revision !== $revision)) {
                 throw ValidationException::withMessages(['revision' => 'Mẫu đã thay đổi hoặc bị lưu trữ.']);
             }
             $definition = $t->definition;
@@ -201,12 +211,13 @@ class TaskTemplateService
             foreach ($definition['dependencies'] as $edge) {
                 $this->workflow->dependency($actor, Task::findOrFail($map[$edge['successor']]), ['predecessor_task_id' => $map[$edge['predecessor']], 'lag_minutes' => $edge['lag_minutes']]);
             }
-            $run = TaskTemplateRun::create(['task_template_id' => $t->id, 'occurrence_key' => $key, 'status' => 'succeeded', 'task_map' => $map]);
+            $run = TaskTemplateRun::create(['task_template_id' => $t->id, 'occurrence_key' => $key, 'status' => TaskTemplateRunStatus::SUCCEEDED, 'task_map' => $map]);
             if ($scheduled) {
                 $t->next_run_at = $this->advance($t, CarbonImmutable::now());
                 if (! $t->next_run_at) {
-                    $t->status = 'paused';
-                } $t->last_error = null;
+                    $t->status = TaskTemplateStatus::PAUSED;
+                }
+                $t->last_error = null;
                 $t->save();
             }
 
@@ -230,27 +241,28 @@ class TaskTemplateService
             return ['succeeded' => 0, 'failed' => 0, 'migration_required' => true];
         }
         $counts = ['succeeded' => 0, 'failed' => 0];
-        foreach (TaskTemplate::where('status', 'active')->where('next_run_at', '<=', now())->orderBy('next_run_at')->limit(20)->get() as $t) {
+        foreach (TaskTemplate::where('status', TaskTemplateStatus::ACTIVE->value)->where('next_run_at', '<=', now())->orderBy('next_run_at')->limit(20)->get() as $t) {
             $key = 'schedule:'.$t->next_run_at->utc()->format('Y-m-d\TH:i:s\Z');
             try {
                 $run = $this->instantiate($t->creator, $t, $key, scheduled: true);
-                if ($run && $run->status === 'succeeded') {
+                if ($run && $run->status === TaskTemplateRunStatus::SUCCEEDED) {
                     $counts['succeeded']++;
                 }
             } catch (\Throwable) {
                 $marked = DB::transaction(function () use ($t, $key) {
                     Workspace::lockForUpdate()->findOrFail($t->workspace_id);
                     $current = TaskTemplate::lockForUpdate()->findOrFail($t->id);
-                    if ($current->status !== 'active' || ! $current->next_run_at || $key !== 'schedule:'.$current->next_run_at->utc()->format('Y-m-d\TH:i:s\Z')) {
+                    if ($current->status !== TaskTemplateStatus::ACTIVE || ! $current->next_run_at || $key !== 'schedule:'.$current->next_run_at->utc()->format('Y-m-d\TH:i:s\Z')) {
                         return false;
                     }
                     $error = 'Không tạo được kỳ này. Kiểm tra quyền người tạo, người được giao/reviewer, trạng thái project và cấu trúc mẫu; không có task nào được ghi một phần.';
-                    TaskTemplateRun::firstOrCreate(['task_template_id' => $t->id, 'occurrence_key' => $key], ['status' => 'failed', 'error' => $error]);
+                    TaskTemplateRun::firstOrCreate(['task_template_id' => $t->id, 'occurrence_key' => $key], ['status' => TaskTemplateRunStatus::FAILED, 'error' => $error]);
                     $current->last_error = $error;
                     $current->next_run_at = $this->advance($current, CarbonImmutable::now());
                     if (! $current->next_run_at) {
-                        $current->status = 'paused';
-                    }$current->save();
+                        $current->status = TaskTemplateStatus::PAUSED;
+                    }
+                    $current->save();
 
                     return true;
                 }, 3);

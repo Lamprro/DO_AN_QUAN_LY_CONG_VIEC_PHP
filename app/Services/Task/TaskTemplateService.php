@@ -28,7 +28,16 @@ class TaskTemplateService
 
     public function settings(array $data): array
     {
-        $v = Validator::make($data, ['name' => 'required|string|max:160', 'frequency' => ['nullable', Rule::in(['daily', 'weekly', 'monthly'])], 'interval' => 'required|integer|between:1,12', 'timezone' => 'required|timezone', 'starts_on' => 'nullable|required_with:frequency|date_format:Y-m-d', 'ends_on' => 'nullable|date_format:Y-m-d|after_or_equal:starts_on', 'local_time' => 'nullable|required_with:frequency|date_format:H:i', 'deadline_offset_days' => 'nullable|integer|between:0,365'])->validate();
+        $v = Validator::make($data, [
+            'name' => 'required|string|max:160',
+            'frequency' => ['nullable', Rule::in(['daily', 'weekly', 'monthly'])],
+            'interval' => 'required|integer|between:1,12',
+            'timezone' => 'required|timezone',
+            'starts_on' => 'nullable|required_with:frequency|date_format:Y-m-d',
+            'ends_on' => 'nullable|date_format:Y-m-d|after_or_equal:starts_on',
+            'local_time' => 'nullable|required_with:frequency|date_format:H:i',
+            'deadline_offset_days' => 'nullable|integer|between:0,365',
+        ])->validate();
         if (! empty($v['frequency'])) {
             $start = LocalTime::parse($v['starts_on'].'T'.$v['local_time'], $v['timezone'], false);
             if ($start->lt(now()->subYear()) || $start->gt(now()->addYears(2))) {
@@ -57,21 +66,47 @@ class TaskTemplateService
             if ($tasks->count() !== count($ids)) {
                 throw ValidationException::withMessages(['task_ids' => 'Chọn task còn hoạt động trong cùng phạm vi.']);
             }
-            $definition = ['schema_version' => 1, 'tasks' => [], 'dependencies' => []];
+            $definition = [
+                'schema_version' => 1,
+                'tasks' => [],
+                'dependencies' => [],
+            ];
             foreach ($tasks as $t) {
                 if ($t->parent_task_id && ! in_array($t->parent_task_id, $ids, true)) {
                     throw ValidationException::withMessages(['task_ids' => 'Chọn cả GROUP cha để giữ cấu trúc cây.']);
                 }
-                $definition['tasks'][] = ['ref' => $t->id, 'parent_ref' => $t->parent_task_id, 'title' => $t->title, 'description' => $t->description, 'task_type' => $t->task_type->value, 'priority' => $t->priority->value, 'estimate_minutes' => $t->estimate_minutes, 'assignee_id' => $t->assignee_id, 'reviewer_id' => $t->reviewer_id, 'sort_order' => $t->sort_order, 'group_label' => $t->group_label];
+                $definition['tasks'][] = [
+                    'ref' => $t->id,
+                    'parent_ref' => $t->parent_task_id,
+                    'title' => $t->title,
+                    'description' => $t->description,
+                    'task_type' => $t->task_type->value,
+                    'priority' => $t->priority->value,
+                    'estimate_minutes' => $t->estimate_minutes,
+                    'assignee_id' => $t->assignee_id,
+                    'reviewer_id' => $t->reviewer_id,
+                    'sort_order' => $t->sort_order,
+                    'group_label' => $t->group_label,
+                ];
             }
             foreach (TaskDependency::whereIn('successor_task_id', $ids)->get() as $edge) {
                 if (! in_array($edge->predecessor_task_id, $ids, true)) {
                     throw ValidationException::withMessages(['task_ids' => 'Chọn cả task tiền nhiệm; không bỏ dependency ngoài tập chọn.']);
                 }
-                $definition['dependencies'][] = ['predecessor' => $edge->predecessor_task_id, 'successor' => $edge->successor_task_id, 'lag_minutes' => $edge->lag_minutes];
+                $definition['dependencies'][] = [
+                    'predecessor' => $edge->predecessor_task_id,
+                    'successor' => $edge->successor_task_id,
+                    'lag_minutes' => $edge->lag_minutes,
+                ];
             }
 
-            return TaskTemplate::create($settings + ['workspace_id' => $workspace->id, 'project_id' => $project?->id, 'created_by' => $actor->id, 'definition' => $definition, 'revision' => 1]);
+            return TaskTemplate::create($settings + [
+                'workspace_id' => $workspace->id,
+                'project_id' => $project?->id,
+                'created_by' => $actor->id,
+                'definition' => $definition,
+                'revision' => 1,
+            ]);
         }, 3);
     }
 
@@ -92,7 +127,7 @@ class TaskTemplateService
                 default => $t->{$key},
             });
             if (! $scheduleChanged) {
-                unset($settings['next_run_at'],$settings['status']);
+                unset($settings['next_run_at'], $settings['status']);
             }
             // A changed schedule starts strictly after now, never replays previous periods implicitly.
             if ($scheduleChanged && ! empty($settings['frequency'])) {
@@ -117,7 +152,9 @@ class TaskTemplateService
                 throw ValidationException::withMessages(['revision' => 'Mẫu đã thay đổi hoặc lưu trữ.']);
             }
             $t->status = match ($action) {
-                'archive' => TaskTemplateStatus::ARCHIVED, 'resume' => TaskTemplateStatus::ACTIVE, default => TaskTemplateStatus::PAUSED,
+                'archive' => TaskTemplateStatus::ARCHIVED,
+                'resume' => TaskTemplateStatus::ACTIVE,
+                default => TaskTemplateStatus::PAUSED,
             };
             if ($action === 'resume') {
                 if (! $t->frequency) {
@@ -181,7 +218,7 @@ class TaskTemplateService
             if ($scheduled && ($t->status !== TaskTemplateStatus::ACTIVE || ! $t->next_run_at || $t->next_run_at->isFuture() || $key !== 'schedule:'.$t->next_run_at->utc()->format('Y-m-d\TH:i:s\Z'))) {
                 return null;
             }
-            if ($t->status === TaskTemplateStatus::ARCHIVED || (! $scheduled && $t->revision !== $revision)) {
+            if ($t->status === TaskTemplateStatus::ARCHIVED || ! $scheduled && $t->revision !== $revision) {
                 throw ValidationException::withMessages(['revision' => 'Mẫu đã thay đổi hoặc bị lưu trữ.']);
             }
             $definition = $t->definition;
@@ -194,7 +231,7 @@ class TaskTemplateService
                         continue;
                     }
                     $values = $row;
-                    unset($values['ref'],$values['parent_ref']);
+                    unset($values['ref'], $values['parent_ref']);
                     $values['parent_task_id'] = $row['parent_ref'] ? $map[$row['parent_ref']] : null;
                     if ($t->deadline_offset_days !== null && $row['task_type'] !== 'GROUP') {
                         $values['deadline_at'] = now($t->workspace->timezone)->addDays($t->deadline_offset_days)->format('Y-m-d\TH:i');
@@ -211,7 +248,12 @@ class TaskTemplateService
             foreach ($definition['dependencies'] as $edge) {
                 $this->workflow->dependency($actor, Task::findOrFail($map[$edge['successor']]), ['predecessor_task_id' => $map[$edge['predecessor']], 'lag_minutes' => $edge['lag_minutes']]);
             }
-            $run = TaskTemplateRun::create(['task_template_id' => $t->id, 'occurrence_key' => $key, 'status' => TaskTemplateRunStatus::SUCCEEDED, 'task_map' => $map]);
+            $run = TaskTemplateRun::create([
+                'task_template_id' => $t->id,
+                'occurrence_key' => $key,
+                'status' => TaskTemplateRunStatus::SUCCEEDED,
+                'task_map' => $map,
+            ]);
             if ($scheduled) {
                 $t->next_run_at = $this->advance($t, CarbonImmutable::now());
                 if (! $t->next_run_at) {
@@ -228,17 +270,29 @@ class TaskTemplateService
     public function due(): array
     {
         if (! Schema::hasTable('task_templates')) {
-            return ['succeeded' => 0, 'failed' => 0, 'migration_required' => true];
+            return [
+                'succeeded' => 0,
+                'failed' => 0,
+                'migration_required' => true,
+            ];
         }
         $result = Cache::lock('task-template:due', 300)->get(fn () => $this->dueLocked());
 
-        return $result === false ? ['succeeded' => 0, 'failed' => 0, 'already_running' => true] : $result;
+        return $result === false ? [
+            'succeeded' => 0,
+            'failed' => 0,
+            'already_running' => true,
+        ] : $result;
     }
 
     private function dueLocked(): array
     {
         if (! Schema::hasTable('task_templates')) {
-            return ['succeeded' => 0, 'failed' => 0, 'migration_required' => true];
+            return [
+                'succeeded' => 0,
+                'failed' => 0,
+                'migration_required' => true,
+            ];
         }
         $counts = ['succeeded' => 0, 'failed' => 0];
         foreach (TaskTemplate::where('status', TaskTemplateStatus::ACTIVE->value)->where('next_run_at', '<=', now())->orderBy('next_run_at')->limit(20)->get() as $t) {
@@ -273,5 +327,38 @@ class TaskTemplateService
         }
 
         return $counts;
+    }
+
+    public function find(Workspace $workspace, string $id): TaskTemplate
+    {
+        return TaskTemplate::where('workspace_id', $workspace->id)->findOrFail($id);
+    }
+
+    public function index(User $actor, Workspace $workspace, ?Project $project): array
+    {
+        abort_unless($this->tasks->templates($actor, $workspace, $project), 403);
+
+        return [
+            'workspace' => $workspace,
+            'project' => $project,
+            'templates' => TaskTemplate::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->latest()->paginate(15)->withQueryString(),
+            'sources' => $workspace->tasks()->where('project_id', $project?->id)->whereNull('archived_at')->orderBy('sort_order')->get(),
+            'canManage' => $this->tasks->templates($actor, $workspace, $project, true),
+        ];
+    }
+
+    public function show(User $actor, Workspace $workspace, TaskTemplate $template): array
+    {
+        abort_unless($this->tasks->templates($actor, $workspace, $template->project), 403);
+        $runs = TaskTemplateRun::where('task_template_id', $template->id)->latest()->paginate(15);
+        $taskIds = $runs->getCollection()->flatMap(fn ($run) => array_values($run->task_map ?? []));
+
+        return [
+            'workspace' => $workspace,
+            'template' => $template,
+            'runs' => $runs,
+            'generatedTasks' => Task::where('workspace_id', $workspace->id)->where('project_id', $template->project_id)->whereIn('id', $taskIds)->get(['id', 'code', 'title'])->keyBy('id'),
+            'canManage' => $this->tasks->templates($actor, $workspace, $template->project, true),
+        ];
     }
 }

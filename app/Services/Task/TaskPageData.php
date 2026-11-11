@@ -22,17 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class TaskPageData
 {
-    public function __construct(
-        private TaskAccess $tasks,
-        private TaskListingQuery $listing,
-        private ProjectAccess $projects,
-        private PlanAccess $plans,
-        private CalendarAccess $calendars,
-        private TaskService $service,
-        private TaskTreeService $tree,
-        private TaskWorkflowService $workflow,
-        private TaskUtilityService $utility,
-    ) {}
+    public function __construct(private TaskAccess $tasks, private TaskListingQuery $listing, private ProjectAccess $projects, private PlanAccess $plans, private CalendarAccess $calendars, private TaskService $service, private TaskTreeService $tree, private TaskWorkflowService $workflow) {}
 
     public function assertScope(User $actor, Workspace $workspace, ?Project $project, string $permission = 'task.view'): void
     {
@@ -43,11 +33,15 @@ class TaskPageData
     public function context(User $actor, Workspace $workspace, ?Project $project): array
     {
         return [
-            'deadlinePresets' => $this->service->presets($workspace), 'workspace' => $workspace, 'project' => $project,
-            'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace],
+            'deadlinePresets' => $this->service->presets($workspace),
+            'workspace' => $workspace,
+            'project' => $project,
+            'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks',
+            'routeParams' => $project ? [$workspace, $project] : [$workspace],
             'canCreate' => $this->canCreate($actor, $workspace, $project),
             'parents' => $workspace->tasks()->where('project_id', $project?->id)->where('task_type', 'GROUP')->whereNull('archived_at')->orderBy('sort_order')->get(),
-            'people' => $this->projects->eligibleMembers($workspace, $project), 'reviewers' => $this->projects->eligibleMembers($workspace, $project, 'task.review'),
+            'people' => $this->projects->eligibleMembers($workspace, $project),
+            'reviewers' => $this->projects->eligibleMembers($workspace, $project, 'task.review'),
             'canAssign' => $this->tasks->scope($actor, $workspace, $project, 'task.assign'),
         ];
     }
@@ -67,10 +61,7 @@ class TaskPageData
 
     public function board(User $actor, Workspace $workspace, ?Project $project, array $filters): array
     {
-        $query = $this->filtered($actor, $workspace, $project, $filters)->withCount([
-            'children',
-            'children as completed_children_count' => fn ($children) => $children->where('status', 'DONE'),
-        ]);
+        $query = $this->filtered($actor, $workspace, $project, $filters)->withCount(['children', 'children as completed_children_count' => fn ($children) => $children->where('status', 'DONE')]);
         $board = [];
         foreach (TaskStatus::cases() as $status) {
             $board[$status->value] = (clone $query)->where('task_type', '!=', 'GROUP')->where('status', $status->value)->orderBy('id')->paginate(10, ['*'], 'page_'.strtolower($status->value))->withQueryString();
@@ -96,14 +87,23 @@ class TaskPageData
         $visibleIds = $tasks->modelKeys();
         $nodes = $tasks->groupBy(fn ($task) => $task->parent_task_id && in_array($task->parent_task_id, $visibleIds, true) ? $task->parent_task_id : 'root');
 
-        return ['workspace' => $workspace, 'project' => $project, 'tasks' => $tasks, 'nodes' => $nodes, 'isPersonalOverview' => $isPersonalOverview, 'progress' => $this->tree->progress($tasks),
-            'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace]];
+        return [
+            'workspace' => $workspace,
+            'project' => $project,
+            'tasks' => $tasks,
+            'nodes' => $nodes,
+            'isPersonalOverview' => $isPersonalOverview,
+            'progress' => $this->tree->progress($tasks),
+            'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks',
+            'routeParams' => $project ? [$workspace, $project] : [$workspace],
+        ];
     }
 
     public function panel(User $actor, Workspace $workspace, ?Project $project, Task $task): array
     {
         return $this->context($actor, $workspace, $project) + [
-            'task' => $task, 'panelMode' => 'view',
+            'task' => $task,
+            'panelMode' => 'view',
             'workflowUi' => $this->workflow->availability($actor, $task),
             'recentComments' => $task->activities()->where('type', 'COMMENT')->with('actor')->latest()->limit(5)->get(),
         ];
@@ -117,16 +117,16 @@ class TaskPageData
         $historyTasks = $all->pluck('title', 'id')->all();
         $activityHuman = function ($field, $value) use ($historyPeople, $historyTasks) {
             if (in_array($field, ['assignee_id', 'reviewer_id', 'creator_id'], true)) {
-                return $value ? ($historyPeople[$value] ?? 'Không còn trong workspace') : 'Chưa phân công';
+                return $value ? $historyPeople[$value] ?? 'Không còn trong workspace' : 'Chưa phân công';
             }
             if (in_array($field, ['parent_task_id', 'predecessor_id', 'predecessor_task_id'], true)) {
-                return $value ? ($historyTasks[$value] ?? 'Không còn trong phạm vi') : 'Không có';
+                return $value ? $historyTasks[$value] ?? 'Không còn trong phạm vi' : 'Không có';
             }
             if ($value === null) {
                 return 'Chưa có';
             }
 
-            return is_scalar($value) ? (in_array($field, ['status', 'priority', 'task_type'], true) ? UiLabels::text($value) : (string) $value) : json_encode($value, JSON_UNESCAPED_UNICODE);
+            return is_scalar($value) ? in_array($field, ['status', 'priority', 'task_type'], true) ? UiLabels::text($value) : (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
         };
 
         return $this->context($actor, $workspace, $project) + [
@@ -143,15 +143,18 @@ class TaskPageData
             'workflowUi' => $this->workflow->availability($actor, $task),
             'statusOptions' => $this->workflow->options($actor, $task),
             'canViewPlans' => $this->plans->allows($actor, $workspace, $project, 'plan.view'),
-            'canScheduleTask' => $task->assignee_id === $actor->id && $task->task_type->value === 'WORK' && in_array($task->status->value, ['TODO', 'IN_PROGRESS', 'REVIEW'], true)
-                && $this->tasks->mutable($actor, $task, 'task.update') && $this->calendars->scope($actor, $workspace, $project, 'calendar.create'),
-        ] + $this->utility->viewData($task);
+            'canScheduleTask' => $task->assignee_id === $actor->id && $task->task_type->value === 'WORK' && in_array($task->status->value, ['TODO', 'IN_PROGRESS', 'REVIEW'], true) && $this->tasks->mutable($actor, $task, 'task.update') && $this->calendars->scope($actor, $workspace, $project, 'calendar.create'),
+        ] + $this->workflow->collaborationData($task);
     }
 
     public function statusPanel(User $actor, Workspace $workspace, ?Project $project, Task $task): array
     {
-        return compact('workspace', 'project', 'task') + ['panelMode' => 'status', 'workflowUi' => $this->workflow->availability($actor, $task),
-            'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace]];
+        return compact('workspace', 'project', 'task') + [
+            'panelMode' => 'status',
+            'workflowUi' => $this->workflow->availability($actor, $task),
+            'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks',
+            'routeParams' => $project ? [$workspace, $project] : [$workspace],
+        ];
     }
 
     /** List/board query: archive state, search, field filters, preset and sort. */
@@ -194,7 +197,7 @@ class TaskPageData
             })->when(! $this->tasks->scope($actor, $workspace, $project, 'task.review'), fn ($q) => $q->whereRaw('1=0')),
             'blocked' => $query->where('task_type', '!=', 'GROUP')->whereNotIn('status', ['DONE', 'CANCELLED'])->whereHas('blockers', fn ($q) => $q->where('status', 'open')),
             'overdue' => $query->where('task_type', 'WORK')->whereNotIn('status', ['DONE', 'CANCELLED'])->where('deadline_at', '<', now()),
-            default => null
+            default => null,
         };
     }
 }

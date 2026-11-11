@@ -37,7 +37,11 @@ class TimeTrackingService
             if ($task->blockers()->where('status', 'open')->exists()) {
                 throw ValidationException::withMessages(['timer' => 'Cần xử lý blocker trước.']);
             }
-            $entry = TimeEntry::create(['task_id' => $task->id, 'user_id' => $actor->id, 'started_at' => now()]);
+            $entry = TimeEntry::create([
+                'task_id' => $task->id,
+                'user_id' => $actor->id,
+                'started_at' => now(),
+            ]);
             $this->history->record($actor, $task, 'timer.started', ['time_entry_id' => $entry->id]);
 
             return $entry;
@@ -73,7 +77,11 @@ class TimeTrackingService
 
     public function value(TimeEntry $entry): array
     {
-        return ['started_at' => $entry->started_at->utc()->format('Y-m-d H:i:s'), 'ended_at' => $entry->ended_at?->utc()->format('Y-m-d H:i:s'), 'note' => $entry->note];
+        return [
+            'started_at' => $entry->started_at->utc()->format('Y-m-d H:i:s'),
+            'ended_at' => $entry->ended_at?->utc()->format('Y-m-d H:i:s'),
+            'note' => $entry->note,
+        ];
     }
 
     public function version(TimeEntry $entry): string
@@ -108,14 +116,31 @@ class TimeTrackingService
                 throw ValidationException::withMessages(['started_at' => 'Khoảng này trùng phiên giờ khác của bạn.']);
             }
             $before = $this->value($entry);
-            $entry->fill(['started_at' => $start, 'ended_at' => $end, 'note' => $data['note'] ?? null]);
+            $entry->fill([
+                'started_at' => $start,
+                'ended_at' => $end,
+                'note' => $data['note'] ?? null,
+            ]);
             if (! $entry->isDirty()) {
                 return;
             }
             $entry->save();
             $after = $this->value($entry);
-            $audit = TimeEntryAdjustment::create(['time_entry_id' => $entry->id, 'actor_id' => $actor->id, 'before' => $before, 'after' => $after, 'reason' => $data['reason'], 'created_at' => now()]);
-            $this->history->record($actor, $entry->task, 'timer.corrected', ['time_entry_id' => $entry->id, 'adjustment_id' => $audit->id, 'before' => $before, 'after' => $after, 'reason' => $data['reason']]);
+            $audit = TimeEntryAdjustment::create([
+                'time_entry_id' => $entry->id,
+                'actor_id' => $actor->id,
+                'before' => $before,
+                'after' => $after,
+                'reason' => $data['reason'],
+                'created_at' => now(),
+            ]);
+            $this->history->record($actor, $entry->task, 'timer.corrected', [
+                'time_entry_id' => $entry->id,
+                'adjustment_id' => $audit->id,
+                'before' => $before,
+                'after' => $after,
+                'reason' => $data['reason'],
+            ]);
         }, 3);
     }
 
@@ -123,7 +148,7 @@ class TimeTrackingService
     {
         $settings = $this->settings->stored($user);
 
-        return $settings['work_hours'] ?? (array_replace(config('work_schedule'), ['timezone' => $timezone ?? $user->timezone]));
+        return $settings['work_hours'] ?? array_replace(config('work_schedule'), ['timezone' => $timezone ?? $user->timezone]);
     }
 
     public function workHoursVersion(User $user): string
@@ -133,7 +158,7 @@ class TimeTrackingService
 
     public function saveWorkHours(User $user, array $data): void
     {
-        $data['windows'] = array_values(array_filter($data['windows'] ?? [], fn ($w) => filled($w['start'] ?? null) || filled($w['end'] ?? null)));
+        $data['windows'] = array_values(array_filter($data['windows'] ?? [], fn ($window) => filled($window['start'] ?? null) || filled($window['end'] ?? null)));
         $data = Validator::make($data, [
             'version' => 'required|string|size:64',
             'timezone' => 'required|timezone',
@@ -146,11 +171,11 @@ class TimeTrackingService
         ])->validate();
         usort($data['windows'], fn ($a, $b) => strcmp($a['start'], $b['start']));
         $end = '00:00';
-        foreach ($data['windows'] as $w) {
-            if ($w['start'] < $end || $w['end'] <= $w['start']) {
+        foreach ($data['windows'] as $window) {
+            if ($window['start'] < $end || $window['end'] <= $window['start']) {
                 throw ValidationException::withMessages(['windows' => 'Các ca làm phải kết thúc sau bắt đầu, cùng ngày và không chồng lấn.']);
             }
-            $end = $w['end'];
+            $end = $window['end'];
         }
         DB::transaction(function () use ($user, $data) {
             User::lockForUpdate()->findOrFail($user->id);
@@ -158,7 +183,12 @@ class TimeTrackingService
                 throw ValidationException::withMessages(['version' => 'Giờ làm đã thay đổi. Tải lại trước khi lưu.']);
             }
             $settings = $this->settings->stored($user) ?: config('work_management.settings_defaults');
-            $settings['work_hours'] = ['timezone' => $data['timezone'], 'weekdays' => array_map('intval', $data['weekdays']), 'windows' => $data['windows'], 'slot_minutes' => (int) $data['slot_minutes']];
+            $settings['work_hours'] = [
+                'timezone' => $data['timezone'],
+                'weekdays' => array_map('intval', $data['weekdays']),
+                'windows' => $data['windows'],
+                'slot_minutes' => (int) $data['slot_minutes'],
+            ];
             $this->settings->store($user, $settings);
         }, 3);
     }

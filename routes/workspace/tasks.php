@@ -2,10 +2,9 @@
 
 // Tasks exist in a project (/projects/{project}/tasks) or, in a personal workspace, without one (/tasks).
 
-use App\Http\Controllers\TaskCollaborationController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskTemplateController;
-use App\Http\Controllers\TaskUtilityController;
+use App\Http\Controllers\TaskWorkflowController;
 use App\Http\Controllers\TaskWorkflowController as Workflow;
 use App\Http\Controllers\TimeTrackingController;
 use App\Http\Middleware\RequireFullFeatureSchema;
@@ -32,10 +31,10 @@ foreach (['projects/{project}/tasks' => 'projects.tasks.', 'tasks' => 'tasks.'] 
 // Saved filters and bulk actions, for both scopes.
 foreach (['' => '', 'projects/{project}' => 'projects.'] as $path => $prefix) {
     Route::prefix($path)->name($prefix)->withoutScopedBindings()->group(function () {
-        Route::post('task-filters', [TaskUtilityController::class, 'store'])->name('task-filters.store');
-        Route::get('task-filters/{saved}/open', [TaskUtilityController::class, 'open'])->withoutScopedBindings()->whereUuid('saved')->name('task-filters.open');
-        Route::delete('task-filters/{saved}', [TaskUtilityController::class, 'destroy'])->withoutScopedBindings()->whereUuid('saved')->name('task-filters.destroy');
-        Route::post('tasks/bulk', [TaskUtilityController::class, 'bulk'])->name('tasks.bulk');
+        Route::post('task-filters', [TaskController::class, 'storeFilter'])->name('task-filters.store');
+        Route::get('task-filters/{saved}/open', [TaskController::class, 'openFilter'])->withoutScopedBindings()->whereUuid('saved')->name('task-filters.open');
+        Route::delete('task-filters/{saved}', [TaskController::class, 'destroyFilter'])->withoutScopedBindings()->whereUuid('saved')->name('task-filters.destroy');
+        Route::post('tasks/bulk', [TaskController::class, 'bulk'])->name('tasks.bulk');
     });
 }
 
@@ -58,6 +57,6 @@ Route::middleware(RequireFullFeatureSchema::class)->group(function () {
     Route::put('/task-templates/{template}', [TaskTemplateController::class, 'update'])->whereUuid('template')->name('templates.update');
     Route::post('/task-templates/{template}/instantiate', [TaskTemplateController::class, 'instantiate'])->whereUuid('template')->name('templates.instantiate');
     Route::post('/task-templates/{template}/{action}', [TaskTemplateController::class, 'state'])->whereUuid('template')->whereIn('action', ['pause', 'resume', 'archive'])->name('templates.state');
-    Route::post('/collaboration/tasks/{task}/watchers', [TaskCollaborationController::class, 'store'])->whereUuid('task')->name('tasks.watchers.store');
-    Route::delete('/collaboration/tasks/{task}/watchers/{user}', [TaskCollaborationController::class, 'destroy'])->whereUuid('task')->whereUuid('user')->name('tasks.watchers.destroy');
+    Route::post('/collaboration/tasks/{task}/watchers', [TaskWorkflowController::class, 'watch'])->whereUuid('task')->name('tasks.watchers.store');
+    Route::delete('/collaboration/tasks/{task}/watchers/{user}', [TaskWorkflowController::class, 'unwatch'])->whereUuid('task')->whereUuid('user')->name('tasks.watchers.destroy');
 });

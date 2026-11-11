@@ -1,0 +1,277 @@
+{
+  "requests": [
+    {
+      "label": "Login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Project task list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks",
+      "status": 200
+    },
+    {
+      "label": "Create Predecessor",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks",
+      "status": 201
+    },
+    {
+      "label": "Create Successor",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks",
+      "status": 201
+    },
+    {
+      "label": "Add dependency",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/dependencies",
+      "status": 302
+    },
+    {
+      "label": "Dependency blocks start",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/status",
+      "status": 422
+    },
+    {
+      "label": "Remove dependency",
+      "method": "DELETE",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/dependencies/01a1cb96-e463-715c-9078-9fad7b02abed",
+      "status": 302
+    },
+    {
+      "label": "Add blocker",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/blockers",
+      "status": 302
+    },
+    {
+      "label": "Blocker prevents start",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/status",
+      "status": 422
+    },
+    {
+      "label": "Resolve blocker",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/blockers/01a1cb96-e784-7393-b35e-134454046609",
+      "status": 302
+    },
+    {
+      "label": "Start task",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/status",
+      "status": 200
+    },
+    {
+      "label": "Start timer",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/timer/01a1cb96-e35d-7074-84cb-c5816a69910b",
+      "status": 302
+    },
+    {
+      "label": "Duplicate timer rejected",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/timer/01a1cb96-e35d-7074-84cb-c5816a69910b",
+      "status": 422
+    },
+    {
+      "label": "Timers page",
+      "method": "GET",
+      "path": "/timers",
+      "status": 200
+    },
+    {
+      "label": "Stop timer",
+      "method": "POST",
+      "path": "/timers/01a1cb96-eb86-73af-9393-3a636794d1cf/stop",
+      "status": 302
+    },
+    {
+      "label": "Adjustment form",
+      "method": "GET",
+      "path": "/timers/01a1cb96-eb86-73af-9393-3a636794d1cf/adjust",
+      "status": 200
+    },
+    {
+      "label": "Adjust finished timer",
+      "method": "PATCH",
+      "path": "/timers/01a1cb96-eb86-73af-9393-3a636794d1cf/adjust",
+      "status": 302
+    },
+    {
+      "label": "Stale adjustment rejected",
+      "method": "PATCH",
+      "path": "/timers/01a1cb96-eb86-73af-9393-3a636794d1cf/adjust",
+      "status": 422
+    },
+    {
+      "label": "Add watcher",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/collaboration/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/watchers",
+      "status": 302
+    },
+    {
+      "label": "Repeat watcher",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/collaboration/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/watchers",
+      "status": 302
+    },
+    {
+      "label": "Comment with mention",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/comments",
+      "status": 302
+    },
+    {
+      "label": "Edit comment",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/comments/01a1cb96-f918-739d-9922-2e88584df7b5",
+      "status": 302
+    },
+    {
+      "label": "Delete comment",
+      "method": "DELETE",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/comments/01a1cb96-f918-739d-9922-2e88584df7b5",
+      "status": 302
+    },
+    {
+      "label": "Remove watcher",
+      "method": "DELETE",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/collaboration/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b/watchers/01a1cb8e-8fcf-72db-be6e-afc737f07781",
+      "status": 302
+    },
+    {
+      "label": "Task detail",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b",
+      "status": 200
+    },
+    {
+      "label": "Task panel",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks/01a1cb96-e35d-7074-84cb-c5816a69910b?panel=1",
+      "status": 200
+    },
+    {
+      "label": "Templates list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/task-templates?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Create template",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/task-templates",
+      "status": 302
+    },
+    {
+      "label": "Template detail",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/task-templates/01a1cb97-0095-710f-849a-b5fc2a6cdd2e",
+      "status": 200
+    },
+    {
+      "label": "Instantiate template",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/task-templates/01a1cb97-0095-710f-849a-b5fc2a6cdd2e/instantiate",
+      "status": 302
+    },
+    {
+      "label": "Repeat template request",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/task-templates/01a1cb97-0095-710f-849a-b5fc2a6cdd2e/instantiate",
+      "status": 302
+    },
+    {
+      "label": "Template history",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/task-templates/01a1cb97-0095-710f-849a-b5fc2a6cdd2e",
+      "status": 200
+    },
+    {
+      "label": "Work hours form",
+      "method": "GET",
+      "path": "/work-hours",
+      "status": 200
+    },
+    {
+      "label": "Save work hours",
+      "method": "PUT",
+      "path": "/work-hours",
+      "status": 302
+    },
+    {
+      "label": "Stale work hours rejected",
+      "method": "PUT",
+      "path": "/work-hours",
+      "status": 422
+    }
+  ],
+  "results": [
+    {
+      "check": "Dependency stored",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Blocker separate from dependency",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Timer started",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Adjustment stores audit",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Watcher idempotent",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Mention creates in-app notification",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Watcher removed",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Template persisted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Template run idempotent",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Work hours stored in users.settings",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Foreign keys valid",
+      "passed": true,
+      "evidence": null
+    }
+  ]
+}

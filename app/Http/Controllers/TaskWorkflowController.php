@@ -12,7 +12,6 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Workspace;
 use App\Services\Task\TaskPageData;
-use App\Services\Task\TaskUtilityService;
 use App\Services\Task\TaskWorkflowService;
 use App\Support\UiLabels;
 use Illuminate\Http\Request;
@@ -22,7 +21,7 @@ class TaskWorkflowController extends Controller
 {
     use ScopesTaskRoutes;
 
-    public function __construct(private TaskWorkflowService $workflow, private TaskUtilityService $files, private TaskPageData $pages) {}
+    public function __construct(private TaskWorkflowService $workflow, private TaskPageData $pages) {}
 
     public function tree(Request $request, Workspace $workspace, ?Project $project = null)
     {
@@ -102,7 +101,7 @@ class TaskWorkflowController extends Controller
     public function upload(TaskAttachmentRequest $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
     {
         $this->assertTaskInScope($workspace, $project, $task);
-        $this->files->storeAttachment($request->user(), $task, $request->file('file'));
+        $this->workflow->storeAttachment($request->user(), $task, $request->file('file'));
 
         return back()->with('success', 'Đã tải tệp lên.');
     }
@@ -111,14 +110,31 @@ class TaskWorkflowController extends Controller
     {
         $this->assertTaskInScope($workspace, $project, $task);
 
-        return $this->files->downloadAttachment($request->user(), $task, $request->route('activity'));
+        return $this->workflow->downloadAttachment($request->user(), $task, $request->route('activity'));
     }
 
     public function removeFile(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
     {
         $this->assertTaskInScope($workspace, $project, $task);
-        $this->files->removeAttachment($request->user(), $task, $request->route('activity'));
+        $this->workflow->removeAttachment($request->user(), $task, $request->route('activity'));
 
         return back()->with('success', 'Đã gỡ tệp đính kèm.');
+    }
+
+    public function watch(Request $request, Workspace $workspace, string $task, TaskWorkflowService $service)
+    {
+        $data = $request->validate(['user_id' => 'required|uuid']);
+        $taskModel = $workspace->tasks()->findOrFail($task);
+        $service->watch($request->user(), $taskModel, $data['user_id']);
+
+        return back()->with('success', 'Đã theo dõi công việc.');
+    }
+
+    public function unwatch(Request $request, Workspace $workspace, string $task, string $user, TaskWorkflowService $service)
+    {
+        $taskModel = $workspace->tasks()->findOrFail($task);
+        $service->watch($request->user(), $taskModel, $user, true);
+
+        return back()->with('success', 'Đã dừng theo dõi.');
     }
 }

@@ -1,0 +1,356 @@
+{
+  "http_requests": 27,
+  "checks": 31,
+  "passed": 31,
+  "requests": [
+    {
+      "label": "Login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Before revocation project",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation project",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation project",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation project",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/tree",
+      "status": 200
+    },
+    {
+      "label": "Old source panel denied project",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-91a0-7173-8bee-b97171445128?panel=1",
+      "status": 403
+    },
+    {
+      "label": "Old source write denied project",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-91a0-7173-8bee-b97171445128",
+      "status": 403
+    },
+    {
+      "label": "Before revocation workspace",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation workspace",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation workspace",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation workspace",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/tree",
+      "status": 200
+    },
+    {
+      "label": "Old source panel denied workspace",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-91a0-7173-8bee-b97171445128?panel=1",
+      "status": 403
+    },
+    {
+      "label": "Old source write denied workspace",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-91a0-7173-8bee-b97171445128",
+      "status": 403
+    },
+    {
+      "label": "Before revocation role",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation role",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation role",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board",
+      "status": 200
+    },
+    {
+      "label": "Refreshed after revocation role",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/tree",
+      "status": 200
+    },
+    {
+      "label": "Old source panel denied role",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-91a0-7173-8bee-b97171445128?panel=1",
+      "status": 403
+    },
+    {
+      "label": "Old source write denied role",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-91a0-7173-8bee-b97171445128",
+      "status": 403
+    },
+    {
+      "label": "Personal after reassignment",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Project after reassignment",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Disabled account denied",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 403
+    },
+    {
+      "label": "Registration form",
+      "method": "GET",
+      "path": "/register",
+      "status": 200
+    },
+    {
+      "label": "Real registration",
+      "method": "POST",
+      "path": "/register",
+      "status": 302
+    },
+    {
+      "label": "Duplicate register form",
+      "method": "GET",
+      "path": "/register",
+      "status": 200
+    },
+    {
+      "label": "Duplicate registration rejected",
+      "method": "POST",
+      "path": "/register",
+      "status": 422
+    }
+  ],
+  "results": [
+    {
+      "check": "Task present before revocation project",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Fixture control project",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "project",
+        "restored": false
+      }
+    },
+    {
+      "check": "Revoked task absent project /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Revoked task absent project /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Revoked task absent project /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/tree",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Rejected stale UI write did not mutate task project",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Fixture control project restore",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "project",
+        "restored": true
+      }
+    },
+    {
+      "check": "Task present before revocation workspace",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Fixture control workspace",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "workspace",
+        "restored": false
+      }
+    },
+    {
+      "check": "Revoked task absent workspace /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Revoked task absent workspace /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Revoked task absent workspace /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/tree",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Rejected stale UI write did not mutate task workspace",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Fixture control workspace restore",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "workspace",
+        "restored": true
+      }
+    },
+    {
+      "check": "Task present before revocation role",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Fixture control role",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "role",
+        "restored": false
+      }
+    },
+    {
+      "check": "Revoked task absent role /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Revoked task absent role /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Revoked task absent role /workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/tree",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Rejected stale UI write did not mutate task role",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Fixture control role restore",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "role",
+        "restored": true
+      }
+    },
+    {
+      "check": "Fixture control assignment",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "assignment",
+        "restored": false
+      }
+    },
+    {
+      "check": "Reassigned task removed from personal aggregate",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Reassigned task remains in project common listing",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Fixture control assignment restore",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "assignment",
+        "restored": true
+      }
+    },
+    {
+      "check": "Fixture control user",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "user",
+        "restored": false
+      }
+    },
+    {
+      "check": "Disabled account denied access",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Fixture control user restore",
+      "passed": true,
+      "evidence": {
+        "fixture_control": "user",
+        "restored": true
+      }
+    },
+    {
+      "check": "Personal workspace cannot be deleted transferred or left",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "HTTP registration provisions exactly one personal workspace",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Duplicate registration creates no additional personal workspace",
+      "passed": true,
+      "evidence": null
+    }
+  ]
+}

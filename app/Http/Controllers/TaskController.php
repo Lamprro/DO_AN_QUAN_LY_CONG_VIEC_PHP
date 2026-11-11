@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\ScopesTaskRoutes;
+use App\Http\Requests\Task\BulkTaskRequest;
+use App\Http\Requests\Task\SavedFilterRequest;
 use App\Http\Requests\Task\TaskRequest;
 use App\Models\Project;
+use App\Models\SavedTaskFilter;
 use App\Models\Task;
 use App\Models\Workspace;
 use App\Services\Task\TaskEditConflict;
@@ -27,9 +30,7 @@ class TaskController extends Controller
     {
         $filters = TaskFilters::clean($request->query());
 
-        return ($filters['view'] ?? 'list') === 'board'
-            ? view('tasks.board', $this->pages->board($request->user(), $workspace, $project, $filters))
-            : view('tasks.index', $this->pages->list($request->user(), $workspace, $project, $filters));
+        return ($filters['view'] ?? 'list') === 'board' ? view('tasks.board', $this->pages->board($request->user(), $workspace, $project, $filters)) : view('tasks.index', $this->pages->list($request->user(), $workspace, $project, $filters));
     }
 
     public function create(Request $request, Workspace $workspace, ?Project $project = null)
@@ -43,7 +44,6 @@ class TaskController extends Controller
     {
         $task = $this->service->save($request->user(), $workspace, $project, $request->validated());
         $url = route($this->taskRoute($project, 'show'), $this->taskRouteParams($workspace, $project, $task));
-
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
@@ -96,11 +96,20 @@ class TaskController extends Controller
         // The conflict pages below render the task before any service call, so authorize here.
         $this->authorize('update', $task);
         try {
-            $input = $request->validate(['conflict_token' => 'required|uuid', 'expected_revision' => 'required|integer|min:1', 'choices' => 'sometimes|array', 'choices.*' => 'required|in:mine,server', 'deadline_reason' => 'nullable|string|max:2000']);
+            $input = $request->validate([
+                'conflict_token' => 'required|uuid',
+                'expected_revision' => 'required|integer|min:1',
+                'choices' => 'sometimes|array',
+                'choices.*' => 'required|in:mine,server',
+                'deadline_reason' => 'nullable|string|max:2000',
+            ]);
             $resolved = $this->conflicts->resolve($request, $task, $input);
         } catch (ValidationException $e) {
             if ($request->wantsJson()) {
-                return response()->json(['message' => 'Bản đối chiếu hết hiệu lực. Mở lại dữ liệu mới và thử lại.', 'errors' => $e->errors()], 422);
+                return response()->json([
+                    'message' => 'Bản đối chiếu hết hiệu lực. Mở lại dữ liệu mới và thử lại.',
+                    'errors' => $e->errors(),
+                ], 422);
             }
 
             return response()->view('tasks.conflict-unavailable', $this->pages->context($request->user(), $workspace, $project) + ['task' => $task, 'messages' => $e->errors()], 422);
@@ -113,8 +122,7 @@ class TaskController extends Controller
             }
             $request->session()->flash('task_edit_error', ['task_id' => $task->id, 'surface' => $resolved['surface']]);
 
-            return redirect()->route($this->taskRoute($project, $resolved['surface'] === 'quick' ? 'show' : 'edit'), $this->taskRouteParams($workspace, $project, $task))
-                ->withErrors($e->errors())->withInput($resolved['data'] + ['edit_surface' => $resolved['surface']]);
+            return redirect()->route($this->taskRoute($project, $resolved['surface'] === 'quick' ? 'show' : 'edit'), $this->taskRouteParams($workspace, $project, $task))->withErrors($e->errors())->withInput($resolved['data'] + ['edit_surface' => $resolved['surface']]);
         }
 
         return $this->saveEdit($request, $workspace, $project, $task, $data, $resolved['surface'], $input['conflict_token']);
@@ -155,7 +163,11 @@ class TaskController extends Controller
             $this->conflicts->forget($request, $token);
         }
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['success' => true, 'message' => 'Đã lưu cập nhật công việc thành công.', 'task' => $this->taskJson($task->fresh(['assignee', 'reviewer']), $workspace)]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã lưu cập nhật công việc thành công.',
+                'task' => $this->taskJson($task->fresh(['assignee', 'reviewer']), $workspace),
+            ]);
         }
 
         return redirect()->route($this->taskRoute($project, 'show'), $this->taskRouteParams($workspace, $project, $task))->with('success', 'Đã cập nhật task.');
@@ -182,12 +194,15 @@ class TaskController extends Controller
             return response()->view('tasks.conflict', $page, 409);
         }
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['success' => false, 'message' => 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.', 'errors' => $e->errors()], 422);
+            return response()->json([
+                'success' => false,
+                'message' => 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.',
+                'errors' => $e->errors(),
+            ], 422);
         }
         $request->session()->flash('task_edit_error', ['task_id' => $task->id, 'surface' => $surface]);
 
-        return redirect()->route($this->taskRoute($project, $surface === 'quick' ? 'show' : 'edit'), $this->taskRouteParams($workspace, $project, $task))
-            ->withErrors($e->errors())->withInput($data + ['edit_surface' => $surface]);
+        return redirect()->route($this->taskRoute($project, $surface === 'quick' ? 'show' : 'edit'), $this->taskRouteParams($workspace, $project, $task))->withErrors($e->errors())->withInput($data + ['edit_surface' => $surface]);
     }
 
     private function taskJson(Task $task, Workspace $workspace): array
@@ -211,5 +226,39 @@ class TaskController extends Controller
             'estimate_minutes' => $task->estimate_minutes,
             'revision' => $task->revision,
         ];
+    }
+
+    public function storeFilter(SavedFilterRequest $request, Workspace $workspace, ?Project $project = null)
+    {
+        $validated = $request->validated();
+        $this->service->saveFilter($request->user(), $workspace, $project, $validated['name'], $validated['query']);
+
+        return redirect($this->indexUrl($workspace, $project, TaskFilters::clean($validated['query'])))->with('success', 'Đã lưu bộ lọc riêng của bạn.');
+    }
+
+    public function openFilter(Request $request, Workspace $workspace, ?Project $project = null, ?SavedTaskFilter $saved = null)
+    {
+        $saved = $this->service->findFilter($request->user(), $workspace, $project, $saved);
+
+        return redirect($this->indexUrl($workspace, $project, TaskFilters::clean($saved->query)));
+    }
+
+    public function destroyFilter(Request $request, Workspace $workspace, ?Project $project = null, ?SavedTaskFilter $saved = null)
+    {
+        $this->service->deleteFilter($request->user(), $workspace, $project, $saved);
+
+        return redirect($this->indexUrl($workspace, $project))->with('success', 'Đã xóa bộ lọc cá nhân.');
+    }
+
+    public function bulk(BulkTaskRequest $request, Workspace $workspace, ?Project $project = null)
+    {
+        $count = $this->service->bulk($request->user(), $workspace, $project, $request->validated());
+
+        return redirect($this->indexUrl($workspace, $project))->with('success', 'Đã xử lý '.$count.' công việc. Đã lưu đồng thời cả nhóm.');
+    }
+
+    private function indexUrl(Workspace $workspace, ?Project $project, array $query = []): string
+    {
+        return route($project ? 'workspaces.projects.tasks.index' : 'workspaces.tasks.index', array_merge($project ? [$workspace, $project] : [$workspace], $query));
     }
 }

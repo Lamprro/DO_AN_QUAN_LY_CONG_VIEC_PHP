@@ -5,10 +5,12 @@ namespace App\Services\Task;
 use App\Authorization\ProjectAccess;
 use App\Authorization\TaskAccess;
 use App\Models\Project;
+use App\Models\SavedTaskFilter;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Support\EditRevision;
+use App\Support\TaskFilters;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +37,20 @@ class TaskService
                 } else {
                     abort_unless($this->tasks->projectWritable($project) && $this->tasks->scope($actor, $workspace, $project, 'task.create'), 403);
                 }
-                $values = array_intersect_key($data, array_flip(['code', 'title', 'description', 'priority', 'estimate_minutes', 'deadline_at', 'assignee_id', 'reviewer_id', 'task_type', 'parent_task_id', 'group_label', 'sort_order']));
+                $values = array_intersect_key($data, array_flip([
+                    'code',
+                    'title',
+                    'description',
+                    'priority',
+                    'estimate_minutes',
+                    'deadline_at',
+                    'assignee_id',
+                    'reviewer_id',
+                    'task_type',
+                    'parent_task_id',
+                    'group_label',
+                    'sort_order',
+                ]));
                 if (empty($values['code'])) {
                     $values['code'] = $task?->code ?? 'T-'.Str::ulid();
                 }
@@ -68,13 +83,26 @@ class TaskService
                     $changed = $task->isDirty();
                     $task->save();
                     if ($deadlineChanged) {
-                        $this->history->record($actor, $task, 'task.deadline_changed', ['before' => ['deadline_at' => $before['deadline_at'] ?? null], 'after' => ['deadline_at' => $task->getRawOriginal('deadline_at')], 'reason' => $data['deadline_reason']]);
+                        $this->history->record($actor, $task, 'task.deadline_changed', [
+                            'before' => ['deadline_at' => $before['deadline_at'] ?? null],
+                            'after' => ['deadline_at' => $task->getRawOriginal('deadline_at')],
+                            'reason' => $data['deadline_reason'],
+                        ]);
                     }
                     if ($changed) {
-                        $this->history->record($actor, $task, 'task.updated', ['before' => array_intersect_key($before, $values), 'after' => array_intersect_key($task->getAttributes(), $values)]);
+                        $this->history->record($actor, $task, 'task.updated', [
+                            'before' => array_intersect_key($before, $values),
+                            'after' => array_intersect_key($task->getAttributes(), $values),
+                        ]);
                     }
                 } else {
-                    $task = Task::create($values + ['workspace_id' => $workspace->id, 'project_id' => $project?->id, 'created_by' => $actor->id, 'task_type' => 'WORK', 'status' => 'TODO']);
+                    $task = Task::create($values + [
+                        'workspace_id' => $workspace->id,
+                        'project_id' => $project?->id,
+                        'created_by' => $actor->id,
+                        'task_type' => 'WORK',
+                        'status' => 'TODO',
+                    ]);
                     $this->history->record($actor, $task, 'task.created', ['code' => $task->code, 'task_type' => $task->task_type->value]);
                 }
                 $this->tree->sync($actor, $task);
@@ -82,7 +110,9 @@ class TaskService
                 return $task;
             });
         } catch (UniqueConstraintViolationException $error) {
-            throw ValidationException::withMessages(['code' => 'Mã task đã tồn tại. Hãy nhập mã khác hoặc để trống để tạo mã tự động.']);
+            throw ValidationException::withMessages([
+                'code' => 'Mã task đã tồn tại. Hãy nhập mã khác hoặc để trống để tạo mã tự động.',
+            ]);
         }
     }
 
@@ -113,7 +143,7 @@ class TaskService
                 throw ValidationException::withMessages(['task' => 'Task đã hoạt động; hãy dùng lưu trữ.']);
             }
             foreach (['children', 'blockers', 'incomingDependencies', 'outgoingDependencies', 'calendarEvents', 'timeEntries'] as $relation) {
-                if ($task->$relation()->exists()) {
+                if ($task->{$relation}()->exists()) {
                     throw ValidationException::withMessages(['task' => 'Task có dữ liệu liên quan; hãy dùng lưu trữ.']);
                 }
             }
@@ -136,10 +166,26 @@ class TaskService
         $friday = (5 - $day->isoWeekday() + 7) % 7;
 
         return [
-            ['key' => 'today', 'label' => 'Hôm nay 17:30', 'value' => $day->setTime(17, 30)->format('Y-m-d\TH:i')],
-            ['key' => 'tomorrow', 'label' => 'Ngày mai 17:30', 'value' => $day->addDay()->setTime(17, 30)->format('Y-m-d\TH:i')],
-            ['key' => 'friday', 'label' => $friday === 0 ? 'Hôm nay (Thứ Sáu)' : ($day->isoWeekday() < 5 ? 'Thứ Sáu tuần này' : 'Thứ Sáu tuần sau'), 'value' => $day->addDays($friday)->setTime(17, 30)->format('Y-m-d\TH:i')],
-            ['key' => 'week', 'label' => '+7 ngày', 'value' => $day->addDays(7)->setTime(17, 30)->format('Y-m-d\TH:i')],
+            [
+                'key' => 'today',
+                'label' => 'Hôm nay 17:30',
+                'value' => $day->setTime(17, 30)->format('Y-m-d\TH:i'),
+            ],
+            [
+                'key' => 'tomorrow',
+                'label' => 'Ngày mai 17:30',
+                'value' => $day->addDay()->setTime(17, 30)->format('Y-m-d\TH:i'),
+            ],
+            [
+                'key' => 'friday',
+                'label' => $friday === 0 ? 'Hôm nay (Thứ Sáu)' : ($day->isoWeekday() < 5 ? 'Thứ Sáu tuần này' : 'Thứ Sáu tuần sau'),
+                'value' => $day->addDays($friday)->setTime(17, 30)->format('Y-m-d\TH:i'),
+            ],
+            [
+                'key' => 'week',
+                'label' => '+7 ngày',
+                'value' => $day->addDays(7)->setTime(17, 30)->format('Y-m-d\TH:i'),
+            ],
         ];
     }
 
@@ -168,5 +214,79 @@ class TaskService
             'conditions' => $conditions,
             'history' => $task->activities()->with('actor')->where('event_type', 'task.deadline_changed')->latest('created_at')->latest('id')->limit(20)->get(),
         ];
+    }
+
+    public function saveFilter(User $actor, Workspace $workspace, ?Project $project, string $name, array $query): SavedTaskFilter
+    {
+        return DB::transaction(function () use ($actor, $workspace, $project, $name, $query) {
+            User::lockForUpdate()->findOrFail($actor->id);
+            $this->assertScope($actor, $workspace, $project);
+            $q = SavedTaskFilter::where('user_id', $actor->id)->where('workspace_id', $workspace->id)->where('project_id', $project?->id);
+            if ((clone $q)->count() >= 20 || (clone $q)->where('name', $name)->exists()) {
+                throw ValidationException::withMessages(['name' => 'Tối đa 20 bộ lọc trong phạm vi; tên không được trùng.']);
+            }
+
+            return SavedTaskFilter::create([
+                'user_id' => $actor->id,
+                'workspace_id' => $workspace->id,
+                'project_id' => $project?->id,
+                'name' => $name,
+                'query' => TaskFilters::clean($query),
+            ]);
+        }, 3);
+    }
+
+    /** A saved filter owned by the actor in exactly this scope. */
+    public function findFilter(User $actor, Workspace $workspace, ?Project $project, SavedTaskFilter $saved): SavedTaskFilter
+    {
+        $this->assertScope($actor, $workspace, $project);
+        abort_unless($saved->user_id === $actor->id && $saved->workspace_id === $workspace->id && $saved->project_id === $project?->id, 404);
+
+        return $saved;
+    }
+
+    public function deleteFilter(User $actor, Workspace $workspace, ?Project $project, SavedTaskFilter $saved): void
+    {
+        $this->findFilter($actor, $workspace, $project, $saved)->delete();
+    }
+
+    public function bulk(User $actor, Workspace $workspace, ?Project $project, array $data): int
+    {
+        return DB::transaction(function () use ($actor, $workspace, $project, $data) {
+            Workspace::lockForUpdate()->findOrFail($workspace->id);
+            $this->assertScope($actor, $workspace, $project);
+            $items = $data['items'];
+            if ($data['action'] === 'assign') {
+                abort_unless($this->tasks->scope($actor, $workspace, $project, 'task.assign'), 403);
+            }
+            $tasks = Task::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->whereIn('id', array_keys($items))->orderBy('id')->lockForUpdate()->get();
+            abort_unless($tasks->count() === count($items), 404);
+            foreach ($tasks as $task) {
+                Gate::forUser($actor)->authorize($data['action'] === 'archive' ? 'archive' : 'update', $task);
+                EditRevision::check($task, ['expected_revision' => $items[$task->id]]);
+            }
+            foreach ($tasks as $task) {
+                if ($data['action'] === 'archive') {
+                    $this->archive($actor, $workspace, $project, $task);
+                } else {
+                    if ($data['action'] === 'assign') {
+                        $changes = ['assignee_id' => $data['assignee_id'] ?? null];
+                    } else {
+                        $changes = ['priority' => $data['priority']];
+                    }
+                    $changes['expected_revision'] = $items[$task->id];
+                    $this->save($actor, $workspace, $project, $changes, $task);
+                }
+            }
+
+            return $tasks->count();
+        }, 3);
+    }
+
+    /** The actor can see tasks in this scope (404 if the project is outside the workspace). */
+    public function assertScope(User $actor, Workspace $workspace, ?Project $project): void
+    {
+        abort_if($project && $project->workspace_id !== $workspace->id, 404);
+        abort_unless($this->tasks->scope($actor, $workspace, $project, 'task.view'), 403);
     }
 }

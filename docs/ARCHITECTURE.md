@@ -81,7 +81,7 @@ app/
     Search/        SearchService
     Setting/       SettingService
     Task/          TaskService · TaskWorkflowService · TaskUtilityService · TaskTemplateService nghiệp vụ
-                   TaskPageData · TaskTemplateQuery (đọc) · TaskParticipants · TaskTreeService · TaskHistory
+                   TaskPageData · TaskListingQuery (đọc và phạm vi tổng hợp cá nhân) · TaskParticipants · TaskTreeService · TaskHistory
                    TaskReminderService · TaskEditConflict
     TimeTracking/  TimeTrackingService
     Workspace/     WorkspaceService · InvitationService nghiệp vụ · WorkspaceQuery (đọc)

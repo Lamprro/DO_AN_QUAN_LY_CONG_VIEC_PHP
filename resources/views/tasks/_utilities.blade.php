@@ -45,6 +45,7 @@
     </div>
 
     <!-- Bulk Actions Card -->
+    @if($isPersonalOverview ?? false)<p class="muted">Chọn hàng loạt chỉ áp dụng cho việc riêng tại đây. Với việc thuộc project, dùng nút Sửa trên từng dòng hoặc mở project nguồn để chọn hàng loạt.</p>@endif
     <details class="card" style="margin: 0; padding: 1.25rem; border-left: 4px solid var(--primary);">
         <summary style="font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
             <span>⚡ Thao tác hàng loạt (Bulk Actions)</span>

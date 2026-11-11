@@ -1,7 +1,7 @@
 @php($currentView=$filters['view']??'list')
 <nav class="preset-bar" aria-label="Bộ lọc công việc nhanh">
 @foreach(['all'=>'Tất cả việc','mine'=>'Việc của tôi','review'=>'Chờ tôi duyệt','blocked'=>'Đang bị chặn','overdue'=>'Quá hạn'] as $value=>$label)
-    <a class="preset-chip {{ ($filters['preset']??'all')===$value ? 'active' : '' }}" href="{{ route($routePrefix.'.index',array_merge($routeParams,['view'=>$currentView,'preset'=>$value])) }}" @if(($filters['preset']??'all')===$value) aria-current="true" @endif>{{ $label }}</a>
+    <a class="preset-chip {{ ($filters['preset']??'all')===$value ? 'active' : '' }}" href="{{ route($routePrefix.'.index',array_merge($routeParams,['view'=>$currentView,'preset'=>$value])) }}" @if(($filters['preset']??'all')===$value) aria-current="true" @endif>{{ ($isPersonalOverview ?? false) && $value === 'all' ? 'Tất cả việc của tôi' : $label }}</a>
 @endforeach
 </nav>
 <form method="GET" action="{{ route($routePrefix.'.index',$routeParams) }}" class="card task-filter-panel" data-form="task-search">
@@ -16,7 +16,7 @@
         <summary>Lọc thêm: người làm, ưu tiên, lưu trữ và sắp xếp</summary>
         <div class="filter-grid">
             <div><label for="priority">Mức ưu tiên</label><select id="priority" name="priority"><option value="">Tất cả ưu tiên</option>@foreach(\App\Enums\TaskPriority::cases() as $priority)<option value="{{ $priority->value }}" @selected(($filters['priority']??'')===$priority->value)>{{ \App\Support\UiLabels::text($priority) }}</option>@endforeach</select></div>
-            <div><label for="assignee_id">Người thực hiện</label><select id="assignee_id" name="assignee_id"><option value="">Tất cả thành viên</option>@foreach($people as $person)<option value="{{ $person->user_id }}" @selected(($filters['assignee_id']??'')===$person->user_id)>{{ $person->user->name }}</option>@endforeach</select></div>
+            <div><label for="assignee_id">Người thực hiện</label><select id="assignee_id" name="assignee_id"><option value="">{{ ($isPersonalOverview ?? false) ? 'Việc riêng và việc giao cho tôi' : 'Tất cả thành viên' }}</option>@foreach($people as $person)<option value="{{ $person->user_id }}" @selected(($filters['assignee_id']??'')===$person->user_id)>{{ $person->user->name }}</option>@endforeach</select></div>
             @include('shared.list-controls',['sortOptions'=>['created_at'=>'Ngày tạo','code'=>'Mã công việc','title'=>'Tiêu đề','priority'=>'Mức ưu tiên','deadline_at'=>'Hạn hoàn thành']])
             <div><label for="per_page">Số dòng ở danh sách</label><select id="per_page" name="per_page">@foreach([10,25,50] as $n)<option value="{{ $n }}" @selected((int)($filters['per_page']??10)===$n)>{{ $n }} dòng</option>@endforeach</select></div>
         </div>

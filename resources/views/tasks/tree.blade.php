@@ -32,6 +32,7 @@
 </div>
 
 @include('tasks._view-nav',['taskView'=>'tree'])
+@include('tasks._overview-note', ['taskView' => 'tree'])
 
 {{-- Thống kê tiến độ WORK lá --}}
 <section class="card" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">

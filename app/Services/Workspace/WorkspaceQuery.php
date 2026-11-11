@@ -6,13 +6,14 @@ use App\Authorization\ProjectAccess;
 use App\Authorization\WorkspaceAccess;
 use App\Models\User;
 use App\Models\Workspace;
+use App\Services\Task\TaskListingQuery;
 use App\Support\SearchTerm;
 use Illuminate\Support\Collection;
 
 /** Read model for workspace, member and role screens. */
 class WorkspaceQuery
 {
-    public function __construct(private WorkspaceAccess $access, private ProjectAccess $projects, private InvitationService $invitations) {}
+    public function __construct(private WorkspaceAccess $access, private ProjectAccess $projects, private InvitationService $invitations, private TaskListingQuery $taskListing) {}
 
     public function index(User $user, ?string $search)
     {
@@ -35,7 +36,13 @@ class WorkspaceQuery
             }
         })->count());
 
+        $isPersonalOverview = $this->taskListing->isPersonalOverview($user, $workspace, null);
+        if ($isPersonalOverview) {
+            $workspace->setAttribute('tasks_count', $this->taskListing->query($user, $workspace, null)->count());
+        }
+
         return [
+            'isPersonalOverview' => $isPersonalOverview,
             'workspace' => $workspace,
             'membership' => $this->access->membership($user, $workspace),
             'transferCandidates' => $workspace->owner_id === $user->id ? $this->activeMembers($workspace)->where('user_id', '!=', $user->id)->values() : collect(),

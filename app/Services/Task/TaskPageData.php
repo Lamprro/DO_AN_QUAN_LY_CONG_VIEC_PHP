@@ -15,7 +15,6 @@ use App\Models\Workspace;
 use App\Support\SearchTerm;
 use App\Support\UiLabels;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Read model for task screens (list, board, tree, form, detail).
@@ -25,6 +24,7 @@ class TaskPageData
 {
     public function __construct(
         private TaskAccess $tasks,
+        private TaskListingQuery $listing,
         private ProjectAccess $projects,
         private PlanAccess $plans,
         private CalendarAccess $calendars,
@@ -59,16 +59,14 @@ class TaskPageData
 
     public function list(User $actor, Workspace $workspace, ?Project $project, array $filters): array
     {
-        $this->assertScope($actor, $workspace, $project);
         $tasks = $this->filtered($actor, $workspace, $project, $filters)->orderBy('id')->paginate((int) ($filters['per_page'] ?? 10))->withQueryString();
         $savedFilters = SavedTaskFilter::where('user_id', $actor->id)->where('workspace_id', $workspace->id)->where('project_id', $project?->id)->orderBy('name')->get();
 
-        return $this->context($actor, $workspace, $project) + compact('tasks', 'filters', 'savedFilters');
+        return $this->context($actor, $workspace, $project) + compact('tasks', 'filters', 'savedFilters') + ['isPersonalOverview' => $this->listing->isPersonalOverview($actor, $workspace, $project)];
     }
 
     public function board(User $actor, Workspace $workspace, ?Project $project, array $filters): array
     {
-        $this->assertScope($actor, $workspace, $project);
         $query = $this->filtered($actor, $workspace, $project, $filters)->withCount([
             'children',
             'children as completed_children_count' => fn ($children) => $children->where('status', 'DONE'),
@@ -78,7 +76,7 @@ class TaskPageData
             $board[$status->value] = (clone $query)->where('task_type', '!=', 'GROUP')->where('status', $status->value)->orderBy('id')->paginate(10, ['*'], 'page_'.strtolower($status->value))->withQueryString();
         }
 
-        return $this->context($actor, $workspace, $project) + compact('board', 'filters');
+        return $this->context($actor, $workspace, $project) + compact('board', 'filters') + ['isPersonalOverview' => $this->listing->isPersonalOverview($actor, $workspace, $project)];
     }
 
     public function createForm(User $actor, Workspace $workspace, ?Project $project): array
@@ -92,10 +90,13 @@ class TaskPageData
 
     public function tree(User $actor, Workspace $workspace, ?Project $project): array
     {
-        $this->assertScope($actor, $workspace, $project);
-        $tasks = $workspace->tasks()->where('project_id', $project?->id)->with('assignee')->orderBy('sort_order')->orderBy('id')->get();
+        $tasks = $this->listing->query($actor, $workspace, $project)->orderBy('sort_order')->orderBy('id')->get();
+        $isPersonalOverview = $this->listing->isPersonalOverview($actor, $workspace, $project);
+        // Project groups are not assigned. Promote matching leaves without loading other people's tasks.
+        $visibleIds = $tasks->modelKeys();
+        $nodes = $tasks->groupBy(fn ($task) => $task->parent_task_id && in_array($task->parent_task_id, $visibleIds, true) ? $task->parent_task_id : 'root');
 
-        return ['workspace' => $workspace, 'project' => $project, 'tasks' => $tasks, 'nodes' => $tasks->groupBy(fn ($t) => $t->parent_task_id ?? 'root'), 'progress' => $this->tree->progress($tasks),
+        return ['workspace' => $workspace, 'project' => $project, 'tasks' => $tasks, 'nodes' => $nodes, 'isPersonalOverview' => $isPersonalOverview, 'progress' => $this->tree->progress($tasks),
             'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks', 'routeParams' => $project ? [$workspace, $project] : [$workspace]];
     }
 
@@ -154,9 +155,9 @@ class TaskPageData
     }
 
     /** List/board query: archive state, search, field filters, preset and sort. */
-    private function filtered(User $actor, Workspace $workspace, ?Project $project, array $filters): HasMany
+    private function filtered(User $actor, Workspace $workspace, ?Project $project, array $filters): Builder
     {
-        $query = $workspace->tasks()->where('project_id', $project?->id)->with('assignee', 'reviewer');
+        $query = $this->listing->query($actor, $workspace, $project);
         $archive = $filters['archived'] ?? 'active';
         if ($archive !== 'all') {
             $archive === 'archived' ? $query->whereNotNull('archived_at') : $query->whereNull('archived_at');
@@ -177,8 +178,13 @@ class TaskPageData
         return $query;
     }
 
-    private function applyPreset(HasMany|Builder $query, string $preset, User $actor, Workspace $workspace, ?Project $project): void
+    private function applyPreset(Builder $query, string $preset, User $actor, Workspace $workspace, ?Project $project): void
     {
+        if ($preset === 'review' && $this->listing->isPersonalOverview($actor, $workspace, $project)) {
+            $this->listing->awaitingReview($query, $actor, $workspace);
+
+            return;
+        }
         match ($preset) {
             'mine' => $query->where('assignee_id', $actor->id)->where('task_type', '!=', 'GROUP'),
             'review' => $query->whereNull('archived_at')->when(! $this->tasks->projectWritable($project), fn ($q) => $q->whereRaw('1=0'))->where('status', 'REVIEW')->where('task_type', '!=', 'GROUP')->where(function ($q) use ($actor, $workspace) {

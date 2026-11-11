@@ -1,7 +1,7 @@
 @php($taskParams = $task ? [...$routeParams, $task] : $routeParams)
 <section data-panel-content data-panel-mode="{{ $panelMode }}" class="jira-slide-panel">
     <div class="panel-header-badge">
-        <p class="eyebrow">{{ $project?->name ?? $workspace->name }} @if($task) • <strong>{{ $task->code }}</strong> @endif</p>
+        <p class="eyebrow">{{ $workspace->name }} @if($project) / {{ $project->name }} @endif @if($task) • <strong>{{ $task->code }}</strong> @endif</p>
     </div>
     <h2 id="task-panel-title">
         {{ ['create' => 'Tạo công việc mới', 'edit' => 'Chỉnh sửa công việc', 'status' => 'Cập nhật trạng thái', 'view' => $task?->title][$panelMode] ?? 'Chi tiết công việc' }}

@@ -32,7 +32,7 @@
             <strong>{{ $workspace->projects_count }}</strong>
         </article>
         <article class="kpi">
-            <span>📋 Công việc</span>
+            <span>📋 {{ ($isPersonalOverview ?? false) ? 'Việc riêng và được giao' : 'Công việc' }}</span>
             <strong>{{ $workspace->tasks_count }}</strong>
         </article>
     </div>

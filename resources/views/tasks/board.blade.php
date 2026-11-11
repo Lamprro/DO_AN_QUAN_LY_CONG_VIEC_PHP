@@ -17,6 +17,7 @@
         @endif
     </div>
     @include('tasks._view-nav')
+@include('tasks._overview-note')
 
     <section class="jira-board" data-jira-board data-user-id="{{ auth()->id() }}" aria-label="Bảng Kanban">
         <div class="jira-toolbar">
@@ -52,6 +53,10 @@
                         </header>
                         <div class="jira-drop-zone" data-drop-zone>
                             @foreach($column as $task)
+@php
+    $itemRoutePrefix = $task->project_id ? 'workspaces.projects.tasks' : 'workspaces.tasks';
+    $itemRouteParams = $task->project_id ? [$task->workspace_id, $task->project_id] : [$task->workspace_id];
+@endphp
                                 @php
                                     $canMove = auth()->user()->can('execute', $task) || auth()->user()->can('review', $task);
                                     $terminal = in_array($task->status->value, ['DONE', 'CANCELLED'], true);
@@ -66,7 +71,7 @@
                                     data-current-status="{{ $task->status->value }}" data-assignee-id="{{ $task->assignee_id }}"
                                     data-priority="{{ $priority }}" data-is-overdue="{{ $overdue ? 'true' : 'false' }}"
                                     data-deadline="{{ $task->deadline_at?->toIso8601String() }}"
-                                    data-status-url="{{ route($routePrefix.'.status.update', [...$routeParams, $task]) }}">
+                                    data-status-url="{{ route($itemRoutePrefix.'.status.update', [...$itemRouteParams, $task]) }}">
                                     <div class="jira-card-top">
                                         <span class="jira-type" title="{{ \App\Support\UiLabels::text($task->task_type) }}" aria-label="{{ \App\Support\UiLabels::text($task->task_type) }}">{{ $task->task_type->value === 'MILESTONE' ? '🚩' : '📋' }}</span>
                                         <strong class="jira-code">{{ $task->code }}</strong>
@@ -75,7 +80,8 @@
                                             <span class="sr-only">Ưu tiên {{ \App\Support\UiLabels::text($task->priority) }}</span>
                                         </span>
                                     </div>
-                                    <h3><a class="jira-title" data-task-panel draggable="false" href="{{ route($routePrefix.'.show', [...$routeParams, $task]) }}" title="{{ $task->title }}">{{ $task->title }}</a></h3>
+                                    <h3><a class="jira-title" data-task-panel draggable="false" href="{{ route($itemRoutePrefix.'.show', [...$itemRouteParams, $task]) }}" title="{{ $task->title }}">{{ $task->title }}</a></h3>
+                                    @include('tasks._source', ['sourceTask' => $task])
                                     <div class="jira-card-bottom">
                                         @if($task->deadline_at)
                                             <span @class(['jira-deadline', 'is-overdue' => $overdue, 'is-due-soon' => $dueSoon]) data-deadline-badge title="Hạn: {{ $task->deadline_at->setTimezone($workspace->timezone)->format('d/m/Y H:i') }} ({{ $workspace->timezone }})">
@@ -90,10 +96,10 @@
                                     </div>
                                     <div class="jira-card-actions">
                                         @can('update', $task)
-                                            <a data-task-panel draggable="false" href="{{ route($routePrefix.'.edit', [...$routeParams, $task]) }}">Sửa</a>
+                                            <a data-task-panel draggable="false" href="{{ route($itemRoutePrefix.'.edit', [...$itemRouteParams, $task]) }}">Sửa</a>
                                         @endcan
                                         @if($canMove)
-                                            <a data-task-panel draggable="false" href="{{ route($routePrefix.'.status.edit', [...$routeParams, $task]) }}">Đổi trạng thái <span aria-hidden="true">↗</span></a>
+                                            <a data-task-panel draggable="false" href="{{ route($itemRoutePrefix.'.status.edit', [...$itemRouteParams, $task]) }}">Đổi trạng thái <span aria-hidden="true">↗</span></a>
                                         @endif
                                     </div>
                                 </article>

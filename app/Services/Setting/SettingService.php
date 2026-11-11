@@ -33,17 +33,30 @@ class SettingService
         $stored = $this->stored($user);
         $defaults = config('work_management.settings_defaults');
 
-        return ['language' => in_array($stored['language'] ?? null, ['vi', 'en'], true) ? $stored['language'] : $defaults['language'],
+        return [
+            'language' => in_array($stored['language'] ?? null, ['vi', 'en'], true) ? $stored['language'] : $defaults['language'],
             'theme' => in_array($stored['theme'] ?? null, ['system', 'light', 'dark'], true) ? $stored['theme'] : $defaults['theme'],
-            'notifications' => ['in_app' => (bool) ($stored['notifications']['in_app'] ?? $defaults['notifications']['in_app']), 'email' => false, 'telegram' => false]];
+            'notifications' => [
+                'in_app' => (bool) ($stored['notifications']['in_app'] ?? $defaults['notifications']['in_app']),
+                'email' => false,
+                'telegram' => false,
+            ],
+        ];
     }
 
     public function save(User $user, array $data): void
     {
         DB::transaction(function () use ($user, $data) {
             User::lockForUpdate()->findOrFail($user->id);
-            $this->store($user, array_replace($this->stored($user), ['language' => $data['language'], 'theme' => $data['theme'],
-                'notifications' => ['in_app' => (bool) $data['notifications']['in_app'], 'email' => false, 'telegram' => false]]));
+            $this->store($user, array_replace($this->stored($user), [
+                'language' => $data['language'],
+                'theme' => $data['theme'],
+                'notifications' => [
+                    'in_app' => (bool) $data['notifications']['in_app'],
+                    'email' => false,
+                    'telegram' => false,
+                ],
+            ]));
         }, 3);
     }
 }

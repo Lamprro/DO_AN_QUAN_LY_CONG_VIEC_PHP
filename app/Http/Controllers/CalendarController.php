@@ -105,7 +105,7 @@ class CalendarController extends Controller
         abort_unless($event->workspace_id === $workspace->id, 404);
     }
 
-    public function timeline(Request $request, Workspace $workspace, Project $project, CalendarPageData $views)
+    public function timeline(Request $request, Workspace $workspace, Project $project)
     {
         abort_unless($project->workspace_id === $workspace->id, 404);
         $this->authorize('view', $project);
@@ -115,18 +115,18 @@ class CalendarController extends Controller
             'workspace' => $workspace,
             'project' => $project,
             'range' => $range,
-            'groups' => $views->timeline($request->user(), $workspace, $project, $range),
-            'navigation' => $views->presentation($request->url(), $request->all(), $range),
+            'groups' => $this->views->timeline($request->user(), $workspace, $project, $range),
+            'navigation' => $this->views->presentation($request->url(), $request->all(), $range),
             'schedule' => config('work_schedule'),
         ]);
     }
 
-    public function team(Request $request, Workspace $workspace, CalendarPageData $views)
+    public function team(Request $request, Workspace $workspace)
     {
         $data = $request->validate(['project_id' => 'nullable|uuid', 'focus' => 'nullable|uuid']);
         $project = empty($data['project_id']) ? null : $workspace->projects()->findOrFail($data['project_id']);
 
-        return view('calendar.team', $views->team($request->user(), $workspace, $project, $data['focus'] ?? null));
+        return view('calendar.team', $this->views->team($request->user(), $workspace, $project, $data['focus'] ?? null));
     }
 
     public function propose(Request $request, Workspace $workspace)

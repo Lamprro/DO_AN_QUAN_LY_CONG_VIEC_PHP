@@ -1,0 +1,305 @@
+{
+  "http": [
+    {
+      "label": "Login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Actor login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Read /workspaces",
+      "method": "GET",
+      "path": "/workspaces",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/create",
+      "method": "GET",
+      "path": "/workspaces/create",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/edit",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/edit",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/members",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/members",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles/create",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles/create",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/create",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/create",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/edit",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/edit",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/members",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/members",
+      "status": 200
+    },
+    {
+      "label": "Read /profile",
+      "method": "GET",
+      "path": "/profile",
+      "status": 200
+    },
+    {
+      "label": "Read /settings",
+      "method": "GET",
+      "path": "/settings",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/dashboard",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/dashboard",
+      "status": 200
+    },
+    {
+      "label": "Create role",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles",
+      "status": 302
+    },
+    {
+      "label": "Edit role",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles/01a1cba2-6574-70db-a3b1-6c616155b8b7/edit",
+      "status": 200
+    },
+    {
+      "label": "Update role",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles/01a1cba2-6574-70db-a3b1-6c616155b8b7",
+      "status": 302
+    },
+    {
+      "label": "Delete unused role",
+      "method": "DELETE",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles/01a1cba2-6574-70db-a3b1-6c616155b8b7",
+      "status": 302
+    },
+    {
+      "label": "Workspace validation",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069",
+      "status": 422
+    },
+    {
+      "label": "Create workspace",
+      "method": "POST",
+      "path": "/workspaces",
+      "status": 302
+    },
+    {
+      "label": "Update workspace",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cba2-6a20-70f0-903e-a521f1ee315c",
+      "status": 302
+    },
+    {
+      "label": "Create project",
+      "method": "POST",
+      "path": "/workspaces/01a1cba2-6a20-70f0-903e-a521f1ee315c/projects",
+      "status": 302
+    },
+    {
+      "label": "Update project",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cba2-6a20-70f0-903e-a521f1ee315c/projects/01a1cba2-6c0e-73ab-a792-09b9077641df",
+      "status": 302
+    },
+    {
+      "label": "Stale project rejected",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cba2-6a20-70f0-903e-a521f1ee315c/projects/01a1cba2-6c0e-73ab-a792-09b9077641df",
+      "status": 422
+    },
+    {
+      "label": "Archive project",
+      "method": "POST",
+      "path": "/workspaces/01a1cba2-6a20-70f0-903e-a521f1ee315c/projects/01a1cba2-6c0e-73ab-a792-09b9077641df/archive",
+      "status": 302
+    },
+    {
+      "label": "Restore project",
+      "method": "POST",
+      "path": "/workspaces/01a1cba2-6a20-70f0-903e-a521f1ee315c/projects/01a1cba2-6c0e-73ab-a792-09b9077641df/restore",
+      "status": 302
+    },
+    {
+      "label": "Delete empty draft project",
+      "method": "DELETE",
+      "path": "/workspaces/01a1cba2-6a20-70f0-903e-a521f1ee315c/projects/01a1cba2-6c0e-73ab-a792-09b9077641df",
+      "status": 302
+    },
+    {
+      "label": "Delete empty workspace",
+      "method": "DELETE",
+      "path": "/workspaces/01a1cba2-6a20-70f0-903e-a521f1ee315c",
+      "status": 302
+    },
+    {
+      "label": "Workspace member update",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/members/01a1cb8e-900d-703d-9e0b-06c762566531",
+      "status": 302
+    },
+    {
+      "label": "Project member update",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/members/01a1cb8e-907d-72cb-aef1-380c64ff41cb",
+      "status": 302
+    },
+    {
+      "label": "Other login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Other login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Unauthorized role administration",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/roles",
+      "status": 403
+    },
+    {
+      "label": "Logout",
+      "method": "POST",
+      "path": "/logout",
+      "status": 302
+    },
+    {
+      "label": "Register form",
+      "method": "GET",
+      "path": "/register",
+      "status": 200
+    },
+    {
+      "label": "Register account",
+      "method": "POST",
+      "path": "/register",
+      "status": 302
+    }
+  ],
+  "checks": [
+    {
+      "check": "Role persisted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Role changed",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Role deleted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Workspace creates roles and owner membership",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Workspace saved",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Project and membership saved",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Project revision increases",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Stale project leaves current name",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Project archived",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Project removed",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Workspace removed",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Registration creates one personal workspace",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Foreign keys valid",
+      "passed": true,
+      "evidence": null
+    }
+  ]
+}

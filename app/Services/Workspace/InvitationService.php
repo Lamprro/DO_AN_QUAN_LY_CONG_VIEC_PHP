@@ -83,7 +83,9 @@ class InvitationService
                 $this->access->assertAssignable($actor, $workspace, $role);
                 $existing = $workspace->members()->whereHas('user', fn ($q) => $q->where('email', $data['email']))->first();
                 if ($existing && $existing->status !== MembershipStatus::LEFT) {
-                    throw ValidationException::withMessages(['email' => 'Người này đã là thành viên hoặc đang bị đình chỉ; hãy dùng quản lý thành viên.']);
+                    throw ValidationException::withMessages([
+                        'email' => 'Người này đã là thành viên hoặc đang bị đình chỉ; hãy dùng quản lý thành viên.',
+                    ]);
                 }
                 $index = $store->get($this->indexKey($workspace->id), []);
                 foreach ($this->pending($workspace) as $id => $old) {
@@ -93,9 +95,17 @@ class InvitationService
                     }
                 }
                 $token = Str::random(64);
-                $record = ['id' => (string) Str::uuid(), 'token_hash' => hash('sha256', $token), 'workspace_id' => $workspace->id,
-                    'workspace_name' => $workspace->name, 'email' => $data['email'], 'role_id' => $role->id, 'role_name' => $role->name,
-                    'invited_by' => $actor->id, 'expires_at' => now()->addMinutes(config('workspace.invitation_ttl_minutes'))->timestamp];
+                $record = [
+                    'id' => (string) Str::uuid(),
+                    'token_hash' => hash('sha256', $token),
+                    'workspace_id' => $workspace->id,
+                    'workspace_name' => $workspace->name,
+                    'email' => $data['email'],
+                    'role_id' => $role->id,
+                    'role_name' => $role->name,
+                    'invited_by' => $actor->id,
+                    'expires_at' => now()->addMinutes(config('workspace.invitation_ttl_minutes'))->timestamp,
+                ];
                 $store->put($this->recordKey($record['token_hash']), $record, $record['expires_at'] - now()->timestamp);
                 $index[$record['id']] = $record['token_hash'];
                 $store->put($this->indexKey($workspace->id), $index, 8 * 24 * 3600);
@@ -154,9 +164,19 @@ class InvitationService
                     throw ValidationException::withMessages(['invitation' => 'Thành viên đang bị đình chỉ; cần quản trị viên kích hoạt lại.']);
                 }
                 if (! $member) {
-                    WorkspaceMember::create(['workspace_id' => $workspace->id, 'user_id' => $user->id, 'role_id' => $role->id, 'status' => 'active', 'joined_at' => now()]);
+                    WorkspaceMember::create([
+                        'workspace_id' => $workspace->id,
+                        'user_id' => $user->id,
+                        'role_id' => $role->id,
+                        'status' => 'active',
+                        'joined_at' => now(),
+                    ]);
                 } elseif ($member->status === MembershipStatus::LEFT) {
-                    $member->update(['role_id' => $role->id, 'status' => 'active', 'joined_at' => now()]);
+                    $member->update([
+                        'role_id' => $role->id,
+                        'status' => 'active',
+                        'joined_at' => now(),
+                    ]);
                 }
 
                 return $workspace;

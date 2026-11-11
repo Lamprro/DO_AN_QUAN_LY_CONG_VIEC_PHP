@@ -27,7 +27,7 @@ class TaskTreeService
         if ($type === 'GROUP' && ((array_key_exists('assignee_id', $values) ? $values['assignee_id'] : $task->assignee_id) || (array_key_exists('reviewer_id', $values) ? $values['reviewer_id'] : $task->reviewer_id))) {
             $this->fail('task_type', 'GROUP không phân công trực tiếp; hãy phân công các WORK lá.');
         }
-        $changed = $task->exists && (($type !== $task->task_type->value) || $parentId !== $task->parent_task_id);
+        $changed = $task->exists && ($type !== $task->task_type->value || $parentId !== $task->parent_task_id);
         if ($changed && ($task->status->value !== 'TODO' || $task->started_at)) {
             $this->fail('parent_task_id', 'Chỉ thay đổi cấu trúc của task chưa bắt đầu.');
         }
@@ -36,7 +36,7 @@ class TaskTreeService
                 $this->fail('task_type', 'Không chuyển loại khi còn task con, estimate hoặc phân công.');
             }
             foreach (['incomingDependencies', 'outgoingDependencies', 'calendarEvents', 'timeEntries', 'blockers'] as $relation) {
-                if ($task->$relation()->exists()) {
+                if ($task->{$relation}()->exists()) {
                     $this->fail('task_type', 'Task đã có dữ liệu nghiệp vụ, không thể chuyển loại.');
                 }
             }
@@ -104,7 +104,11 @@ class TaskTreeService
             }
             if ($group->status->value !== $state) {
                 $old = $group->status->value;
-                $group->update(['status' => $state, 'started_at' => $state !== 'TODO' ? ($group->started_at ?? now()) : null, 'completed_at' => $state === 'DONE' ? now() : null]);
+                $group->update([
+                    'status' => $state,
+                    'started_at' => $state !== 'TODO' ? $group->started_at ?? now() : null,
+                    'completed_at' => $state === 'DONE' ? now() : null,
+                ]);
                 $this->history->record($actor, $group, 'task.group_synced', ['from' => $old, 'to' => $state]);
             }
         }
@@ -117,7 +121,13 @@ class TaskTreeService
         $total = $weighted ? $leaves->sum('estimate_minutes') : $leaves->count();
         $done = $weighted ? $leaves->filter(fn ($t) => $t->status->value === 'DONE')->sum('estimate_minutes') : $leaves->filter(fn ($t) => $t->status->value === 'DONE')->count();
 
-        return ['method' => $weighted ? 'estimate' : 'count', 'total' => $total, 'done' => $done, 'percent' => $total ? round(100 * $done / $total, 1) : 0, 'work_count' => $leaves->count()];
+        return [
+            'method' => $weighted ? 'estimate' : 'count',
+            'total' => $total,
+            'done' => $done,
+            'percent' => $total ? round(100 * $done / $total, 1) : 0,
+            'work_count' => $leaves->count(),
+        ];
     }
 
     public function descendants(Task $task, Collection $all): Collection

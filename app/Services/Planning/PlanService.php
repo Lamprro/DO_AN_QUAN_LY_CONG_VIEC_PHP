@@ -38,7 +38,8 @@ class PlanService
         // Hash only: never publish other users' private calendar details in a plan.
         $tasks = $workspace->tasks()->where('project_id', $project?->id)->orderBy('id')->get();
         $ids = $tasks->pluck('id');
-        $data = [$tasks->map(fn ($t) => $t->getRawOriginal())->all(),
+        $data = [
+            $tasks->map(fn ($t) => $t->getRawOriginal())->all(),
             DB::table('task_dependencies')->whereIn('successor_task_id', $ids)->orderBy('id')->get()->toArray(),
             DB::table('task_blockers')->whereIn('task_id', $ids)->orderBy('id')->get()->toArray(),
             DB::table('time_entries')->whereIn('task_id', $ids)->orderBy('id')->get()->toArray(),
@@ -47,7 +48,8 @@ class PlanService
             $project?->fresh()->getRawOriginal(),
             $project ? DB::table('project_members')->where('project_id', $project->id)->orderBy('id')->get()->toArray() : [],
             CalendarEvent::where('user_id', $actor->id)->orderBy('id')->get()->map(fn ($e) => $e->getRawOriginal())->all(),
-            $this->time->workHoursValues($actor, $workspace->timezone)];
+            $this->time->workHoursValues($actor, $workspace->timezone),
+        ];
 
         return hash('sha256', json_encode($data));
     }
@@ -56,19 +58,28 @@ class PlanService
     {
         $timezone ??= config('work_schedule.timezone');
         $data = Validator::make($input, [
-            'schema_version' => 'required|integer|in:1', 'tasks' => 'required|array|list|min:1|max:100',
+            'schema_version' => 'required|integer|in:1',
+            'tasks' => 'required|array|list|min:1|max:100',
             'tasks.*' => 'required|array:ref,task_id,title,description,task_type,parent_ref,priority,estimate_minutes,assignee_id,reviewer_id',
             'tasks.*.ref' => 'required|string|regex:/^[a-zA-Z][a-zA-Z0-9_-]{0,39}$/|distinct',
-            'tasks.*.task_id' => 'nullable|uuid', 'tasks.*.title' => 'required|string|max:180',
-            'tasks.*.description' => 'nullable|string|max:10000', 'tasks.*.task_type' => 'required|in:GROUP,WORK,MILESTONE',
-            'tasks.*.parent_ref' => 'nullable|string|max:40', 'tasks.*.priority' => 'required|in:low,medium,high,urgent',
+            'tasks.*.task_id' => 'nullable|uuid',
+            'tasks.*.title' => 'required|string|max:180',
+            'tasks.*.description' => 'nullable|string|max:10000',
+            'tasks.*.task_type' => 'required|in:GROUP,WORK,MILESTONE',
+            'tasks.*.parent_ref' => 'nullable|string|max:40',
+            'tasks.*.priority' => 'required|in:low,medium,high,urgent',
             'tasks.*.estimate_minutes' => 'nullable|integer|min:0|max:525600',
-            'tasks.*.assignee_id' => 'nullable|uuid', 'tasks.*.reviewer_id' => 'nullable|uuid',
-            'dependencies' => 'present|array|list|max:300', 'dependencies.*' => 'array:predecessor,successor,lag_minutes',
-            'dependencies.*.predecessor' => 'required|string', 'dependencies.*.successor' => 'required|string',
+            'tasks.*.assignee_id' => 'nullable|uuid',
+            'tasks.*.reviewer_id' => 'nullable|uuid',
+            'dependencies' => 'present|array|list|max:300',
+            'dependencies.*' => 'array:predecessor,successor,lag_minutes',
+            'dependencies.*.predecessor' => 'required|string',
+            'dependencies.*.successor' => 'required|string',
             'dependencies.*.lag_minutes' => 'required|integer|min:0|max:525600',
-            'slots' => 'present|array|list|max:300', 'slots.*' => 'array:task_ref,starts_at,ends_at',
-            'slots.*.task_ref' => 'required|string', 'slots.*.starts_at' => 'required|date_format:Y-m-d\TH:i',
+            'slots' => 'present|array|list|max:300',
+            'slots.*' => 'array:task_ref,starts_at,ends_at',
+            'slots.*.task_ref' => 'required|string',
+            'slots.*.starts_at' => 'required|date_format:Y-m-d\TH:i',
             'slots.*.ends_at' => 'required|date_format:Y-m-d\TH:i',
         ])->validate();
         if (array_diff(array_keys($input), ['schema_version', 'tasks', 'dependencies', 'slots'])) {
@@ -80,7 +91,8 @@ class PlanService
             if (! empty($row['task_id'])) {
                 if (isset($used[$row['task_id']])) {
                     $this->fail('Một task chỉ xuất hiện một lần.');
-                } $used[$row['task_id']] = true;
+                }
+                $used[$row['task_id']] = true;
             }
             $parent = $row['parent_ref'] ?? null;
             $seen = [$ref => true];
@@ -104,7 +116,7 @@ class PlanService
         foreach ($data['dependencies'] as $edge) {
             $a = $edge['predecessor'];
             $b = $edge['successor'];
-            if (! isset($refs[$a],$refs[$b]) || $a === $b || $refs[$a]['task_type'] === 'GROUP' || $refs[$b]['task_type'] === 'GROUP' || isset($edges[$a.':'.$b])) {
+            if (! isset($refs[$a], $refs[$b]) || $a === $b || $refs[$a]['task_type'] === 'GROUP' || $refs[$b]['task_type'] === 'GROUP' || isset($edges[$a.':'.$b])) {
                 $this->fail('Dependency không hợp lệ hoặc trùng.');
             }
             $graph[$a][] = $b;
@@ -114,12 +126,15 @@ class PlanService
         $visit = function ($node) use (&$visit, $graph, &$colors) {
             if (($colors[$node] ?? 0) === 1) {
                 $this->fail('Dependency có vòng lặp.');
-            }if (($colors[$node] ?? 0) === 2) {
+            }
+            if (($colors[$node] ?? 0) === 2) {
                 return;
-            }$colors[$node] = 1;
+            }
+            $colors[$node] = 1;
             foreach ($graph[$node] ?? [] as $next) {
                 $visit($next);
-            }$colors[$node] = 2;
+            }
+            $colors[$node] = 2;
         };
         foreach (array_keys($refs) as $ref) {
             $visit($ref);
@@ -129,7 +144,6 @@ class PlanService
                 $this->fail('Slot chỉ tham chiếu WORK trong bản nháp.');
             }
         }
-
         $slotBounds = [];
         foreach ($data['slots'] as $slot) {
             if ($slot['ends_at'] <= $slot['starts_at']) {
@@ -138,8 +152,10 @@ class PlanService
             LocalTime::parse($slot['starts_at'], $timezone, false);
             LocalTime::parse($slot['ends_at'], $timezone, false);
             $ref = $slot['task_ref'];
-            $slotBounds[$ref] = ['start' => isset($slotBounds[$ref]) ? min($slotBounds[$ref]['start'], $slot['starts_at']) : $slot['starts_at'],
-                'end' => isset($slotBounds[$ref]) ? max($slotBounds[$ref]['end'], $slot['ends_at']) : $slot['ends_at']];
+            $slotBounds[$ref] = [
+                'start' => isset($slotBounds[$ref]) ? min($slotBounds[$ref]['start'], $slot['starts_at']) : $slot['starts_at'],
+                'end' => isset($slotBounds[$ref]) ? max($slotBounds[$ref]['end'], $slot['ends_at']) : $slot['ends_at'],
+            ];
         }
         foreach ($data['dependencies'] as $edge) {
             $a = $slotBounds[$edge['predecessor']] ?? null;
@@ -178,8 +194,26 @@ class PlanService
                 }
             }
 
-            return Plan::create(['workspace_id' => $workspace->id, 'project_id' => $project?->id, 'plan_group_id' => $group, 'parent_plan_id' => $base?->id, 'version_no' => $version,
-                'created_by' => $actor->id, 'ai_run_id' => $aiRunId, 'name' => $name, 'status' => 'draft', 'data' => ['schema_version' => 1, 'payload' => $payload, 'fingerprint' => $this->fingerprint($actor, $workspace, $project), 'snapshot_actor_id' => $actor->id, 'base_active_id' => $active, 'work_schedule' => $this->time->workHoursValues($actor, $workspace->timezone), 'source' => $aiRunId ? 'ai' : 'manual']]);
+            return Plan::create([
+                'workspace_id' => $workspace->id,
+                'project_id' => $project?->id,
+                'plan_group_id' => $group,
+                'parent_plan_id' => $base?->id,
+                'version_no' => $version,
+                'created_by' => $actor->id,
+                'ai_run_id' => $aiRunId,
+                'name' => $name,
+                'status' => 'draft',
+                'data' => [
+                    'schema_version' => 1,
+                    'payload' => $payload,
+                    'fingerprint' => $this->fingerprint($actor, $workspace, $project),
+                    'snapshot_actor_id' => $actor->id,
+                    'base_active_id' => $active,
+                    'work_schedule' => $this->time->workHoursValues($actor, $workspace->timezone),
+                    'source' => $aiRunId ? 'ai' : 'manual',
+                ],
+            ]);
         }, 3);
     }
 
@@ -200,7 +234,10 @@ class PlanService
             Workspace::lockForUpdate()->findOrFail($plan->workspace_id);
             $plan = Plan::lockForUpdate()->findOrFail($plan->id);
             $permission = match ($action) {
-                'propose' => 'plan.update','approve','reject' => 'plan.approve','apply' => 'plan.apply',default => abort(404)
+                'propose' => 'plan.update',
+                'approve', 'reject' => 'plan.approve',
+                'apply' => 'plan.apply',
+                default => abort(404),
             };
             abort_unless($this->plans->allows($actor, $plan->workspace, $plan->project, $permission) && $this->tasks->projectWritable($plan->project), 403);
             if ($plan->status->value !== $expected) {
@@ -219,7 +256,12 @@ class PlanService
                 if ($action === 'reject' && ! $reason) {
                     $this->fail('Cần lý do từ chối.');
                 }
-                $plan->update(['status' => $action === 'approve' ? 'approved' : 'rejected', 'reviewed_by' => $actor->id, 'reviewed_at' => now(), 'change_summary' => $reason]);
+                $plan->update([
+                    'status' => $action === 'approve' ? 'approved' : 'rejected',
+                    'reviewed_by' => $actor->id,
+                    'reviewed_at' => now(),
+                    'change_summary' => $reason,
+                ]);
 
                 return;
             }
@@ -228,7 +270,8 @@ class PlanService
             }
             if ($plan->applied_at) {
                 return;
-            } // Idempotent replay; never duplicate tasks/events.
+            }
+            // Idempotent replay; never duplicate tasks/events.
             abort_unless($this->plans->allows($actor, $plan->workspace, $plan->project, 'plan.approve'), 403);
             $payload = $this->payload($plan);
             if (! is_string($plan->data['snapshot_actor_id'] ?? null) || ! is_string($plan->data['fingerprint'] ?? null)) {
@@ -282,8 +325,17 @@ class PlanService
                     $map[$row['ref']] = $task->id;
                     unset($pending[$key]);
                     $progress = true;
-                    TaskActivity::create(['task_id' => $task->id, 'actor_id' => $actor->id, 'type' => 'HISTORY', 'source' => 'user', 'plan_id' => $plan->id, 'event_type' => 'plan.applied', 'data' => ['version' => $plan->version_no]]);
-                }if (! $progress) {
+                    TaskActivity::create([
+                        'task_id' => $task->id,
+                        'actor_id' => $actor->id,
+                        'type' => 'HISTORY',
+                        'source' => 'user',
+                        'plan_id' => $plan->id,
+                        'event_type' => 'plan.applied',
+                        'data' => ['version' => $plan->version_no],
+                    ]);
+                }
+                if (! $progress) {
                     $this->fail('Không thể dựng cây task.');
                 }
             }
@@ -301,7 +353,20 @@ class PlanService
             }
             foreach ($payload['slots'] as $slot) {
                 $task = Task::findOrFail($map[$slot['task_ref']]);
-                $event = $this->calendar->save($actor, $plan->workspace, ['project_id' => $plan->project_id, 'task_id' => $task->id, 'event_type' => 'TASK_BLOCK', 'title' => $task->title, 'starts_at' => $slot['starts_at'], 'ends_at' => $slot['ends_at'], 'timezone' => $plan->workspace->timezone, 'all_day' => false, 'is_busy' => true, 'visibility' => $plan->project_id ? 'project' : 'private', 'status' => 'planned', 'participants' => []]);
+                $event = $this->calendar->save($actor, $plan->workspace, [
+                    'project_id' => $plan->project_id,
+                    'task_id' => $task->id,
+                    'event_type' => 'TASK_BLOCK',
+                    'title' => $task->title,
+                    'starts_at' => $slot['starts_at'],
+                    'ends_at' => $slot['ends_at'],
+                    'timezone' => $plan->workspace->timezone,
+                    'all_day' => false,
+                    'is_busy' => true,
+                    'visibility' => $plan->project_id ? 'project' : 'private',
+                    'status' => 'planned',
+                    'participants' => [],
+                ]);
                 $event->update(['plan_id' => $plan->id, 'source' => 'plan']);
             }
             if ($active) {
@@ -309,7 +374,11 @@ class PlanService
             }
             $data = $plan->data;
             $data['applied_task_ids'] = $map;
-            $plan->update(['data' => $data, 'is_active' => true, 'applied_at' => now()]);
+            $plan->update([
+                'data' => $data,
+                'is_active' => true,
+                'applied_at' => now(),
+            ]);
         }, 3);
     }
 

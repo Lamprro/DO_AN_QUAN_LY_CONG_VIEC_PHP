@@ -17,7 +17,6 @@ class CalendarAccess
             return false;
         }
 
-        return $project ? $project->workspace_id === $workspace->id && $this->projects->allows($user, $project, 'calendar.view') && $this->projects->allows($user, $project, $permission)
-            : $this->workspaces->allows($user, $workspace, 'calendar.view') && $this->workspaces->allows($user, $workspace, $permission);
+        return $project ? $project->workspace_id === $workspace->id && $this->projects->allows($user, $project, 'calendar.view') && $this->projects->allows($user, $project, $permission) : $this->workspaces->allows($user, $workspace, 'calendar.view') && $this->workspaces->allows($user, $workspace, $permission);
     }
 }

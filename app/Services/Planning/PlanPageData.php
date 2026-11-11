@@ -36,7 +36,12 @@ class PlanPageData
         return [
             'workspace' => $workspace,
             'project' => $project,
-            'plans' => Plan::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->where('data->schema_version', 1)->latest()->paginate(20)->withQueryString(),
+            'plans' => Plan::where('workspace_id', $workspace->id)
+                ->where('project_id', $project?->id)
+                ->where('data->schema_version', 1)
+                ->latest()
+                ->paginate(20)
+                ->withQueryString(),
             'canCreatePlan' => $this->plans->allows($actor, $workspace, $project, 'plan.create'),
         ];
     }
@@ -125,7 +130,11 @@ class PlanPageData
             $query->whereRaw('1 = 0');
         }
         $needle = $sourceQuery;
-        $choices = (clone $query)->when(is_string($needle) && $needle !== '', fn ($q) => $q->where(fn ($q) => $q->whereRaw("code LIKE ? ESCAPE '!'", [SearchTerm::contains($needle)])->orWhereRaw("title LIKE ? ESCAPE '!'", [SearchTerm::contains($needle)])))->orderBy('code')->limit(201)->get();
+        $choices = (clone $query)
+            ->when(is_string($needle) && $needle !== '', fn ($q) => $q->where(fn ($q) => $q->whereRaw("code LIKE ? ESCAPE '!'", [SearchTerm::contains($needle)])->orWhereRaw("title LIKE ? ESCAPE '!'", [SearchTerm::contains($needle)])))
+            ->orderBy('code')
+            ->limit(201)
+            ->get();
         $hasMore = $choices->count() > 200;
         $choices = $choices->take(200);
         $selected = [];
@@ -248,18 +257,18 @@ class PlanPageData
         }
         // Re-display the user's draft after a validation error.
         if (($oldInput['input_mode'] ?? null) === 'editor') {
-            $old = ($oldInput['payload'] ?? null);
+            $old = $oldInput['payload'] ?? null;
             if (is_string($old) && mb_strlen($old) <= 120000) {
                 $decoded = json_decode($old, true, 32);
                 if (is_array($decoded)) {
                     $payload = $decoded;
                 }
-            } elseif (is_array(($oldInput['editor'] ?? null))) {
-                $payload = $this->normalize(($oldInput['editor'] ?? null));
+            } elseif (is_array($oldInput['editor'] ?? null)) {
+                $payload = $this->normalize($oldInput['editor'] ?? null);
             }
         }
         $editorData = $this->build($actor, $workspace, $project, $payload, $sourceQuery, $sourceSelected);
-        if (is_string(($oldInput['payload'] ?? null)) && mb_strlen(($oldInput['payload'] ?? null)) > 120000) {
+        if (is_string($oldInput['payload'] ?? null) && mb_strlen($oldInput['payload'] ?? null) > 120000) {
             $editorData['renderable'] = false;
         }
         $people = $this->projects->eligibleMembers($workspace, $project);

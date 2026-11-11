@@ -199,7 +199,13 @@ class WorkspaceService
 
     public function index(User $user, ?string $search)
     {
-        return Workspace::query()->whereHas('members', fn ($q) => $q->where('user_id', $user->id)->where('status', 'active'))->where(fn ($q) => $q->where('owner_id', $user->id)->orWhereHas('members', fn ($m) => $m->where('user_id', $user->id)->where('status', 'active')->whereHas('role', fn ($r) => $r->whereJsonContains('permissions', 'workspace.view'))))->when($search !== null && $search !== '', fn ($q) => $q->whereRaw("name LIKE ? ESCAPE '!'", [SearchTerm::contains($search)]))->latest()->paginate(12)->withQueryString();
+        return Workspace::query()
+            ->whereHas('members', fn ($q) => $q->where('user_id', $user->id)->where('status', 'active'))
+            ->where(fn ($q) => $q->where('owner_id', $user->id)->orWhereHas('members', fn ($m) => $m->where('user_id', $user->id)->where('status', 'active')->whereHas('role', fn ($r) => $r->whereJsonContains('permissions', 'workspace.view'))))
+            ->when($search !== null && $search !== '', fn ($q) => $q->whereRaw("name LIKE ? ESCAPE '!'", [SearchTerm::contains($search)]))
+            ->latest()
+            ->paginate(12)
+            ->withQueryString();
     }
 
     /** Overview counts only include projects/tasks the user may see. */
@@ -209,12 +215,15 @@ class WorkspaceService
         $visible = $this->projects->visible($user, $workspace)->get();
         $workspace->setAttribute('projects_count', $visible->count());
         $taskProjects = $visible->filter(fn ($p) => $this->projects->allows($user, $p, 'task.view'))->pluck('id');
-        $workspace->setAttribute('tasks_count', $workspace->tasks()->where(function ($q) use ($taskProjects, $workspace, $user) {
-            $q->whereIn('project_id', $taskProjects);
-            if ($workspace->kind->value === 'personal' && $workspace->owner_id === $user->id) {
-                $q->orWhereNull('project_id');
-            }
-        })->count());
+        $workspace->setAttribute('tasks_count', $workspace
+            ->tasks()
+            ->where(function ($q) use ($taskProjects, $workspace, $user) {
+                $q->whereIn('project_id', $taskProjects);
+                if ($workspace->kind->value === 'personal' && $workspace->owner_id === $user->id) {
+                    $q->orWhereNull('project_id');
+                }
+            })
+            ->count());
         $isPersonalOverview = $this->taskListing->isPersonalOverview($user, $workspace, null);
         if ($isPersonalOverview) {
             $workspace->setAttribute('tasks_count', $this->taskListing->query($user, $workspace, null)->count());

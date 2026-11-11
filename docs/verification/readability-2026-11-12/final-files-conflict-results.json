@@ -1,0 +1,101 @@
+{
+  "requests": [
+    {
+      "label": "Login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Personal list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 200
+    },
+    {
+      "label": "Create attachment task",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 201
+    },
+    {
+      "label": "Upload text attachment",
+      "status": 302
+    },
+    {
+      "label": "Download attachment",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cba2-aacf-703e-bac0-e8a61c3138cb/attachments/01a1cba2-abf4-70c7-88e5-8ec46246e662",
+      "status": 200
+    },
+    {
+      "label": "Remove attachment",
+      "method": "DELETE",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cba2-aacf-703e-bac0-e8a61c3138cb/attachments/01a1cba2-abf4-70c7-88e5-8ec46246e662",
+      "status": 302
+    },
+    {
+      "label": "Removed attachment unavailable",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cba2-aacf-703e-bac0-e8a61c3138cb/attachments/01a1cba2-abf4-70c7-88e5-8ec46246e662",
+      "status": 404
+    },
+    {
+      "label": "First edit",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cba2-aacf-703e-bac0-e8a61c3138cb",
+      "status": 200
+    },
+    {
+      "label": "Stale edit",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cba2-aacf-703e-bac0-e8a61c3138cb",
+      "status": 409
+    },
+    {
+      "label": "Resolve conflict",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cba2-aacf-703e-bac0-e8a61c3138cb/resolve-edit",
+      "status": 200
+    },
+    {
+      "label": "Conflict token cannot be reused",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cba2-aacf-703e-bac0-e8a61c3138cb/resolve-edit",
+      "status": 404
+    }
+  ],
+  "results": [
+    {
+      "check": "Attachment upload accepted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Attachment metadata stored",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Download content matches",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Stale write did not overwrite server",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Chosen title persisted",
+      "passed": true,
+      "evidence": null
+    }
+  ]
+}

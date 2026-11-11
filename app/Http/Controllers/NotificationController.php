@@ -10,7 +10,23 @@ class NotificationController extends Controller
 {
     public function index(Request $request, NotificationService $service)
     {
-        $data = $request->validate(['filter' => ['sometimes', 'in:all,unread,read'], 'type' => ['nullable', Rule::in(['task.created', 'task.updated', 'task.status_changed', 'task.comment_added', 'task.reminder_due', 'task.reminder_review', 'task.mentioned', 'calendar.proposed', 'calendar.responded'])]]);
+        $data = $request->validate([
+            'filter' => ['sometimes', 'in:all,unread,read'],
+            'type' => [
+                'nullable',
+                Rule::in([
+                    'task.created',
+                    'task.updated',
+                    'task.status_changed',
+                    'task.comment_added',
+                    'task.reminder_due',
+                    'task.reminder_review',
+                    'task.mentioned',
+                    'calendar.proposed',
+                    'calendar.responded',
+                ]),
+            ],
+        ]);
         $notifications = $service->inbox($request->user(), $data);
 
         return view('notifications.index', compact('notifications'));

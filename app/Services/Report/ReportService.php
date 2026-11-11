@@ -76,13 +76,21 @@ class ReportService
     public function metrics(User $actor, Workspace $workspace, array $data, string $permission = 'report.view'): array
     {
         return DB::transaction(function () use ($actor, $workspace, $data, $permission) {
-            $f = $this->filters($actor, $workspace, $data, $permission);
-            $project = $f['project'];
-            $start = $f['start'];
-            $end = $f['end'];
+            $filters = $this->filters($actor, $workspace, $data, $permission);
+            $project = $filters['project'];
+            $start = $filters['start'];
+            $end = $filters['end'];
             $asOf = CarbonImmutable::now('UTC');
             $projectIds = $project ? [$project->id] : $this->access->projects($actor, $workspace)->pluck('id')->all();
-            $tasks = Task::where('workspace_id', $workspace->id)->where('task_type', 'WORK')->where(fn ($q) => $q->whereIn('project_id', $projectIds)->when($workspace->kind->value === 'personal' && $workspace->owner_id === $actor->id, fn ($q) => $q->orWhereNull('project_id')))->when($f['subject'], fn ($q) => $q->where('assignee_id', $f['subject']))->when(! $f['include_archived'], fn ($q) => $q->whereNull('archived_at'))->with('assignee:id,name')->orderBy('id')->limit(10001)->get();
+            $tasks = Task::where('workspace_id', $workspace->id)
+                ->where('task_type', 'WORK')
+                ->where(fn ($q) => $q->whereIn('project_id', $projectIds)->when($workspace->kind->value === 'personal' && $workspace->owner_id === $actor->id, fn ($q) => $q->orWhereNull('project_id')))
+                ->when($filters['subject'], fn ($q) => $q->where('assignee_id', $filters['subject']))
+                ->when(! $filters['include_archived'], fn ($q) => $q->whereNull('archived_at'))
+                ->with('assignee:id,name')
+                ->orderBy('id')
+                ->limit(10001)
+                ->get();
             if ($tasks->count() > 10000) {
                 throw ValidationException::withMessages(['project_id' => 'Có quá nhiều task; chọn project hoặc thành viên cụ thể.']);
             }
@@ -93,8 +101,21 @@ class ReportService
             foreach ($tasks as $task) {
                 $statuses[$task->status->value]++;
             }
-            $events = CalendarEvent::whereIn('task_id', $activeIds)->where('event_type', 'TASK_BLOCK')->where('status', '!=', 'cancelled')->where('starts_at', '<', $end)->where('ends_at', '>', $start)->with(['workspace', 'project', 'task'])->orderBy('id')->limit(20001)->get();
-            $entries = TimeEntry::whereIn('task_id', $ids)->where('started_at', '<', $end)->where(fn ($q) => $q->whereNull('ended_at')->orWhere('ended_at', '>', $start))->orderBy('id')->limit(20001)->get();
+            $events = CalendarEvent::whereIn('task_id', $activeIds)
+                ->where('event_type', 'TASK_BLOCK')
+                ->where('status', '!=', 'cancelled')
+                ->where('starts_at', '<', $end)
+                ->where('ends_at', '>', $start)
+                ->with(['workspace', 'project', 'task'])
+                ->orderBy('id')
+                ->limit(20001)
+                ->get();
+            $entries = TimeEntry::whereIn('task_id', $ids)
+                ->where('started_at', '<', $end)
+                ->where(fn ($q) => $q->whereNull('ended_at')->orWhere('ended_at', '>', $start))
+                ->orderBy('id')
+                ->limit(20001)
+                ->get();
             if ($events->count() > 20000 || $entries->count() > 20000) {
                 throw ValidationException::withMessages(['from' => 'Có quá nhiều phiên/lịch; thu hẹp kỳ hoặc phạm vi.']);
             }
@@ -105,7 +126,7 @@ class ReportService
             $calendarProjects = [];
             $running = 0;
             foreach ($events as $event) {
-                if (! Gate::forUser($actor)->allows('view', $event) || $f['subject'] && $event->user_id !== $f['subject']) {
+                if (! Gate::forUser($actor)->allows('view', $event) || $filters['subject'] && $event->user_id !== $filters['subject']) {
                     continue;
                 }
                 $planned[$event->user_id][] = [max($start->timestamp, $event->starts_at->timestamp), min($end->timestamp, $event->ends_at->timestamp)];
@@ -113,7 +134,7 @@ class ReportService
                 $calendarProjects[] = $event->project_id;
             }
             foreach ($entries as $entry) {
-                if ($f['subject'] && $entry->user_id !== $f['subject']) {
+                if ($filters['subject'] && $entry->user_id !== $filters['subject']) {
                     continue;
                 }
                 if (! $entry->ended_at) {
@@ -157,7 +178,7 @@ class ReportService
                 'workspace_id' => $workspace->id,
                 'workspace_name' => $workspace->name,
                 'generated_at' => $asOf->toIso8601String(),
-                'timezone' => $f['timezone'],
+                'timezone' => $filters['timezone'],
                 'period' => [
                     'from' => $data['from'],
                     'to' => $data['to'],
@@ -167,8 +188,8 @@ class ReportService
                 'filters' => [
                     'project_id' => $project?->id,
                     'project_name' => $project?->name,
-                    'subject_user_id' => $f['subject'],
-                    'include_archived' => $f['include_archived'],
+                    'subject_user_id' => $filters['subject'],
+                    'include_archived' => $filters['include_archived'],
                 ],
                 'access' => [
                     'project_ids' => $tasks->pluck('project_id')->filter()->unique()->values()->all(),
@@ -260,14 +281,20 @@ class ReportService
 
     public function snapshots(User $actor, Workspace $workspace, array $filters, string $path, array $query): LengthAwarePaginator
     {
-        $rows = ReportSnapshot::where('workspace_id', $workspace->id)->where('generated_by', $actor->id)->where('metrics_json->schema_version', 1)->when($filters['project_id'] ?? null, fn ($q, $id) => $q->where('project_id', $id));
+        $rows = ReportSnapshot::where('workspace_id', $workspace->id)
+            ->where('generated_by', $actor->id)
+            ->where('metrics_json->schema_version', 1)
+            ->when($filters['project_id'] ?? null, fn ($q, $id) => $q->where('project_id', $id));
 
         return $this->visiblePage($actor, $this->createdBetween($rows, $actor, $filters), $filters, $path, $query, 'Có quá nhiều bản báo cáo; lọc project hoặc ngày tạo.');
     }
 
     public function aiRuns(User $actor, Workspace $workspace, array $filters, string $path, array $query): LengthAwarePaginator
     {
-        $rows = AiRun::where('workspace_id', $workspace->id)->where('requested_by', $actor->id)->where('context_snapshot->schema_version', 1)->when($filters['status'] ?? null, fn ($q, $status) => $q->where('status', $status));
+        $rows = AiRun::where('workspace_id', $workspace->id)
+            ->where('requested_by', $actor->id)
+            ->where('context_snapshot->schema_version', 1)
+            ->when($filters['status'] ?? null, fn ($q, $status) => $q->where('status', $status));
 
         return $this->visiblePage($actor, $this->createdBetween($rows, $actor, $filters), $filters, $path, $query, 'Có quá nhiều yêu cầu; lọc trạng thái hoặc ngày tạo.');
     }

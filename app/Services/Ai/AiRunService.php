@@ -37,17 +37,23 @@ class AiRunService
             }
             $key = hash('sha256', $actor->id.':'.$workspace->id.':'.$data['idempotency_token']);
             $digest = hash('sha256', json_encode(array_intersect_key($data, array_flip(['project_id', 'base_id', 'operation', 'user_prompt']))));
-            if ($existing = AiRun::where('idempotency_key', $key)->first()) {
-                Gate::forUser($actor)->authorize('view', $existing);
-                if (($existing->context_snapshot['request_digest'] ?? null) !== $digest) {
-                    throw ValidationException::withMessages(['idempotency_token' => 'Mã gửi đã dùng cho nội dung khác.']);
-                }
-
+            $existing = $this->existingRequest($actor, $key, $digest, 'Mã gửi đã dùng cho nội dung khác.');
+            if ($existing) {
                 return $existing;
             }
             $context = $this->planning->capture($actor, $workspace, $project, $base);
             $context['request_digest'] = $digest;
-            $run = AiRun::create(['workspace_id' => $workspace->id, 'project_id' => $project?->id, 'requested_by' => $actor->id, 'operation' => $data['operation'], 'trigger_type' => 'manual', 'user_prompt' => $data['user_prompt'], 'context_snapshot' => $context, 'status' => 'queued', 'idempotency_key' => $key]);
+            $run = AiRun::create([
+                'workspace_id' => $workspace->id,
+                'project_id' => $project?->id,
+                'requested_by' => $actor->id,
+                'operation' => $data['operation'],
+                'trigger_type' => 'manual',
+                'user_prompt' => $data['user_prompt'],
+                'context_snapshot' => $context,
+                'status' => 'queued',
+                'idempotency_key' => $key,
+            ]);
             $this->enqueue($run);
 
             return $run;
@@ -60,9 +66,7 @@ class AiRunService
             return false;
         }
 
-        return $run->operation->value === 'report'
-            ? $this->access->manifest($run->requester, $run->workspace, $run->context_snapshot['metrics'] ?? [], 'report.create')
-            : $this->plans->run($run->requester, $run, 'plan.create');
+        return $run->operation->value === 'report' ? $this->access->manifest($run->requester, $run->workspace, $run->context_snapshot['metrics'] ?? [], 'report.create') : $this->plans->run($run->requester, $run, 'plan.create');
     }
 
     private function enqueue(AiRun $run): void
@@ -82,20 +86,38 @@ class AiRunService
             Workspace::lockForUpdate()->findOrFail($workspace->id);
             $this->reports->filters($actor, $workspace, $data, 'report.create');
             $key = hash('sha256', $actor->id.':'.$workspace->id.':'.$data['idempotency_token']);
-            $request = ['from' => $data['from'], 'to' => $data['to'], 'project_id' => $data['project_id'] ?? null, 'subject_user_id' => $data['subject_user_id'] ?? null, 'include_archived' => (bool) ($data['include_archived'] ?? false), 'timezone' => $actor->timezone, 'user_prompt' => $data['user_prompt']];
+            $request = [
+                'from' => $data['from'],
+                'to' => $data['to'],
+                'project_id' => $data['project_id'] ?? null,
+                'subject_user_id' => $data['subject_user_id'] ?? null,
+                'include_archived' => (bool) ($data['include_archived'] ?? false),
+                'timezone' => $actor->timezone,
+                'user_prompt' => $data['user_prompt'],
+            ];
             $digest = hash('sha256', json_encode($request));
-            if ($existing = AiRun::where('idempotency_key', $key)->first()) {
-                Gate::forUser($actor)->authorize('view', $existing);
-                if (($existing->context_snapshot['request_digest'] ?? null) !== $digest) {
-                    throw ValidationException::withMessages(['idempotency_token' => 'Mã gửi đã dùng cho nội dung khác. Mở form mới để tạo yêu cầu khác.']);
-                }
-
+            $existing = $this->existingRequest($actor, $key, $digest, 'Mã gửi đã dùng cho nội dung khác. Mở form mới để tạo yêu cầu khác.');
+            if ($existing) {
                 return $existing;
             }
             $metrics = $this->reports->metrics($actor, $workspace, $data, 'report.create');
-            $run = AiRun::create(['workspace_id' => $workspace->id, 'project_id' => $metrics['filters']['project_id'], 'requested_by' => $actor->id, 'operation' => 'report', 'trigger_type' => 'manual',
-                'user_prompt' => $data['user_prompt'], 'context_snapshot' => ['schema_version' => 1, 'request_digest' => $digest, 'metrics' => $metrics, 'work_schedule' => config('work_schedule'), 'mode' => 'report_commentary_only'],
-                'status' => 'queued', 'idempotency_key' => $key]);
+            $run = AiRun::create([
+                'workspace_id' => $workspace->id,
+                'project_id' => $metrics['filters']['project_id'],
+                'requested_by' => $actor->id,
+                'operation' => 'report',
+                'trigger_type' => 'manual',
+                'user_prompt' => $data['user_prompt'],
+                'context_snapshot' => [
+                    'schema_version' => 1,
+                    'request_digest' => $digest,
+                    'metrics' => $metrics,
+                    'work_schedule' => config('work_schedule'),
+                    'mode' => 'report_commentary_only',
+                ],
+                'status' => 'queued',
+                'idempotency_key' => $key,
+            ]);
             $this->enqueue($run);
 
             return $run;
@@ -114,14 +136,23 @@ class AiRunService
                 if (! in_array($run->status->value, ['queued', 'running'], true)) {
                     throw ValidationException::withMessages(['status' => 'Chỉ hủy yêu cầu đang chờ hoặc xử lý.']);
                 }
-                $run->update(['status' => 'cancelled', 'finished_at' => now(), 'error_message' => null]);
+                $run->update([
+                    'status' => 'cancelled',
+                    'finished_at' => now(),
+                    'error_message' => null,
+                ]);
 
                 return;
             }
             if ($run->status->value !== 'failed' || $run->calls()->count() >= config('ai.max_attempts')) {
                 throw ValidationException::withMessages(['status' => 'Chỉ thử lại yêu cầu lỗi còn lượt xử lý (tối đa 3 lượt).']);
             }
-            $run->update(['status' => 'queued', 'started_at' => null, 'finished_at' => null, 'error_message' => null]);
+            $run->update([
+                'status' => 'queued',
+                'started_at' => null,
+                'finished_at' => null,
+                'error_message' => null,
+            ]);
             $this->enqueue($run);
         }, 3);
     }
@@ -135,19 +166,45 @@ class AiRunService
             }
             $actor = $run->requester;
             if (! $this->canProcess($run)) {
-                $run->update(['status' => 'failed', 'finished_at' => now(), 'error_message' => 'Không còn quyền xử lý phạm vi dữ liệu của yêu cầu.']);
+                $run->update([
+                    'status' => 'failed',
+                    'finished_at' => now(),
+                    'error_message' => 'Không còn quyền xử lý phạm vi dữ liệu của yêu cầu.',
+                ]);
 
                 return null;
             }
             $attempt = (int) $run->calls()->max('attempt_no') + 1;
             if ($attempt > config('ai.max_attempts')) {
-                $run->update(['status' => 'failed', 'finished_at' => now(), 'error_message' => 'Đã hết số lượt xử lý.']);
+                $run->update([
+                    'status' => 'failed',
+                    'finished_at' => now(),
+                    'error_message' => 'Đã hết số lượt xử lý.',
+                ]);
 
                 return null;
             }
-            $run->update(['status' => 'running', 'started_at' => now(), 'finished_at' => null, 'error_message' => null]);
-            $call = AiCall::create(['ai_run_id' => $run->id, 'step_key' => $run->operation->value, 'attempt_no' => $attempt, 'provider' => config('ai.provider'), 'model' => config('ai.model'),
-                'request_payload' => ['job_uuid' => $jobUuid, 'context_sha256' => hash('sha256', json_encode($run->context_snapshot)), 'mode' => $run->operation->value, 'timeout_seconds' => config('ai.timeout_seconds')], 'status' => 'running', 'started_at' => now()]);
+            $run->update([
+                'status' => 'running',
+                'started_at' => now(),
+                'finished_at' => null,
+                'error_message' => null,
+            ]);
+            $call = AiCall::create([
+                'ai_run_id' => $run->id,
+                'step_key' => $run->operation->value,
+                'attempt_no' => $attempt,
+                'provider' => config('ai.provider'),
+                'model' => config('ai.model'),
+                'request_payload' => [
+                    'job_uuid' => $jobUuid,
+                    'context_sha256' => hash('sha256', json_encode($run->context_snapshot)),
+                    'mode' => $run->operation->value,
+                    'timeout_seconds' => config('ai.timeout_seconds'),
+                ],
+                'status' => 'running',
+                'started_at' => now(),
+            ]);
 
             return [$run, $call];
         }, 3);
@@ -162,7 +219,11 @@ class AiRunService
                 return;
             }
             if ($run->status->value !== 'running' || $run->calls()->orderByDesc('attempt_no')->value('id') !== $call->id) {
-                $call->update(['status' => 'failed', 'finished_at' => now(), 'error_message' => 'Kết quả không được áp dụng vì yêu cầu đã hủy hoặc kết thúc.']);
+                $call->update([
+                    'status' => 'failed',
+                    'finished_at' => now(),
+                    'error_message' => 'Kết quả không được áp dụng vì yêu cầu đã hủy hoặc kết thúc.',
+                ]);
 
                 return;
             }
@@ -181,9 +242,19 @@ class AiRunService
                     $retry = false;
                 }
             }
-            $call->update(['status' => $result ? 'succeeded' : 'failed', 'finished_at' => now(), 'error_message' => $error,
-                'response_payload' => $result ? ['text' => $result->text] : null, 'input_tokens' => $result?->inputTokens, 'output_tokens' => $result?->outputTokens]);
-            $run->update(['status' => $result ? 'succeeded' : ($retry ? 'queued' : 'failed'), 'finished_at' => $retry ? null : now(), 'error_message' => $error]);
+            $call->update([
+                'status' => $result ? 'succeeded' : 'failed',
+                'finished_at' => now(),
+                'error_message' => $error,
+                'response_payload' => $result ? ['text' => $result->text] : null,
+                'input_tokens' => $result?->inputTokens,
+                'output_tokens' => $result?->outputTokens,
+            ]);
+            $run->update([
+                'status' => $result ? 'succeeded' : ($retry ? 'queued' : 'failed'),
+                'finished_at' => $retry ? null : now(),
+                'error_message' => $error,
+            ]);
         }, 3);
     }
 
@@ -201,8 +272,19 @@ class AiRunService
             if ($jobUuid && ($latest?->request_payload['job_uuid'] ?? null) !== $jobUuid) {
                 return false;
             }
-            $run->calls()->where('status', 'running')->update(['status' => 'failed', 'finished_at' => now(), 'error_message' => 'Worker dừng hoặc hết lượt xử lý.']);
-            $run->update(['status' => 'failed', 'finished_at' => now(), 'error_message' => 'Worker dừng hoặc hết lượt xử lý. Có thể thử lại nếu còn lượt.']);
+            $run
+                ->calls()
+                ->where('status', 'running')
+                ->update([
+                    'status' => 'failed',
+                    'finished_at' => now(),
+                    'error_message' => 'Worker dừng hoặc hết lượt xử lý.',
+                ]);
+            $run->update([
+                'status' => 'failed',
+                'finished_at' => now(),
+                'error_message' => 'Worker dừng hoặc hết lượt xử lý. Có thể thử lại nếu còn lượt.',
+            ]);
 
             return true;
         }, 3);
@@ -219,5 +301,21 @@ class AiRunService
         }
 
         return $count;
+    }
+
+    /** Replays must still pass current access checks and match the original input. */
+    private function existingRequest(User $actor, string $key, string $digest, string $message): ?AiRun
+    {
+        $existing = AiRun::where('idempotency_key', $key)->first();
+        if (! $existing) {
+            return null;
+        }
+
+        Gate::forUser($actor)->authorize('view', $existing);
+        if (($existing->context_snapshot['request_digest'] ?? null) !== $digest) {
+            throw ValidationException::withMessages(['idempotency_token' => $message]);
+        }
+
+        return $existing;
     }
 }

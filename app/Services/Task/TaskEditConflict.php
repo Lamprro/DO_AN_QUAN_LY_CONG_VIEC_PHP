@@ -11,9 +11,35 @@ use Illuminate\Validation\ValidationException;
 
 class TaskEditConflict
 {
-    public const FIELDS = ['code', 'title', 'description', 'priority', 'estimate_minutes', 'deadline_at', 'assignee_id', 'reviewer_id', 'task_type', 'parent_task_id', 'group_label', 'sort_order'];
+    public const FIELDS = [
+        'code',
+        'title',
+        'description',
+        'priority',
+        'estimate_minutes',
+        'deadline_at',
+        'assignee_id',
+        'reviewer_id',
+        'task_type',
+        'parent_task_id',
+        'group_label',
+        'sort_order',
+    ];
 
-    public const LABELS = ['code' => 'Mã', 'title' => 'Tiêu đề', 'description' => 'Mô tả', 'priority' => 'Ưu tiên', 'estimate_minutes' => 'Ước lượng (phút)', 'deadline_at' => 'Hạn chót', 'assignee_id' => 'Người thực hiện', 'reviewer_id' => 'Người duyệt', 'task_type' => 'Loại', 'parent_task_id' => 'Nhóm cha', 'group_label' => 'Nhãn nhóm', 'sort_order' => 'Thứ tự'];
+    public const LABELS = [
+        'code' => 'Mã',
+        'title' => 'Tiêu đề',
+        'description' => 'Mô tả',
+        'priority' => 'Ưu tiên',
+        'estimate_minutes' => 'Ước lượng (phút)',
+        'deadline_at' => 'Hạn chót',
+        'assignee_id' => 'Người thực hiện',
+        'reviewer_id' => 'Người duyệt',
+        'task_type' => 'Loại',
+        'parent_task_id' => 'Nhóm cha',
+        'group_label' => 'Nhãn nhóm',
+        'sort_order' => 'Thứ tự',
+    ];
 
     public function values(Task $task): array
     {
@@ -34,7 +60,12 @@ class TaskEditConflict
         $rows = [];
         foreach ($mine as $field => $value) {
             if ((string) $value !== (string) ($current[$field] ?? null)) {
-                $rows[] = ['field' => $field, 'label' => self::LABELS[$field], 'mine' => $this->human($task, $field, $value), 'server' => $this->human($task, $field, $current[$field] ?? null)];
+                $rows[] = [
+                    'field' => $field,
+                    'label' => self::LABELS[$field],
+                    'mine' => $this->human($task, $field, $value),
+                    'server' => $this->human($task, $field, $current[$field] ?? null),
+                ];
             }
         }
         $token = (string) Str::uuid();
@@ -43,10 +74,29 @@ class TaskEditConflict
         while (count($all) >= 5) {
             array_shift($all);
         }
-        $all[$token] = ['actor_id' => $request->user()->id, 'task_id' => $task->id, 'workspace_id' => $task->workspace_id, 'project_id' => $task->project_id, 'revision' => $task->revision, 'created_at' => time(), 'surface' => $surface, 'mine' => $mine, 'server' => $current, 'fields' => array_column($rows, 'field'), 'deadline_reason' => $input['deadline_reason'] ?? null];
+        $all[$token] = [
+            'actor_id' => $request->user()->id,
+            'task_id' => $task->id,
+            'workspace_id' => $task->workspace_id,
+            'project_id' => $task->project_id,
+            'revision' => $task->revision,
+            'created_at' => time(),
+            'surface' => $surface,
+            'mine' => $mine,
+            'server' => $current,
+            'fields' => array_column($rows, 'field'),
+            'deadline_reason' => $input['deadline_reason'] ?? null,
+        ];
         $request->session()->put('task_edit_conflicts', $all);
 
-        return ['token' => $token, 'revision' => $task->revision, 'submitted_revision' => $input['expected_revision'] ?? null, 'rows' => $rows, 'deadline_reason' => $input['deadline_reason'] ?? null, 'surface' => $surface];
+        return [
+            'token' => $token,
+            'revision' => $task->revision,
+            'submitted_revision' => $input['expected_revision'] ?? null,
+            'rows' => $rows,
+            'deadline_reason' => $input['deadline_reason'] ?? null,
+            'surface' => $surface,
+        ];
     }
 
     private function human(Task $task, string $field, mixed $value): string
@@ -69,7 +119,9 @@ class TaskEditConflict
         $p = $request->session()->get('task_edit_conflicts.'.$input['conflict_token']);
         abort_unless(is_array($p) && $p['actor_id'] === $request->user()->id && $p['task_id'] === $task->id && $p['workspace_id'] === $task->workspace_id && $p['project_id'] === $task->project_id, 404);
         if ($p['created_at'] < time() - 1200) {
-            throw ValidationException::withMessages(['conflict_token' => 'Bản đối chiếu đã hết hạn 20 phút. Hãy mở lại dữ liệu hiện tại trước khi sửa.']);
+            throw ValidationException::withMessages([
+                'conflict_token' => 'Bản đối chiếu đã hết hạn 20 phút. Hãy mở lại dữ liệu hiện tại trước khi sửa.',
+            ]);
         }
         if ((int) $input['expected_revision'] !== (int) $p['revision']) {
             throw ValidationException::withMessages(['expected_revision' => 'Phiên bản của bản đối chiếu không hợp lệ.']);

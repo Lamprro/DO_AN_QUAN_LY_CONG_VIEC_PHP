@@ -70,17 +70,17 @@ class TimeTrackingController extends Controller
         return to_route('timers.adjust', $entry)->with('success', 'Đã điều chỉnh, lưu lịch sử trước/sau. Snapshot cũ giữ nguyên; dashboard mới dùng giờ đã sửa.');
     }
 
-    public function editWorkHours(Request $request, TimeTrackingService $service)
+    public function editWorkHours(Request $request)
     {
         return view('settings.work-hours', [
-            'hours' => $service->workHoursValues($request->user()),
-            'version' => $service->workHoursVersion($request->user()),
+            'hours' => $this->service->workHoursValues($request->user()),
+            'version' => $this->service->workHoursVersion($request->user()),
         ]);
     }
 
-    public function updateWorkHours(Request $request, TimeTrackingService $service)
+    public function updateWorkHours(Request $request)
     {
-        $service->saveWorkHours($request->user(), $request->all());
+        $this->service->saveWorkHours($request->user(), $request->all());
 
         return back()->with('success', 'Đã cập nhật giờ làm. Kế hoạch cũ giữ snapshot, kế hoạch mới dùng lịch mới.');
     }

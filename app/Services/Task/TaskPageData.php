@@ -64,7 +64,12 @@ class TaskPageData
         $query = $this->filtered($actor, $workspace, $project, $filters)->withCount(['children', 'children as completed_children_count' => fn ($children) => $children->where('status', 'DONE')]);
         $board = [];
         foreach (TaskStatus::cases() as $status) {
-            $board[$status->value] = (clone $query)->where('task_type', '!=', 'GROUP')->where('status', $status->value)->orderBy('id')->paginate(10, ['*'], 'page_'.strtolower($status->value))->withQueryString();
+            $board[$status->value] = (clone $query)
+                ->where('task_type', '!=', 'GROUP')
+                ->where('status', $status->value)
+                ->orderBy('id')
+                ->paginate(10, ['*'], 'page_'.strtolower($status->value))
+                ->withQueryString();
         }
 
         return $this->context($actor, $workspace, $project) + compact('board', 'filters') + ['isPersonalOverview' => $this->listing->isPersonalOverview($actor, $workspace, $project)];
@@ -112,7 +117,14 @@ class TaskPageData
     public function show(User $actor, Workspace $workspace, ?Project $project, Task $task, ?string $activityType): array
     {
         $all = $workspace->tasks()->where('project_id', $project?->id)->get();
-        $activities = $task->activities()->with('actor')->when($activityType, fn ($q) => $q->where('type', $activityType))->orderByDesc('created_at')->orderByDesc('id')->paginate(15)->withQueryString();
+        $activities = $task
+            ->activities()
+            ->with('actor')
+            ->when($activityType, fn ($q) => $q->where('type', $activityType))
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->paginate(15)
+            ->withQueryString();
         $historyPeople = User::whereIn('id', $workspace->members()->pluck('user_id'))->pluck('name', 'id')->all();
         $historyTasks = $all->pluck('title', 'id')->all();
         $activityHuman = function ($field, $value) use ($historyPeople, $historyTasks) {
@@ -190,11 +202,17 @@ class TaskPageData
         }
         match ($preset) {
             'mine' => $query->where('assignee_id', $actor->id)->where('task_type', '!=', 'GROUP'),
-            'review' => $query->whereNull('archived_at')->when(! $this->tasks->projectWritable($project), fn ($q) => $q->whereRaw('1=0'))->where('status', 'REVIEW')->where('task_type', '!=', 'GROUP')->where(function ($q) use ($actor, $workspace) {
-                if ($workspace->owner_id !== $actor->id) {
-                    $q->where('reviewer_id', $actor->id);
-                }
-            })->when(! $this->tasks->scope($actor, $workspace, $project, 'task.review'), fn ($q) => $q->whereRaw('1=0')),
+            'review' => $query
+                ->whereNull('archived_at')
+                ->when(! $this->tasks->projectWritable($project), fn ($q) => $q->whereRaw('1=0'))
+                ->where('status', 'REVIEW')
+                ->where('task_type', '!=', 'GROUP')
+                ->where(function ($q) use ($actor, $workspace) {
+                    if ($workspace->owner_id !== $actor->id) {
+                        $q->where('reviewer_id', $actor->id);
+                    }
+                })
+                ->when(! $this->tasks->scope($actor, $workspace, $project, 'task.review'), fn ($q) => $q->whereRaw('1=0')),
             'blocked' => $query->where('task_type', '!=', 'GROUP')->whereNotIn('status', ['DONE', 'CANCELLED'])->whereHas('blockers', fn ($q) => $q->where('status', 'open')),
             'overdue' => $query->where('task_type', 'WORK')->whereNotIn('status', ['DONE', 'CANCELLED'])->where('deadline_at', '<', now()),
             default => null,

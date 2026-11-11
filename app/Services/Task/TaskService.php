@@ -259,7 +259,12 @@ class TaskService
             if ($data['action'] === 'assign') {
                 abort_unless($this->tasks->scope($actor, $workspace, $project, 'task.assign'), 403);
             }
-            $tasks = Task::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->whereIn('id', array_keys($items))->orderBy('id')->lockForUpdate()->get();
+            $tasks = Task::where('workspace_id', $workspace->id)
+                ->where('project_id', $project?->id)
+                ->whereIn('id', array_keys($items))
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get();
             abort_unless($tasks->count() === count($items), 404);
             foreach ($tasks as $task) {
                 Gate::forUser($actor)->authorize($data['action'] === 'archive' ? 'archive' : 'update', $task);

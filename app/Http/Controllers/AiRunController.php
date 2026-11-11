@@ -90,7 +90,7 @@ class AiRunController extends Controller
         ]);
     }
 
-    public function storePlanning(Request $request, Workspace $workspace, AiRunService $service)
+    public function storePlanning(Request $request, Workspace $workspace)
     {
         $validated = $request->validate([
             'project_id' => 'nullable|uuid',
@@ -99,7 +99,7 @@ class AiRunController extends Controller
             'user_prompt' => 'required|string|max:4000',
             'idempotency_token' => 'required|uuid',
         ]);
-        $run = $service->requestPlanning($request->user(), $workspace, $validated);
+        $run = $this->service->requestPlanning($request->user(), $workspace, $validated);
 
         return to_route('workspaces.ai-runs.show', [$workspace, $run])->with('success', 'Đã lưu yêu cầu AI. Kết quả kế hoạch chỉ là nháp, chưa áp dụng.');
     }

@@ -357,7 +357,11 @@ class TaskTemplateService
             'workspace' => $workspace,
             'template' => $template,
             'runs' => $runs,
-            'generatedTasks' => Task::where('workspace_id', $workspace->id)->where('project_id', $template->project_id)->whereIn('id', $taskIds)->get(['id', 'code', 'title'])->keyBy('id'),
+            'generatedTasks' => Task::where('workspace_id', $workspace->id)
+                ->where('project_id', $template->project_id)
+                ->whereIn('id', $taskIds)
+                ->get(['id', 'code', 'title'])
+                ->keyBy('id'),
             'canManage' => $this->tasks->templates($actor, $workspace, $template->project, true),
         ];
     }

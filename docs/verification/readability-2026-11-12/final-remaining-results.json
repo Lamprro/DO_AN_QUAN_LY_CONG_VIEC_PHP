@@ -1,0 +1,252 @@
+{
+  "requests": [
+    {
+      "label": "Login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Settings form",
+      "method": "GET",
+      "path": "/settings",
+      "status": 200
+    },
+    {
+      "label": "Save preferences",
+      "method": "PATCH",
+      "path": "/settings",
+      "status": 302
+    },
+    {
+      "label": "Profile form",
+      "method": "GET",
+      "path": "/profile",
+      "status": 200
+    },
+    {
+      "label": "Save profile",
+      "method": "PATCH",
+      "path": "/profile",
+      "status": 302
+    },
+    {
+      "label": "Search accessible tasks",
+      "method": "GET",
+      "path": "/search?q=Review&type=tasks",
+      "status": 200
+    },
+    {
+      "label": "Search inaccessible workspace",
+      "method": "GET",
+      "path": "/search?q=Review&workspace_id=f61f2bd8-3c86-4dfc-9567-09b3dc35d13f",
+      "status": 403
+    },
+    {
+      "label": "Task list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks",
+      "status": 200
+    },
+    {
+      "label": "Create due task",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/tasks",
+      "status": 201
+    },
+    {
+      "label": "Scan reminders",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reminders/scan",
+      "status": 302
+    },
+    {
+      "label": "Repeat reminder scan",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reminders/scan",
+      "status": 302
+    },
+    {
+      "label": "Inbox",
+      "method": "GET",
+      "path": "/notifications",
+      "status": 200
+    },
+    {
+      "label": "Mark read",
+      "method": "PATCH",
+      "path": "/notifications/01a1cba4-01ee-70f1-b239-efd8efbe7459/read",
+      "status": 302
+    },
+    {
+      "label": "Mark unread",
+      "method": "PATCH",
+      "path": "/notifications/01a1cba4-01ee-70f1-b239-efd8efbe7459/read",
+      "status": 302
+    },
+    {
+      "label": "Mark all read",
+      "method": "POST",
+      "path": "/notifications/read-all",
+      "status": 302
+    },
+    {
+      "label": "Reminder history",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reminders",
+      "status": 200
+    },
+    {
+      "label": "Operations",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/operations",
+      "status": 200
+    },
+    {
+      "label": "Create invitation workspace",
+      "method": "POST",
+      "path": "/workspaces",
+      "status": 302
+    },
+    {
+      "label": "Invite existing account",
+      "method": "POST",
+      "path": "/workspaces/01a1cba4-08ab-71f4-87fe-307bd9279bd7/invitations",
+      "status": 302
+    },
+    {
+      "label": "Read invitation URL",
+      "method": "GET",
+      "path": "/workspaces/01a1cba4-08ab-71f4-87fe-307bd9279bd7/members",
+      "status": 200
+    },
+    {
+      "label": "Invitee login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Invitee login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Read invitation",
+      "method": "GET",
+      "path": "/invitations/WmEyffIfHcc6k1I0AA7641afQn8t21czdHNWvTkLMQEbP656I9aQbTxT7RDk8oB5",
+      "status": 200
+    },
+    {
+      "label": "Accept invitation",
+      "method": "POST",
+      "path": "/invitations/WmEyffIfHcc6k1I0AA7641afQn8t21czdHNWvTkLMQEbP656I9aQbTxT7RDk8oB5/accept",
+      "status": 302
+    },
+    {
+      "label": "Consumed invitation unavailable",
+      "method": "GET",
+      "path": "/invitations/WmEyffIfHcc6k1I0AA7641afQn8t21czdHNWvTkLMQEbP656I9aQbTxT7RDk8oB5",
+      "status": 410
+    },
+    {
+      "label": "GitHub settings",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/github",
+      "status": 200
+    },
+    {
+      "label": "Save local webhook config",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/github",
+      "status": 302
+    },
+    {
+      "label": "Reject invalid webhook signature",
+      "status": 403
+    },
+    {
+      "label": "Process signed webhook",
+      "status": 204
+    },
+    {
+      "label": "Repeat signed delivery",
+      "status": 204
+    },
+    {
+      "label": "Disable webhook config",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/github",
+      "status": 302
+    }
+  ],
+  "results": [
+    {
+      "check": "Preferences persisted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Reminder scan idempotent",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Reminder worker executes",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Reminder delivers in app",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Read marker stored",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Invitation creates one active membership",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Reject invalid webhook signature",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Process signed webhook",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Repeat signed delivery",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Webhook delivery recorded once",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "GitHub logs task activity without changing status",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Foreign keys valid",
+      "passed": true,
+      "evidence": null
+    }
+  ]
+}

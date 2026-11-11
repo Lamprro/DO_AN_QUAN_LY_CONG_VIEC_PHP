@@ -19,7 +19,9 @@ class PasswordRecoveryController extends Controller
 
     public function store(Request $request, AccountService $accounts): RedirectResponse
     {
-        $request->merge(['email' => is_string($request->input('email')) ? Str::lower(trim($request->input('email'))) : $request->input('email')]);
+        $request->merge([
+            'email' => is_string($request->input('email')) ? Str::lower(trim($request->input('email'))) : $request->input('email'),
+        ]);
         $data = $request->validate(['email' => ['required', 'string', 'email', 'max:255']]);
         $accounts->sendResetLink($data['email']);
 
@@ -34,14 +36,18 @@ class PasswordRecoveryController extends Controller
 
     public function update(Request $request, AccountService $accounts): RedirectResponse
     {
-        $request->merge(['email' => is_string($request->input('email')) ? Str::lower(trim($request->input('email'))) : $request->input('email')]);
+        $request->merge([
+            'email' => is_string($request->input('email')) ? Str::lower(trim($request->input('email'))) : $request->input('email'),
+        ]);
         $data = $request->validate([
             'email' => ['required', 'string', 'email', 'max:255'],
             'token' => ['required', 'string', 'size:64'],
             'password' => ['required', 'confirmed', PasswordRule::min(8)->letters()->numbers(), 'max:200'],
         ]);
         if (! $accounts->resetPassword($data)) {
-            return back()->withErrors(['email' => 'Liên kết không hợp lệ, đã dùng hoặc hết hạn. Vui lòng yêu cầu liên kết mới.'])->onlyInput('email');
+            return back()->withErrors([
+                'email' => 'Liên kết không hợp lệ, đã dùng hoặc hết hạn. Vui lòng yêu cầu liên kết mới.',
+            ])->onlyInput('email');
         }
         $request->session()->invalidate();
         $request->session()->regenerateToken();

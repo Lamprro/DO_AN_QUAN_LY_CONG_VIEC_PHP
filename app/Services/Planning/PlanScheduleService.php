@@ -26,14 +26,20 @@ class PlanScheduleService
         if ($start->lt(CarbonImmutable::now($zone)->startOfDay())) {
             throw ValidationException::withMessages(['from' => 'Chọn hôm nay hoặc ngày tương lai.']);
         }
-        $busy = CalendarEvent::where('user_id', $actor->id)->where('is_busy', true)->where('status', '!=', 'cancelled')->where('ends_at', '>', $start->utc())->where('starts_at', '<', $start->addDays(93)->utc())->get();
+        $busy = CalendarEvent::where('user_id', $actor->id)
+            ->where('is_busy', true)
+            ->where('status', '!=', 'cancelled')
+            ->where('ends_at', '>', $start->utc())
+            ->where('starts_at', '<', $start->addDays(93)->utc())
+            ->get();
         $pending = array_column($payload['tasks'], null, 'ref');
         $finish = [];
         foreach ($pending as &$row) {
             if (isset($base->data['applied_task_ids'][$row['ref']])) {
                 $row['task_id'] = $base->data['applied_task_ids'][$row['ref']];
             }
-        }unset($row);
+        }
+        unset($row);
         $tasks = $pending;
         while ($pending) {
             $progress = false;
@@ -50,7 +56,8 @@ class PlanScheduleService
                     if ($edge['successor'] === $ref) {
                         if (! isset($finish[$edge['predecessor']])) {
                             continue 2;
-                        }$earliest = $earliest->max($finish[$edge['predecessor']]->addMinutes($edge['lag_minutes']));
+                        }
+                        $earliest = $earliest->max($finish[$edge['predecessor']]->addMinutes($edge['lag_minutes']));
                     }
                 }
                 if ($row['task_type'] === 'MILESTONE') {
@@ -84,8 +91,8 @@ class PlanScheduleService
                             }
                             if ($cursor->gte($earliest) && $cursor->gte(CarbonImmutable::now($zone))) {
                                 $conflict = $busy->contains(fn ($e) => $e->starts_at->lt($next->utc()) && $e->ends_at->gt($cursor->utc()));
-                                foreach ($payload['slots'] as $s) {
-                                    if ($s['starts_at'] < $next->setTimezone($zone)->format('Y-m-d\TH:i') && $s['ends_at'] > $cursor->setTimezone($zone)->format('Y-m-d\TH:i')) {
+                                foreach ($payload['slots'] as $slot) {
+                                    if ($slot['starts_at'] < $next->setTimezone($zone)->format('Y-m-d\TH:i') && $slot['ends_at'] > $cursor->setTimezone($zone)->format('Y-m-d\TH:i')) {
                                         $conflict = true;
                                     }
                                 }
@@ -98,7 +105,11 @@ class PlanScheduleService
 
                                         continue;
                                     }
-                                    $payload['slots'][] = ['task_ref' => $ref, 'starts_at' => $cursor->setTimezone($zone)->format('Y-m-d\TH:i'), 'ends_at' => $next->setTimezone($zone)->format('Y-m-d\TH:i')];
+                                    $payload['slots'][] = [
+                                        'task_ref' => $ref,
+                                        'starts_at' => $cursor->setTimezone($zone)->format('Y-m-d\TH:i'),
+                                        'ends_at' => $next->setTimezone($zone)->format('Y-m-d\TH:i'),
+                                    ];
                                     $remaining -= $size;
                                     $last = $next;
                                 }

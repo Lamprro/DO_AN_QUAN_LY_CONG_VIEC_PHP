@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function __construct(private ReportService $query) {}
+    public function __construct(private ReportService $service) {}
 
     public function index(Request $request, Workspace $workspace)
     {
@@ -20,14 +20,14 @@ class ReportController extends Controller
             'created_to' => ['nullable', 'date_format:Y-m-d', 'after:created_from'],
             'page' => ['sometimes', 'integer', 'min:1', 'max:100000'],
         ]);
-        $snapshots = $this->query->snapshots($request->user(), $workspace, $filters, $request->url(), $request->query());
+        $snapshots = $this->service->snapshots($request->user(), $workspace, $filters, $request->url(), $request->query());
 
         return view('reports.index', compact('workspace', 'snapshots', 'filters'));
     }
 
-    public function store(ReportRequest $request, Workspace $workspace, ReportService $reports)
+    public function store(ReportRequest $request, Workspace $workspace)
     {
-        $snapshot = $reports->snapshot($request->user(), $workspace, $request->validated());
+        $snapshot = $this->service->snapshot($request->user(), $workspace, $request->validated());
 
         return to_route('workspaces.reports.show', [$workspace, $snapshot])->with('success', 'Đã lưu bản báo cáo cố định.');
     }
@@ -49,7 +49,7 @@ class ReportController extends Controller
     public function export(Workspace $workspace, ReportSnapshot $snapshot)
     {
         $this->bound($workspace, $snapshot);
-        $rows = $this->query->csvRows($snapshot->metrics_json);
+        $rows = $this->service->csvRows($snapshot->metrics_json);
 
         return response()->streamDownload(function () use ($rows) {
             $file = fopen('php://output', 'w');

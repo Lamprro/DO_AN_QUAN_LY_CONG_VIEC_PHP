@@ -122,7 +122,10 @@ class TaskController extends Controller
             }
             $request->session()->flash('task_edit_error', ['task_id' => $task->id, 'surface' => $resolved['surface']]);
 
-            return redirect()->route($this->taskRoute($project, $resolved['surface'] === 'quick' ? 'show' : 'edit'), $this->taskRouteParams($workspace, $project, $task))->withErrors($e->errors())->withInput($resolved['data'] + ['edit_surface' => $resolved['surface']]);
+            return redirect()
+                ->route($this->taskRoute($project, $resolved['surface'] === 'quick' ? 'show' : 'edit'), $this->taskRouteParams($workspace, $project, $task))
+                ->withErrors($e->errors())
+                ->withInput($resolved['data'] + ['edit_surface' => $resolved['surface']]);
         }
 
         return $this->saveEdit($request, $workspace, $project, $task, $data, $resolved['surface'], $input['conflict_token']);
@@ -202,7 +205,10 @@ class TaskController extends Controller
         }
         $request->session()->flash('task_edit_error', ['task_id' => $task->id, 'surface' => $surface]);
 
-        return redirect()->route($this->taskRoute($project, $surface === 'quick' ? 'show' : 'edit'), $this->taskRouteParams($workspace, $project, $task))->withErrors($e->errors())->withInput($data + ['edit_surface' => $surface]);
+        return redirect()
+            ->route($this->taskRoute($project, $surface === 'quick' ? 'show' : 'edit'), $this->taskRouteParams($workspace, $project, $task))
+            ->withErrors($e->errors())
+            ->withInput($data + ['edit_surface' => $surface]);
     }
 
     private function taskJson(Task $task, Workspace $workspace): array

@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Services\Ai\AiRunService;
 use App\Services\Ai\Contracts\AiProvider;
 use App\Services\Ai\Exceptions\AiProviderUnavailable;
-use App\Services\Ai\AiRunService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -33,13 +33,14 @@ class ProcessAiRun implements ShouldQueue
         $claimed = $service->begin($this->runId, $this->job?->uuid());
         if (! $claimed) {
             return;
-        }[$run,$call] = $claimed;
+        }
+        [$run, $call] = $claimed;
         try {
             if (! config('work_management.ai_enabled')) {
                 throw new AiProviderUnavailable('AI đang tắt; chưa gọi nhà cung cấp và chưa tạo nhận xét AI.');
             }
             $result = $provider->complete($run);
-            if (trim($result->text) === '' || mb_strlen($result->text) > 20000 || ($result->inputTokens !== null && $result->inputTokens < 0) || ($result->outputTokens !== null && $result->outputTokens < 0)) {
+            if (trim($result->text) === '' || mb_strlen($result->text) > 20000 || $result->inputTokens !== null && $result->inputTokens < 0 || $result->outputTokens !== null && $result->outputTokens < 0) {
                 throw new AiProviderUnavailable('Phản hồi không đúng hợp đồng nhận xét AI.');
             }
             $service->finish($run, $call, $result);

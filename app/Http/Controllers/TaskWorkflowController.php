@@ -121,19 +121,19 @@ class TaskWorkflowController extends Controller
         return back()->with('success', 'Đã gỡ tệp đính kèm.');
     }
 
-    public function watch(Request $request, Workspace $workspace, string $task, TaskWorkflowService $service)
+    public function watch(Request $request, Workspace $workspace, string $task)
     {
         $data = $request->validate(['user_id' => 'required|uuid']);
         $taskModel = $workspace->tasks()->findOrFail($task);
-        $service->watch($request->user(), $taskModel, $data['user_id']);
+        $this->workflow->watch($request->user(), $taskModel, $data['user_id']);
 
         return back()->with('success', 'Đã theo dõi công việc.');
     }
 
-    public function unwatch(Request $request, Workspace $workspace, string $task, string $user, TaskWorkflowService $service)
+    public function unwatch(Request $request, Workspace $workspace, string $task, string $user)
     {
         $taskModel = $workspace->tasks()->findOrFail($task);
-        $service->watch($request->user(), $taskModel, $user, true);
+        $this->workflow->watch($request->user(), $taskModel, $user, true);
 
         return back()->with('success', 'Đã dừng theo dõi.');
     }

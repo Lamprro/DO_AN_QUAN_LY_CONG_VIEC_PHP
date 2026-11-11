@@ -26,7 +26,8 @@ class NotificationService
         $event = $history->event_type;
         $ids = [];
         $title = '';
-        if ($event === 'task.created' || ($event === 'task.updated' && array_key_exists('assignee_id', $data['after'] ?? []) && ($data['before']['assignee_id'] ?? null) !== $task->assignee_id)) {
+        $assigneeChanged = $event === 'task.updated' && array_key_exists('assignee_id', $data['after'] ?? []) && ($data['before']['assignee_id'] ?? null) !== $task->assignee_id;
+        if ($event === 'task.created' || $assigneeChanged) {
             $ids = [$task->assignee_id];
             $title = 'Bạn được giao công việc';
         } elseif ($event === 'task.status_changed') {
@@ -36,7 +37,7 @@ class NotificationService
             $ids = [$task->assignee_id, $task->reviewer_id, $task->created_by];
             $title = 'Có bình luận mới';
         }
-        $ids = array_merge($ids, (Schema::hasTable('task_watchers') ? TaskWatcher::where('task_id', $task->id)->pluck('user_id')->all() : []), $data['mentions'] ?? []);
+        $ids = array_merge($ids, Schema::hasTable('task_watchers') ? TaskWatcher::where('task_id', $task->id)->pluck('user_id')->all() : [], $data['mentions'] ?? []);
         if ($title === '') {
             $title = 'Công việc bạn theo dõi có cập nhật';
         }
@@ -48,9 +49,24 @@ class NotificationService
             if (! $recipient || $recipient->status->value !== 'active' || Gate::forUser($recipient)->denies('view', $task) || ! $this->settings->values($recipient)['notifications']['in_app']) {
                 continue;
             }
-            Notification::firstOrCreate(['dedupe_key' => 'activity:'.$history->id.':'.$id], ['workspace_id' => $task->workspace_id, 'project_id' => $task->project_id, 'task_id' => $task->id,
-                'recipient_id' => $id, 'type' => in_array($id, $data['mentions'] ?? [], true) ? 'task.mentioned' : $event, 'title' => in_array($id, $data['mentions'] ?? [], true) ? 'Bạn được nhắc tên trong bình luận' : $title, 'body' => $task->code.' · '.$task->title,
-                'deliveries' => [['channel' => 'in_app', 'status' => 'sent', 'attempts' => 1, 'sent_at' => now()->toIso8601String(), 'last_error' => null]]]);
+            Notification::firstOrCreate(['dedupe_key' => 'activity:'.$history->id.':'.$id], [
+                'workspace_id' => $task->workspace_id,
+                'project_id' => $task->project_id,
+                'task_id' => $task->id,
+                'recipient_id' => $id,
+                'type' => in_array($id, $data['mentions'] ?? [], true) ? 'task.mentioned' : $event,
+                'title' => in_array($id, $data['mentions'] ?? [], true) ? 'Bạn được nhắc tên trong bình luận' : $title,
+                'body' => $task->code.' · '.$task->title,
+                'deliveries' => [
+                    [
+                        'channel' => 'in_app',
+                        'status' => 'sent',
+                        'attempts' => 1,
+                        'sent_at' => now()->toIso8601String(),
+                        'last_error' => null,
+                    ],
+                ],
+            ]);
         }
     }
 
@@ -59,17 +75,39 @@ class NotificationService
         if ($user->status->value !== 'active' || ! $this->settings->values($user)['notifications']['in_app']) {
             return;
         }
-        Notification::firstOrCreate(['dedupe_key' => $key], ['recipient_id' => $user->id, 'workspace_id' => $workspace->id, 'project_id' => $project?->id, 'task_id' => $task?->id, 'type' => $type, 'title' => $title, 'body' => $body, 'deliveries' => [['channel' => 'in_app', 'status' => 'sent', 'attempts' => 1, 'sent_at' => now()->toIso8601String(), 'last_error' => null]]]);
+        Notification::firstOrCreate(['dedupe_key' => $key], [
+            'recipient_id' => $user->id,
+            'workspace_id' => $workspace->id,
+            'project_id' => $project?->id,
+            'task_id' => $task?->id,
+            'type' => $type,
+            'title' => $title,
+            'body' => $body,
+            'deliveries' => [
+                [
+                    'channel' => 'in_app',
+                    'status' => 'sent',
+                    'attempts' => 1,
+                    'sent_at' => now()->toIso8601String(),
+                    'last_error' => null,
+                ],
+            ],
+        ]);
     }
 
     /** Inbox page: filter = all|unread|read, optional event type. */
     public function inbox(User $user, array $filters)
     {
-        return $this->visible($user)
+        return $this
+            ->visible($user)
             ->when(($filters['filter'] ?? 'all') === 'unread', fn ($q) => $q->whereNull('read_at'))
             ->when(($filters['filter'] ?? 'all') === 'read', fn ($q) => $q->whereNotNull('read_at'))
             ->when($filters['type'] ?? null, fn ($q, $type) => $q->where('type', $type))
-            ->with(['workspace', 'project', 'task'])->orderByDesc('created_at')->orderByDesc('id')->paginate(20)->withQueryString();
+            ->with(['workspace', 'project', 'task'])
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->paginate(20)
+            ->withQueryString();
     }
 
     public function visible(User $user): Builder
@@ -91,7 +129,7 @@ class NotificationService
             $query = $this->visible($user);
             if ($id) {
                 $notification = $query->lockForUpdate()->findOrFail($id);
-                $notification->update(['read_at' => $unread ? null : ($notification->read_at ?? now())]);
+                $notification->update(['read_at' => $unread ? null : $notification->read_at ?? now()]);
             } else {
                 $query->whereNull('read_at')->update(['read_at' => now()]);
             }

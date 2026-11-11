@@ -35,3 +35,15 @@ Kiểm chứng sau thay đổi: 36 HTTP/11 kiểm tra task–timer–template; 1
 - Giữ `CalendarService` và `TeamCalendarService` vì lịch của chính mình khác với vòng đời đề xuất cần người nhận chấp thuận. Đề xuất là chính bản ghi `calendar_events`; chấp nhận đổi trạng thái, không nhân đôi. Giữ `PlanReviewService` cho diff/preview rollback, `PlanScheduleService` cho thuật toán xếp lịch, `PlanService` cho schema, phiên bản, duyệt và áp dụng.
 
 Kiểm chứng: 56 HTTP/16 kiểm tra dữ liệu đạt; bao gồm tạo/sửa/xóa lịch, phiên bản cũ bị chặn, đề xuất/chấp nhận/hủy không tạo bản ghi trùng, draft không tạo task, preview rollback, duyệt/apply lặp không nhân đôi, snapshot/print/CSV, AI idempotency và worker thật với AI tắt. Worker không gọi nhà cung cấp và không tạo plan. Đủ 166 hợp đồng route không đổi. Bằng chứng: `planning-results.json`.
+
+## Nhóm 4 — làm rõ nghiệp vụ trên toàn ứng dụng
+
+- Tách các chuỗi truy vấn dài, mảng dữ liệu và các câu lệnh dính nhau trong planning, AI/job, calendar, report, reminder, invitation, integration, authorization, search, settings và task. So sánh cây cú pháp xác nhận các phần chỉ trình bày không đổi phép tính/điều kiện.
+- Gộp hai đoạn kiểm tra replay AI vào `AiRunService.existingRequest`; vẫn kiểm quyền hiện tại trước khi trả yêu cầu cũ, so sánh digest và giữ thông báo lỗi của từng luồng.
+- `GithubIntegrationController` lấy body/header HTTP rồi chuyển nguyên byte ký sang `GithubWebhookService`; service không còn nhận Request. Vẫn kiểm chữ ký và quyền lần nữa trong giao dịch, dedupe delivery, không chuyển trạng thái task từ commit.
+- Dùng tên biến rõ trong diff kế hoạch, lịch đề xuất, giờ làm, báo cáo, queue và tìm kiếm; bỏ dependency được inject lặp trong cùng controller. Xóa `UnconfiguredAiProvider` không còn được đăng ký/tham chiếu; fallback thực tế vẫn là `HttpAiProvider` và cờ tắt nằm trong job.
+- Không đổi model/observer, migration, rule nghiệp vụ, thứ tự khóa, revision, CSRF hay Policy/Access dùng chung.
+
+Hồi quy tổng thể: **250 yêu cầu HTTP, 141/141 kiểm tra dữ liệu đạt**, cộng worker database thật cho AI tắt và nhắc việc in-app. Kiểm tra webhook dùng secret giả và payload ký thật trong môi trường review; không gọi GitHub bên ngoài. Có một lượt quét nhắc việc bị 429 do chạy lại quá gần; giữ nguyên throttle, chờ hết cửa sổ rồi chạy lại đạt. Các lỗi thiết lập kiểm chứng (CSRF sau login, scope proposal, throttle) được sửa ở kịch bản kiểm chứng, không sửa nghiệp vụ để ép đạt.
+
+Giới hạn: SQLite riêng trên máy này, không chứng minh tranh chấp đồng thời ở database sản xuất. Không thử nhà cung cấp AI thật hoặc email ngoài hệ thống. Giữ nguyên key, database và cấu hình đang dùng. Khung form lớn và đồng bộ sheet đang thực hiện riêng.

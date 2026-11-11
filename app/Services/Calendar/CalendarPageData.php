@@ -122,7 +122,16 @@ class CalendarPageData
         $workspaceCalendar = $this->calendars->scope($actor, $workspace, null, 'calendar.view');
         $projectIds = $this->projects->visible($actor, $workspace)->get()->filter(fn ($p) => $this->calendars->scope($actor, $workspace, $p, 'calendar.view'))->pluck('id');
         abort_unless($project ? $this->calendars->scope($actor, $workspace, $project, 'calendar.view') : $workspaceCalendar || $projectIds->isNotEmpty(), 403);
-        $events = CalendarEvent::where('workspace_id', $workspace->id)->when($project, fn ($q) => $q->where('project_id', $project->id), fn ($q) => $q->where(fn ($q) => $q->whereIn('project_id', $projectIds)->when($workspaceCalendar, fn ($q) => $q->orWhereNull('project_id'))))->where('starts_at', '<', $range['end']->utc())->where('ends_at', '>', $range['start']->utc())->when(! $range['includeCancelled'], fn ($q) => $q->where('status', '!=', 'cancelled'))->with(['user', 'workspace', 'project', 'task'])->orderBy('starts_at')->orderBy('id')->limit(1001)->get();
+        $events = CalendarEvent::where('workspace_id', $workspace->id)
+            ->when($project, fn ($q) => $q->where('project_id', $project->id), fn ($q) => $q->where(fn ($q) => $q->whereIn('project_id', $projectIds)->when($workspaceCalendar, fn ($q) => $q->orWhereNull('project_id'))))
+            ->where('starts_at', '<', $range['end']->utc())
+            ->where('ends_at', '>', $range['start']->utc())
+            ->when(! $range['includeCancelled'], fn ($q) => $q->where('status', '!=', 'cancelled'))
+            ->with(['user', 'workspace', 'project', 'task'])
+            ->orderBy('starts_at')
+            ->orderBy('id')
+            ->limit(1001)
+            ->get();
         if ($events->count() > 1000) {
             throw ValidationException::withMessages(['from' => 'Có quá nhiều sự kiện; chọn phạm vi ngày ngắn hơn.']);
         }
@@ -162,14 +171,28 @@ class CalendarPageData
             return $this->tasks->projectWritable($project) && $this->calendars->scope($actor, $workspace, $project, 'calendar.create');
         }
 
-        return $this->calendars->scope($actor, $workspace, null, 'calendar.create') || $this->projects->visible($actor, $workspace)->get()->contains(fn ($p) => $this->tasks->projectWritable($p) && $this->calendars->scope($actor, $workspace, $p, 'calendar.create'));
+        return $this->calendars->scope($actor, $workspace, null, 'calendar.create') || $this->projects
+            ->visible($actor, $workspace)
+            ->get()
+            ->contains(fn ($p) => $this->tasks->projectWritable($p) && $this->calendars->scope($actor, $workspace, $p, 'calendar.create'));
     }
 
     /** Options for the create/edit form: writable projects, the actor's open WORK tasks, members. */
     public function formContext(User $actor, Workspace $workspace, ?CalendarEvent $event = null): array
     {
-        $projects = $this->projects->visible($actor, $workspace)->get()->filter(fn ($p) => $this->tasks->projectWritable($p) && $this->calendars->scope($actor, $workspace, $p, $event ? 'calendar.update' : 'calendar.create'));
-        $tasks = $workspace->tasks()->where('assignee_id', $actor->id)->where('task_type', 'WORK')->whereIn('status', ['TODO', 'IN_PROGRESS', 'REVIEW'])->whereNull('archived_at')->where(fn ($q) => $q->whereIn('project_id', $projects->pluck('id'))->orWhereNull('project_id'))->get()->filter(fn ($t) => $this->tasks->mutable($actor, $t, 'task.update'));
+        $projects = $this->projects
+            ->visible($actor, $workspace)
+            ->get()
+            ->filter(fn ($p) => $this->tasks->projectWritable($p) && $this->calendars->scope($actor, $workspace, $p, $event ? 'calendar.update' : 'calendar.create'));
+        $tasks = $workspace
+            ->tasks()
+            ->where('assignee_id', $actor->id)
+            ->where('task_type', 'WORK')
+            ->whereIn('status', ['TODO', 'IN_PROGRESS', 'REVIEW'])
+            ->whereNull('archived_at')
+            ->where(fn ($q) => $q->whereIn('project_id', $projects->pluck('id'))->orWhereNull('project_id'))
+            ->get()
+            ->filter(fn ($t) => $this->tasks->mutable($actor, $t, 'task.update'));
         if ($event?->task && ! $tasks->contains('id', $event->task_id)) {
             $tasks->push($event->task);
         }
@@ -198,10 +221,27 @@ class CalendarPageData
     public function team(User $actor, Workspace $workspace, ?Project $project, ?string $focus): array
     {
         abort_unless($this->calendars->scope($actor, $workspace, $project), 403);
-        $proposals = CalendarEvent::proposals()->when($focus, fn ($q, $id) => $q->whereKey($id))->where('workspace_id', $workspace->id)->where('project_id', $project?->id)->when(! $this->tasks->scope($actor, $workspace, $project, 'task.view'), fn ($q) => $q->whereNull('task_id'))->where(fn ($q) => $q->where('user_id', $actor->id)->orWhere('proposed_by', $actor->id))->with('recipient', 'proposer')->latest()->paginate(15)->withQueryString();
+        $proposals = CalendarEvent::proposals()
+            ->when($focus, fn ($q, $id) => $q->whereKey($id))
+            ->where('workspace_id', $workspace->id)
+            ->where('project_id', $project?->id)
+            ->when(! $this->tasks->scope($actor, $workspace, $project, 'task.view'), fn ($q) => $q->whereNull('task_id'))
+            ->where(fn ($q) => $q->where('user_id', $actor->id)->orWhere('proposed_by', $actor->id))
+            ->with('recipient', 'proposer')
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
         $versions = $proposals->getCollection()->mapWithKeys(fn ($p) => [$p->id => $this->calendar->version($p)])->all();
         $people = $this->projects->eligibleMembers($workspace, $project, 'calendar.view')->filter(fn ($m) => $this->calendars->scope($m->user, $workspace, $project, 'calendar.create'));
-        $tasks = $workspace->tasks()->where('project_id', $project?->id)->where('task_type', 'WORK')->whereNull('archived_at')->whereNotIn('status', ['DONE', 'CANCELLED'])->orderBy('title')->get()->filter(fn ($task) => Gate::forUser($actor)->allows('view', $task));
+        $tasks = $workspace
+            ->tasks()
+            ->where('project_id', $project?->id)
+            ->where('task_type', 'WORK')
+            ->whereNull('archived_at')
+            ->whereNotIn('status', ['DONE', 'CANCELLED'])
+            ->orderBy('title')
+            ->get()
+            ->filter(fn ($task) => Gate::forUser($actor)->allows('view', $task));
 
         return compact('workspace', 'project', 'proposals', 'versions', 'people', 'tasks') + ['canPropose' => $this->calendars->scope($actor, $workspace, $project, 'calendar.create')];
     }

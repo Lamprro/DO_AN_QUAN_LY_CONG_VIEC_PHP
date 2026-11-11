@@ -21,7 +21,9 @@ class GithubSettingsService
         $this->assert($actor, $workspace, $project, 'integration.view');
 
         return [
-            'workspace' => $workspace, 'project' => $project, 'connection' => $project->githubConnection,
+            'workspace' => $workspace,
+            'project' => $project,
+            'connection' => $project->githubConnection,
             'latestDelivery' => GithubLog::where('project_id', $project->id)->latest('received_at')->latest('id')->first(),
             'logs' => GithubLog::where('project_id', $project->id)->latest('received_at')->paginate(20),
             'canManage' => $this->projects->allows($actor, $project, 'integration.manage'),
@@ -35,8 +37,12 @@ class GithubSettingsService
         DB::transaction(function () use ($actor, $workspace, $project, $data) {
             Workspace::lockForUpdate()->findOrFail($workspace->id);
             $project = $project->fresh();
-            $connection = $project->githubConnection
-                ?? new IntegrationConnection(['workspace_id' => $workspace->id, 'user_id' => $actor->id, 'provider' => 'github', 'scopes' => ['webhook:push']]);
+            $connection = $project->githubConnection ?? new IntegrationConnection([
+                'workspace_id' => $workspace->id,
+                'user_id' => $actor->id,
+                'provider' => 'github',
+                'scopes' => ['webhook:push'],
+            ]);
             $secrets = $connection->credentials_encrypted ?? [];
             if (! empty($data['webhook_secret'])) {
                 $secrets['webhook_secret'] = $data['webhook_secret'];
@@ -44,7 +50,12 @@ class GithubSettingsService
             if ($data['enabled'] && (! config('work_management.integrations_enabled') || empty($secrets['webhook_secret']))) {
                 throw ValidationException::withMessages(['enabled' => 'Cần bật INTEGRATIONS_ENABLED và cấu hình secret trước.']);
             }
-            $connection->fill(['account_ref' => $data['repository_id'], 'user_id' => $actor->id, 'credentials_encrypted' => $secrets, 'status' => $data['enabled'] ? 'active' : 'disabled'])->save();
+            $connection->fill([
+                'account_ref' => $data['repository_id'],
+                'user_id' => $actor->id,
+                'credentials_encrypted' => $secrets,
+                'status' => $data['enabled'] ? 'active' : 'disabled',
+            ])->save();
             $project->update(['github_connection_id' => $connection->id]);
         }, 3);
     }

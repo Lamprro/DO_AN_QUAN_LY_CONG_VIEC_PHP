@@ -159,7 +159,13 @@ class ProjectService
         if ($archive !== 'all') {
             $archive === 'archived' ? $query->whereNotNull('archived_at') : $query->whereNull('archived_at');
         }
-        $projects = $query->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->whereRaw("name LIKE ? ESCAPE '!'", [SearchTerm::contains($filters['q'])]))->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))->orderBy($filters['sort'] ?? 'created_at', $filters['direction'] ?? 'desc')->orderBy('id')->paginate(12)->withQueryString();
+        $projects = $query
+            ->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->whereRaw("name LIKE ? ESCAPE '!'", [SearchTerm::contains($filters['q'])]))
+            ->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
+            ->orderBy($filters['sort'] ?? 'created_at', $filters['direction'] ?? 'desc')
+            ->orderBy('id')
+            ->paginate(12)
+            ->withQueryString();
         foreach ($projects as $listed) {
             if (! $this->access->allows($actor, $listed, 'task.view')) {
                 $listed->setAttribute('tasks_count', null);
@@ -210,9 +216,21 @@ class ProjectService
             'workspace' => $workspace,
             'project' => $project,
             'actorPermissions' => $actorPermissions,
-            'roles' => $workspace->roles()->orderBy('name')->get()->filter(fn ($r) => ! ($r->is_system && $r->name === 'Owner') && ! array_diff($r->permissions, $actorPermissions)),
+            'roles' => $workspace
+                ->roles()
+                ->orderBy('name')
+                ->get()
+                ->filter(fn ($r) => ! ($r->is_system && $r->name === 'Owner') && ! array_diff($r->permissions, $actorPermissions)),
             'members' => $project->members()->with('workspaceMember.user', 'role')->get(),
-            'candidates' => $workspace->members()->with('user')->where('status', 'active')->where('user_id', '!=', $actor->id)->where('user_id', '!=', $workspace->owner_id)->whereHas('user', fn ($q) => $q->where('status', 'active'))->whereDoesntHave('projectMemberships', fn ($q) => $q->where('project_id', $project->id)->where('status', '!=', 'left'))->get(),
+            'candidates' => $workspace
+                ->members()
+                ->with('user')
+                ->where('status', 'active')
+                ->where('user_id', '!=', $actor->id)
+                ->where('user_id', '!=', $workspace->owner_id)
+                ->whereHas('user', fn ($q) => $q->where('status', 'active'))
+                ->whereDoesntHave('projectMemberships', fn ($q) => $q->where('project_id', $project->id)->where('status', '!=', 'left'))
+                ->get(),
         ];
     }
 }

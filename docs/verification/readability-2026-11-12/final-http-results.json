@@ -1,0 +1,567 @@
+{
+  "http_requests": 48,
+  "checks": 53,
+  "passed": 53,
+  "requests": [
+    {
+      "label": "Login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Login actor",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Personal list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Personal pagination first page",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 200
+    },
+    {
+      "label": "Personal pagination second page",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?page=2",
+      "status": 200
+    },
+    {
+      "label": "Personal Kanban",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board",
+      "status": 200
+    },
+    {
+      "label": "Personal Kanban second TODO page",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board&page_todo=2",
+      "status": 200
+    },
+    {
+      "label": "Personal tree",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/tree",
+      "status": 200
+    },
+    {
+      "label": "Project shared listing",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Project mine preset",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks?preset=mine&per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Personal cannot widen by assignee",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?assignee_id=01a1cb8e-8fcf-72db-be6e-afc737f07781&per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Personal review preset",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?preset=review",
+      "status": 200
+    },
+    {
+      "label": "Archived task filter",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?archived=archived",
+      "status": 200
+    },
+    {
+      "label": "Overdue preset",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?preset=overdue",
+      "status": 200
+    },
+    {
+      "label": "Search across sources",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?q=shared-mine",
+      "status": 200
+    },
+    {
+      "label": "View source panel shared_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9?panel=1",
+      "status": 200
+    },
+    {
+      "label": "Full source detail shared_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9",
+      "status": 200
+    },
+    {
+      "label": "View source panel readonly_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9032-723c-97e7-7727762f9a01/tasks/01a1cb8e-90fa-73ab-b42d-6f4ba4690577?panel=1",
+      "status": 200
+    },
+    {
+      "label": "Full source detail readonly_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9032-723c-97e7-7727762f9a01/tasks/01a1cb8e-90fa-73ab-b42d-6f4ba4690577",
+      "status": 200
+    },
+    {
+      "label": "View source panel archived_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9068-7398-9d3b-45d3b6d14a97/tasks/01a1cb8e-9134-72db-af8a-9332215cf57b?panel=1",
+      "status": 200
+    },
+    {
+      "label": "Full source detail archived_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9068-7398-9d3b-45d3b6d14a97/tasks/01a1cb8e-9134-72db-af8a-9332215cf57b",
+      "status": 200
+    },
+    {
+      "label": "View source panel personal_project_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/projects/01a1cb8e-9092-73b7-9f58-08a047ff63b9/tasks/01a1cb8e-9164-72a4-9756-ef47304a1c15?panel=1",
+      "status": 200
+    },
+    {
+      "label": "Full source detail personal_project_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/projects/01a1cb8e-9092-73b7-9f58-08a047ff63b9/tasks/01a1cb8e-9164-72a4-9756-ef47304a1c15",
+      "status": 200
+    },
+    {
+      "label": "Edit source panel",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9/edit?panel=1",
+      "status": 200
+    },
+    {
+      "label": "Save source edit",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9",
+      "status": 200
+    },
+    {
+      "label": "Stale edit rejected",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9",
+      "status": 409
+    },
+    {
+      "label": "Status move at source",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9/status",
+      "status": 200
+    },
+    {
+      "label": "Stale status rejected",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9/status",
+      "status": 422
+    },
+    {
+      "label": "Wrong personal source view rejected",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9",
+      "status": 404
+    },
+    {
+      "label": "Wrong personal source edit rejected",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9",
+      "status": 404
+    },
+    {
+      "label": "Wrong personal source status rejected",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cb8e-90c4-73e7-9b94-8d8df57e9ed9/status",
+      "status": 404
+    },
+    {
+      "label": "Read-only edit denied readonly_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9032-723c-97e7-7727762f9a01/tasks/01a1cb8e-90fa-73ab-b42d-6f4ba4690577/edit?panel=1",
+      "status": 403
+    },
+    {
+      "label": "Read-only status denied readonly_mine",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9032-723c-97e7-7727762f9a01/tasks/01a1cb8e-90fa-73ab-b42d-6f4ba4690577/status",
+      "status": 403
+    },
+    {
+      "label": "Read-only edit denied archived_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9068-7398-9d3b-45d3b6d14a97/tasks/01a1cb8e-9134-72db-af8a-9332215cf57b/edit?panel=1",
+      "status": 403
+    },
+    {
+      "label": "Read-only status denied archived_mine",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9068-7398-9d3b-45d3b6d14a97/tasks/01a1cb8e-9134-72db-af8a-9332215cf57b/status",
+      "status": 403
+    },
+    {
+      "label": "Inaccessible source denied no_view_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-9048-717f-801a-0e0cd68bd483/tasks/01a1cb8e-910e-71ef-9d48-7790c1fe2647?panel=1",
+      "status": 403
+    },
+    {
+      "label": "Inaccessible source denied revoked_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-905b-7089-8239-054dcc1877fb/tasks/01a1cb8e-9120-7293-880a-19cd4fc68075?panel=1",
+      "status": 403
+    },
+    {
+      "label": "Inaccessible source denied inactive_mine",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8ff4-73f6-88a3-922dc230a6c6/projects/01a1cb8e-9083-71be-b1f2-850c4a96a82b/tasks/01a1cb8e-9155-7349-a149-1f41776a99c9?panel=1",
+      "status": 403
+    },
+    {
+      "label": "Cross-source bulk rejected",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/bulk",
+      "status": 404
+    },
+    {
+      "label": "Local bulk works",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/bulk",
+      "status": 302
+    },
+    {
+      "label": "Save personal filter",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/task-filters",
+      "status": 302
+    },
+    {
+      "label": "Open personal saved filter",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/task-filters/01a1cba2-1a5c-73dc-8d2e-588fb19ffebc/open",
+      "status": 302
+    },
+    {
+      "label": "Saved filter result",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?q=shared&preset=all",
+      "status": 200
+    },
+    {
+      "label": "Saved filter wrong scope rejected",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe1-727a-a21a-c6a58a1c1223/projects/01a1cb8e-901b-70ef-909d-e3af2da18866/task-filters/01a1cba2-1a5c-73dc-8d2e-588fb19ffebc/open",
+      "status": 404
+    },
+    {
+      "label": "Create direct personal task",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 201
+    },
+    {
+      "label": "Refresh personal aggregate after writes",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?per_page=50",
+      "status": 200
+    },
+    {
+      "label": "Workspace overview",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d",
+      "status": 200
+    },
+    {
+      "label": "Workspace members unaffected",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/members",
+      "status": 200
+    }
+  ],
+  "results": [
+    {
+      "check": "Personal list contains exactly own direct tasks and accessible assigned tasks",
+      "passed": true,
+      "evidence": {
+        "count": 20
+      }
+    },
+    {
+      "check": "Correct source link: local_group",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: local_unassigned",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: local_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: shared_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: readonly_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: archived_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: owned_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: personal_project_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_1",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_2",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_3",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_4",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_5",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_6",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_7",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_8",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_9",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_10",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_11",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Correct source link: page_12",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Project tasks cannot be selected for personal bulk",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Direct personal task remains selectable",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Source workspace and project displayed",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Personal creation stays in personal source",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "List paginates 10 rows with no duplicates",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Kanban covers assigned leaves across pagination",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Kanban PATCH URL points to actual project",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Tree includes matching leaves under excluded groups",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Tree excludes project group and other assignee",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Tree explains independent project leaves",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Project keeps common listing",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Project excludes tasks from other sources",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Existing project mine filter preserved",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Assignee filter cannot reveal others tasks",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Personal Owner does not grant review privilege in shared sources",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Archive filter matches source task state",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Overdue filter includes matching assigned source",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Search uses full aggregate query",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Source panel contains right task shared_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Source panel contains right task readonly_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Source panel contains right task archived_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Source panel contains right task personal_project_mine",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Panel posts to source URL",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Read back edited original row and revision",
+      "passed": true,
+      "evidence": {
+        "before_revision": 1,
+        "after_revision": 2
+      }
+    },
+    {
+      "check": "Kanban action changed original task",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Cross-source bulk is atomic",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Local bulk persisted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Saved filter cannot broaden assignee scope",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "No task copied moved or deleted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "New personal task remains project-less",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Refreshed listing reads source edit",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Foreign keys valid after all writes",
+      "passed": true,
+      "evidence": null
+    }
+  ]
+}

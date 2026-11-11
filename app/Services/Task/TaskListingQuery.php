@@ -29,31 +29,28 @@ class TaskListingQuery
         if (! $this->isPersonalOverview($actor, $workspace, $project)) {
             return $query->where('workspace_id', $workspace->id)->where('project_id', $project?->id);
         }
-
         $projectIds = $this->accessibleProjects($actor)->pluck('id');
 
-        return $query->where(fn ($scope) => $scope
-            ->where(fn ($own) => $own->where('workspace_id', $workspace->id)->whereNull('project_id'))
-            ->orWhere(fn ($assigned) => $assigned->whereIn('project_id', $projectIds)
-                ->where('assignee_id', $actor->id)->where('task_type', '!=', 'GROUP')));
+        return $query->where(fn ($scope) => $scope->where(fn ($own) => $own->where('workspace_id', $workspace->id)->whereNull('project_id'))->orWhere(fn ($assigned) => $assigned->whereIn('project_id', $projectIds)->where('assignee_id', $actor->id)->where('task_type', '!=', 'GROUP')));
     }
 
     /** Apply review rights from each source, never from the personal workspace's Owner role. */
     public function awaitingReview(Builder $query, User $actor, Workspace $workspace): void
     {
-        $projectIds = $this->accessibleProjects($actor)->filter(fn (Project $project) => $this->tasks->projectWritable($project) && $this->projects->allows($actor, $project, 'task.review')
-        )->pluck('id');
-        $query->whereNull('archived_at')->where('status', 'REVIEW')->where('task_type', '!=', 'GROUP')
-            ->where(fn ($scope) => $scope->whereIn('project_id', $projectIds)
-                ->orWhere(fn ($own) => $own->where('workspace_id', $workspace->id)->whereNull('project_id')))
-            ->where(fn ($reviewer) => $reviewer->where('reviewer_id', $actor->id)
-                ->orWhereHas('workspace', fn ($source) => $source->where('owner_id', $actor->id)));
+        $projectIds = $this
+            ->accessibleProjects($actor)
+            ->filter(fn (Project $project) => $this->tasks->projectWritable($project) && $this->projects->allows($actor, $project, 'task.review'))
+            ->pluck('id');
+        $query
+            ->whereNull('archived_at')
+            ->where('status', 'REVIEW')
+            ->where('task_type', '!=', 'GROUP')
+            ->where(fn ($scope) => $scope->whereIn('project_id', $projectIds)->orWhere(fn ($own) => $own->where('workspace_id', $workspace->id)->whereNull('project_id')))
+            ->where(fn ($reviewer) => $reviewer->where('reviewer_id', $actor->id)->orWhereHas('workspace', fn ($source) => $source->where('owner_id', $actor->id)));
     }
 
     private function accessibleProjects(User $actor): Collection
     {
-        return $this->workspaces->visible($actor)->flatMap(fn (Workspace $workspace) => $this->projects->visible($actor, $workspace)->get()
-            ->filter(fn (Project $project) => $this->tasks->scope($actor, $workspace, $project, 'task.view'))
-        );
+        return $this->workspaces->visible($actor)->flatMap(fn (Workspace $workspace) => $this->projects->visible($actor, $workspace)->get()->filter(fn (Project $project) => $this->tasks->scope($actor, $workspace, $project, 'task.view')));
     }
 }

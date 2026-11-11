@@ -112,7 +112,11 @@ class TimeTrackingService
             if ($end->lte($start) || $end->gt(now())) {
                 throw ValidationException::withMessages(['ended_at' => 'Kết thúc phải sau bắt đầu và không ở tương lai.']);
             }
-            if (TimeEntry::where('user_id', $actor->id)->whereKeyNot($entry->id)->where('started_at', '<', $end)->where(fn ($q) => $q->whereNull('ended_at')->orWhere('ended_at', '>', $start))->exists()) {
+            if (TimeEntry::where('user_id', $actor->id)
+                ->whereKeyNot($entry->id)
+                ->where('started_at', '<', $end)
+                ->where(fn ($q) => $q->whereNull('ended_at')->orWhere('ended_at', '>', $start))
+                ->exists()) {
                 throw ValidationException::withMessages(['started_at' => 'Khoảng này trùng phiên giờ khác của bạn.']);
             }
             $before = $this->value($entry);

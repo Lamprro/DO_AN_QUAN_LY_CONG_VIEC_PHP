@@ -26,6 +26,9 @@ class SendTaskReminder implements ShouldQueue
 
     public function failed(?\Throwable $error): void
     {
-        TaskReminder::whereKey($this->reminderId)->where('status', TaskReminderStatus::QUEUED->value)->update(['status' => TaskReminderStatus::FAILED->value, 'skip_reason' => 'Job hết lượt xử lý; chưa có xác nhận gửi. Kiểm tra vận hành.']);
+        TaskReminder::whereKey($this->reminderId)->where('status', TaskReminderStatus::QUEUED->value)->update([
+            'status' => TaskReminderStatus::FAILED->value,
+            'skip_reason' => 'Job hết lượt xử lý; chưa có xác nhận gửi. Kiểm tra vận hành.',
+        ]);
     }
 }

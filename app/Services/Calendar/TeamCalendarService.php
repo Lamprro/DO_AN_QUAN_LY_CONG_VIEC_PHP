@@ -34,7 +34,18 @@ class TeamCalendarService
 
     public function propose(User $actor, Workspace $workspace, array $data): CalendarEvent
     {
-        $data = Validator::make($data, ['project_id' => 'nullable|uuid', 'recipient_id' => 'required|uuid', 'task_id' => 'nullable|uuid', 'title' => 'required|string|max:200', 'description' => 'nullable|string|max:4000', 'event_type' => ['required', Rule::in(['MEETING', 'TASK_BLOCK'])], 'visibility' => ['required', Rule::in(['private', 'project', 'workspace'])], 'timezone' => 'required|timezone', 'starts_at' => 'required|date_format:Y-m-d\TH:i', 'ends_at' => 'required|date_format:Y-m-d\TH:i'])->validate();
+        $data = Validator::make($data, [
+            'project_id' => 'nullable|uuid',
+            'recipient_id' => 'required|uuid',
+            'task_id' => 'nullable|uuid',
+            'title' => 'required|string|max:200',
+            'description' => 'nullable|string|max:4000',
+            'event_type' => ['required', Rule::in(['MEETING', 'TASK_BLOCK'])],
+            'visibility' => ['required', Rule::in(['private', 'project', 'workspace'])],
+            'timezone' => 'required|timezone',
+            'starts_at' => 'required|date_format:Y-m-d\TH:i',
+            'ends_at' => 'required|date_format:Y-m-d\TH:i',
+        ])->validate();
 
         return DB::transaction(function () use ($actor, $workspace, $data) {
             $workspace = Workspace::lockForUpdate()->findOrFail($workspace->id);
@@ -60,11 +71,23 @@ class TeamCalendarService
                 throw ValidationException::withMessages(['starts_at' => 'Chọn giờ tương lai, kết thúc sau bắt đầu và tối đa24 giờ.']);
             }
             $proposal = CalendarEvent::create([
-                'workspace_id' => $workspace->id, 'project_id' => $project?->id, 'task_id' => $data['task_id'] ?? null,
-                'user_id' => $recipient->id, 'proposed_by' => $actor->id, 'event_type' => $data['event_type'],
-                'title' => $data['title'], 'description' => $data['description'] ?? null, 'starts_at' => $start, 'ends_at' => $end,
-                'timezone' => $data['timezone'], 'all_day' => false, 'is_busy' => true, 'visibility' => $data['visibility'],
-                'status' => CalendarEventStatus::PROPOSED, 'participants' => [], 'source' => 'manual',
+                'workspace_id' => $workspace->id,
+                'project_id' => $project?->id,
+                'task_id' => $data['task_id'] ?? null,
+                'user_id' => $recipient->id,
+                'proposed_by' => $actor->id,
+                'event_type' => $data['event_type'],
+                'title' => $data['title'],
+                'description' => $data['description'] ?? null,
+                'starts_at' => $start,
+                'ends_at' => $end,
+                'timezone' => $data['timezone'],
+                'all_day' => false,
+                'is_busy' => true,
+                'visibility' => $data['visibility'],
+                'status' => CalendarEventStatus::PROPOSED,
+                'participants' => [],
+                'source' => 'manual',
             ]);
             $this->notifications->direct($recipient, $workspace, $project, 'calendar.proposed', 'Có đề xuất lịch cần bạn xác nhận', $proposal->title, $this->notificationKey($proposal), $proposal->task);
 
@@ -77,40 +100,58 @@ class TeamCalendarService
         DB::transaction(function () use ($actor, $proposal, $action, $version) {
             User::lockForUpdate()->findOrFail($proposal->user_id);
             Workspace::lockForUpdate()->findOrFail($proposal->workspace_id);
-            $p = CalendarEvent::proposals()->lockForUpdate()->findOrFail($proposal->id);
-            abort_unless(in_array($actor->id, [$p->proposed_by, $p->user_id], true) && $this->calendars->scope($actor, $p->workspace, $p->project), 403);
-            if ($p->task_id) {
-                abort_unless($p->task && Gate::forUser($actor)->allows('view', $p->task), 403);
+            $proposal = CalendarEvent::proposals()->lockForUpdate()->findOrFail($proposal->id);
+            abort_unless(in_array($actor->id, [$proposal->proposed_by, $proposal->user_id], true) && $this->calendars->scope($actor, $proposal->workspace, $proposal->project), 403);
+            if ($proposal->task_id) {
+                abort_unless($proposal->task && Gate::forUser($actor)->allows('view', $proposal->task), 403);
             }
-            if (! hash_equals($this->calendar->version($p), $version)) {
+            if (! hash_equals($this->calendar->version($proposal), $version)) {
                 throw ValidationException::withMessages(['version' => 'Đề xuất đã thay đổi. Tải lại trước khi xử lý.']);
             }
-            if ($p->status === CalendarEventStatus::PLANNED && $action === 'cancel' && $actor->id === $p->user_id) {
+            if ($proposal->status === CalendarEventStatus::PLANNED && $action === 'cancel' && $actor->id === $proposal->user_id) {
                 // Accepted: the row is the recipient's own event, cancelled through the normal calendar rules.
-                $this->calendar->save($actor, $p->workspace, ['project_id' => $p->project_id, 'task_id' => $p->task_id, 'event_type' => $p->event_type->value, 'title' => $p->title, 'description' => $p->description, 'starts_at' => $p->starts_at->setTimezone($p->timezone)->format('Y-m-d\TH:i'), 'ends_at' => $p->ends_at->setTimezone($p->timezone)->format('Y-m-d\TH:i'), 'timezone' => $p->timezone, 'visibility' => $p->visibility->value, 'status' => CalendarEventStatus::CANCELLED->value, 'all_day' => false, 'is_busy' => true, 'participants' => $p->participants, 'version' => $this->calendar->version($p)], $p);
-                $p = CalendarEvent::proposals()->findOrFail($p->id);
-                $p->fill(['responded_at' => now()])->save();
+                $this->calendar->save($actor, $proposal->workspace, [
+                    'project_id' => $proposal->project_id,
+                    'task_id' => $proposal->task_id,
+                    'event_type' => $proposal->event_type->value,
+                    'title' => $proposal->title,
+                    'description' => $proposal->description,
+                    'starts_at' => $proposal->starts_at->setTimezone($proposal->timezone)->format('Y-m-d\TH:i'),
+                    'ends_at' => $proposal->ends_at->setTimezone($proposal->timezone)->format('Y-m-d\TH:i'),
+                    'timezone' => $proposal->timezone,
+                    'visibility' => $proposal->visibility->value,
+                    'status' => CalendarEventStatus::CANCELLED->value,
+                    'all_day' => false,
+                    'is_busy' => true,
+                    'participants' => $proposal->participants,
+                    'version' => $this->calendar->version($proposal),
+                ], $proposal);
+                $proposal = CalendarEvent::proposals()->findOrFail($proposal->id);
+                $proposal->fill(['responded_at' => now()])->save();
             } else {
-                if ($p->status !== CalendarEventStatus::PROPOSED) {
+                if ($proposal->status !== CalendarEventStatus::PROPOSED) {
                     throw ValidationException::withMessages(['proposal' => 'Đề xuất đã được xử lý. Không tạo lịch lần nữa.']);
                 }
-                abort_unless($action === 'cancel' ? $actor->id === $p->proposed_by : $actor->id === $p->user_id, 403);
+                abort_unless($action === 'cancel' ? $actor->id === $proposal->proposed_by : $actor->id === $proposal->user_id, 403);
                 if ($action === 'accept') {
-                    abort_unless($p->proposer && $this->calendars->scope($p->proposer, $p->workspace, $p->project, 'calendar.create'), 403);
-                    if ($p->starts_at->isPast()) {
+                    abort_unless($proposal->proposer && $this->calendars->scope($proposal->proposer, $proposal->workspace, $proposal->project, 'calendar.create'), 403);
+                    if ($proposal->starts_at->isPast()) {
                         throw ValidationException::withMessages(['proposal' => 'Giờ đề xuất đã qua. Hãy tạo đề xuất mới.']);
                     }
-                    if ($p->task_id) {
-                        abort_unless($this->tasks->scope($p->proposer, $p->workspace, $p->project, 'task.assign'), 403);
+                    if ($proposal->task_id) {
+                        abort_unless($this->tasks->scope($proposal->proposer, $proposal->workspace, $proposal->project, 'task.assign'), 403);
                     }
-                    $p = $this->calendar->acceptProposal($actor, $p->workspace, $p);
+                    $proposal = $this->calendar->acceptProposal($actor, $proposal->workspace, $proposal);
                 } else {
-                    $p->fill(['status' => $action === 'decline' ? CalendarEventStatus::DECLINED : CalendarEventStatus::WITHDRAWN, 'responded_at' => now()])->save();
+                    $proposal->fill([
+                        'status' => $action === 'decline' ? CalendarEventStatus::DECLINED : CalendarEventStatus::WITHDRAWN,
+                        'responded_at' => now(),
+                    ])->save();
                 }
             }
-            $other = User::find($actor->id === $p->user_id ? $p->proposed_by : $p->user_id);
-            if ($other && $this->calendars->scope($other, $p->workspace, $p->project) && (! $p->task_id || ($p->task && Gate::forUser($other)->allows('view', $p->task)))) {
-                $this->notifications->direct($other, $p->workspace, $p->project, 'calendar.responded', 'Đề xuất lịch đã được xử lý', $p->title.' · '.$p->status->value, $this->notificationKey($p), $p->task);
+            $other = User::find($actor->id === $proposal->user_id ? $proposal->proposed_by : $proposal->user_id);
+            if ($other && $this->calendars->scope($other, $proposal->workspace, $proposal->project) && (! $proposal->task_id || $proposal->task && Gate::forUser($other)->allows('view', $proposal->task))) {
+                $this->notifications->direct($other, $proposal->workspace, $proposal->project, 'calendar.responded', 'Đề xuất lịch đã được xử lý', $proposal->title.' · '.$proposal->status->value, $this->notificationKey($proposal), $proposal->task);
             }
         }, 3);
     }

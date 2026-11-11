@@ -16,8 +16,7 @@ class ReportAccess
             return false;
         }
 
-        return $project ? $project->workspace_id === $workspace->id && $this->projects->allows($actor, $project, 'task.view') && $this->projects->allows($actor, $project, 'report.view') && $this->projects->allows($actor, $project, $permission)
-            : $this->workspaces->allows($actor, $workspace, 'report.view') && $this->workspaces->allows($actor, $workspace, $permission);
+        return $project ? $project->workspace_id === $workspace->id && $this->projects->allows($actor, $project, 'task.view') && $this->projects->allows($actor, $project, 'report.view') && $this->projects->allows($actor, $project, $permission) : $this->workspaces->allows($actor, $workspace, 'report.view') && $this->workspaces->allows($actor, $workspace, $permission);
     }
 
     public function projects(User $actor, Workspace $workspace)
@@ -46,7 +45,7 @@ class ReportAccess
         }
         foreach ($metrics['access']['calendar_project_ids'] ?? [] as $id) {
             $calendarProject = $id ? $workspace->projects()->find($id) : null;
-            if (($id && ! $calendarProject) || ! $this->calendars->scope($actor, $workspace, $calendarProject, 'calendar.view')) {
+            if ($id && ! $calendarProject || ! $this->calendars->scope($actor, $workspace, $calendarProject, 'calendar.view')) {
                 return false;
             }
         }

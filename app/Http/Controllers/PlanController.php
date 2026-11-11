@@ -29,13 +29,9 @@ class PlanController extends Controller
             'source_selected.*' => 'uuid',
         ]);
         $project = $this->project($request, $workspace);
-        $data = $this->pages->form(
-            $request->user(), $workspace, $project, $request->input('base_id'),
-            $request->session()->getOldInput(), $request->query('source_q'), $request->query('source_selected', []),
-        );
+        $data = $this->pages->form($request->user(), $workspace, $project, $request->input('base_id'), $request->session()->getOldInput(), $request->query('source_q'), $request->query('source_selected', []));
         if (isset($data['invalidBase'])) {
-            return to_route('workspaces.plans.show', [$workspace, $data['invalidBase']])
-                ->with('warning', 'Kế hoạch nguồn thiếu dữ liệu chuẩn. Hãy tạo kế hoạch mới thay vì sao chép bản này.');
+            return to_route('workspaces.plans.show', [$workspace, $data['invalidBase']])->with('warning', 'Kế hoạch nguồn thiếu dữ liệu chuẩn. Hãy tạo kế hoạch mới thay vì sao chép bản này.');
         }
 
         return view('plans.create', $data);

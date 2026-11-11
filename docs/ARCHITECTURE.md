@@ -27,7 +27,7 @@ View (Blade)  chỉ hiển thị biến được truyền vào + @can(ability, m
 | FormRequest | `app/Http/Requests` | `rules()`, chuẩn hoá input (`prepareForValidation`), cách phản hồi lỗi validate | `authorize()`, gọi Service/DB nghiệp vụ |
 | Controller | `app/Http/Controllers` | Điều phối service/PageData của nhóm nghiệp vụ, chọn view, redirect, flash, JSON. Với trang đọc **một model** được phép 1 dòng `$this->authorize('ability', $model)` | Query builder, `DB::`, transaction, tự viết điều kiện quyền, `app(...)` |
 | Service nghiệp vụ | `app/Services/<Domain>/*Service.php` | Đọc dữ liệu của nghiệp vụ; khi ghi dùng transaction, `lockForUpdate`, `Gate::forUser($actor)->authorize(...)` trên dữ liệu đã khoá, nghiệp vụ, ghi lịch sử/thông báo | Đọc `request()`/session toàn cục, trả view |
-| Query / PageData (đọc) | `app/Services/<Domain>/*Query.php`, `TaskPageData`, `CalendarViewService`, `PlanEditorData` | Kiểm quyền **theo phạm vi** (danh sách, trang có bộ lọc), query, trả mảng biến cho view | Ghi DB |
+| Query / PageData (đọc) | `app/Services/<Domain>/*Query.php`, `TaskPageData`, `CalendarPageData`, `PlanPageData` | Kiểm quyền **theo phạm vi** (danh sách, trang có bộ lọc), query, trả mảng biến cho view | Ghi DB |
 | Authorization | `app/Authorization` | Tính quyền của user trong workspace/project, các quy tắc phạm vi (task, lịch, kế hoạch, báo cáo). Cache theo request | Ghi DB, phụ thuộc Service |
 | Policy | `app/Policies` | Ability trên **một model** (`view`, `update`, `review`…), dùng chung cho Service, Controller và `@can` trong Blade | Hàm helper public để lớp khác gọi trực tiếp |
 | View composer | `app/View` | Dữ liệu dùng chung cho layout (menu, breadcrumbs, timer) và cờ hiển thị link module | Ghi DB |
@@ -71,13 +71,13 @@ app/
   Services/
     Account/       AccountService (đăng ký, hồ sơ, mật khẩu, reset) · AccountMailService
     Ai/            AiRunService · PlanningContext · Providers/
-    Calendar/      CalendarService nghiệp vụ · CalendarViewService (đọc) · TeamCalendarService nghiệp vụ
+    Calendar/      CalendarService nghiệp vụ · CalendarPageData (đọc) · TeamCalendarService nghiệp vụ
     Integration/   GithubSettingsService · GithubWebhookService
     Notification/  NotificationService
-    Planning/      PlanService nghiệp vụ · PlanQuery (đọc) · PlanReviewService · PlanScheduleService · PlanEditorData
+    Planning/      PlanService nghiệp vụ · PlanQuery (đọc) · PlanReviewService · PlanScheduleService · PlanPageData
     Project/       ProjectService nghiệp vụ · ProjectQuery (đọc)
     Queue/         QueueObservation
-    Report/        ReportService (tính số liệu, snapshot) · ReportQuery (lịch sử, dashboard, CSV)
+    Report/        ReportService (số liệu, snapshot, lịch sử, dashboard, CSV)
     Search/        SearchService
     Setting/       SettingService
     Task/          TaskService · TaskWorkflowService · TaskUtilityService · TaskTemplateService nghiệp vụ
@@ -127,7 +127,7 @@ Kiểm quyền: **1 lần** (bước 4). Trước đây: middleware + `TaskReque
 - `TaskController@resolveEdit` gọi `$this->authorize('update', $task)` dù sau đó Service cũng kiểm: nhánh lỗi của màn hình đối chiếu render dữ liệu task **trước khi** tới Service.
 - `PlanController@preview` kiểm quyền xem kế hoạch, còn `PlanReviewService::preview` kiểm `plan.apply`+`plan.approve`: hai quyền khác nhau, không trùng.
 - `User::sendEmailVerificationNotification` và `ProcessAiRun::failed` vẫn dùng `app()`: đây là hook của framework, không nhận dependency injection.
-- `TaskEditConflict` nhận `Request` để lưu bản nháp đối chiếu trong session; `CalendarViewService::range/presentation` nhận `Request` để đọc tham số lịch. Request được truyền tường minh, không dùng `request()` toàn cục.
+- `TaskEditConflict` là bộ điều phối bản nháp đối chiếu theo phiên, nhận `Request` tường minh để quản lý session. `CalendarPageData` nhận mảng đã kiểm tra, múi giờ và URL; không phụ thuộc Request/session.
 - `RequireFullFeatureSchema` giữ nguyên (trang 503 khi chưa chạy migration 23/10).
 
 ## 8. Thay đổi ngày 06/11/2026 (tên cũ → mới)

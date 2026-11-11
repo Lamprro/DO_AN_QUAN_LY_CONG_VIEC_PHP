@@ -8,7 +8,8 @@ use App\Http\Requests\ReportRequest;
 use App\Models\AiRun;
 use App\Models\Workspace;
 use App\Services\Ai\AiRunService;
-use App\Services\Report\ReportQuery;
+use App\Services\Planning\PlanPageData;
+use App\Services\Report\ReportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -17,17 +18,21 @@ class AiRunController extends Controller
 {
     public function __construct(private AiRunService $service) {}
 
-    public function index(Request $request, Workspace $workspace, ReportQuery $query)
+    public function index(Request $request, Workspace $workspace, ReportService $query)
     {
-        $filters = $request->validate(['page' => ['sometimes', 'integer', 'min:1', 'max:100000'], 'status' => ['nullable', Rule::enum(AiRunStatus::class)],
-            'created_from' => ['nullable', 'date_format:Y-m-d'], 'created_to' => ['nullable', 'date_format:Y-m-d', 'after:created_from']]);
+        $filters = $request->validate([
+            'page' => ['sometimes', 'integer', 'min:1', 'max:100000'],
+            'status' => ['nullable', Rule::enum(AiRunStatus::class)],
+            'created_from' => ['nullable', 'date_format:Y-m-d'],
+            'created_to' => ['nullable', 'date_format:Y-m-d', 'after:created_from'],
+        ]);
         $runs = $query->aiRuns($request->user(), $workspace, $filters, $request->url(), $request->query());
 
         return view('ai-runs.index', compact('workspace', 'runs', 'filters'));
     }
 
     /** Report-commentary request form. */
-    public function create(ReportRequest $request, Workspace $workspace, ReportQuery $reports)
+    public function create(ReportRequest $request, Workspace $workspace, ReportService $reports)
     {
         return view('ai-runs.create', $reports->aiRunForm($request->user(), $workspace, $request->validated()) + ['token' => (string) Str::uuid()]);
     }
@@ -69,5 +74,33 @@ class AiRunController extends Controller
     {
         abort_unless($run->workspace_id === $workspace->id, 404);
         $this->authorize('view', $run);
+    }
+
+    public function createPlanning(Request $request, Workspace $workspace, PlanPageData $plans)
+    {
+        $request->validate(['project_id' => 'nullable|uuid']);
+        $project = $request->filled('project_id') ? $workspace->projects()->findOrFail($request->input('project_id')) : null;
+        $bases = $plans->bases($request->user(), $workspace, $project);
+
+        return view('plans.ai', [
+            'workspace' => $workspace,
+            'project' => $project,
+            'bases' => $bases,
+            'token' => (string) Str::uuid(),
+        ]);
+    }
+
+    public function storePlanning(Request $request, Workspace $workspace, AiRunService $service)
+    {
+        $validated = $request->validate([
+            'project_id' => 'nullable|uuid',
+            'base_id' => 'nullable|uuid',
+            'operation' => 'required|in:planning,replanning,assistance',
+            'user_prompt' => 'required|string|max:4000',
+            'idempotency_token' => 'required|uuid',
+        ]);
+        $run = $service->requestPlanning($request->user(), $workspace, $validated);
+
+        return to_route('workspaces.ai-runs.show', [$workspace, $run])->with('success', 'Đã lưu yêu cầu AI. Kết quả kế hoạch chỉ là nháp, chưa áp dụng.');
     }
 }

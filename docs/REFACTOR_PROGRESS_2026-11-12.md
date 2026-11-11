@@ -25,3 +25,13 @@ Nhóm 1 sau thay đổi: 39/39 HTTP, 13/13 kiểm tra dữ liệu; hồi quy cá
 - Giữ `TaskPageData` vì có list/board/tree/form/panel; giữ `TaskListingQuery` vì phạm vi tổng hợp dùng cả trang task lẫn số đếm workspace. Giữ `TaskTreeService` cho thuật toán cây, `TaskParticipants` cho danh sách người hợp lệ dùng chung, `TaskHistory` cho audit + notification.
 
 Kiểm chứng sau thay đổi: 36 HTTP/11 kiểm tra task–timer–template; 12 HTTP/5 kiểm tra tệp và conflict 409; 48 HTTP/53 kiểm tra tổng hợp cá nhân; 27 HTTP/31 kiểm tra thu hồi quyền, membership, đăng ký và bảo vệ workspace cá nhân. Đủ 166 hợp đồng route không đổi. Các JSON `tasks-*.json`, `files-conflict-results.json` nằm trong thư mục bằng chứng của đợt này. Không gọi AI/mail bên ngoài.
+
+## Nhóm 3 — lịch, kế hoạch, báo cáo và AI
+
+- `CalendarEventController`, `TimelineController`, `TeamCalendarController` thành `CalendarController`. `CalendarViewService` đổi tên đúng vai trò thành `CalendarPageData`; controller kiểm đầu vào HTTP, lớp này tính khoảng lịch và dữ liệu hiển thị từ các giá trị truyền vào.
+- `PlanQuery` và `PlanEditorData` thành `PlanPageData`. Chuẩn bị bản nháp, ánh xạ task của phiên bản nguồn và phục hồi dữ liệu form chuyển khỏi `PlanController` vào `PlanPageData.form`. Controller giữ phản hồi HTTP và ánh xạ lỗi về trường form.
+- `ReportQuery` về `ReportService`, gồm dashboard, lịch sử snapshot/AI, giới hạn phân trang và CSV. Các truy vấn vẫn kiểm lại quyền nguồn hiện tại.
+- `PlanningAiController` về `AiRunController` qua `createPlanning`/`storePlanning`. `AiRunService` vẫn quản lý idempotency, hàng đợi, trạng thái và kết quả.
+- Giữ `CalendarService` và `TeamCalendarService` vì lịch của chính mình khác với vòng đời đề xuất cần người nhận chấp thuận. Đề xuất là chính bản ghi `calendar_events`; chấp nhận đổi trạng thái, không nhân đôi. Giữ `PlanReviewService` cho diff/preview rollback, `PlanScheduleService` cho thuật toán xếp lịch, `PlanService` cho schema, phiên bản, duyệt và áp dụng.
+
+Kiểm chứng: 56 HTTP/16 kiểm tra dữ liệu đạt; bao gồm tạo/sửa/xóa lịch, phiên bản cũ bị chặn, đề xuất/chấp nhận/hủy không tạo bản ghi trùng, draft không tạo task, preview rollback, duyệt/apply lặp không nhân đôi, snapshot/print/CSV, AI idempotency và worker thật với AI tắt. Worker không gọi nhà cung cấp và không tạo plan. Đủ 166 hợp đồng route không đổi. Bằng chứng: `planning-results.json`.

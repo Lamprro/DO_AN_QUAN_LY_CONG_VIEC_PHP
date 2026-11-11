@@ -1,0 +1,422 @@
+{
+  "requests": [
+    {
+      "label": "Login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar?view=month",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar?view=month",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar?view=day",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar?view=day",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar?view=list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar?view=list",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar/create",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar/create",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/team-calendar?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/team-calendar?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/timeline",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/timeline",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/create?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/create?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/planning-ai/create?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/planning-ai/create?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plan-impact?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plan-impact?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/dashboard?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/dashboard?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reports?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reports?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs/create?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs/create?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/operations",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/operations",
+      "status": 200
+    },
+    {
+      "label": "Read /workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reminders",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reminders",
+      "status": 200
+    },
+    {
+      "label": "Excessive calendar range rejected",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar?from=2027-01-01&to=2028-01-01",
+      "status": 422
+    },
+    {
+      "label": "Create calendar event",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar",
+      "status": 302
+    },
+    {
+      "label": "Calendar detail",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar/01a1cb9c-43a3-72a9-a5e7-d6264f273922",
+      "status": 200
+    },
+    {
+      "label": "Calendar edit",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar/01a1cb9c-43a3-72a9-a5e7-d6264f273922/edit",
+      "status": 200
+    },
+    {
+      "label": "Update calendar event",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar/01a1cb9c-43a3-72a9-a5e7-d6264f273922",
+      "status": 302
+    },
+    {
+      "label": "Stale calendar version rejected",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar/01a1cb9c-43a3-72a9-a5e7-d6264f273922",
+      "status": 422
+    },
+    {
+      "label": "Refresh calendar edit",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar/01a1cb9c-43a3-72a9-a5e7-d6264f273922/edit",
+      "status": 200
+    },
+    {
+      "label": "Delete calendar event",
+      "method": "DELETE",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar/01a1cb9c-43a3-72a9-a5e7-d6264f273922",
+      "status": 302
+    },
+    {
+      "label": "Propose meeting",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/team-calendar",
+      "status": 302
+    },
+    {
+      "label": "Recipient login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Recipient login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Recipient proposals",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/team-calendar?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Accept proposal",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/team-calendar/01a1cb9c-4a8f-72bf-b27c-d260f53f894d/accept",
+      "status": 302
+    },
+    {
+      "label": "Stale acceptance rejected",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/team-calendar/01a1cb9c-4a8f-72bf-b27c-d260f53f894d/accept",
+      "status": 422
+    },
+    {
+      "label": "Cancel accepted event",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/team-calendar/01a1cb9c-4a8f-72bf-b27c-d260f53f894d/cancel",
+      "status": 302
+    },
+    {
+      "label": "Save draft plan",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans",
+      "status": 302
+    },
+    {
+      "label": "Plan detail",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/01a1cb9c-553b-71f2-a38a-9be3f6df93e9",
+      "status": 200
+    },
+    {
+      "label": "Preview plan",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/01a1cb9c-553b-71f2-a38a-9be3f6df93e9/preview",
+      "status": 200
+    },
+    {
+      "label": "Propose plan",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/01a1cb9c-553b-71f2-a38a-9be3f6df93e9/propose",
+      "status": 302
+    },
+    {
+      "label": "Approve plan",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/01a1cb9c-553b-71f2-a38a-9be3f6df93e9/approve",
+      "status": 302
+    },
+    {
+      "label": "Apply approved plan",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/01a1cb9c-553b-71f2-a38a-9be3f6df93e9/apply",
+      "status": 302
+    },
+    {
+      "label": "Repeat apply is idempotent",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/01a1cb9c-553b-71f2-a38a-9be3f6df93e9/apply",
+      "status": 302
+    },
+    {
+      "label": "New version form from applied plan",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/plans/create?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c&base_id=01a1cb9c-553b-71f2-a38a-9be3f6df93e9",
+      "status": 200
+    },
+    {
+      "label": "Save report snapshot",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reports",
+      "status": 302
+    },
+    {
+      "label": "Snapshot detail",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reports/01a1cb9c-5e18-729d-b42c-84717d73f1e2",
+      "status": 200
+    },
+    {
+      "label": "Snapshot print",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reports/01a1cb9c-5e18-729d-b42c-84717d73f1e2/print",
+      "status": 200
+    },
+    {
+      "label": "Snapshot export",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reports/01a1cb9c-5e18-729d-b42c-84717d73f1e2/export",
+      "status": 200
+    },
+    {
+      "label": "Client supplied metrics rejected",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/reports",
+      "status": 422
+    },
+    {
+      "label": "Queue report AI request",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs",
+      "status": 302
+    },
+    {
+      "label": "Repeat AI request",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs",
+      "status": 302
+    },
+    {
+      "label": "Changed input with same token rejected",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs",
+      "status": 422
+    },
+    {
+      "label": "AI run detail",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs/01a1cb9c-636a-7069-82c5-7febf4e12d7c",
+      "status": 200
+    },
+    {
+      "label": "Cancel queued run",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs/01a1cb9c-636a-7069-82c5-7febf4e12d7c/cancel",
+      "status": 302
+    },
+    {
+      "label": "Queue planning request",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/planning-ai",
+      "status": 302
+    },
+    {
+      "label": "Repeat planning request",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/planning-ai",
+      "status": 302
+    },
+    {
+      "label": "Operations after worker",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/operations",
+      "status": 200
+    },
+    {
+      "label": "AI history after worker",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/ai-runs",
+      "status": 200
+    }
+  ],
+  "results": [
+    {
+      "check": "Calendar event stored",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Calendar event deleted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Proposal is a calendar_events row",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Accept updates same event without duplication",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Recipient cancellation persists",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Draft has no task side effects",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Preview rolls back every domain side effect",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Approved plan applies task once",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Repeated apply creates no duplicate task",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Snapshot persisted",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "CSV is populated",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "AI request and queue are idempotent",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Real worker obeys AI disabled",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Disabled AI creates no plan",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Cancelled run stays cancelled",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Foreign keys valid",
+      "passed": true,
+      "evidence": null
+    }
+  ]
+}

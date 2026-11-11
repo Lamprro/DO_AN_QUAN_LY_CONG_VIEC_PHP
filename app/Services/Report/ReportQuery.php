@@ -7,7 +7,7 @@ use App\Models\AiRun;
 use App\Models\ReportSnapshot;
 use App\Models\User;
 use App\Models\Workspace;
-use App\Services\Workspace\WorkspaceQuery;
+use App\Services\Workspace\WorkspaceService;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -20,7 +20,7 @@ use Illuminate\Validation\ValidationException;
  */
 class ReportQuery
 {
-    public function __construct(private ReportService $reports, private ReportAccess $access, private WorkspaceQuery $workspaces) {}
+    public function __construct(private ReportService $reports, private ReportAccess $access, private WorkspaceService $workspaces) {}
 
     /** Live dashboard; ReportService::metrics asserts report.view on the scope. */
     public function dashboard(User $actor, Workspace $workspace, array $filters): array

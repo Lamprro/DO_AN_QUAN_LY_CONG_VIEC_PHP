@@ -1,6 +1,6 @@
 # Kiến trúc backend — mỗi lớp một việc
 
-Cập nhật: 06/11/2026. Tài liệu này là chuẩn hiện hành cho cấu trúc code. Các tài liệu STAGE_xx và báo cáo cũ ghi lại kiến trúc tại thời điểm đó; khi tên class/file khác với tài liệu này thì tài liệu này đúng.
+Cập nhật: 12/11/2026. Tài liệu này là chuẩn hiện hành cho cấu trúc code. Các tài liệu STAGE_xx và báo cáo cũ ghi lại kiến trúc tại thời điểm đó; khi tên class/file khác với tài liệu này thì tài liệu này đúng.
 
 Dự án vẫn là Laravel MVC + Blade (không đổi sang REST/SPA). Mục tiêu của đợt tái cấu trúc 06/11: **mỗi request chỉ kiểm quyền một lần, ở một chỗ đoán trước được; mỗi lớp chỉ làm đúng việc của nó; không lớp nào gọi ngược lên lớp trên.**
 
@@ -10,8 +10,8 @@ Dự án vẫn là Laravel MVC + Blade (không đổi sang REST/SPA). Mục tiê
 Route (routes/*.php)
   └─ Middleware      đăng nhập · tài khoản active · email đã xác minh · là thành viên workspace
        └─ FormRequest   chỉ validate dữ liệu đầu vào (không kiểm quyền, không gọi service)
-            └─ Controller   nhận input → gọi 1 Service (ghi) hoặc 1 Query/PageData (đọc) → trả view/redirect/JSON
-                 ├─ Service (ghi)      transaction + lock → kiểm quyền → nghiệp vụ → ghi DB
+            └─ Controller   nhận input → gọi service nghiệp vụ hoặc PageData cho màn hình phức tạp → trả view/redirect/JSON
+                 ├─ Service nghiệp vụ      transaction + lock → kiểm quyền → nghiệp vụ → ghi DB
                  └─ Query / PageData (đọc)  kiểm quyền theo phạm vi → query → mảng dữ liệu cho view
                         └─ App\Authorization   nguồn quyền duy nhất (WorkspaceAccess, ProjectAccess, TaskAccess, …)
                                └─ Model / Eloquent  (+ IntegrityObserver kiểm bất biến cấu trúc khi lưu)
@@ -25,8 +25,8 @@ View (Blade)  chỉ hiển thị biến được truyền vào + @can(ability, m
 | Route | `routes/web.php`, `routes/auth.php`, `routes/workspace/*.php` | URL, tên route, middleware, ràng buộc tham số | Logic, kiểm quyền chi tiết |
 | Middleware | `app/Http/Middleware` | Kiểm thô cho cả nhóm route: đăng nhập, active, verified, membership workspace | Kiểm quyền theo chức năng |
 | FormRequest | `app/Http/Requests` | `rules()`, chuẩn hoá input (`prepareForValidation`), cách phản hồi lỗi validate | `authorize()`, gọi Service/DB nghiệp vụ |
-| Controller | `app/Http/Controllers` | Gọi đúng 1 Service/Query, chọn view, redirect, flash, JSON. Với trang đọc **một model** được phép 1 dòng `$this->authorize('ability', $model)` | Query builder, `DB::`, transaction, tự viết điều kiện quyền, `app(...)` |
-| Service (ghi) | `app/Services/<Domain>/*Service.php` | Transaction, `lockForUpdate`, `Gate::forUser($actor)->authorize(...)` trên dữ liệu đã khoá, nghiệp vụ, ghi lịch sử/thông báo | Đọc `request()`/session toàn cục, trả view |
+| Controller | `app/Http/Controllers` | Điều phối service/PageData của nhóm nghiệp vụ, chọn view, redirect, flash, JSON. Với trang đọc **một model** được phép 1 dòng `$this->authorize('ability', $model)` | Query builder, `DB::`, transaction, tự viết điều kiện quyền, `app(...)` |
+| Service nghiệp vụ | `app/Services/<Domain>/*Service.php` | Đọc dữ liệu của nghiệp vụ; khi ghi dùng transaction, `lockForUpdate`, `Gate::forUser($actor)->authorize(...)` trên dữ liệu đã khoá, nghiệp vụ, ghi lịch sử/thông báo | Đọc `request()`/session toàn cục, trả view |
 | Query / PageData (đọc) | `app/Services/<Domain>/*Query.php`, `TaskPageData`, `CalendarViewService`, `PlanEditorData` | Kiểm quyền **theo phạm vi** (danh sách, trang có bộ lọc), query, trả mảng biến cho view | Ghi DB |
 | Authorization | `app/Authorization` | Tính quyền của user trong workspace/project, các quy tắc phạm vi (task, lịch, kế hoạch, báo cáo). Cache theo request | Ghi DB, phụ thuộc Service |
 | Policy | `app/Policies` | Ability trên **một model** (`view`, `update`, `review`…), dùng chung cho Service, Controller và `@can` trong Blade | Hàm helper public để lớp khác gọi trực tiếp |
@@ -39,7 +39,7 @@ Dependency chỉ đi xuống: Controller → Service/Query → Authorization →
 ## 3. Quy tắc phân quyền (quan trọng nhất)
 
 1. **Ghi dữ liệu**: chỉ Service kiểm, bên trong transaction sau khi `lockForUpdate`. Lý do kiểm ở đây chứ không ở Request: quyền có thể bị thu hồi giữa lúc gửi form và lúc ghi; kiểm trên bản ghi đã khoá mới chắc chắn. Service cũng được Job/Artisan gọi, nên quyền phải nằm cùng nghiệp vụ.
-2. **Đọc theo phạm vi** (danh sách task, kế hoạch, mẫu, lịch nhóm…): lớp Query/PageData kiểm (`assertScope`).
+2. **Đọc theo phạm vi** (danh sách task, kế hoạch, mẫu, lịch nhóm…): service hoặc Query/PageData kiểm (`assertScope`).
 3. **Đọc một model** (xem task, xem báo cáo, form sửa): Controller gọi `$this->authorize('view'|'update', $model)` — một dòng, dùng Policy.
 4. **Hiển thị nút/link**: Blade dùng `@can('ability', $model)` hoặc biến cờ (`$canCreateTask`, `$canViewPlans`…) do Query/Composer tính. Blade không gọi `app(...)`.
 5. FormRequest không có `authorize()`. Middleware `workspace.member` chỉ đảm bảo là thành viên đang hoạt động.
@@ -69,22 +69,22 @@ app/
                    TaskDependencyRequest, TaskAttachmentRequest, BulkTaskRequest, SavedFilterRequest)
   Jobs/  Mail/  Models/  Observers/ (IntegrityObserver, ReferenceIntegrity)  Policies/
   Services/
-    Account/       AccountService (hồ sơ, mật khẩu, reset) · RegistrationService · AccountMailService
+    Account/       AccountService (đăng ký, hồ sơ, mật khẩu, reset) · AccountMailService
     Ai/            AiRunService · PlanningContext · Providers/
-    Calendar/      CalendarService (ghi) · CalendarViewService (đọc) · TeamCalendarService (ghi)
+    Calendar/      CalendarService nghiệp vụ · CalendarViewService (đọc) · TeamCalendarService nghiệp vụ
     Integration/   GithubSettingsService · GithubWebhookService
     Notification/  NotificationService
-    Planning/      PlanService (ghi) · PlanQuery (đọc) · PlanReviewService · PlanScheduleService · PlanEditorData
-    Project/       ProjectService (ghi) · ProjectQuery (đọc)
+    Planning/      PlanService nghiệp vụ · PlanQuery (đọc) · PlanReviewService · PlanScheduleService · PlanEditorData
+    Project/       ProjectService nghiệp vụ · ProjectQuery (đọc)
     Queue/         QueueObservation
     Report/        ReportService (tính số liệu, snapshot) · ReportQuery (lịch sử, dashboard, CSV)
     Search/        SearchService
     Setting/       SettingService
-    Task/          TaskService · TaskWorkflowService · TaskUtilityService · TaskTemplateService (ghi)
+    Task/          TaskService · TaskWorkflowService · TaskUtilityService · TaskTemplateService nghiệp vụ
                    TaskPageData · TaskTemplateQuery (đọc) · TaskParticipants · TaskTreeService · TaskHistory
                    TaskReminderService · TaskEditConflict
     TimeTracking/  TimeTrackingService
-    Workspace/     WorkspaceService · InvitationService (ghi) · WorkspaceQuery (đọc)
+    Workspace/     WorkspaceService · InvitationService nghiệp vụ · WorkspaceQuery (đọc)
   Support/         LocalTime SearchTerm UiLabels MetricDisplay EditRevision TaskFilters
   View/            AppShell · Composers/LayoutComposer · Composers/ScopeLinksComposer
 routes/
@@ -93,7 +93,7 @@ routes/
   workspace/       workspace.php tasks.php projects.php calendar.php planning.php reports.php
 ```
 
-Quy ước tên: `XxxService` = thao tác ghi; `XxxQuery`/`XxxPageData`/`CalendarViewService` = dữ liệu cho màn hình.
+Quy ước tên: `XxxService` là điểm vào nghiệp vụ, được chứa cả đọc và ghi theo nhóm phương thức rõ ràng. Chỉ giữ `Query`/`PageData` riêng khi truy vấn dùng lại nhiều nơi hoặc việc chuẩn bị màn hình đủ phức tạp. Không tạo lớp mới chỉ vì thêm một form. Controller cùng thực thể có thể chứa các phương thức thành viên/vai trò với tên rõ nghĩa.
 
 ## 5. Ví dụ luồng
 
@@ -117,7 +117,7 @@ Kiểm quyền: **1 lần** (bước 4). Trước đây: middleware + `TaskReque
 1. Route trong file domain tương ứng ở `routes/workspace/` (hoặc `web.php` nếu cấp tài khoản).
 2. FormRequest chỉ có `rules()`.
 3. Ghi dữ liệu: method mới trong Service, transaction + lock + `Gate::forUser($actor)->authorize()` hoặc `abort_unless($this->tasks->scope(...))`.
-4. Màn hình đọc: method trong `XxxQuery`/PageData, trả mảng cho view; kiểm phạm vi ở đó.
+4. Màn hình đọc: method trong service cùng nghiệp vụ; dùng Query/PageData khi thực sự cần, trả mảng cho view; kiểm phạm vi ở đó.
 5. Quy tắc quyền mới: ability trong Policy (theo model) hoặc hàm trong `App\Authorization` (theo phạm vi). Không thêm hàm helper vào Policy để Service gọi.
 6. Blade: chỉ dùng biến được truyền và `@can`.
 7. Kiểm tra bằng flow thật (xem `docs/verification/architecture-2026-11-06/`).

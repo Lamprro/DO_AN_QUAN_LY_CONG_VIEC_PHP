@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
-use App\Services\Account\RegistrationService;
+use App\Services\Account\AccountService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -16,7 +16,7 @@ class RegisteredUserController extends Controller
         return view('auth.register', ['timezones' => timezone_identifiers_list()]);
     }
 
-    public function store(RegisterRequest $request, RegistrationService $service): RedirectResponse
+    public function store(RegisterRequest $request, AccountService $service): RedirectResponse
     {
         $user = $service->register($request->validated());
         Auth::login($user);

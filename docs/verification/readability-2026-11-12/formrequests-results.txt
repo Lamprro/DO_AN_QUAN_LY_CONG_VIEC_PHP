@@ -1,0 +1,18 @@
+[PASS] demo1 login
+[PASS] template store (valid) → 302 to show, +1 row
+[PASS] template store (invalid: no name, interval 99, no task_ids) → 302 back, no new row
+[PASS] template store with prohibited 'revision' → rejected
+[PASS] template update (valid) → 302, name/frequency/revision changed
+[PASS] template update without revision → rejected by FormRequest, row unchanged
+[PASS] template update with stale revision → service rejects, row unchanged
+[PASS] work-hours save: empty row dropped, 1 window, slot 15, weekdays [1,3]
+[PASS] work-hours invalid slot_minutes=7 → rejected, settings unchanged
+[PASS] work-hours stale version → service rejects (version check still in service)
+[PASS] demo2 login
+[PASS] proposal (valid) → 302, +1 proposed row owned by demo3
+[PASS] proposal invalid (no title, event_type BUSY) → back, no row
+[PASS] proposal with prohibited 'status=planned' → rejected
+[PASS] team page renders after posts (200) and lists FR proposal
+server log error lines: 0
+
+FORMS RESULT: 15 pass, 0 fail

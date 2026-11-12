@@ -12,8 +12,6 @@ use App\Services\Notification\NotificationService;
 use App\Support\LocalTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -32,21 +30,9 @@ class TeamCalendarService
         return CalendarEvent::proposals()->where('workspace_id', $workspace->id)->findOrFail($id);
     }
 
+    /** @param array $data validated by CalendarProposalRequest */
     public function propose(User $actor, Workspace $workspace, array $data): CalendarEvent
     {
-        $data = Validator::make($data, [
-            'project_id' => 'nullable|uuid',
-            'recipient_id' => 'required|uuid',
-            'task_id' => 'nullable|uuid',
-            'title' => 'required|string|max:200',
-            'description' => 'nullable|string|max:4000',
-            'event_type' => ['required', Rule::in(['MEETING', 'TASK_BLOCK'])],
-            'visibility' => ['required', Rule::in(['private', 'project', 'workspace'])],
-            'timezone' => 'required|timezone',
-            'starts_at' => 'required|date_format:Y-m-d\TH:i',
-            'ends_at' => 'required|date_format:Y-m-d\TH:i',
-        ])->validate();
-
         return DB::transaction(function () use ($actor, $workspace, $data) {
             $workspace = Workspace::lockForUpdate()->findOrFail($workspace->id);
             $project = empty($data['project_id']) ? null : $workspace->projects()->findOrFail($data['project_id']);

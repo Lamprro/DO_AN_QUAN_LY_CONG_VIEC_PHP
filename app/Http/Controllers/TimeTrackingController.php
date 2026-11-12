@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WorkHoursRequest;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\Workspace;
@@ -78,9 +79,9 @@ class TimeTrackingController extends Controller
         ]);
     }
 
-    public function updateWorkHours(Request $request)
+    public function updateWorkHours(WorkHoursRequest $request)
     {
-        $this->service->saveWorkHours($request->user(), $request->all());
+        $this->service->saveWorkHours($request->user(), $request->validated());
 
         return back()->with('success', 'Đã cập nhật giờ làm. Kế hoạch cũ giữ snapshot, kế hoạch mới dùng lịch mới.');
     }

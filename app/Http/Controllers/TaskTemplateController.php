@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Task\TaskTemplateRequest;
 use App\Models\Workspace;
 use App\Services\Task\TaskTemplateService;
 use Illuminate\Http\Request;
@@ -19,11 +20,11 @@ class TaskTemplateController extends Controller
         return view('templates.index', $this->service->index($request->user(), $workspace, $project));
     }
 
-    public function store(Request $request, Workspace $workspace)
+    public function store(TaskTemplateRequest $request, Workspace $workspace)
     {
         $validated = $request->validate(['project_id' => 'nullable|uuid']);
         $project = empty($validated['project_id']) ? null : $workspace->projects()->findOrFail($validated['project_id']);
-        $template = $this->service->create($request->user(), $workspace, $project, $request->all());
+        $template = $this->service->create($request->user(), $workspace, $project, $request->validated());
 
         return to_route('workspaces.templates.show', [$workspace, $template->id])->with('success', 'Đã lưu mẫu độc lập. Chưa tạo task mới.');
     }
@@ -37,9 +38,9 @@ class TaskTemplateController extends Controller
         return view('templates.show', $data + ['requestKey' => (string) Str::uuid()]);
     }
 
-    public function update(Request $request, Workspace $workspace, string $template)
+    public function update(TaskTemplateRequest $request, Workspace $workspace, string $template)
     {
-        $this->service->update($request->user(), $this->service->find($workspace, $template), $request->all());
+        $this->service->update($request->user(), $this->service->find($workspace, $template), $request->validated());
 
         return back()->with('success', 'Đã cập nhật cấu hình mẫu; lịch sử các kỳ cũ giữ nguyên.');
     }

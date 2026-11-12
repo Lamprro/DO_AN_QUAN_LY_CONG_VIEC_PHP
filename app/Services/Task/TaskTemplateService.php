@@ -17,26 +17,16 @@ use App\Support\LocalTime;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class TaskTemplateService
 {
     public function __construct(private TaskAccess $tasks, private TaskService $taskService, private TaskWorkflowService $workflow) {}
 
-    public function settings(array $data): array
+    /** Schedule fields of a validated TaskTemplateRequest, plus the derived next_run_at and status. */
+    private function settings(array $data): array
     {
-        $v = Validator::make($data, [
-            'name' => 'required|string|max:160',
-            'frequency' => ['nullable', Rule::in(['daily', 'weekly', 'monthly'])],
-            'interval' => 'required|integer|between:1,12',
-            'timezone' => 'required|timezone',
-            'starts_on' => 'nullable|required_with:frequency|date_format:Y-m-d',
-            'ends_on' => 'nullable|date_format:Y-m-d|after_or_equal:starts_on',
-            'local_time' => 'nullable|required_with:frequency|date_format:H:i',
-            'deadline_offset_days' => 'nullable|integer|between:0,365',
-        ])->validate();
+        $v = array_intersect_key($data, array_flip(['name', 'frequency', 'interval', 'timezone', 'starts_on', 'ends_on', 'local_time', 'deadline_offset_days']));
         if (! empty($v['frequency'])) {
             $start = LocalTime::parse($v['starts_on'].'T'.$v['local_time'], $v['timezone'], false);
             if ($start->lt(now()->subYear()) || $start->gt(now()->addYears(2))) {
@@ -53,10 +43,11 @@ class TaskTemplateService
         return $v;
     }
 
+    /** @param array $data validated by TaskTemplateRequest (store) */
     public function create(User $actor, Workspace $workspace, ?Project $project, array $data): TaskTemplate
     {
         $settings = $this->settings($data);
-        $ids = Validator::make($data, ['task_ids' => 'required|array|min:1|max:50', 'task_ids.*' => 'required|uuid|distinct'])->validate()['task_ids'];
+        $ids = $data['task_ids'];
 
         return DB::transaction(function () use ($actor, $workspace, $project, $settings, $ids) {
             Workspace::lockForUpdate()->findOrFail($workspace->id);
@@ -109,15 +100,16 @@ class TaskTemplateService
         }, 3);
     }
 
+    /** @param array $data validated by TaskTemplateRequest (update) */
     public function update(User $actor, TaskTemplate $template, array $data): void
     {
         $settings = $this->settings($data);
-        $revision = Validator::make($data, ['revision' => 'required|integer|min:1'])->validate()['revision'];
+        $revision = (int) $data['revision'];
         DB::transaction(function () use ($actor, $template, $settings, $revision) {
             Workspace::lockForUpdate()->findOrFail($template->workspace_id);
             $t = TaskTemplate::lockForUpdate()->findOrFail($template->id);
             abort_unless($this->tasks->templates($actor, $t->workspace, $t->project, true), 403);
-            if ($t->status === TaskTemplateStatus::ARCHIVED || $t->revision !== (int) $revision) {
+            if ($t->status === TaskTemplateStatus::ARCHIVED || $t->revision !== $revision) {
                 throw ValidationException::withMessages(['revision' => 'Mẫu đã thay đổi hoặc lưu trữ. Tải lại trước khi lưu.']);
             }
             $scheduleChanged = collect(['frequency', 'interval', 'starts_on', 'ends_on', 'local_time', 'timezone'])->contains(fn ($key) => (string) ($settings[$key] ?? '') !== (string) match (true) {

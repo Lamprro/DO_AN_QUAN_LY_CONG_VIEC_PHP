@@ -1,0 +1,55 @@
+{
+  "database_checks": [
+    {
+      "check": "Workspace saved through browser editor",
+      "passed": true
+    },
+    {
+      "check": "Task saved once after inline validation error",
+      "passed": true
+    },
+    {
+      "check": "Conflict choice saved; backdrop draft did not autosave",
+      "passed": true
+    },
+    {
+      "check": "Double click created one calendar event",
+      "passed": true
+    },
+    {
+      "check": "Comment editor saved once",
+      "passed": true
+    },
+    {
+      "check": "Visual plan preserved two rows through close and reopen",
+      "passed": true
+    },
+    {
+      "check": "Draft plan did not create business tasks",
+      "passed": true
+    },
+    {
+      "check": "Foreign keys remain valid",
+      "passed": true
+    }
+  ],
+  "browser_observations": [
+    "Workspace create saved; background list refreshed",
+    "Task create: duplicate-code server error shown inside frame; input preserved; corrected save passed",
+    "X, Escape and backdrop close directly; reopen retains fields; Escape restores opener focus",
+    "Member inline form opened and saved; background refreshed",
+    "Visual plan two rows survived Escape and saved as draft",
+    "Desktop dialog: 1488px wide with 24px outer margin",
+    "Mobile viewport 390x844: dialog 378x832; body scrollWidth equals clientWidth",
+    "Stale task edit showed 409 comparison inside frame; chosen mine title saved and background refreshed",
+    "Calendar double-click save completed once",
+    "Comment saved from focused inline editor",
+    "Bulk editor showed exactly one selected task and priority controls after action-name collision fix"
+  ],
+  "limits": [
+    "Bulk save confirmation was not completed in browser: CUA stopped because current Windows browser URL could not be established confidently",
+    "Real backend bulk atomicity/revision/scope was verified in the earlier HTTP suite",
+    "Drafts remain only while the parent page stays open; no disk autosave",
+    "No real AI provider, external mail, production database concurrency or deployment tested"
+  ]
+}

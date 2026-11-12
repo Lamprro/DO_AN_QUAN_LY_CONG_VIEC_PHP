@@ -1,0 +1,20 @@
+{
+  "spreadsheet_id": "1--DCOQtPtV2o8MhNlMQtk4s3DJVcgHXdUhZrxMHEnDs",
+  "sheet": "P2 - Flow trong hệ thống",
+  "sheet_id": 820682619,
+  "ranges": [
+    "A1:H48",
+    "A49:H213",
+    "A214:H445",
+    "A446:H589",
+    "A590:H800"
+  ],
+  "changed_cells": 1338,
+  "changed_rows": 674,
+  "values_match": true,
+  "formats_unchanged": true,
+  "validation_unchanged": true,
+  "formulas_preserved": 6,
+  "structural_requests": 0,
+  "native_visual_check": "Not completed: Computer Use stopped because the active Windows browser URL could not be verified. Cell formatting and values were read back through the Sheets connector."
+}

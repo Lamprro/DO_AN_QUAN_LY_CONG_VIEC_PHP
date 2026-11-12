@@ -12,7 +12,7 @@
 
 Kiểm chứng: review SQLite riêng, mail dùng bộ nhớ, AI tắt. Trước thay đổi: 39 yêu cầu HTTP/13 kiểm tra dữ liệu cho tài khoản–workspace–project; 48 HTTP/53 kiểm tra tổng hợp task cá nhân. Route baseline có 166 route. Kết quả sau mỗi nhóm được ghi bổ sung khi chạy xong, không dùng test giả hoặc dữ liệu sản xuất.
 
-Các nhóm task/time, lịch/kế hoạch/báo cáo/AI, việc làm rõ các nghiệp vụ còn lại và khung form lớn đang triển khai; chưa coi là hoàn tất.
+Các nhóm bên dưới đã được triển khai theo từng commit; giới hạn kiểm chứng được ghi rõ ở cuối báo cáo.
 
 Nhóm 1 sau thay đổi: 39/39 HTTP, 13/13 kiểm tra dữ liệu; hồi quy cá nhân 48/48 HTTP, 53/53 kiểm tra. So sánh đủ 166 hợp đồng route: không đổi. Bằng chứng: docs/verification/readability-2026-11-12/identity-*.json.
 
@@ -46,4 +46,35 @@ Kiểm chứng: 56 HTTP/16 kiểm tra dữ liệu đạt; bao gồm tạo/sửa/
 
 Hồi quy tổng thể: **250 yêu cầu HTTP, 141/141 kiểm tra dữ liệu đạt**, cộng worker database thật cho AI tắt và nhắc việc in-app. Kiểm tra webhook dùng secret giả và payload ký thật trong môi trường review; không gọi GitHub bên ngoài. Có một lượt quét nhắc việc bị 429 do chạy lại quá gần; giữ nguyên throttle, chờ hết cửa sổ rồi chạy lại đạt. Các lỗi thiết lập kiểm chứng (CSRF sau login, scope proposal, throttle) được sửa ở kịch bản kiểm chứng, không sửa nghiệp vụ để ép đạt.
 
-Giới hạn: SQLite riêng trên máy này, không chứng minh tranh chấp đồng thời ở database sản xuất. Không thử nhà cung cấp AI thật hoặc email ngoài hệ thống. Giữ nguyên key, database và cấu hình đang dùng. Khung form lớn và đồng bộ sheet đang thực hiện riêng.
+Giới hạn: SQLite riêng trên máy này, không chứng minh tranh chấp đồng thời ở database sản xuất. Không thử nhà cung cấp AI thật hoặc email ngoài hệ thống. Giữ nguyên key, database và cấu hình đang dùng. Khung form lớn và đồng bộ sheet được ghi ở các mục tiếp theo.
+
+## Nhóm 5 — khung chỉnh sửa lớn
+
+Commit `b39f0bc` — Add spacious editors across business forms. Thay task-panel riêng bằng editor dùng chung; trang nền còn hiển thị, X/Esc/backdrop đóng ngay và giữ bản nhập trong trang hiện tại. Tái dùng nguyên Blade để các form kế hoạch nhiều dòng, HTTP validation và đối chiếu 409 không mất hành vi. Bao phủ link tạo/sửa và các form inline có dữ liệu nhập; giữ các nút chuyển trạng thái riêng và thao tác tức thời.
+
+Đã quan sát trên Chrome: tạo workspace và cập nhật danh sách nền; task lỗi mã trùng giữ dữ liệu rồi lưu lại; X/Esc/backdrop giữ bản nhập; focus trả về nút mở; form thành viên lưu; kế hoạch hai dòng giữ qua Esc rồi lưu nháp; conflict chọn mine lưu đúng; double-click lịch chỉ tạo một bản ghi; bình luận lưu; bulk mở đúng một dòng đã chọn. Viewport desktop: khung rộng 1488px, chừa viền 24px; viewport 390×844: khung 378×832, nội dung không tràn ngang.
+
+8/8 kiểm tra đọc lại DB đạt. Blade toàn bộ biên dịch được; JavaScript kiểm cú pháp đạt; đủ 166 hợp đồng route giữ nguyên. Ảnh và JSON ở `docs/verification/readability-2026-11-12/editor-*`.
+
+Giới hạn riêng: thao tác xác nhận lưu bulk chưa hoàn tất trên trình duyệt. Công cụ CUA đã dừng vì không xác định chắc URL đang mở trên Windows; không tiếp tục điều khiển hoặc coi hộp xác nhận đó là thành công. Kiểm chứng HTTP về bulk nguyên tử, quyền và revision vẫn đạt ở nhóm backend. Bản nhập chỉ tồn tại khi trang cha còn mở, không phải tính năng tự lưu dài hạn.
+
+## Nhóm 6 — tài liệu và sheet hiện hành
+
+Đã cập nhật trực tiếp sheet **ĐỒ ÁN PHP**, tab **P2 - Flow trong hệ thống** (gid 820682619), các vùng `A1:H48`, `A49:H213`, `A214:H445`, `A446:H589`, `A590:H800`: 1.338 ô trên 674 dòng. Giữ nguyên cấu trúc, sáu công thức điều hướng, validation và toàn bộ định dạng ô; không ghi sang tab khác. Đọc lại qua connector xác nhận mọi giá trị đúng bản dự kiến và ô ngoài danh sách sửa không đổi. Các phương thức Model mới liên quan được tham chiếu bổ sung cùng dòng model để không xê dịch nhóm.
+
+Nội dung gồm map controller/service mới, signature và dòng code hiện tại; TaskListingQuery và phạm vi tổng hợp cá nhân; watcher về TaskWorkflowController/TaskWorkflowService; settings ở users.settings; proposal trong calendar_events; ProjectAccess.resolve là quyền dự án; blocker khác dependency; flow editor chung và giới hạn kiểm chứng. Các lời gọi trong bảng là phân tích tĩnh trực tiếp, không thay thế việc đọc callback/framework.
+
+Không hoàn tất kiểm tra hiển thị trực tiếp trong Google Sheets vì CUA đã dừng. Đã kiểm tra lại định dạng bằng API, không tự đổi chiều rộng, hàng, wrap hay merge để che vấn đề. Bằng chứng: `sheet-verification.json`, `sheet-write-log.json`.
+
+Liên kết: https://docs.google.com/spreadsheets/d/1--DCOQtPtV2o8MhNlMQtk4s3DJVcgHXdUhZrxMHEnDs/edit#gid=820682619
+
+## Các commit theo nhóm
+
+- `42dacbd` — Consolidate account and workspace flows.
+- `c8ef354` — Unify task and time tracking flows.
+- `8491f08` — Unify planning and calendar entry points.
+- `2a52399` — Clarify domain workflows and onboarding.
+- `b39f0bc` — Add spacious editors across business forms.
+- Commit tài liệu cuối chứa hướng dẫn editor, báo cáo này và bằng chứng đối chiếu sheet.
+
+Tất cả được đẩy trực tiếp lên main theo chỉ đạo, không force push và không deploy. Lịch sử trước đợt refactor, báo cáo của chat khác và nguồn đồng bộ của project được bảo toàn.

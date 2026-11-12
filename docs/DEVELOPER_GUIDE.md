@@ -40,3 +40,22 @@ Dự án dùng Laravel MVC + Blade. Hãy bắt đầu từ tên route trong form
 - Công việc cá nhân tổng hợp task trực tiếp và task được giao trong nguồn được phép xem; không chép hoặc chuyển task khỏi project. Mọi thao tác quay lại nguồn gốc và kiểm quyền hiện tại. Bulk từ cá nhân chỉ nhận task trực tiếp trong phạm vi đó.
 - Đề xuất lịch và sự kiện cùng bảng `calendar_events`. Scope mặc định ẩn trạng thái chỉ là đề xuất; `proposals()` đọc vòng đời đề xuất. Accept đổi chính bản ghi sang planned.
 - `ProjectAccess.resolve` giải quyết ngữ cảnh/quyền project. Xung đột phiên sửa task do `TaskEditConflict.resolve`; hai việc không liên quan.
+
+## Form lớn dùng chung
+
+Layout nạp `public/js/page-editor.js` và `public/css/page-editor.css`. Link tạo/sửa, hồ sơ, cấu hình, giờ làm và chỉnh timer mở một dialog gần toàn màn hình. Mỗi editor tải nguyên route Blade vào iframe cùng origin; các script của trang, CSRF, FormRequest, redirect, version và màn hình conflict vẫn chạy trên HTTP hiện có. `?panel=1` còn được server hỗ trợ để không phá hợp đồng cũ.
+
+Các form đang nằm trong bảng hoặc thẻ (thành viên, lời mời, mẫu, đề xuất lịch, GitHub, xếp lịch, bình luận, blocker, dependency, watcher, tệp, bộ lọc và bulk) dùng `data-form` để mở đúng form trong khung. Thao tác tức thời không có trường nhập như xóa/đọc thông báo/start-stop timer vẫn theo nút hiện hành. Form đổi trạng thái giữ các nút chuyển trạng thái riêng, không tự chọn một trạng thái cho nút Lưu chung.
+
+- X, Escape, backdrop và liên kết Hủy đóng trực tiếp. Frame được giữ trong trang cha nên dữ liệu nhập, dòng kế hoạch và tệp đã chọn không mất khi mở lại. Không tự ghi server, không lưu bản nhập xuống ổ đĩa; tải lại hoặc rời trang cha kết thúc bản nhập này.
+- Lưu dùng submit HTML gốc; `app-ui.js` chống gửi lặp. Lỗi validate và conflict được hiển thị trong frame. Thành công có flash sẽ đóng frame đã lưu và làm mới nội dung chính, số thông báo, tên tài khoản/ngữ cảnh; giữ vị trí cuộn, bộ lọc, trang và lựa chọn. Nếu trang chính có bản nhập chưa lưu thì giữ nó và thông báo tải lại thủ công.
+- Bulk chuyển chính các cặp task/revision đã chọn vào form. Backend tiếp tục kiểm quyền, revision và tính nguyên tử. Dùng `getAttribute('action')` vì trường `name="action"` che khuất thuộc tính `form.action` trong DOM.
+- Dialog khóa cuộn nền, trả focus về nút mở khi đóng; frame xử lý Escape. Màn hình nhỏ dùng khoảng cách viền 6px và nút đóng/lưu tối thiểu 44px.
+- Muốn thêm form inline: đặt `data-form` rõ nghĩa, thêm nhãn vào `inlineForms`, giữ URL action thật. Không thêm endpoint hoặc một controller/service chỉ để phục vụ dialog.
+- Route riêng và liên kết “Mở trang riêng” là đường dự phòng. JavaScript không có hoặc dialog không được hỗ trợ thì link/form HTML vẫn hoạt động.
+
+## Đánh giá bảo trì và phạm vi kiểm chứng
+
+Đợt này giảm 18 class ròng so với trước refactor (17 lớp được hợp nhất, 1 provider không dùng được bỏ), không thêm service bọc. Các lớp lớn còn lại có phạm vi nghiệp vụ rõ; thuật toán cây, xếp lịch, preview, nguồn danh sách dùng chung và adapter bên ngoài vẫn tách vì có trách nhiệm riêng. Điểm đánh đổi: controller/service cùng module dài hơn, và mỗi bản nhập đang giữ mở chiếm một frame trong bộ nhớ. Không khẳng định đã loại hết mọi đoạn viết gọn hay đã kiểm mọi tổ hợp quyền/trình duyệt.
+
+Bằng chứng backend: 250 yêu cầu HTTP và 141 kiểm tra dữ liệu; 166 hợp đồng route không đổi. Giao diện: kiểm tra Chrome trên desktop và viewport 390×844, cộng 8 lần đọc lại DB cho workspace/task/plan/calendar/comment/conflict và khóa ngoại. Bước xác nhận lưu bulk trong trình duyệt bị dừng bởi công cụ không xác định chắc URL trên Windows; không ghi nhận bước đó là đạt. Backend bulk/revision/scope đã được kiểm bằng HTTP thật trước đó. Không thử cạnh tranh trên DB production, email ngoài hệ thống hoặc nhà cung cấp AI thật; không deploy.

@@ -74,17 +74,17 @@ app/
     Calendar/      CalendarService nghiệp vụ · CalendarPageData (đọc) · TeamCalendarService nghiệp vụ
     Integration/   GithubSettingsService · GithubWebhookService
     Notification/  NotificationService
-    Planning/      PlanService nghiệp vụ · PlanQuery (đọc) · PlanReviewService · PlanScheduleService · PlanPageData
-    Project/       ProjectService nghiệp vụ · ProjectQuery (đọc)
+    Planning/      PlanService · PlanPageData (màn hình) · PlanReviewService · PlanScheduleService
+    Project/       ProjectService (nghiệp vụ và dữ liệu màn hình)
     Queue/         QueueObservation
     Report/        ReportService (số liệu, snapshot, lịch sử, dashboard, CSV)
     Search/        SearchService
     Setting/       SettingService
-    Task/          TaskService · TaskWorkflowService · TaskUtilityService · TaskTemplateService nghiệp vụ
+    Task/          TaskService · TaskWorkflowService · TaskTemplateService
                    TaskPageData · TaskListingQuery (đọc và phạm vi tổng hợp cá nhân) · TaskParticipants · TaskTreeService · TaskHistory
                    TaskReminderService · TaskEditConflict
     TimeTracking/  TimeTrackingService
-    Workspace/     WorkspaceService · InvitationService nghiệp vụ · WorkspaceQuery (đọc)
+    Workspace/     WorkspaceService (nghiệp vụ và màn hình) · InvitationService
   Support/         LocalTime SearchTerm UiLabels MetricDisplay EditRevision TaskFilters
   View/            AppShell · Composers/LayoutComposer · Composers/ScopeLinksComposer
 routes/

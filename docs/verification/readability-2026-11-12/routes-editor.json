@@ -1,0 +1,2600 @@
+[
+    {
+        "name": "home",
+        "uri": "\/",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "verification.send",
+        "uri": "email\/verification-notification",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "throttle:account-verification-mail"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "verification.verify",
+        "uri": "email\/verify\/{id}\/{hash}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "signed:relative",
+            "throttle:account-verification-link"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "verification.notice",
+        "uri": "email\/verify",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "password.request",
+        "uri": "forgot-password",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "guest"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "password.email",
+        "uri": "forgot-password",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "guest",
+            "throttle:account-recovery"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "github.webhook",
+        "uri": "hooks\/github\/{project}",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "throttle:60,1"
+        ],
+        "wheres": {
+            "project": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "invitations.accept",
+        "uri": "invitations\/{token}\/accept",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "throttle:10,1"
+        ],
+        "wheres": {
+            "token": "[A-Za-z0-9]{64}"
+        }
+    },
+    {
+        "name": "invitations.show",
+        "uri": "invitations\/{token}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web"
+        ],
+        "wheres": {
+            "token": "[A-Za-z0-9]{64}"
+        }
+    },
+    {
+        "name": "login",
+        "uri": "login",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "guest"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "login.store",
+        "uri": "login",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "guest",
+            "throttle:account-login"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "logout",
+        "uri": "logout",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "notifications.read-all",
+        "uri": "notifications\/read-all",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "notifications.read",
+        "uri": "notifications\/{notification}\/read",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": {
+            "notification": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "notifications.index",
+        "uri": "notifications",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "password.update",
+        "uri": "password",
+        "methods": [
+            "PUT"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "profile.edit",
+        "uri": "profile",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "profile.update",
+        "uri": "profile",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "register",
+        "uri": "register",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "guest"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "register.store",
+        "uri": "register",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "guest",
+            "throttle:account-registration"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "password.reset",
+        "uri": "reset-password\/{token}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "guest"
+        ],
+        "wheres": {
+            "token": "[A-Za-z0-9]{64}"
+        }
+    },
+    {
+        "name": "password.reset.store",
+        "uri": "reset-password",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "guest",
+            "throttle:account-reset"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "search.index",
+        "uri": "search",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "settings.edit",
+        "uri": "settings",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "settings.update",
+        "uri": "settings",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "timers.adjust",
+        "uri": "timers\/{entry}\/adjust",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": {
+            "entry": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "timers.adjust.update",
+        "uri": "timers\/{entry}\/adjust",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": {
+            "entry": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "timers.stop",
+        "uri": "timers\/{entry}\/stop",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": {
+            "entry": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "timers.index",
+        "uri": "timers",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "work-hours.edit",
+        "uri": "work-hours",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "work-hours.update",
+        "uri": "work-hours",
+        "methods": [
+            "PUT"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.create",
+        "uri": "workspaces\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.ai-runs.create",
+        "uri": "workspaces\/{workspace}\/ai-runs\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.ai-runs.cancel",
+        "uri": "workspaces\/{workspace}\/ai-runs\/{run}\/cancel",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "run": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.ai-runs.retry",
+        "uri": "workspaces\/{workspace}\/ai-runs\/{run}\/retry",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "throttle:10,1"
+        ],
+        "wheres": {
+            "run": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.ai-runs.show",
+        "uri": "workspaces\/{workspace}\/ai-runs\/{run}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "run": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.ai-runs.index",
+        "uri": "workspaces\/{workspace}\/ai-runs",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.ai-runs.store",
+        "uri": "workspaces\/{workspace}\/ai-runs",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "throttle:10,1"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.calendar.create",
+        "uri": "workspaces\/{workspace}\/calendar\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.calendar.edit",
+        "uri": "workspaces\/{workspace}\/calendar\/{event}\/edit",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "event": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.calendar.destroy",
+        "uri": "workspaces\/{workspace}\/calendar\/{event}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "event": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.calendar.show",
+        "uri": "workspaces\/{workspace}\/calendar\/{event}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "event": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.calendar.update",
+        "uri": "workspaces\/{workspace}\/calendar\/{event}",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "event": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.calendar.index",
+        "uri": "workspaces\/{workspace}\/calendar",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.calendar.store",
+        "uri": "workspaces\/{workspace}\/calendar",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.watchers.destroy",
+        "uri": "workspaces\/{workspace}\/collaboration\/tasks\/{task}\/watchers\/{user}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": {
+            "task": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}",
+            "user": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.tasks.watchers.store",
+        "uri": "workspaces\/{workspace}\/collaboration\/tasks\/{task}\/watchers",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": {
+            "task": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.dashboard",
+        "uri": "workspaces\/{workspace}\/dashboard",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.edit",
+        "uri": "workspaces\/{workspace}\/edit",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.invitations.destroy",
+        "uri": "workspaces\/{workspace}\/invitations\/{invitation}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "invitation": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.invitations.store",
+        "uri": "workspaces\/{workspace}\/invitations",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "throttle:10,1"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.leave",
+        "uri": "workspaces\/{workspace}\/leave",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.members.destroy",
+        "uri": "workspaces\/{workspace}\/members\/{member}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.members.update",
+        "uri": "workspaces\/{workspace}\/members\/{member}",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.members.index",
+        "uri": "workspaces\/{workspace}\/members",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.operations",
+        "uri": "workspaces\/{workspace}\/operations",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.plans.impact",
+        "uri": "workspaces\/{workspace}\/plan-impact",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.planning-ai.create",
+        "uri": "workspaces\/{workspace}\/planning-ai\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.planning-ai.store",
+        "uri": "workspaces\/{workspace}\/planning-ai",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "throttle:10,1"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.plans.create",
+        "uri": "workspaces\/{workspace}\/plans\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.plans.preview",
+        "uri": "workspaces\/{workspace}\/plans\/{plan}\/preview",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "plan": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.plans.schedule",
+        "uri": "workspaces\/{workspace}\/plans\/{plan}\/schedule",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "plan": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.plans.action",
+        "uri": "workspaces\/{workspace}\/plans\/{plan}\/{action}",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "plan": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}",
+            "action": "propose|approve|reject|apply"
+        }
+    },
+    {
+        "name": "workspaces.plans.show",
+        "uri": "workspaces\/{workspace}\/plans\/{plan}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "plan": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.plans.index",
+        "uri": "workspaces\/{workspace}\/plans",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.plans.store",
+        "uri": "workspaces\/{workspace}\/plans",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.create",
+        "uri": "workspaces\/{workspace}\/projects\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.archive",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/archive",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.edit",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/edit",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.github.show",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/github",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.github.save",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/github",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.members.destroy",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/members\/{projectMember}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.members.update",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/members\/{projectMember}",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.members.index",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/members",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.members.store",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/members",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.restore",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/restore",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.task-filters.open",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/task-filters\/{saved}\/open",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "saved": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.projects.task-filters.destroy",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/task-filters\/{saved}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "saved": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.projects.task-filters.store",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/task-filters",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.bulk",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/bulk",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.create",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.tree",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/tree",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.archive",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/archive",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.attachments.destroy",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/attachments\/{activity}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.attachments.download",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/attachments\/{activity}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.attachments.store",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/attachments",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.blockers.update",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/blockers\/{blocker}",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.blockers.store",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/blockers",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.comments.destroy",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/comments\/{activity}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.comments.update",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/comments\/{activity}",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.comments.store",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/comments",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.dependencies.destroy",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/dependencies\/{dependency}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.dependencies.store",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/dependencies",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.edit",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/edit",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.resolve-edit",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/resolve-edit",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.restore",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/restore",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.status.edit",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/status",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.status.update",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}\/status",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.destroy",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.show",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.update",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks\/{task}",
+        "methods": [
+            "PUT",
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.index",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.tasks.store",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/tasks",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.timeline",
+        "uri": "workspaces\/{workspace}\/projects\/{project}\/timeline",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.destroy",
+        "uri": "workspaces\/{workspace}\/projects\/{project}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.show",
+        "uri": "workspaces\/{workspace}\/projects\/{project}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.update",
+        "uri": "workspaces\/{workspace}\/projects\/{project}",
+        "methods": [
+            "PUT",
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.index",
+        "uri": "workspaces\/{workspace}\/projects",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.projects.store",
+        "uri": "workspaces\/{workspace}\/projects",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.reminders.scan",
+        "uri": "workspaces\/{workspace}\/reminders\/scan",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "throttle:3,1"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.reminders",
+        "uri": "workspaces\/{workspace}\/reminders",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.reports.export",
+        "uri": "workspaces\/{workspace}\/reports\/{snapshot}\/export",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "snapshot": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.reports.print",
+        "uri": "workspaces\/{workspace}\/reports\/{snapshot}\/print",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "snapshot": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.reports.show",
+        "uri": "workspaces\/{workspace}\/reports\/{snapshot}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "snapshot": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.reports.index",
+        "uri": "workspaces\/{workspace}\/reports",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.reports.store",
+        "uri": "workspaces\/{workspace}\/reports",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.roles.create",
+        "uri": "workspaces\/{workspace}\/roles\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.roles.edit",
+        "uri": "workspaces\/{workspace}\/roles\/{role}\/edit",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.roles.destroy",
+        "uri": "workspaces\/{workspace}\/roles\/{role}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.roles.update",
+        "uri": "workspaces\/{workspace}\/roles\/{role}",
+        "methods": [
+            "PUT",
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.roles.index",
+        "uri": "workspaces\/{workspace}\/roles",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.roles.store",
+        "uri": "workspaces\/{workspace}\/roles",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.select",
+        "uri": "workspaces\/{workspace}\/select",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.task-filters.open",
+        "uri": "workspaces\/{workspace}\/task-filters\/{saved}\/open",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "saved": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.task-filters.destroy",
+        "uri": "workspaces\/{workspace}\/task-filters\/{saved}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "saved": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.task-filters.store",
+        "uri": "workspaces\/{workspace}\/task-filters",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.templates.instantiate",
+        "uri": "workspaces\/{workspace}\/task-templates\/{template}\/instantiate",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": {
+            "template": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.templates.state",
+        "uri": "workspaces\/{workspace}\/task-templates\/{template}\/{action}",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": {
+            "template": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}",
+            "action": "pause|resume|archive"
+        }
+    },
+    {
+        "name": "workspaces.templates.show",
+        "uri": "workspaces\/{workspace}\/task-templates\/{template}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": {
+            "template": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.templates.update",
+        "uri": "workspaces\/{workspace}\/task-templates\/{template}",
+        "methods": [
+            "PUT"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": {
+            "template": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.templates.index",
+        "uri": "workspaces\/{workspace}\/task-templates",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.templates.store",
+        "uri": "workspaces\/{workspace}\/task-templates",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.bulk",
+        "uri": "workspaces\/{workspace}\/tasks\/bulk",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.create",
+        "uri": "workspaces\/{workspace}\/tasks\/create",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.tree",
+        "uri": "workspaces\/{workspace}\/tasks\/tree",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.archive",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/archive",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.attachments.destroy",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/attachments\/{activity}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.attachments.download",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/attachments\/{activity}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.attachments.store",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/attachments",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.blockers.update",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/blockers\/{blocker}",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.blockers.store",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/blockers",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.comments.destroy",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/comments\/{activity}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.comments.update",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/comments\/{activity}",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.comments.store",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/comments",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.dependencies.destroy",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/dependencies\/{dependency}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.dependencies.store",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/dependencies",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.edit",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/edit",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.resolve-edit",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/resolve-edit",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.restore",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/restore",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.status.edit",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/status",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.status.update",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}\/status",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.destroy",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.show",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.update",
+        "uri": "workspaces\/{workspace}\/tasks\/{task}",
+        "methods": [
+            "PUT",
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.index",
+        "uri": "workspaces\/{workspace}\/tasks",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.tasks.store",
+        "uri": "workspaces\/{workspace}\/tasks",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.calendar.respond",
+        "uri": "workspaces\/{workspace}\/team-calendar\/{proposal}\/{action}",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": {
+            "proposal": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}",
+            "action": "accept|decline|cancel"
+        }
+    },
+    {
+        "name": "workspaces.calendar.team",
+        "uri": "workspaces\/{workspace}\/team-calendar",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.calendar.propose",
+        "uri": "workspaces\/{workspace}\/team-calendar",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member",
+            "App\\Http\\Middleware\\RequireFullFeatureSchema"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.timer.start",
+        "uri": "workspaces\/{workspace}\/timer\/{task}",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": {
+            "task": "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}"
+        }
+    },
+    {
+        "name": "workspaces.transfer",
+        "uri": "workspaces\/{workspace}\/transfer-owner",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.destroy",
+        "uri": "workspaces\/{workspace}",
+        "methods": [
+            "DELETE"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.show",
+        "uri": "workspaces\/{workspace}",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.update",
+        "uri": "workspaces\/{workspace}",
+        "methods": [
+            "PATCH"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount",
+            "workspace.member"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.index",
+        "uri": "workspaces",
+        "methods": [
+            "GET",
+            "HEAD"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    },
+    {
+        "name": "workspaces.store",
+        "uri": "workspaces",
+        "methods": [
+            "POST"
+        ],
+        "middleware": [
+            "web",
+            "auth",
+            "active.user",
+            "App\\Http\\Middleware\\RequireVerifiedAccount"
+        ],
+        "wheres": []
+    }
+]

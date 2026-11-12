@@ -1,7 +1,7 @@
 @props(['title'=>'Quản lý công việc'])
 @php($versionedAsset = fn (string $path) => asset($path).'?v='.(is_file(public_path($path)) ? filemtime(public_path($path)) : 'missing'))
-<!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}" data-theme-preference="{{ $preferences['theme']??'system' }}" data-theme-owner="{{ auth()->id()??'guest' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ $versionedAsset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p1-observation.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/modern-theme.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/review-polish.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/workflow-experience.css') }}">@stack('styles')
-<script src="{{ $versionedAsset('js/theme.js') }}"></script><script src="{{ $versionedAsset('js/app-ui.js') }}" defer></script><script src="{{ $versionedAsset('js/task-panel.js') }}" defer></script></head>
+<!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}" data-theme-preference="{{ $preferences['theme']??'system' }}" data-theme-owner="{{ auth()->id()??'guest' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ $versionedAsset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p1-observation.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/modern-theme.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/review-polish.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/workflow-experience.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/page-editor.css') }}">@stack('styles')
+<script src="{{ $versionedAsset('js/theme.js') }}"></script><script src="{{ $versionedAsset('js/app-ui.js') }}" defer></script><script src="{{ $versionedAsset('js/page-editor.js') }}" defer></script></head>
 <body><a href="#main-content" class="skip-link">Tới nội dung chính</a><header class="app-header"><a href="{{ route('home') }}" class="brand">Work Management</a>
 @auth
 <button type="button" class="secondary nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="app-sidebar">Menu</button>
@@ -14,7 +14,7 @@
 <a href="{{ ($shell['project'] && $quickCreateWorkspace->id === $shell['workspace']?->id) ? route('workspaces.projects.tasks.create', [$quickCreateWorkspace, $shell['project']]) : route('workspaces.tasks.create', $quickCreateWorkspace) }}" class="jira-quick-create-btn" data-task-panel title="Tạo công việc mới (Phím tắt: c)">+ Tạo việc</a>
 @endif
 <form method="get" action="{{ route('search.index') }}" class="global-search" role="search"><label class="sr-only" for="global-query">Tìm công việc và dự án</label><div class="search-input-wrap"><input type="search" id="global-query" name="q" maxlength="200" required placeholder="Tìm công việc, dự án…"><kbd class="global-search-kbd" title="Nhấn / hoặc Ctrl+K để tìm">/</kbd></div><button class="secondary">Tìm</button></form>
-<nav aria-label="Tài khoản" class="account-nav"><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button><a href="{{ route('notifications.index') }}">Thông báo <span class="count" data-unread-count>{{ $unreadNotifications??0 }}</span></a><details><summary>{{ auth()->user()->name }}</summary><div class="account-menu"><a href="{{ route('profile.edit') }}">Hồ sơ</a><a href="{{ route('settings.edit') }}">Cấu hình</a><form action="{{ route('logout') }}" method="post" data-form="logout">
+<nav aria-label="Tài khoản" class="account-nav"><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button><a href="{{ route('notifications.index') }}">Thông báo <span class="count" data-unread-count>{{ $unreadNotifications??0 }}</span></a><details><summary data-account-name>{{ auth()->user()->name }}</summary><div class="account-menu"><a href="{{ route('profile.edit') }}">Hồ sơ</a><a href="{{ route('settings.edit') }}">Cấu hình</a><form action="{{ route('logout') }}" method="post" data-form="logout">
 @csrf<button class="secondary">Đăng xuất</button></form></div></details></nav>
 @else
 <nav aria-label="Tài khoản" class="account-nav"><button type="button" class="theme-toggle" id="theme-toggle-guest" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button><a href="{{ route('login') }}">Đăng nhập</a><a href="{{ route('register') }}">Đăng ký</a></nav>
@@ -85,7 +85,15 @@ $icon = match(true) {
 @endforeach</ul></section>
 @endif
 {{ $slot }}<div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div><footer>Quản lý công việc cá nhân và nhóm.</footer></main></div>@auth
-<dialog id="task-panel" class="task-panel" aria-labelledby="task-panel-title"><div class="panel-toolbar"><span>Không gian công việc</span><button type="button" class="secondary" data-panel-close aria-label="Đóng cửa sổ">✕</button></div><div data-panel-body></div><div class="notice error" data-panel-error role="alert" tabindex="-1" hidden></div><div data-panel-discard hidden><p>Bạn có thay đổi chưa lưu. Đóng và bỏ bản nhập này?</p><button type="button" data-panel-keep>Tiếp tục sửa</button><button type="button" class="secondary" data-panel-discard-confirm>Bỏ thay đổi</button></div></dialog>
+<dialog id="page-editor" class="page-editor" aria-labelledby="page-editor-title">
+    <header class="editor-toolbar">
+        <div class="editor-heading"><h2 id="page-editor-title">Chỉnh sửa</h2><p data-editor-status role="status"></p></div>
+        <a data-editor-standalone target="_blank" rel="noopener">Mở trang riêng</a>
+        <button type="button" data-editor-save hidden>Lưu thay đổi</button>
+        <button type="button" class="secondary" data-editor-close aria-label="Đóng cửa sổ">×</button>
+    </header>
+    <div data-editor-frames></div>
+</dialog>
 @endauth
 @stack('scripts')
 </body></html>

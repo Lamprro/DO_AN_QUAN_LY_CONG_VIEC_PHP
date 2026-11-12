@@ -17,7 +17,7 @@
  if(document.querySelector('#error-summary'))document.querySelector('#error-summary').focus();
  document.querySelectorAll('input[type=password]').forEach(input=>{const button=document.createElement('button');button.type='button';button.className='secondary password-toggle';button.textContent='Hiện mật khẩu';button.setAttribute('aria-pressed','false');button.addEventListener('click',()=>{const show=input.type==='password';input.type=show?'text':'password';button.textContent=show?'Ẩn mật khẩu':'Hiện mật khẩu';button.setAttribute('aria-pressed',String(show));});input.after(button);});
  const dirtyForms=new Set();for(const event of ['input','change'])document.addEventListener(event,e=>{const form=e.target.closest('[data-dirty-form]');if(form&&!form.closest('#task-panel'))dirtyForms.add(form);});
- window.addEventListener('beforeunload',e=>{if(dirtyForms.size){e.preventDefault();e.returnValue='';}});
+ window.addEventListener('beforeunload',e=>{if(window.self===window.top&&dirtyForms.size){e.preventDefault();e.returnValue='';}});
  document.addEventListener('submit',e=>{const f=e.target;if(!(f instanceof HTMLFormElement)||e.defaultPrevented||f.closest('#task-panel'))return;
   if(f.dataset.confirm&&!window.confirm(f.dataset.form==='owner-transfer'?f.dataset.confirm+' Người nhận: '+(f.querySelector('[name=member_id]')?.selectedOptions[0]?.textContent||'Chưa chọn'):f.dataset.confirm)){e.preventDefault();return;}
   if((f.method||'get').toLowerCase()==='get'){f.querySelector('[name=page]')?.remove();return;}

@@ -145,7 +145,7 @@
         <p class="muted" style="font-size: 0.85rem; margin-bottom: 1rem;">
             Tạo phiên bản mới theo khung giờ làm việc mặc định của hệ thống, tự động né các khung giờ bận cá nhân và bảo toàn thời gian chờ quan hệ FS/lag. Thuật toán chạy nội bộ, chưa áp dụng vào lịch thật.
         </p>
-        <form method="post" action="{{ route('workspaces.plans.schedule',[$workspace,$plan]) }}">
+        <form data-form="plan-schedule" method="post" action="{{ route('workspaces.plans.schedule',[$workspace,$plan]) }}">
             @csrf
             <div style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
                 <div>

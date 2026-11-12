@@ -4,9 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Database\Seeders\DemoSeeder;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -60,4 +58,3 @@ class RegistrationTest extends TestCase
         $response->assertRedirect(route('verification.notice'));
     }
 }
-

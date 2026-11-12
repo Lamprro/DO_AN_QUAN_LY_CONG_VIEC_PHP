@@ -2,10 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Workspace;
 use Database\Seeders\DemoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

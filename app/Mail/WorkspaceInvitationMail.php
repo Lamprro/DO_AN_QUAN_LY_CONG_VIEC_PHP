@@ -13,4 +13,3 @@ class WorkspaceInvitationMail extends Mailable
         return $this->subject('Lời mời tham gia workspace')->view('mail.workspace-invitation');
     }
 }
-

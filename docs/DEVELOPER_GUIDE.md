@@ -52,6 +52,9 @@ Các form đang nằm trong bảng hoặc thẻ (thành viên, lời mời, mẫ
 - Bulk chuyển chính các cặp task/revision đã chọn vào form. Backend tiếp tục kiểm quyền, revision và tính nguyên tử. Dùng `getAttribute('action')` vì trường `name="action"` che khuất thuộc tính `form.action` trong DOM.
 - Dialog khóa cuộn nền, trả focus về nút mở khi đóng; frame xử lý Escape. Màn hình nhỏ dùng khoảng cách viền 6px và nút đóng/lưu tối thiểu 44px.
 - Muốn thêm form inline: đặt `data-form` rõ nghĩa, thêm nhãn vào `inlineForms`, giữ URL action thật. Không thêm endpoint hoặc một controller/service chỉ để phục vụ dialog.
+- Quy ước tên `data-form` mà `page-editor.js` dựa vào: form có tên chứa `delete`, `cancel`, `logout`, `status`, `comment`, `attachment` **không** nhận nút "Lưu thay đổi" chung của dialog (chúng giữ nút riêng trong form). Form còn lại chỉ nhận nút chung khi là form duy nhất có trường nhập trên trang, hoặc được mở trực tiếp từ launcher. Đặt tên form mới theo quy ước này thay vì sửa regex.
+- Link "Hủy" trong form muốn đóng dialog thay vì chuyển trang thì thêm `data-editor-cancel`; editor không nhận diện theo chữ trên link.
+- Dialog giữ tối đa 5 frame đã đóng; frame cũ nhất không có bản nhập dở sẽ bị bỏ trước. Rời trang cha khi còn frame có bản nhập dở sẽ được trình duyệt hỏi lại.
 - Route riêng và liên kết “Mở trang riêng” là đường dự phòng. JavaScript không có hoặc dialog không được hỗ trợ thì link/form HTML vẫn hoạt động.
 
 ## Đánh giá bảo trì và phạm vi kiểm chứng

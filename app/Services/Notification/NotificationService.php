@@ -15,7 +15,6 @@ use App\Services\Setting\SettingService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Schema;
 
 class NotificationService
 {
@@ -37,7 +36,7 @@ class NotificationService
             $ids = [$task->assignee_id, $task->reviewer_id, $task->created_by];
             $title = 'Có bình luận mới';
         }
-        $ids = array_merge($ids, Schema::hasTable('task_watchers') ? TaskWatcher::where('task_id', $task->id)->pluck('user_id')->all() : [], $data['mentions'] ?? []);
+        $ids = array_merge($ids, TaskWatcher::where('task_id', $task->id)->pluck('user_id')->all(), $data['mentions'] ?? []);
         if ($title === '') {
             $title = 'Công việc bạn theo dõi có cập nhật';
         }

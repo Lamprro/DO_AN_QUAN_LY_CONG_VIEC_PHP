@@ -37,8 +37,6 @@ Artisan::command('tasks:remind {--workspace=} {--user=} {--review-after=60}', fu
 Artisan::command('tasks:generate-recurring', function (TaskTemplateService $templates) {
     $counts = $templates->due();
     $this->info(json_encode($counts));
-
-    return empty($counts['migration_required']) ? 0 : 1;
 })->purpose('Generate due task templates atomically with occurrence deduplication');
 Schedule::command('tasks:generate-recurring')->everyMinute()->withoutOverlapping(5);
 Schedule::command('tasks:remind')->hourly()->withoutOverlapping(55);

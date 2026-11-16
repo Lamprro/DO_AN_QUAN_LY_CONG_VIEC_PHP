@@ -39,6 +39,14 @@
                 <option value="table" @selected(($filters['view']??'cards')==='table')>Dạng Bảng (Table)</option>
             </select>
         </div>
+        <div>
+            <label for="project-per-page">Số dự án / trang</label>
+            <select id="project-per-page" name="per_page">
+                @foreach([10, 50, 100, 500] as $n)
+                    <option value="{{ $n }}" @selected((int)($filters['per_page']??10)===$n)>{{ $n }} / trang</option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="actions" style="margin-top: 1rem; margin-bottom: 0;">
         <button type="submit">Áp dụng bộ lọc</button>

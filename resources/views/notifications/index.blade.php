@@ -1,4 +1,16 @@
 <x-layout title="Hộp thư Thông báo">
+@push('styles')
+<style>
+    .notification-item { margin: 0; padding: 1.25rem; border-left: 4px solid var(--border); background: var(--surface) !important; transition: background-color .2s, border-color .2s, opacity .25s; }
+    .notification-item.is-unread { border-left-color: var(--primary); background: var(--bg-subtle) !important; }
+    .notification-item.is-unread .notification-read-badge { background: var(--primary); color: #fff; font-weight: 700; }
+    .notification-item.is-leaving { opacity: 0; }
+    .notification-item[aria-busy="true"] [data-read-toggle] { opacity: .6; cursor: progress; }
+</style>
+@endpush
+@push('scripts')
+<script src="{{ asset('js/notification-inbox.js') }}?v={{ filemtime(public_path('js/notification-inbox.js')) }}" defer></script>
+@endpush
 <div class="page-heading" style="margin-bottom: 1.25rem;">
     <div>
         <p class="eyebrow">INBOX</p>
@@ -45,11 +57,11 @@
 
 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
     @forelse($notifications as $notification)
-        <article class="card notification-item {{ $notification->read_at?'':'is-unread' }}" data-notification-id="{{ $notification->id }}" style="margin: 0; padding: 1.25rem; border-left: 4px solid {{ $notification->read_at ? 'var(--border)' : 'var(--primary)' }}; background: {{ $notification->read_at ? 'var(--surface)' : 'var(--bg-subtle)' }} !important;">
+        <article class="card notification-item {{ $notification->read_at?'':'is-unread' }}" data-notification-id="{{ $notification->id }}">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem;">
                 <div style="flex: 1;">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-                        <span class="badge" style="{{ $notification->read_at ? '' : 'background: var(--primary); color: #fff; font-weight: 700;' }}">
+                        <span class="badge notification-read-badge" data-read-badge>
                             {{ $notification->read_at ? 'Đã đọc' : 'Chưa đọc' }}
                         </span>
                         <span class="badge">
@@ -77,7 +89,7 @@
                             @csrf
                             @method('PATCH')
                             <input type="hidden" name="unread" value="{{ $notification->read_at?1:0 }}">
-                            <button type="submit" class="secondary" style="font-size: 0.75rem; padding: 0.2rem 0.6rem; min-height: 28px;">
+                            <button type="submit" class="secondary" data-read-toggle style="font-size: 0.75rem; padding: 0.2rem 0.6rem; min-height: 28px;">
                                 {{ $notification->read_at ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc' }}
                             </button>
                         </form>

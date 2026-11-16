@@ -19,17 +19,21 @@
 .jira-board .jira-search input { width: 100%; min-height: 38px; padding: 8px 12px 8px 35px; border-radius: 8px; font-size: 12px; margin: 0; background: var(--surface); }
 .jira-board-summary { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 20px; margin: 0 0 14px; }
 .jira-board-summary p { margin: 0; font-size: 12px; }
-.jira-scroll { overflow-x: auto; padding: 2px 2px 18px; scrollbar-width: thin; }
-.jira-columns { display: grid; grid-template-columns: repeat(5, minmax(270px, 1fr)); gap: 16px; align-items: start; min-width: 1414px; }
-.jira-column { --column-color: #64748b; min-width: 0; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.jira-scroll { overflow-x: auto; overflow-y: hidden; padding: 2px 2px 18px; scrollbar-width: thin; }
+.jira-columns { display: grid; grid-template-columns: repeat(5, minmax(230px, 1fr)); gap: 16px; align-items: stretch; min-width: 1200px; }
+.jira-column { --column-color: #64748b; min-width: 0; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; display: flex; flex-direction: column; height: calc(100vh - 220px); max-height: calc(100dvh - 220px); min-height: 480px; overflow: hidden; }
 .jira-column[data-status='IN_PROGRESS'] { --column-color: #2563eb; }
 .jira-column[data-status='REVIEW'] { --column-color: #7c3aed; }
 .jira-column[data-status='DONE'] { --column-color: #16a34a; }
 .jira-column[data-status='CANCELLED'] { --column-color: #9ca3af; }
-.jira-column-header { display: flex; gap: 10px; align-items: center; justify-content: space-between; border-top: 4px solid var(--column-color); padding: 17px 14px 12px; }
+.jira-column-header { flex-shrink: 0; position: sticky; top: 0; z-index: 5; background: var(--bg-subtle); border-top: 4px solid var(--column-color); padding: 14px 14px 10px; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center; justify-content: space-between; }
 .jira-column-header h2 { margin: 0; font-size: 12px; font-weight: 750; text-transform: uppercase; letter-spacing: .045em; color: var(--text-muted); }
 .jira-count { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 25px; padding: 0 7px; border-radius: 7px; background: var(--surface); border: 1px solid var(--border); color: var(--text); font-size: 12px; font-weight: 750; font-variant-numeric: tabular-nums; }
-.jira-drop-zone { min-height: 250px; display: flex; flex-direction: column; gap: 10px; padding: 10px; border: 2px dashed transparent; border-radius: 8px; transition: background .15s, border-color .15s; }
+.jira-drop-zone { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 10px; padding: 10px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; border: 2px dashed transparent; border-radius: 8px; transition: background .15s, border-color .15s; }
+.jira-drop-zone::-webkit-scrollbar { width: 6px; }
+.jira-drop-zone::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.jira-drop-zone::-webkit-scrollbar-track { background: transparent; }
+.jira-pagination { flex-shrink: 0; border-top: 1px solid var(--border); background: var(--bg-subtle); }
 .jira-column.is-dragover .jira-drop-zone { border-color: var(--jira-blue); background: var(--primary-light); }
 .jira-card { padding: 13px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-card); box-shadow: 0 1px 3px rgb(15 23 42 / .07); transition: transform .15s, box-shadow .15s, border-color .15s; }
 .jira-card[draggable='true'] { cursor: grab; }
@@ -81,4 +85,17 @@
 @media (prefers-reduced-motion: reduce) {
   .jira-card, .jira-drop-zone { transition: none; }
   .jira-card:hover, .jira-card:focus-within { transform: none; }
+}
+
+/* 2026-11-16: last column was hidden.
+   main is capped at 1200px (~1140px usable) while the 5 columns needed 1414px, and the only
+   horizontal scrollbar sat under 10 cards per column, far below the screen.
+   1) The board page uses the full frame width.
+   2) Columns are narrower (5 x 220px + gaps = 1164px), so they fit on most desktop screens.
+   3) When they still do not fit, the board scrolls inside a viewport-high box: the horizontal
+      scrollbar stays on screen and column headers stay visible while scrolling cards. */
+.app-frame main:has(.jira-board) { max-width: none; }
+.jira-columns { grid-template-columns: repeat(5, minmax(230px, 1fr)); min-width: 1200px; }
+@media (min-width: 641px) {
+  .jira-scroll { overflow-x: auto; overflow-y: hidden; }
 }

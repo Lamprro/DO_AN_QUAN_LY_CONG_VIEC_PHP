@@ -3,15 +3,16 @@
 @include('tasks._view-nav')
 @include('tasks._overview-note')
 @include('tasks._filters')
-<details class="card task-tools" @if($errors->any()) open @endif><summary>Bộ lọc đã lưu và cập nhật hàng loạt</summary><div class="task-tools-content">@include('tasks._utilities')</div></details>
-<p class="result-summary" role="status"><strong>{{ $tasks->total() }}</strong> công việc · {{ $tasks->firstItem()??0 }}–{{ $tasks->lastItem()??0 }} trên trang này</p>
+@include('tasks._saved-filters')
+<p class="result-summary"><label class="bulk-select-all"><input type="checkbox" id="bulk-select-page"> Chọn tất cả</label><span role="status"><strong>{{ $tasks->total() }}</strong> công việc · {{ $tasks->firstItem()??0 }}–{{ $tasks->lastItem()??0 }} trên trang này</span></p>
+@include('tasks._bulk-bar')
 <section class="card table-wrap mobile-data-table task-list" data-page="tasks-index"><table><thead><tr><th>Chọn</th><th>Công việc</th><th>Trạng thái</th><th>Người thực hiện</th><th>Hạn hoàn thành</th><th>Thao tác</th></tr></thead><tbody>
 @forelse($tasks as $task)
 @php
     $itemRoutePrefix = $task->project_id ? 'workspaces.projects.tasks' : 'workspaces.tasks';
     $itemRouteParams = $task->project_id ? [$task->workspace_id, $task->project_id] : [$task->workspace_id];
 @endphp
-<tr data-task-id="{{ $task->id }}"><td data-label="Chọn">@if($task->workspace_id === $workspace->id && $task->project_id === $project?->id && (auth()->user()->can('update',$task)||auth()->user()->can('archive',$task)))<input type="checkbox" form="bulk-tasks" name="items[{{ $task->id }}]" value="{{ $task->revision }}" aria-label="Chọn {{ $task->title }}">@else<span class="muted">—</span>@endif</td>
+<tr data-task-id="{{ $task->id }}"><td data-label="Chọn">@if(auth()->user()->can('update',$task)||auth()->user()->can('archive',$task))<input type="checkbox" form="bulk-tasks" name="items[{{ $task->id }}]" value="{{ $task->revision }}" aria-label="Chọn {{ $task->title }}">@else<span class="muted">—</span>@endif</td>
 <td data-label="Công việc"><a class="task-title-link" data-task-panel href="{{ route($itemRoutePrefix.'.show',[...$itemRouteParams,$task]) }}">{{ $task->title }}</a><small class="task-code-line">{{ $task->code }} · {{ \App\Support\UiLabels::text($task->task_type) }}</small>@include('tasks._source', ['sourceTask' => $task])<div class="task-meta-line">@can('update',$task)<a data-task-panel data-panel-field="priority" href="{{ route($itemRoutePrefix.'.edit',[...$itemRouteParams,$task]) }}" class="priority-link">Ưu tiên: {{ \App\Support\UiLabels::text($task->priority) }}</a>@else<x-status :value="$task->priority"/>@endcan @if($task->archived_at)<span class="badge">Đã lưu trữ</span>@endif</div></td>
 <td data-label="Trạng thái">@if($task->task_type->value!=='GROUP' && (auth()->user()->can('execute',$task)||auth()->user()->can('review',$task)))<a data-task-panel class="task-status-link" href="{{ route($itemRoutePrefix.'.status.edit',[...$itemRouteParams,$task]) }}" aria-label="Đổi trạng thái {{ $task->title }}"><x-status :value="$task->status"/> ▾</a>@else<x-status :value="$task->status"/>@endif</td>
 <td data-label="Người thực hiện">{{ $task->assignee?->name??'Chưa phân công' }}</td>

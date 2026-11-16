@@ -43,33 +43,40 @@
 @else
     <div class="calendar-grid-scroll" role="region" aria-label="Lưới lịch theo ngày" tabindex="0" style="border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow-x: auto;">
         <div class="calendar-grid calendar-mode-{{ $range['mode'] }}">
-            @if($range['mode']==='month')
+            @if(in_array($range['mode'], ['month', 'week']))
                 @foreach(['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','Chủ nhật'] as $label)
-                    <div class="weekday-label" style="text-align: center; font-size: 0.8rem; font-weight: 750; color: var(--text-muted); text-transform: uppercase;">
+                    <div class="weekday-label" style="text-align: center; font-size: 0.8rem; font-weight: 750; color: var(--text-muted); text-transform: uppercase; padding: 0.5rem 0;">
                         {{ $label }}
                     </div>
                 @endforeach
-                @for($pad=1;$pad<$range['start']->dayOfWeekIso;$pad++)
-                    <div class="calendar-empty" aria-hidden="true" style="background: var(--bg-subtle); border-radius: var(--radius-sm); min-height: 100px;"></div>
-                @endfor
+                @if($range['mode']==='month')
+                    @for($pad=1;$pad<$range['start']->dayOfWeekIso;$pad++)
+                        <div class="calendar-empty" aria-hidden="true" style="background: var(--bg-subtle); border-radius: var(--radius-sm); min-height: 100px;"></div>
+                    @endfor
+                @endif
             @endif
 
             @foreach($range['days'] as $day)
+                @php($dayCarbon = \Carbon\CarbonImmutable::parse($day, $range['timezone']))
                 <section class="card calendar-day {{ $day===$navigation['todayDate']?'is-today':'' }}" data-day="{{ $day }}">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-light, #f1f5f9); padding-bottom: 0.35rem;">
                         <h2 style="margin: 0; font-size: 0.9rem;">
-                            <a href="{{ request()->fullUrlWithQuery(['view'=>'day','date'=>$day,'from'=>null,'to'=>null]) }}" style="font-weight: 700;">
-                                {{ \Carbon\CarbonImmutable::parse($day)->format('d/m') }}
+                            <a href="{{ request()->fullUrlWithQuery(['view'=>'day','date'=>$day,'from'=>null,'to'=>null]) }}" style="font-weight: 700; text-decoration: none;">
+                                @if($range['mode'] === 'week')
+                                    {{ ['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','Chủ nhật'][$dayCarbon->dayOfWeekIso - 1] }} ({{ $dayCarbon->format('d/m') }})
+                                @else
+                                    {{ $dayCarbon->format('d/m') }}
+                                @endif
                             </a>
                         </h2>
                         @if($day===$navigation['todayDate'])
-                            <span class="badge" style="background: var(--primary); color: #fff; font-size: 0.65rem; padding: 0.1rem 0.4rem; border: none;">
+                            <span class="badge" style="background: var(--primary); color: #fff; font-size: 0.65rem; padding: 0.1rem 0.4rem; border: none; font-weight: 700;">
                                 Hôm nay
                             </span>
                         @endif
                     </div>
 
-                    @php($dayRows=collect($rows)->filter(fn($row)=>$row['starts_at']->lt(\Carbon\CarbonImmutable::parse($day,$range['timezone'])->addDay())&&$row['ends_at']->gt(\Carbon\CarbonImmutable::parse($day,$range['timezone']))))
+                    @php($dayRows=collect($rows)->filter(fn($row)=>$row['starts_at']->lt($dayCarbon->addDay())&&$row['ends_at']->gt($dayCarbon)))
                     @forelse($dayRows as $row)
                         @include('calendar._row')
                     @empty

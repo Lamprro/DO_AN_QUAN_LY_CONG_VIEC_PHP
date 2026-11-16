@@ -6,8 +6,8 @@
         .jira-issue-main, .jira-issue-sidebar { min-width: 0; overflow-wrap: anywhere; }
         .jira-issue-main > .card, .jira-issue-main .jira-section > .card { margin: 0; }
         .jira-issue-code-bar { flex-wrap: wrap; }
-        .jira-issue-code { background: #e9f2ff; color: #0c66e4; }
-        .jira-issue-title { font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 750; }
+        .jira-issue-code { background: var(--primary-light, #e9f2ff); color: var(--primary, #0c66e4); }
+        .jira-issue-title { font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 750; color: var(--text) !important; }
         .jira-issue-main .breadcrumbs { margin: 0; flex-wrap: wrap; }
         .jira-action-toolbar { padding: 0; }
         .jira-action-toolbar form { margin: 0; }
@@ -22,7 +22,7 @@
         .jira-detail-label { flex: 0 0 43%; }
         .jira-detail-value { min-width: 0; text-align: right; justify-content: flex-end; flex-wrap: wrap; }
         .jira-person { flex-wrap: nowrap; }
-        .jira-person-avatar { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex: 0 0 28px; border-radius: 50%; background: #e9f2ff; color: #0c66e4; font-size: 0.7rem; font-weight: 700; }
+        .jira-person-avatar { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex: 0 0 28px; border-radius: 50%; background: var(--primary-light, #e9f2ff); color: var(--primary, #0c66e4); font-size: 0.7rem; font-weight: 700; }
         .jira-sidebar-section + .jira-sidebar-section { border-top: 1px solid var(--border); padding-top: 16px; }
         .jira-sidebar-section h2 { margin: 0 0 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
         .jira-sidebar-section details + details { margin-top: 16px; }
@@ -62,7 +62,7 @@
             <span aria-hidden="true">›</span><span aria-current="page">{{ $task->code }}</span>
         </nav>
 
-        <header class="jira-issue-header">
+        <header class="jira-issue-header" style="background: transparent;">
             <div class="jira-issue-code-bar">
                 <span class="jira-issue-code">{{ $task->code }}</span>
                 <span class="badge">{{ \App\Support\UiLabels::text($task->task_type->value) }}</span>

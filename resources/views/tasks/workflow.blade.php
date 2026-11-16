@@ -194,15 +194,15 @@
 
     <!-- Attachments Box -->
     <section class="card" style="margin: 0;">
-        <h2 style="font-size: 1.15rem; margin-bottom: 0.5rem;">📎 Tệp đính kèm</h2>
+        <h2 style="font-size: 1.15rem; margin-bottom: 0.5rem;">📎 Tệp & hình ảnh đính kèm</h2>
         @can('attach',$task)
             <form method="POST" action="{{ route($routePrefix.'.attachments.store',[...$routeParams,$task]) }}" enctype="multipart/form-data" data-form="attachment-create">
                 @csrf
                 <div class="field">
-                    <label for="task-file">Chọn tệp từ máy tính</label>
-                    <input type="file" name="file" id="task-file" accept=".pdf,.png,.jpg,.jpeg,.txt,.csv,.docx,.xlsx" required>
+                    <label for="task-files">Chọn một hoặc nhiều tệp / ảnh từ máy tính</label>
+                    <input type="file" name="files[]" id="task-files" accept=".pdf,.png,.jpg,.jpeg,.txt,.csv,.docx,.xlsx" multiple required>
                     <p class="muted" style="font-size: 0.8rem; margin-top: 0.35rem;">
-                        Định dạng: PDF, PNG, JPG, TXT, CSV, DOCX, XLSX (tối đa {{ config('tasks.attachment_max_kb') }} KB).
+                        Hỗ trợ chọn nhiều tệp/ảnh cùng lúc: PNG, JPG, JPEG, PDF, TXT, CSV, DOCX, XLSX (tối đa 10 tệp cùng lúc, {{ config('tasks.attachment_max_kb') }} KB/tệp).
                     </p>
                 </div>
                 <button type="submit">Tải tệp lên</button>
@@ -279,9 +279,15 @@
                 @endcan
             @elseif($activity->type->value==='ATTACHMENT')
                 <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light); margin: 0.5rem 0;">
-                    <span style="font-weight: 600;">{{ $activity->content }}</span>
+                    <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                        <span>{{ str_starts_with($activity->data['mime'] ?? '', 'image/') ? '🖼️' : '📄' }}</span>
+                        <span style="font-weight: 600; overflow-wrap: anywhere;">{{ $activity->content }}</span>
+                        @if(isset($activity->data['size']))
+                            <small class="muted">({{ round($activity->data['size'] / 1024, 1) }} KB)</small>
+                        @endif
+                    </div>
                     @if(($activity->data['disk']??null)==='task_files')
-                        <a href="{{ route($routePrefix.'.attachments.download',[...$routeParams,$task,$activity->id]) }}" class="button" style="min-height: 30px; font-size: 0.75rem; padding: 0.25rem 0.65rem;">
+                        <a href="{{ route($routePrefix.'.attachments.download',[...$routeParams,$task,$activity->id]) }}" class="button" style="min-height: 30px; font-size: 0.75rem; padding: 0.25rem 0.65rem; flex-shrink: 0;">
                             ⬇ Tải xuống
                         </a>
                     @endif

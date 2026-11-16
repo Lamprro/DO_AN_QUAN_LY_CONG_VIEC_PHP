@@ -762,10 +762,22 @@ input:not([type='checkbox']):not([type='radio']):focus, select:focus, textarea:f
 
 input[type='checkbox'], input[type='radio'] {
   accent-color: var(--primary);
-  width: 18px;
-  height: 18px;
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  max-height: 18px !important;
+  padding: 0 !important;
+  margin: 0 !important;
   cursor: pointer;
   vertical-align: middle;
+  display: inline-block !important;
+  box-sizing: border-box !important;
+}
+
+input[type='checkbox']:focus-visible, input[type='radio']:focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px !important;
+  border-radius: 3px !important;
 }
 
 .actions {
@@ -851,6 +863,46 @@ input[type='checkbox'], input[type='radio'] {
   background: var(--bg-subtle);
   color: var(--text-muted);
   border: 1px solid var(--border);
+}
+
+html[data-theme='dark'] .status-todo {
+  background: rgba(148, 163, 184, 0.16) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+  color: #cbd5e1 !important;
+}
+
+html[data-theme='dark'] .status-in-progress {
+  background: rgba(59, 130, 246, 0.18) !important;
+  border-color: rgba(59, 130, 246, 0.35) !important;
+  color: #93c5fd !important;
+}
+
+html[data-theme='dark'] .status-review {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #fde68a !important;
+}
+
+html[data-theme='dark'] .status-done,
+html[data-theme='dark'] .status-completed,
+html[data-theme='dark'] .status-approved {
+  background: rgba(16, 185, 129, 0.18) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: #6ee7b7 !important;
+}
+
+html[data-theme='dark'] .status-cancelled,
+html[data-theme='dark'] .status-rejected,
+html[data-theme='dark'] .status-urgent {
+  background: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #fca5a5 !important;
+}
+
+html[data-theme='dark'] .badge {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 /* ==========================================================================

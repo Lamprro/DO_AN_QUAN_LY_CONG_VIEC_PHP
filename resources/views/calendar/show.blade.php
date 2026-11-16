@@ -45,14 +45,14 @@
             <div style="display: flex; align-items: center; gap: 0.75rem; color: var(--color-text);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-primary); flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <div style="font-size: 0.9375rem; font-weight: 600;">
-                    {{ $event->starts_at->setTimezone($timezone)->format('H:i - d/m/Y') }} → {{ $event->ends_at->setTimezone($timezone)->format('H:i - d/m/Y') }}
+                    {{ $event->starts_at->setTimezone($timezone)->format('d/m/Y H:i') }} → {{ $event->ends_at->setTimezone($timezone)->format('d/m/Y H:i') }}
                     <span style="font-size: 0.8125rem; font-weight: 400; color: var(--color-text-muted); margin-left: 0.375rem;">({{ $timezone }})</span>
                 </div>
             </div>
 
             @if($event->all_day)
                 <div style="font-size: 0.8125rem; color: var(--color-text-muted); padding-left: 2rem;">
-                    📅 Sự kiện cả ngày: {{ $event->starts_at->setTimezone($event->timezone)->format('Y-m-d') }} → {{ $event->ends_at->setTimezone($event->timezone)->format('Y-m-d') }}
+                    📅 Sự kiện cả ngày: {{ $event->starts_at->setTimezone($event->timezone)->format('d/m/Y') }} → {{ $event->ends_at->setTimezone($event->timezone)->format('d/m/Y') }}
                 </div>
             @endif
 

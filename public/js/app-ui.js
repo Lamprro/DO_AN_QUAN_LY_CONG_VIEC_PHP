@@ -45,8 +45,10 @@
   if(bulk){
     const boxes=[...root.querySelectorAll('input[type="checkbox"][form="bulk-tasks"][name^="items["]')];
     const count=root.querySelector('#bulk-count'),all=root.querySelector('#bulk-select-page'),action=bulk.elements.action;
-    const sync=()=>{const n=boxes.filter(b=>b.checked).length;if(count)count.textContent=`Đã chọn ${n} công việc trên trang này`;if(all){all.checked=boxes.length>0&&n===boxes.length;all.indeterminate=n>0&&n<boxes.length;}for(const name of ['priority','assignee_id']){const input=bulk.elements[name];const relevant=(name==='priority'&&action.value==='priority')||(name==='assignee_id'&&action.value==='assign');input.disabled=!relevant;input.closest('div').hidden=!relevant;}};
-    boxes.forEach(b=>b.addEventListener('change',()=>{sync();const tools=bulk.closest('.task-tools');if(b.checked&&tools)tools.open=true;}));all?.addEventListener('change',()=>{boxes.forEach(b=>b.checked=all.checked);sync();});action.addEventListener('change',sync);sync();
+    // The bar appears only while rows are ticked (or after a server error on the bulk form).
+    const sync=()=>{const n=boxes.filter(b=>b.checked).length;if(count)count.textContent=`Đã chọn ${n} việc`;bulk.hidden=n===0&&bulk.dataset.hasErrors!=='1';if(all){all.disabled=boxes.length===0;all.checked=boxes.length>0&&n===boxes.length;all.indeterminate=n>0&&n<boxes.length;}for(const name of ['priority','assignee_id']){const input=bulk.elements[name];if(!input)continue;const relevant=(name==='priority'&&action.value==='priority')||(name==='assignee_id'&&action.value==='assign');input.disabled=!relevant;input.closest('div').hidden=!relevant;}};
+    boxes.forEach(b=>b.addEventListener('change',sync));all?.addEventListener('change',()=>{boxes.forEach(b=>b.checked=all.checked);sync();});action.addEventListener('change',sync);
+    bulk.querySelector('[data-bulk-clear]')?.addEventListener('click',()=>{boxes.forEach(b=>b.checked=false);delete bulk.dataset.hasErrors;sync();});sync();
     bulk.addEventListener('submit',e=>{if(!boxes.some(b=>b.checked)){e.preventDefault();count.textContent='Hãy chọn ít nhất một công việc ở bảng bên dưới.';count.focus();}},true);
   }
   const calendarForm=root.querySelector('form[data-form="calendar-save"]');
@@ -218,7 +220,7 @@
   document.addEventListener('keydown', e => {
     const tag = (e.target?.tagName || '').toLowerCase();
     const isEditable = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target?.isContentEditable;
-    
+
     if ((e.key === 'c' || e.key === 'C') && !isEditable && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const createBtn = document.querySelector('.jira-quick-create-btn');
       if (createBtn) {

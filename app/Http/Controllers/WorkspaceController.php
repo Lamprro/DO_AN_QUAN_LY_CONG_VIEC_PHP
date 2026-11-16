@@ -12,6 +12,7 @@ use App\Models\WorkspaceMember;
 use App\Services\Workspace\WorkspaceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class WorkspaceController extends Controller
@@ -20,9 +21,16 @@ class WorkspaceController extends Controller
 
     public function index(Request $request): View
     {
-        $request->validate(['q' => ['nullable', 'string', 'max:160']]);
+        $validated = $request->validate([
+            'q' => ['nullable', 'string', 'max:160'],
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
+        ]);
+        $perPage = (int) ($validated['per_page'] ?? 10);
 
-        return view('workspaces.index', ['workspaces' => $this->service->index($request->user(), $request->input('q'))]);
+        return view('workspaces.index', [
+            'workspaces' => $this->service->index($request->user(), $request->input('q'), $perPage),
+            'filters' => $validated,
+        ]);
     }
 
     public function create(): View

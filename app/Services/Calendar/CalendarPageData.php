@@ -218,7 +218,7 @@ class CalendarPageData
     }
 
     /** Team calendar: proposals the actor sent or received, people and tasks to propose for. */
-    public function team(User $actor, Workspace $workspace, ?Project $project, ?string $focus): array
+    public function team(User $actor, Workspace $workspace, ?Project $project, ?string $focus, int $perPage = 10): array
     {
         abort_unless($this->calendars->scope($actor, $workspace, $project), 403);
         $proposals = CalendarEvent::proposals()
@@ -229,7 +229,7 @@ class CalendarPageData
             ->where(fn ($q) => $q->where('user_id', $actor->id)->orWhere('proposed_by', $actor->id))
             ->with('recipient', 'proposer')
             ->latest()
-            ->paginate(15)
+            ->paginate($perPage)
             ->withQueryString();
         $versions = $proposals->getCollection()->mapWithKeys(fn ($p) => [$p->id => $this->calendar->version($p)])->all();
         $people = $this->projects->eligibleMembers($workspace, $project, 'calendar.view')->filter(fn ($m) => $this->calendars->scope($m->user, $workspace, $project, 'calendar.create'));

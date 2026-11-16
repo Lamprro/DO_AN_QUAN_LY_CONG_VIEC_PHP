@@ -196,14 +196,14 @@ class WorkspaceService
         });
     }
 
-    public function index(User $user, ?string $search)
+    public function index(User $user, ?string $search, int $perPage = 10)
     {
         return Workspace::query()
             ->whereHas('members', fn ($q) => $q->where('user_id', $user->id)->where('status', 'active'))
             ->where(fn ($q) => $q->where('owner_id', $user->id)->orWhereHas('members', fn ($m) => $m->where('user_id', $user->id)->where('status', 'active')->whereHas('role', fn ($r) => $r->whereJsonContains('permissions', 'workspace.view'))))
             ->when($search !== null && $search !== '', fn ($q) => $q->whereRaw("name LIKE ? ESCAPE '!'", [SearchTerm::contains($search)]))
             ->latest()
-            ->paginate(12)
+            ->paginate($perPage)
             ->withQueryString();
     }
 

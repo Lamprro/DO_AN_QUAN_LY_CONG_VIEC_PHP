@@ -63,9 +63,13 @@ class TimeTrackingService
         }, 3);
     }
 
-    public function entries(User $actor)
+    public function entries(User $actor, int $perPage = 10)
     {
-        return TimeEntry::where('user_id', $actor->id)->with('task')->latest('started_at')->paginate(25);
+        return TimeEntry::where('user_id', $actor->id)
+            ->with('task')
+            ->latest('started_at')
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     public function adjustments(TimeEntry $entry)

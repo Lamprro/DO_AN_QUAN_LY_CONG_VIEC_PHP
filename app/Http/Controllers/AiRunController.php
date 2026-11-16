@@ -25,6 +25,7 @@ class AiRunController extends Controller
             'status' => ['nullable', Rule::enum(AiRunStatus::class)],
             'created_from' => ['nullable', 'date_format:Y-m-d'],
             'created_to' => ['nullable', 'date_format:Y-m-d', 'after:created_from'],
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
         ]);
         $runs = $query->aiRuns($request->user(), $workspace, $filters, $request->url(), $request->query());
 

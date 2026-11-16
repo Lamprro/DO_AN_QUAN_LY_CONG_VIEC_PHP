@@ -98,7 +98,6 @@ class AppShell
                 $prefix = $project ? 'workspaces.projects.tasks' : 'workspaces.tasks';
                 if ($this->tasks->scope($actor, $workspace, $project, 'task.view')) {
                     $add('Công việc', $prefix.'.index', $params);
-                    $add('Cây công việc', $prefix.'.tree', $params);
                     $add('Mẫu / công việc lặp', 'workspaces.templates.index', [$workspace, 'project_id' => $project?->id]);
                 }
                 $scope = [$workspace, 'project_id' => $project?->id];

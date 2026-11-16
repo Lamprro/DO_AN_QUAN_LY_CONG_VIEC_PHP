@@ -97,6 +97,8 @@ class NotificationService
     /** Inbox page: filter = all|unread|read, optional event type. */
     public function inbox(User $user, array $filters)
     {
+        $perPage = (int) ($filters['per_page'] ?? 10);
+
         return $this
             ->visible($user)
             ->when(($filters['filter'] ?? 'all') === 'unread', fn ($q) => $q->whereNull('read_at'))
@@ -105,7 +107,7 @@ class NotificationService
             ->with(['workspace', 'project', 'task'])
             ->orderByDesc('created_at')
             ->orderByDesc('id')
-            ->paginate(20)
+            ->paginate($perPage)
             ->withQueryString();
     }
 
@@ -122,16 +124,25 @@ class NotificationService
             ->where(fn ($q) => $q->whereNull('task_id')->orWhereHas('task', fn ($t) => $t->whereIn('project_id', $taskProjects)->orWhere(fn ($t) => $t->whereNull('project_id')->whereIn('workspace_id', $personal))));
     }
 
-    public function read(User $user, ?string $id = null, bool $unread = false): void
+    /** Marks one notification (or every visible unread one) and returns the stored row, or null for read-all. */
+    public function read(User $user, ?string $id = null, bool $unread = false): ?Notification
     {
-        DB::transaction(function () use ($user, $id, $unread) {
+        return DB::transaction(function () use ($user, $id, $unread) {
             $query = $this->visible($user);
             if ($id) {
                 $notification = $query->lockForUpdate()->findOrFail($id);
                 $notification->update(['read_at' => $unread ? null : $notification->read_at ?? now()]);
-            } else {
-                $query->whereNull('read_at')->update(['read_at' => now()]);
+
+                return $notification->fresh();
             }
+            $query->whereNull('read_at')->update(['read_at' => now()]);
+
+            return null;
         }, 3);
+    }
+
+    public function unreadCount(User $user): int
+    {
+        return $this->visible($user)->whereNull('read_at')->count();
     }
 }

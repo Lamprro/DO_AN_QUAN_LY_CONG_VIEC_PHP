@@ -11,6 +11,7 @@ use App\Services\Calendar\CalendarPageData;
 use App\Services\Calendar\CalendarService;
 use App\Services\Calendar\TeamCalendarService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CalendarController extends Controller
 {
@@ -124,10 +125,15 @@ class CalendarController extends Controller
 
     public function team(Request $request, Workspace $workspace)
     {
-        $data = $request->validate(['project_id' => 'nullable|uuid', 'focus' => 'nullable|uuid']);
+        $data = $request->validate([
+            'project_id' => 'nullable|uuid',
+            'focus' => 'nullable|uuid',
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
+        ]);
         $project = empty($data['project_id']) ? null : $workspace->projects()->findOrFail($data['project_id']);
+        $perPage = (int) ($data['per_page'] ?? 10);
 
-        return view('calendar.team', $this->views->team($request->user(), $workspace, $project, $data['focus'] ?? null));
+        return view('calendar.team', $this->views->team($request->user(), $workspace, $project, $data['focus'] ?? null, $perPage));
     }
 
     public function propose(CalendarProposalRequest $request, Workspace $workspace)

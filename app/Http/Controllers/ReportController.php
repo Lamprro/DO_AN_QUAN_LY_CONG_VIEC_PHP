@@ -7,6 +7,7 @@ use App\Models\ReportSnapshot;
 use App\Models\Workspace;
 use App\Services\Report\ReportService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ReportController extends Controller
 {
@@ -19,6 +20,7 @@ class ReportController extends Controller
             'created_from' => ['nullable', 'date_format:Y-m-d'],
             'created_to' => ['nullable', 'date_format:Y-m-d', 'after:created_from'],
             'page' => ['sometimes', 'integer', 'min:1', 'max:100000'],
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
         ]);
         $snapshots = $this->service->snapshots($request->user(), $workspace, $filters, $request->url(), $request->query());
 

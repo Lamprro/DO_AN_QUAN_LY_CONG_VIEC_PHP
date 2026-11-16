@@ -158,12 +158,13 @@ class ProjectService
         if ($archive !== 'all') {
             $archive === 'archived' ? $query->whereNotNull('archived_at') : $query->whereNull('archived_at');
         }
+        $perPage = (int) ($filters['per_page'] ?? 10);
         $projects = $query
             ->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->whereRaw("name LIKE ? ESCAPE '!'", [SearchTerm::contains($filters['q'])]))
             ->when($filters['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
             ->orderBy($filters['sort'] ?? 'created_at', $filters['direction'] ?? 'desc')
             ->orderBy('id')
-            ->paginate(12)
+            ->paginate($perPage)
             ->withQueryString();
         foreach ($projects as $listed) {
             if (! $this->access->allows($actor, $listed, 'task.view')) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CalendarEventRequest;
+use App\Http\Requests\CalendarProposalRequest;
 use App\Models\CalendarEvent;
 use App\Models\Project;
 use App\Models\Workspace;
@@ -129,9 +130,9 @@ class CalendarController extends Controller
         return view('calendar.team', $this->views->team($request->user(), $workspace, $project, $data['focus'] ?? null));
     }
 
-    public function propose(Request $request, Workspace $workspace)
+    public function propose(CalendarProposalRequest $request, Workspace $workspace)
     {
-        $proposal = $this->proposals->propose($request->user(), $workspace, $request->all());
+        $proposal = $this->proposals->propose($request->user(), $workspace, $request->validated());
 
         return to_route('workspaces.calendar.team', [$workspace, 'project_id' => $proposal->project_id])->with('success', 'Đã gửi đề xuất. Chỉ tạo lịch khi người nhận chấp thuận.');
     }

@@ -78,3 +78,9 @@ Liên kết: https://docs.google.com/spreadsheets/d/1--DCOQtPtV2o8MhNlMQtk4s3DJV
 - Commit tài liệu cuối chứa hướng dẫn editor, báo cáo này và bằng chứng đối chiếu sheet.
 
 Tất cả được đẩy trực tiếp lên main theo chỉ đạo, không force push và không deploy. Lịch sử trước đợt refactor, báo cáo của chat khác và nguồn đồng bộ của project được bảo toàn.
+
+## Nhóm 7 — validate đầu vào về FormRequest
+
+Ba chỗ service tự gọi `Validator::make` chuyển sang FormRequest theo đúng quy tắc trong ARCHITECTURE.md: `CalendarProposalRequest` (đề xuất lịch), `Task\TaskTemplateRequest` (tạo/sửa mẫu; `task_ids` bắt buộc khi tạo, `revision` bắt buộc khi sửa, trường kia bị cấm), `WorkHoursRequest` (giờ làm; `prepareForValidation` bỏ dòng ca trống). Service nhận `validated()` và giữ nguyên các kiểm tra nghiệp vụ: khoảng ngày bắt đầu mẫu, ca làm không chồng lấn, revision/version dưới khóa. `PlanService::validate` giữ lại vì JSON kế hoạch còn đến từ AI run, không chỉ từ form.
+
+Kiểm chứng HTTP thật trên bản sao SQLite review (cookie + CSRF): 15/15, gồm tạo/sửa mẫu hợp lệ và các trường hợp thiếu tên, `interval` vượt ngưỡng, thiếu/cũ `revision`, trường bị cấm; giờ làm bỏ dòng trống, `slot_minutes` sai, version cũ; đề xuất lịch hợp lệ, thiếu tiêu đề, `event_type` không cho phép, trường `status` bị cấm. Không có lỗi trong log server. Bằng chứng: `formrequests-results.txt`, kịch bản `formrequests-http.sh`.

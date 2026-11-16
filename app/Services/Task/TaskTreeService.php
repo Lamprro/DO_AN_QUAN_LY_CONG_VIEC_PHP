@@ -22,14 +22,10 @@ class TaskTreeService
         $parentId = array_key_exists('parent_task_id', $values) ? $values['parent_task_id'] : $task->parent_task_id;
         $estimate = array_key_exists('estimate_minutes', $values) ? $values['estimate_minutes'] : $task->estimate_minutes;
         if ($type !== 'WORK' && $estimate !== null) {
-            $this->fail('estimate_minutes', 'Chỉ WORK lá có ước lượng; hãy để trống cho GROUP/MILESTONE.');
+            $this->fail('estimate_minutes', 'Chỉ WORK có ước lượng; hãy để trống cho GROUP/MILESTONE.');
         }
         if ($type === 'GROUP' && ((array_key_exists('assignee_id', $values) ? $values['assignee_id'] : $task->assignee_id) || (array_key_exists('reviewer_id', $values) ? $values['reviewer_id'] : $task->reviewer_id))) {
             $this->fail('task_type', 'GROUP không phân công trực tiếp; hãy phân công các WORK lá.');
-        }
-        $changed = $task->exists && ($type !== $task->task_type->value || $parentId !== $task->parent_task_id);
-        if ($changed && ($task->status->value !== 'TODO' || $task->started_at)) {
-            $this->fail('parent_task_id', 'Chỉ thay đổi cấu trúc của task chưa bắt đầu.');
         }
         if ($task->exists && $type !== $task->task_type->value) {
             if ($task->children()->exists() || $task->estimate_minutes !== null || $task->assignee_id || $task->reviewer_id) {
@@ -53,8 +49,8 @@ class TaskTreeService
                 $this->fail('parent_task_id', 'Không được tạo chu trình cha/con.');
             }
             $parent = $all->get($cursor);
-            if (! $parent || $parent->task_type->value !== 'GROUP' || $parent->archived_at) {
-                $this->fail('parent_task_id', 'Cha phải là GROUP chưa lưu trữ, cùng workspace/project.');
+            if (! $parent || $parent->archived_at || ($parent->status->value === 'DONE' && (! $task->exists || $parentId !== $task->parent_task_id))) {
+                $this->fail('parent_task_id', 'Việc cha phải cùng workspace/project, chưa hoàn thành và chưa lưu trữ.');
             }
             $seen[] = $cursor;
             $depth++;

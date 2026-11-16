@@ -28,12 +28,15 @@
             </div>
 
             <div class="field" style="margin: 0;">
-                <label for="parent_task_id" style="display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.375rem; color: var(--color-text);">Thuộc nhóm cha</label>
+                <label for="parent_task_id" style="display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.375rem; color: var(--color-text);">Thuộc công việc cha</label>
                 <select id="parent_task_id" name="parent_task_id" style="width: 100%; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text);">
-                    <option value="">(Cấp cao nhất / Không có nhóm cha)</option>
+                    <option value="">(Cấp cao nhất / Không có việc cha)</option>
+                    @if($task?->parent_task_id && ! $parents->contains('id', $task->parent_task_id))
+                        <option value="{{ $task->parent_task_id }}" @selected(old('parent_task_id', $task->parent_task_id) === $task->parent_task_id)>{{ $task->parent?->code }} — {{ $task->parent?->title }} (cha hiện tại)</option>
+                    @endif
                     @foreach($parents as $parent)
                         @if($parent->id !== $task?->id)
-                            <option value="{{ $parent->id }}" @selected(old('parent_task_id', $task?->parent_task_id) === $parent->id)>
+                            <option value="{{ $parent->id }}" @selected(old('parent_task_id', $task?->parent_task_id ?? (($selectedParent ?? null)?->id)) === $parent->id)>
                                 {{ $parent->code }} — {{ $parent->title }}
                             </option>
                         @endif

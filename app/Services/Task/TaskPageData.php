@@ -39,7 +39,7 @@ class TaskPageData
             'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks',
             'routeParams' => $project ? [$workspace, $project] : [$workspace],
             'canCreate' => $this->canCreate($actor, $workspace, $project),
-            'parents' => $workspace->tasks()->where('project_id', $project?->id)->where('task_type', 'GROUP')->whereNull('archived_at')->orderBy('sort_order')->get(),
+            'parents' => $workspace->tasks()->where('project_id', $project?->id)->whereNull('archived_at')->orderBy('sort_order')->get()->filter(fn ($parent) => \Illuminate\Support\Facades\Gate::forUser($actor)->allows('addChild', $parent)),
             'people' => $this->projects->eligibleMembers($workspace, $project),
             'reviewers' => $this->projects->eligibleMembers($workspace, $project, 'task.review'),
             'canAssign' => $this->tasks->scope($actor, $workspace, $project, 'task.assign'),

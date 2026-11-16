@@ -36,6 +36,13 @@ class TaskController extends Controller
     public function create(Request $request, Workspace $workspace, ?Project $project = null)
     {
         $data = $this->pages->createForm($request->user(), $workspace, $project);
+        $input = $request->validate(['parent_task_id' => ['nullable', 'uuid']]);
+        $selectedParent = null;
+        if (! empty($input['parent_task_id'])) {
+            $selectedParent = $workspace->tasks()->where('project_id', $project?->id)->findOrFail($input['parent_task_id']);
+            $this->authorize('addChild', $selectedParent);
+        }
+        $data['selectedParent'] = $selectedParent;
 
         return view($request->boolean('panel') ? 'tasks.panel' : 'tasks.create', $data + ['task' => null, 'panelMode' => 'create']);
     }

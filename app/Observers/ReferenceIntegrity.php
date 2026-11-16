@@ -92,15 +92,12 @@ class ReferenceIntegrity
             $this->assertAcyclicParent($model, 'parent_task_id');
             if ($model->parent_task_id) {
                 $this->sameProject($model, $model->parent);
-                if ($model->parent->task_type !== TaskType::GROUP) {
-                    $this->fail('parent_task_id', 'Chỉ GROUP được chứa công việc con.');
+                if ($model->isDirty('parent_task_id') && ($model->parent->status->value === 'DONE' || $model->parent->archived_at)) {
+                    $this->fail('parent_task_id', 'Không thêm việc con vào công việc đã hoàn thành hoặc lưu trữ.');
                 }
             }
             if ($model->task_type !== TaskType::WORK && $model->estimate_minutes !== null) {
-                $this->fail('estimate_minutes', 'Chỉ WORK lá có ước lượng thời gian.');
-            }
-            if ($model->exists && $model->task_type !== TaskType::GROUP && $model->children()->exists()) {
-                $this->fail('task_type', 'Công việc đang có con phải giữ loại GROUP.');
+                $this->fail('estimate_minutes', 'Chỉ WORK có ước lượng thời gian.');
             }
         }
         if ($model instanceof TaskDependency) {

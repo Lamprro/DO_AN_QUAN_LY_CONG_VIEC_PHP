@@ -72,6 +72,10 @@ class TaskService
                     }
                 }
                 $probe = $task ?? new Task(['workspace_id' => $workspace->id, 'project_id' => $project?->id]);
+                if (! empty($values['parent_task_id']) && (! $task || $task->parent_task_id !== $values['parent_task_id'])) {
+                    $parent = $workspace->tasks()->where('project_id', $project?->id)->lockForUpdate()->findOrFail($values['parent_task_id']);
+                    Gate::forUser($actor)->authorize('addChild', $parent);
+                }
                 $this->tree->validate($probe, $values);
                 if ($task) {
                     $before = $task->getRawOriginal();

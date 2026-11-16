@@ -100,6 +100,12 @@
         <section class="jira-section" aria-labelledby="task-subtasks-heading">
             <div class="jira-desc-card">
                 <h2 id="task-subtasks-heading" class="jira-activity-heading">Công việc con &amp; Tiến độ <span class="badge">{{ $subtasks->count() }}</span></h2>
+                @can('addChild', $task)
+                    <a class="button secondary" data-task-panel href="{{ route($routePrefix.'.create', [...$routeParams, 'parent_task_id' => $task->id]) }}">+ Thêm công việc con</a>
+                @endcan
+                @if($task->status->value === 'DONE')
+                    <p class="muted">Công việc đã hoàn thành: khóa chỉnh sửa và thêm việc con.</p>
+                @endif
                 <ul class="jira-subtask-list">
                     @forelse($subtasks as $subtask)
                         <li>

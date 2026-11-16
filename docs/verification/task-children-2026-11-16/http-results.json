@@ -1,0 +1,157 @@
+{
+  "http": [
+    {
+      "label": "Login page",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Refresh authenticated CSRF",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 200
+    },
+    {
+      "label": "Create Review actionable parent",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 201
+    },
+    {
+      "label": "Detail exposes add-child",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-b0ad-7393-858e-51446879b278",
+      "status": 200
+    },
+    {
+      "label": "Transition IN_PROGRESS",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-b0ad-7393-858e-51446879b278/status",
+      "status": 200
+    },
+    {
+      "label": "Edit IN_PROGRESS",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-b0ad-7393-858e-51446879b278",
+      "status": 200
+    },
+    {
+      "label": "Create Child of IN_PROGRESS",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 201
+    },
+    {
+      "label": "Transition REVIEW",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-b0ad-7393-858e-51446879b278/status",
+      "status": 200
+    },
+    {
+      "label": "Edit REVIEW",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-b0ad-7393-858e-51446879b278",
+      "status": 200
+    },
+    {
+      "label": "Create Child of REVIEW",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 201
+    },
+    {
+      "label": "Create child form",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/create?parent_task_id=01a1e524-b0ad-7393-858e-51446879b278",
+      "status": 200
+    },
+    {
+      "label": "Complete parent",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-b0ad-7393-858e-51446879b278/status",
+      "status": 200
+    },
+    {
+      "label": "Completed edit denied",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-b0ad-7393-858e-51446879b278",
+      "status": 403
+    },
+    {
+      "label": "Completed child denied",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 403
+    },
+    {
+      "label": "Completed preselected create denied",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/create?parent_task_id=01a1e524-b0ad-7393-858e-51446879b278",
+      "status": 403
+    },
+    {
+      "label": "Completed detail",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-b0ad-7393-858e-51446879b278",
+      "status": 200
+    },
+    {
+      "label": "Create Cancelled editable",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 201
+    },
+    {
+      "label": "Cancel task",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-c8e2-71bb-b4ce-85971b84d54f/status",
+      "status": 200
+    },
+    {
+      "label": "Cancelled edit allowed",
+      "method": "PATCH",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1e524-c8e2-71bb-b4ce-85971b84d54f",
+      "status": 200
+    },
+    {
+      "label": "Create Child of cancelled",
+      "method": "POST",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 201
+    }
+  ],
+  "checks": [
+    {
+      "check": "Direct child link rendered",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Requested parent selected",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Completed detail hides add-child",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Stored completed title unchanged",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Foreign keys valid",
+      "passed": true,
+      "evidence": null
+    }
+  ]
+}

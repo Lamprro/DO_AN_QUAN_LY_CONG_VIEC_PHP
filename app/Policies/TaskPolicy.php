@@ -19,7 +19,24 @@ class TaskPolicy
 
     public function update(User $user, Task $task): bool
     {
-        return $this->access->mutable($user, $task, 'task.update') && ($task->task_type->value === 'GROUP' || in_array($task->status->value, ['TODO', 'IN_PROGRESS'], true));
+        return $this->access->mutable($user, $task, 'task.update') && $task->status->value !== 'DONE';
+    }
+
+    public function addChild(User $user, Task $task): bool
+    {
+        if (! $this->update($user, $task) || ! $this->access->scope($user, $task->workspace, $task->project, 'task.create')) {
+            return false;
+        }
+        $depth = 1;
+        $seen = [$task->id];
+        $parent = $task->parent;
+        while ($parent && ! in_array($parent->id, $seen, true)) {
+            $seen[] = $parent->id;
+            $depth++;
+            $parent = $parent->parent;
+        }
+
+        return $depth < config('tasks.max_depth');
     }
 
     public function execute(User $user, Task $task): bool

@@ -17,8 +17,7 @@
       if (!event.defaultPrevented && event.target.method.toLowerCase() !== 'get') notify('submitting');
     });
     document.addEventListener('click', event => {
-      const link = event.target.closest('a');
-      if (link && /^(Hủy|Hủy bỏ)$/.test(link.textContent.trim())) {
+      if (event.target.closest('a[data-editor-cancel]')) {
         event.preventDefault();
         notify('close');
       }
@@ -37,8 +36,19 @@
   const save = dialog.querySelector('[data-editor-save]');
   const standalone = dialog.querySelector('[data-editor-standalone]');
   const sessions = new Map();
+  const maxSessions = 5;
   let active = null;
   let trigger = null;
+  const hasDirtySession = () => [...sessions.values()].some(session => session.dirty && !session.pending);
+
+  function evictIdleSessions() {
+    for (const [key, session] of sessions) {
+      if (sessions.size <= maxSessions) return;
+      if (session === active || session.dirty || session.pending) continue;
+      session.frame.remove();
+      sessions.delete(key);
+    }
+  }
   const formUrl = form => new URL(form.getAttribute('action') || form.ownerDocument.URL, form.ownerDocument.URL).href;
 
   const inlineForms = {
@@ -235,6 +245,7 @@
       sessions.set(key, session);
       frame.src = target.href;
       frames.append(frame);
+      evictIdleSessions();
     }
     active.frame.hidden = false;
     standalone.href = target.href;
@@ -274,13 +285,19 @@
     if (button) active.form.requestSubmit(button);
     else active.form.requestSubmit();
   });
+  window.addEventListener('beforeunload', event => {
+    if (hasDirtySession()) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  });
   window.addEventListener('message', event => {
     if (event.origin !== location.origin) return;
     const session = [...sessions.values()].find(item => item.frame.contentWindow === event.source);
     if (!session) return;
     if (event.data?.workEditor === 'close' && active === session) close();
     if (event.data?.workEditor === 'dirty') session.dirty = true;
-    if (event.data?.workEditor === 'submitting') session.pending = true;
+    if (event.data?.workEditor === 'submitting') { session.pending = true; session.dirty = false; }
     updateToolbar(session);
   });
   mountLaunchers();

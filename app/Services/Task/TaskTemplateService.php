@@ -311,14 +311,14 @@ class TaskTemplateService
         return TaskTemplate::where('workspace_id', $workspace->id)->findOrFail($id);
     }
 
-    public function index(User $actor, Workspace $workspace, ?Project $project): array
+    public function index(User $actor, Workspace $workspace, ?Project $project, int $perPage = 10): array
     {
         abort_unless($this->tasks->templates($actor, $workspace, $project), 403);
 
         return [
             'workspace' => $workspace,
             'project' => $project,
-            'templates' => TaskTemplate::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->latest()->paginate(15)->withQueryString(),
+            'templates' => TaskTemplate::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->latest()->paginate($perPage)->withQueryString(),
             'sources' => $workspace->tasks()->where('project_id', $project?->id)->whereNull('archived_at')->orderBy('sort_order')->get(),
             'canManage' => $this->tasks->templates($actor, $workspace, $project, true),
         ];

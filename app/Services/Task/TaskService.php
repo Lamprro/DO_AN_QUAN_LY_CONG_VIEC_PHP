@@ -20,7 +20,7 @@ use Illuminate\Validation\ValidationException;
 
 class TaskService
 {
-    public function __construct(private ProjectAccess $access, private TaskAccess $tasks, private TaskTreeService $tree, private TaskHistory $history) {}
+    public function __construct(private ProjectAccess $access, private TaskAccess $tasks, private TaskTreeService $tree, private TaskHistory $history, private TaskListingQuery $listing) {}
 
     public function save(User $actor, Workspace $workspace, ?Project $project, array $data, ?Task $task = null): Task
     {
@@ -257,26 +257,26 @@ class TaskService
     public function bulk(User $actor, Workspace $workspace, ?Project $project, array $data): int
     {
         return DB::transaction(function () use ($actor, $workspace, $project, $data) {
-            Workspace::lockForUpdate()->findOrFail($workspace->id);
             $this->assertScope($actor, $workspace, $project);
             $items = $data['items'];
-            if ($data['action'] === 'assign') {
-                abort_unless($this->tasks->scope($actor, $workspace, $project, 'task.assign'), 403);
-            }
-            $tasks = Task::where('workspace_id', $workspace->id)
-                ->where('project_id', $project?->id)
-                ->whereIn('id', array_keys($items))
-                ->orderBy('id')
-                ->lockForUpdate()
-                ->get();
-            abort_unless($tasks->count() === count($items), 404);
+            // Only rows the list itself shows can be selected. In a project or team list that is
+            // the one scope; in the personal overview it also covers project tasks assigned to
+            // the actor. Every task is then checked and written in its own source scope.
+            $ids = $this->listing->query($actor, $workspace, $project)->whereIn('id', array_keys($items))->pluck('id');
+            abort_unless($ids->count() === count($items), 404);
+            $sources = Task::whereIn('id', $ids)->distinct()->pluck('workspace_id')->sort()->values();
+            Workspace::whereIn('id', $sources)->orderBy('id')->lockForUpdate()->get();
+            $tasks = Task::whereIn('id', $ids)->with('workspace', 'project')->orderBy('id')->lockForUpdate()->get();
             foreach ($tasks as $task) {
+                if ($data['action'] === 'assign') {
+                    abort_unless($this->tasks->scope($actor, $task->workspace, $task->project, 'task.assign'), 403);
+                }
                 Gate::forUser($actor)->authorize($data['action'] === 'archive' ? 'archive' : 'update', $task);
                 EditRevision::check($task, ['expected_revision' => $items[$task->id]]);
             }
             foreach ($tasks as $task) {
                 if ($data['action'] === 'archive') {
-                    $this->archive($actor, $workspace, $project, $task);
+                    $this->archive($actor, $task->workspace, $task->project, $task);
                 } else {
                     if ($data['action'] === 'assign') {
                         $changes = ['assignee_id' => $data['assignee_id'] ?? null];
@@ -284,7 +284,7 @@ class TaskService
                         $changes = ['priority' => $data['priority']];
                     }
                     $changes['expected_revision'] = $items[$task->id];
-                    $this->save($actor, $workspace, $project, $changes, $task);
+                    $this->save($actor, $task->workspace, $task->project, $changes, $task);
                 }
             }
 

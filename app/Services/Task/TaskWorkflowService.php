@@ -13,7 +13,6 @@ use App\Models\Workspace;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -262,11 +261,9 @@ class TaskWorkflowService
     public function collaborationData(Task $task): array
     {
         $people = $this->participants->people($task);
-        $ready = Schema::hasTable('task_watchers');
-        $watchers = $ready ? TaskWatcher::where('task_id', $task->id)->with('user')->get()->filter(fn ($w) => $people->contains('user_id', $w->user_id)) : collect();
+        $watchers = TaskWatcher::where('task_id', $task->id)->with('user')->get()->filter(fn ($w) => $people->contains('user_id', $w->user_id));
 
         return [
-            'collaborationReady' => $ready,
             'collaborationPeople' => $people,
             'watchers' => $watchers,
         ];

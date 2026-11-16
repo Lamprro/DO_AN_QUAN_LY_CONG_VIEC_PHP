@@ -17,7 +17,6 @@ use App\Support\LocalTime;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -269,13 +268,6 @@ class TaskTemplateService
 
     public function due(): array
     {
-        if (! Schema::hasTable('task_templates')) {
-            return [
-                'succeeded' => 0,
-                'failed' => 0,
-                'migration_required' => true,
-            ];
-        }
         $result = Cache::lock('task-template:due', 300)->get(fn () => $this->dueLocked());
 
         return $result === false ? [
@@ -287,13 +279,6 @@ class TaskTemplateService
 
     private function dueLocked(): array
     {
-        if (! Schema::hasTable('task_templates')) {
-            return [
-                'succeeded' => 0,
-                'failed' => 0,
-                'migration_required' => true,
-            ];
-        }
         $counts = ['succeeded' => 0, 'failed' => 0];
         foreach (TaskTemplate::where('status', TaskTemplateStatus::ACTIVE->value)->where('next_run_at', '<=', now())->orderBy('next_run_at')->limit(20)->get() as $t) {
             $key = 'schedule:'.$t->next_run_at->utc()->format('Y-m-d\TH:i:s\Z');

@@ -14,7 +14,6 @@ use App\Support\EditRevision;
 use App\Support\SearchTerm;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\ValidationException;
 
 class ProjectService
@@ -92,7 +91,7 @@ class ProjectService
                 'notifications' => 'project_id',
                 'task_templates' => 'project_id',
             ] as $table => $field) {
-                if (Schema::hasTable($table) && DB::table($table)->where($field, $project->id)->exists()) {
+                if (DB::table($table)->where($field, $project->id)->exists()) {
                     throw ValidationException::withMessages(['project' => 'Project có dữ liệu liên quan; hãy dùng lưu trữ.']);
                 }
             }

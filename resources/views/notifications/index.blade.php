@@ -73,7 +73,17 @@
                     </div>
 
                     <h2 style="font-size: 1.1rem; margin: 0.25rem 0;">{{ $notification->title }}</h2>
-                    <p style="margin: 0.25rem 0 0.5rem 0; color: var(--text-muted); font-size: 0.9rem;">{{ $notification->body }}</p>
+                    <div class="notification-full-body" style="margin: 0.25rem 0 0.5rem 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">
+                        @if(mb_strlen($notification->body) > 100)
+                            <div class="notif-body-preview">{{ Str::limit($notification->body, 100) }}</div>
+                            <div class="notif-body-full" hidden style="background: var(--bg-subtle, #f8fafc); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-light, #f1f5f9); margin-top: 4px; white-space: pre-wrap;">{{ $notification->body }}</div>
+                            <button type="button" class="btn-toggle-expand" onclick="toggleNotificationText(this, event)" style="background: none; border: none; color: var(--primary); font-size: 0.8rem; font-weight: 700; cursor: pointer; padding: 2px 0;">
+                                Xem chi tiết văn bản dài ▾
+                            </button>
+                        @else
+                            <div>{{ $notification->body }}</div>
+                        @endif
+                    </div>
 
                     <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem;">
                         @if(str_starts_with($notification->type,'calendar.') && $notification->workspace)

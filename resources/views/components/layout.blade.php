@@ -1,5 +1,5 @@
 @props(['title'=>'Quản lý công việc'])
-@php($versionedAsset = fn (string $path) => asset($path).'?v='.(is_file(public_path($path)) ? filemtime(public_path($path)) : 'missing'))
+<?php $versionedAsset = fn (string $path) => asset($path).'?v='.(is_file(public_path($path)) ? filemtime(public_path($path)) : 'missing'); ?>
 <!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}" data-theme-preference="{{ $preferences['theme']??'system' }}" data-theme-owner="{{ auth()->id()??'guest' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ $versionedAsset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p1-observation.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/modern-theme.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/review-polish.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/workflow-experience.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/page-editor.css') }}">@stack('styles')
 <script src="{{ $versionedAsset('js/theme.js') }}"></script><script src="{{ $versionedAsset('js/app-ui.js') }}" defer></script><script src="{{ $versionedAsset('js/page-editor.js') }}" defer></script><script src="{{ $versionedAsset('js/date-inputs.js') }}" defer></script></head>
 <body><a href="#main-content" class="skip-link">Tới nội dung chính</a><header class="app-header"><a href="{{ route('home') }}" class="brand">Work Management</a>
@@ -14,7 +14,114 @@
 <a href="{{ ($shell['project'] && $quickCreateWorkspace->id === $shell['workspace']?->id) ? route('workspaces.projects.tasks.create', [$quickCreateWorkspace, $shell['project']]) : route('workspaces.tasks.create', $quickCreateWorkspace) }}" class="jira-quick-create-btn" data-task-panel title="Tạo công việc mới (Phím tắt: c)">+ Tạo việc</a>
 @endif
 <form method="get" action="{{ route('search.index') }}" class="global-search" role="search"><label class="sr-only" for="global-query">Tìm công việc và dự án</label><div class="search-input-wrap"><input type="search" id="global-query" name="q" maxlength="200" required placeholder="Tìm công việc, dự án…"><kbd class="global-search-kbd" title="Nhấn / hoặc Ctrl+K để tìm">/</kbd></div><button class="secondary">Tìm</button></form>
-<nav aria-label="Tài khoản" class="account-nav"><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button><a href="{{ route('notifications.index') }}">Thông báo <span class="count" data-unread-count>{{ $unreadNotifications??0 }}</span></a><details><summary data-account-name>{{ auth()->user()->name }}</summary><div class="account-menu"><a href="{{ route('profile.edit') }}">Hồ sơ</a><a href="{{ route('settings.edit') }}">Cấu hình</a><form action="{{ route('logout') }}" method="post" data-form="logout">
+<nav aria-label="Tài khoản" class="account-nav">
+<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button>
+
+{{-- Nút Chuông Thông Báo & Popover Chuẩn Mẫu --}}
+<details class="notification-dropdown" id="notification-dropdown">
+    <summary class="notification-bell-btn" aria-label="Xem thông báo" title="Thông báo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="notification-dot-badge" data-unread-badge style="{{ ($unreadNotifications ?? 0) > 0 ? '' : 'display: none;' }}"></span>
+    </summary>
+    <div class="notification-popover" role="region" aria-label="Bảng thông báo nhanh">
+        {{-- Header Popover --}}
+        <div class="notification-popover-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <h3 style="margin: 0; font-size: 1rem; font-weight: 750; color: var(--text);">Thông báo</h3>
+                <span class="badge" data-unread-count-badge style="background: var(--primary-light, #e0e7ff); color: var(--primary); font-size: 11px; font-weight: 750; padding: 2px 7px; border-radius: 10px;">
+                    <span data-unread-count>{{ $unreadNotifications ?? 0 }}</span> mới
+                </span>
+            </div>
+            <button type="button" class="btn-mark-all-read" onclick="markAllNotificationsRead(event)" title="Đánh dấu tất cả đã đọc">
+                ✓ Đánh dấu tất cả đã đọc
+            </button>
+        </div>
+
+        {{-- Tabs phân loại --}}
+        <div class="notification-popover-tabs">
+            <button type="button" class="notif-tab active" data-tab="all" onclick="filterPopoverNotifs(this, 'all')">Tất cả</button>
+            <button type="button" class="notif-tab" data-tab="unread" onclick="filterPopoverNotifs(this, 'unread')">Chưa đọc</button>
+            <button type="button" class="notif-tab" data-tab="task" onclick="filterPopoverNotifs(this, 'task')">Công việc</button>
+        </div>
+
+        {{-- Danh sách thông báo có cuộn --}}
+        <div class="notification-popover-list" id="notification-popover-list">
+            @forelse($recentNotifications ?? [] as $n)
+                @php
+                    $isUnread = !$n->read_at;
+                    $isTask = str_starts_with($n->type, 'task.');
+                    $taskUrl = null;
+                    if ($n->task) {
+                        $taskUrl = route($n->project_id ? 'workspaces.projects.tasks.show' : 'workspaces.tasks.show', $n->project_id ? [$n->workspace, $n->project, $n->task] : [$n->workspace, $n->task]);
+                    } elseif (str_starts_with($n->type, 'calendar.') && $n->workspace) {
+                        $taskUrl = route('workspaces.calendar.team', [$n->workspace, 'project_id' => $n->project_id]);
+                    }
+                    $icon = match(true) {
+                        str_contains($n->type, 'comment') => '💬',
+                        str_contains($n->type, 'status') => '🔄',
+                        str_contains($n->type, 'created') => '📋',
+                        str_contains($n->type, 'reminder') => '⏰',
+                        str_contains($n->type, 'calendar') => '🤝',
+                        str_contains($n->type, 'github') => '🐙',
+                        default => '🔔',
+                    };
+                    $hasLongBody = mb_strlen($n->body) > 65;
+                @endphp
+                <div class="popover-notif-item {{ $isUnread ? 'is-unread' : 'is-read' }}" 
+                     data-notif-id="{{ $n->id }}"
+                     data-is-task="{{ $isTask ? '1' : '0' }}"
+                     data-is-unread="{{ $isUnread ? '1' : '0' }}">
+                    <div class="popover-notif-icon">
+                        {{ $icon }}
+                    </div>
+                    <div class="popover-notif-content">
+                        <div class="popover-notif-top">
+                            <span class="popover-notif-title">{{ $n->title }}</span>
+                            <span class="popover-notif-time">{{ $n->created_at->setTimezone(auth()->user()->timezone)->format('d/m · H:i') }}</span>
+                        </div>
+                        <div class="popover-notif-body">
+                            @if($hasLongBody)
+                                <div class="text-preview">{{ Str::limit($n->body, 65) }}</div>
+                                <div class="text-full" hidden>{{ $n->body }}</div>
+                                <button type="button" class="btn-toggle-expand" onclick="toggleNotificationText(this, event)">Xem thêm ▾</button>
+                            @else
+                                <div class="text-full">{{ $n->body }}</div>
+                            @endif
+                        </div>
+                        <div class="popover-notif-actions">
+                            @if($taskUrl)
+                                <a href="{{ $taskUrl }}" class="popover-notif-link">Chi tiết ›</a>
+                            @else
+                                <span></span>
+                            @endif
+                            <button type="button" class="btn-toggle-read" onclick="toggleSingleNotifRead('{{ $n->id }}', this, event)">
+                                {{ $isUnread ? 'Đánh dấu đã đọc' : 'Đánh dấu chưa đọc' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div style="padding: 2.5rem 1rem; text-align: center; color: var(--text-muted);">
+                    <div style="font-size: 1.75rem; margin-bottom: 4px;">🔔</div>
+                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600;">Không có thông báo mới nào</p>
+                </div>
+            @endforelse
+        </div>
+
+        {{-- Nút Xem tất cả (View all) dẫn sang trang Notification --}}
+        <div class="notification-popover-footer">
+            <a href="{{ route('notifications.index') }}" class="view-all-link">
+                <span>Xem tất cả thông báo (View all)</span>
+                <span style="font-size: 13px;">›</span>
+            </a>
+        </div>
+    </div>
+</details>
+
+<details><summary data-account-name>{{ auth()->user()->name }}</summary><div class="account-menu"><a href="{{ route('profile.edit') }}">Hồ sơ</a><a href="{{ route('settings.edit') }}">Cấu hình</a><form action="{{ route('logout') }}" method="post" data-form="logout">
 @csrf<button class="secondary">Đăng xuất</button></form></div></details></nav>
 @else
 <nav aria-label="Tài khoản" class="account-nav"><button type="button" class="theme-toggle" id="theme-toggle-guest" aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối"><span class="theme-icon light-icon" aria-hidden="true">☀️</span><span class="theme-icon dark-icon" aria-hidden="true">🌙</span></button><a href="{{ route('login') }}">Đăng nhập</a><a href="{{ route('register') }}">Đăng ký</a></nav>
@@ -139,5 +246,118 @@ $icon = match(true) {
         });
     }
 })();
+
+// Xử lý Popover Thông báo & Mở rộng/Thu gọn văn bản dài
+function toggleNotificationText(btn, event) {
+    if (event) event.stopPropagation();
+    var container = btn.closest('.popover-notif-body, .notification-full-body');
+    if (!container) return;
+    var preview = container.querySelector('.text-preview, .notif-body-preview');
+    var full = container.querySelector('.text-full, .notif-body-full');
+    if (!preview || !full) return;
+
+    if (full.hasAttribute('hidden')) {
+        full.removeAttribute('hidden');
+        preview.setAttribute('hidden', 'true');
+        btn.textContent = 'Thu gọn ▴';
+    } else {
+        full.setAttribute('hidden', 'true');
+        preview.removeAttribute('hidden');
+        btn.textContent = 'Xem thêm ▾';
+    }
+}
+
+function filterPopoverNotifs(tabBtn, filter) {
+    var popover = tabBtn.closest('.notification-popover');
+    if (!popover) return;
+    popover.querySelectorAll('.notif-tab').forEach(function(b) { b.classList.remove('active'); });
+    tabBtn.classList.add('active');
+
+    var items = popover.querySelectorAll('.popover-notif-item');
+    items.forEach(function(item) {
+        if (filter === 'all') {
+            item.style.display = 'flex';
+        } else if (filter === 'unread') {
+            item.style.display = item.dataset.isUnread === '1' ? 'flex' : 'none';
+        } else if (filter === 'task') {
+            item.style.display = item.dataset.isTask === '1' ? 'flex' : 'none';
+        }
+    });
+}
+
+async function markAllNotificationsRead(event) {
+    if (event) event.stopPropagation();
+    var token = document.querySelector('meta[name="csrf-token"]')?.content;
+    try {
+        var res = await fetch('{{ route("notifications.read-all") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': token,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        var data = await res.json();
+        if (data.success) {
+            document.querySelectorAll('[data-unread-count]').forEach(function(el) { el.textContent = '0'; });
+            document.querySelectorAll('[data-unread-badge]').forEach(function(el) { el.style.display = 'none'; });
+            document.querySelectorAll('.popover-notif-item').forEach(function(item) {
+                item.classList.remove('is-unread');
+                item.classList.add('is-read');
+                item.dataset.isUnread = '0';
+                var readBtn = item.querySelector('.btn-toggle-read');
+                if (readBtn) readBtn.textContent = 'Đánh dấu chưa đọc';
+            });
+            if (window.showToast) window.showToast('Đã đánh dấu tất cả thông báo là đã đọc.', 'success');
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function toggleSingleNotifRead(id, btn, event) {
+    if (event) event.stopPropagation();
+    var item = btn.closest('.popover-notif-item');
+    if (!item) return;
+    var isCurrentlyUnread = item.dataset.isUnread === '1';
+    var token = document.querySelector('meta[name="csrf-token"]')?.content;
+
+    try {
+        var res = await fetch('/notifications/' + id + '/read', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': token,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ unread: !isCurrentlyUnread })
+        });
+        var data = await res.json();
+        if (data.success) {
+            var nowRead = data.read;
+            item.classList.toggle('is-unread', !nowRead);
+            item.classList.toggle('is-read', nowRead);
+            item.dataset.isUnread = nowRead ? '0' : '1';
+            btn.textContent = nowRead ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc';
+
+            var count = data.unread_count ?? 0;
+            document.querySelectorAll('[data-unread-count]').forEach(function(el) { el.textContent = String(count); });
+            document.querySelectorAll('[data-unread-badge]').forEach(function(el) {
+                el.style.display = count > 0 ? '' : 'none';
+            });
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+document.addEventListener('click', function(e) {
+    var dropdown = document.getElementById('notification-dropdown');
+    if (dropdown && dropdown.hasAttribute('open') && !dropdown.contains(e.target)) {
+        dropdown.removeAttribute('open');
+    }
+});
 </script>
 </body></html>

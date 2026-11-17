@@ -19,6 +19,9 @@
     @include('tasks._view-nav')
 @include('tasks._overview-note')
 
+@php
+    $hasActiveFilters = collect($filters)->only(['q', 'status', 'priority', 'assignee_id', 'group_id', 'tier'])->filter(fn ($v) => !empty($v))->isNotEmpty();
+@endphp
     <section class="jira-board" data-jira-board data-user-id="{{ auth()->id() }}" aria-label="Bảng Kanban">
         <div class="jira-toolbar">
             <div class="jira-chips" role="group" aria-label="Lọc nhanh các thẻ đã tải">
@@ -32,23 +35,19 @@
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
                     <input type="search" data-quick-search placeholder="Tìm kiếm nhanh trong bảng..." autocomplete="off" maxlength="200" aria-describedby="jira-filter-help">
                 </label>
-                <button type="button" class="jira-filter-toggle" data-advanced-toggle aria-controls="jira-advanced-filters" aria-expanded="true">Bộ lọc nâng cao</button>
+                <button type="button" class="jira-filter-toggle {{ $hasActiveFilters ? 'has-active' : '' }}" data-advanced-toggle aria-controls="jira-advanced-filters" aria-expanded="{{ $hasActiveFilters ? 'true' : 'false' }}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    Bộ lọc nâng cao
+                    @if($hasActiveFilters)
+                        <span class="jira-filter-dot" title="Đang có bộ lọc nâng cao">●</span>
+                    @endif
+                </button>
             </div>
         </div>
-        <div id="jira-advanced-filters" data-advanced-filters data-has-filters="{{ collect($filters)->except('view')->isNotEmpty() ? 'true' : 'false' }}">
+        <div id="jira-advanced-filters" data-advanced-filters data-has-filters="{{ $hasActiveFilters ? 'true' : 'false' }}" @if(!$hasActiveFilters) hidden @endif>
             @include('tasks._filters')
         </div>
-        @if(isset($groups) && $groups->isNotEmpty())
-            <div class="jira-epic-bar" data-epic-bar role="group" aria-label="Lọc theo Nhóm (Epic)">
-                <span class="jira-epic-label">Nhóm (Epic):</span>
-                <a href="{{ route($routePrefix.'.index', array_merge($routeParams, collect($filters)->except('group_id')->all(), ['view' => 'board'])) }}" class="jira-epic-chip {{ empty($filters['group_id']) ? 'active' : '' }}">Tất cả nhóm</a>
-                @foreach($groups as $g)
-                    <a href="{{ route($routePrefix.'.index', array_merge($routeParams, $filters, ['view' => 'board', 'group_id' => $g->id])) }}" class="jira-epic-chip {{ ($filters['group_id'] ?? '') === $g->id ? 'active' : '' }}">
-                        📁 {{ $g->code }}: {{ $g->title }}
-                    </a>
-                @endforeach
-            </div>
-        @endif
+        @include('tasks._epic-bar', ['currentView' => 'board'])
         <div class="jira-board-summary">
             <p class="result-summary" role="status" data-board-summary><strong>{{ collect($board)->sum(fn ($column) => $column->count()) }}</strong> công việc và cột mốc</p>
             <p id="jira-filter-help" class="muted">Hiển thị 10 việc mới nhất mỗi cột. Kéo xuống đáy cột để tự động tải thêm việc cũ hơn.</p>

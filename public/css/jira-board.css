@@ -13,6 +13,8 @@
 .jira-board .jira-chip[aria-pressed='true'] { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 .jira-board .jira-filter-toggle { border-radius: 8px; }
 .jira-board .jira-filter-toggle[aria-expanded='true'] { color: var(--primary); border-color: var(--primary); }
+.jira-board .jira-filter-toggle.has-active { background: rgba(99, 102, 241, 0.1); color: var(--primary); border-color: var(--primary); font-weight: 700; }
+.jira-filter-dot { display: inline-block; margin-left: 4px; color: var(--primary); font-size: 8px; vertical-align: middle; }
 .jira-tools { flex: 1 1 410px; justify-content: flex-end; }
 .jira-search { position: relative; flex: 1; max-width: 350px; margin: 0; }
 .jira-search svg { position: absolute; width: 17px; height: 17px; left: 11px; top: 50%; transform: translateY(-50%); fill: none; stroke: var(--text-muted); stroke-width: 1.7; pointer-events: none; }
@@ -55,11 +57,17 @@
 .jira-card-epic { margin-bottom: 8px; }
 .jira-epic-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .jira-subtask-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border); }
-.jira-epic-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
-.jira-epic-label { font-size: 11px; font-weight: 750; text-transform: uppercase; color: var(--text-muted); letter-spacing: .04em; }
-.jira-epic-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-subtle); color: var(--text); text-decoration: none; transition: all .15s ease; }
-.jira-epic-chip:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
-.jira-epic-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.jira-epic-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; padding: 8px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.jira-epic-label { font-size: 11.5px; font-weight: 750; text-transform: uppercase; color: var(--text-muted); letter-spacing: .04em; margin-right: 2px; display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.jira-epic-chip { display: inline-flex !important; align-items: center !important; gap: 6px !important; font-size: 12px !important; font-weight: 600 !important; padding: 5px 12px !important; border-radius: 20px !important; border: 1px solid var(--border) !important; background: var(--surface) !important; color: var(--text) !important; text-decoration: none !important; transition: all .15s ease !important; max-width: 280px !important; white-space: nowrap !important; line-height: 1.4 !important; }
+.jira-epic-chip:hover { border-color: var(--primary) !important; background: rgba(99, 102, 241, 0.08) !important; color: var(--primary) !important; text-decoration: none !important; transform: translateY(-1px); }
+.jira-epic-chip.active, .jira-epic-chip[aria-current="true"] { background: var(--primary) !important; color: #ffffff !important; border-color: var(--primary) !important; text-decoration: none !important; box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35) !important; }
+.jira-epic-chip.active *, .jira-epic-chip[aria-current="true"] * { color: #ffffff !important; }
+.jira-epic-chip.active:hover { color: #ffffff !important; background: var(--primary-hover, #4338ca) !important; text-decoration: none !important; }
+.epic-chip-icon { font-size: 12px; line-height: 1; flex-shrink: 0; }
+.epic-chip-code { font-family: var(--font-mono, monospace); font-weight: 700; font-size: 11px; letter-spacing: 0.02em; }
+.epic-chip-sep { opacity: 0.5; font-weight: 400; }
+.epic-chip-title { font-weight: 500; font-size: 11.5px; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .jira-deadline, .jira-subtasks { display: inline-flex; align-items: center; gap: 4px; color: var(--text-muted); background: var(--bg-subtle); border-radius: 5px; padding: 3px 6px; font-size: 10px; font-weight: 650; }
 .jira-deadline.is-overdue { color: #b91c1c; background: #fee2e2; }
 .jira-deadline.is-due-soon { color: #854d0e; background: #fef9c3; }

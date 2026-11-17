@@ -13,6 +13,7 @@
 @include('tasks._overview-note')
 @include('tasks._filters')
 @include('tasks._saved-filters')
+@include('tasks._epic-bar', ['currentView' => 'list'])
 
 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin: 14px 0 10px;">
     <p class="result-summary" style="margin: 0;">

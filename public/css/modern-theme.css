@@ -2818,6 +2818,111 @@ button.inline-edit-trigger:focus-visible,
 }
 
 /* ==========================================================================
+   JIRA EPIC BAR & CHIPS (STANDARDIZED ACROSS ALL FLOWS & VIEWS)
+   ========================================================================== */
+.jira-epic-bar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  margin-bottom: 14px !important;
+  padding: 8px 12px !important;
+  background: var(--surface, #ffffff) !important;
+  border: 1px solid var(--border, #e2e8f0) !important;
+  border-radius: 10px !important;
+}
+
+.jira-epic-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 11.5px !important;
+  font-weight: 750 !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted, #64748b) !important;
+  letter-spacing: .04em !important;
+  margin-right: 2px !important;
+  flex-shrink: 0 !important;
+}
+
+a.jira-epic-chip,
+.jira-epic-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 5px 12px !important;
+  border-radius: 20px !important;
+  border: 1px solid var(--border, #cbd5e1) !important;
+  background: var(--surface, #ffffff) !important;
+  color: var(--text, #334155) !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  white-space: nowrap !important;
+  max-width: 280px !important;
+  line-height: 1.4 !important;
+}
+
+a.jira-epic-chip:hover,
+.jira-epic-chip:hover {
+  border-color: var(--primary, #4f46e5) !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+  color: var(--primary, #4f46e5) !important;
+  text-decoration: none !important;
+  transform: translateY(-1px);
+}
+
+a.jira-epic-chip.active,
+a.jira-epic-chip[aria-current="true"],
+.jira-epic-chip.active {
+  background: var(--primary, #4f46e5) !important;
+  color: #ffffff !important;
+  border-color: var(--primary, #4f46e5) !important;
+  text-decoration: none !important;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35) !important;
+}
+
+a.jira-epic-chip.active *,
+.jira-epic-chip.active * {
+  color: #ffffff !important;
+}
+
+a.jira-epic-chip.active:hover,
+.jira-epic-chip.active:hover {
+  color: #ffffff !important;
+  background: var(--primary-hover, #4338ca) !important;
+  text-decoration: none !important;
+}
+
+.epic-chip-icon {
+  font-size: 12px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.epic-chip-code {
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.epic-chip-sep {
+  opacity: 0.5;
+  font-weight: 400;
+}
+
+.epic-chip-title {
+  font-weight: 500;
+  font-size: 11.5px;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
    Floating Inline Quick Popover & Controls
    ========================================================================== */
 #inline-quick-popover {

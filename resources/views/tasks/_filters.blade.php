@@ -4,11 +4,13 @@
 <script src="{{ asset('js/task-filters.js') }}?v={{ filemtime(public_path('js/task-filters.js')) }}" defer></script>
 @endpush
 @endonce
+@if($currentView !== 'board')
 <nav class="preset-bar" aria-label="Bộ lọc công việc nhanh" data-live-links>
 @foreach(['all'=>'Tất cả việc','mine'=>'Việc của tôi','review'=>'Chờ tôi duyệt','blocked'=>'Đang bị chặn','overdue'=>'Quá hạn'] as $value=>$label)
     <a class="preset-chip {{ ($filters['preset']??'all')===$value ? 'active' : '' }}" href="{{ route($routePrefix.'.index',array_merge($routeParams,['view'=>$currentView,'preset'=>$value])) }}" @if(($filters['preset']??'all')===$value) aria-current="true" @endif>{{ ($isPersonalOverview ?? false) && $value === 'all' ? 'Tất cả việc của tôi' : $label }}</a>
 @endforeach
 </nav>
+@endif
 {{-- Every change applies at once (task-filters.js). The submit button only shows without JavaScript. --}}
 <form method="GET" action="{{ route($routePrefix.'.index',$routeParams) }}" class="card task-filter-panel" data-form="task-search" data-live-filter role="search">
     <input type="hidden" name="view" value="{{ $currentView }}">
@@ -28,8 +30,10 @@
         <summary>Sắp xếp và hiển thị</summary>
         <div class="filter-grid">
             @include('shared.list-controls',['sortOptions'=>['created_at'=>'Ngày tạo','code'=>'Mã công việc','title'=>'Tiêu đề','priority'=>'Mức ưu tiên','deadline_at'=>'Hạn hoàn thành']])
-            <div><label for="per_page">Số dòng ở danh sách</label><select id="per_page" name="per_page">@foreach([10,50,100,500] as $n)<option value="{{ $n }}" @selected((int)($filters['per_page']??10)===$n)>{{ $n }} dòng</option>@endforeach</select></div>
+            @if($currentView !== 'board')
+                <div><label for="per_page">Số dòng ở danh sách</label><select id="per_page" name="per_page">@foreach([10,50,100,500] as $n)<option value="{{ $n }}" @selected((int)($filters['per_page']??10)===$n)>{{ $n }} dòng</option>@endforeach</select></div>
+            @endif
         </div>
-        <p class="muted filter-help">Bộ lọc nhanh đặt lại các điều kiện khác. Kanban hiển thị tối đa 10 thẻ mỗi cột. Hạn giờ theo {{ $workspace->timezone }}.</p>
+        <p class="muted filter-help">Múi giờ làm việc: {{ $workspace->timezone }}.</p>
     </details>
 </form>

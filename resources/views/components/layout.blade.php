@@ -33,7 +33,28 @@
 @auth
 <button type="button" class="nav-backdrop" aria-label="Đóng menu" hidden></button><aside id="app-sidebar" class="app-sidebar" aria-label="Điều hướng ứng dụng">
 <button type="button" class="secondary nav-close" data-close-nav>Đóng điều hướng</button>
-<div class="nav-context"><span class="eyebrow">{{ $shell['project']?'Dự án hiện tại':($shell['workspace']?'Không gian hiện tại':'Khu vực cá nhân') }}</span><strong>{{ $shell['project']?->name ?? $shell['workspace']?->name ?? 'Công việc của bạn' }}</strong></div>
+<div class="sidebar-header-box">
+    <div class="nav-context sidebar-workspace-pill">
+        <div class="sidebar-workspace-avatar" aria-hidden="true">
+            {{ $shell['project'] ? '📁' : ($shell['workspace']?->kind->value === 'team' ? '🏢' : '👤') }}
+        </div>
+        <div class="sidebar-workspace-meta">
+            <span class="eyebrow sidebar-workspace-badge">
+                {{ $shell['project'] ? 'Dự án' : ($shell['workspace']?->kind->value === 'team' ? 'Team Workspace' : 'Cá nhân') }}
+            </span>
+            <strong class="sidebar-workspace-title" title="{{ $shell['project']?->name ?? $shell['workspace']?->name ?? 'Công việc' }}">
+                {{ $shell['project']?->name ?? $shell['workspace']?->name ?? 'Công việc của bạn' }}
+            </strong>
+        </div>
+    </div>
+    <button type="button" class="sidebar-collapse-toggle" id="sidebar-collapse-btn" title="Thu gọn / Mở rộng thanh điều hướng" aria-label="Thu gọn hoặc mở rộng thanh điều hướng">
+        <svg class="collapse-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <path d="M9 3v18"></path>
+            <path d="M14 9l-3 3 3 3"></path>
+        </svg>
+    </button>
+</div>
 @foreach(collect($shell['menu'])->groupBy('group')->sortBy(fn($items,$group)=>array_search($group,['Dự án hiện tại','Công việc cá nhân','Không gian làm việc','Cá nhân'])) as $group=>$items)
 <nav class="nav-group" aria-label="{{ $group }}"><h2>{{ $group }}</h2>
 @foreach($items as $item)
@@ -96,4 +117,27 @@ $icon = match(true) {
 </dialog>
 @endauth
 @stack('scripts')
+<script>
+(function() {
+    try {
+        var frame = document.querySelector('.app-frame');
+        if (frame && localStorage.getItem('sidebar_collapsed') === 'true') {
+            frame.classList.add('sidebar-collapsed');
+        }
+    } catch(e) {}
+
+    var btn = document.getElementById('sidebar-collapse-btn');
+    if (btn) {
+        btn.addEventListener('click', function() {
+            var frame = document.querySelector('.app-frame');
+            if (frame) {
+                var isCollapsed = frame.classList.toggle('sidebar-collapsed');
+                try {
+                    localStorage.setItem('sidebar_collapsed', isCollapsed ? 'true' : 'false');
+                } catch(e) {}
+            }
+        });
+    }
+})();
+</script>
 </body></html>

@@ -103,11 +103,9 @@ class AppShell
                 $scope = [$workspace, 'project_id' => $project?->id];
                 if ($this->plans->allows($actor, $workspace, $project)) {
                     $add('Kế hoạch', 'workspaces.plans.index', $scope);
-                    $add('Ảnh hưởng công việc', 'workspaces.plans.impact', $scope);
                 }
                 if ($this->calendars->scope($actor, $workspace, $project, 'calendar.view')) {
                     $add('Lịch', 'workspaces.calendar.index', $scope);
-                    $add('Lịch nhóm / lời mời', 'workspaces.calendar.team', $scope);
                     if ($project) {
                         $add('Timeline', 'workspaces.projects.timeline', [$workspace, $project]);
                     }

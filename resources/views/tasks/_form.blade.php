@@ -1,4 +1,4 @@
-<div style="display: flex; flex-direction: column; gap: 1.5rem;">
+<div style="display: flex; flex-direction: column; gap: 1.5rem; padding-bottom: 3.5rem;">
     @if(!empty($selectedParent) && !$task)
         <div class="notice" style="background: rgba(99, 102, 241, 0.1); border-left: 4px solid var(--color-primary); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.875rem;">
             Đang tạo công việc con cho: <strong style="color: var(--color-primary);">{{ $selectedParent->code }} — {{ $selectedParent->title }}</strong>
@@ -83,10 +83,11 @@
             Ưu tiên & Kế hoạch thời gian
         </h3>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 1rem; margin-bottom: 1rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; align-items: start; margin-bottom: 1rem;">
+            {{-- Cột 1: Độ ưu tiên --}}
             <div class="field" style="margin: 0;">
-                <label for="priority" style="display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.375rem; color: var(--color-text);">Độ ưu tiên</label>
-                <select id="priority" name="priority" style="width: 100%; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text);">
+                <label for="priority">Độ ưu tiên</label>
+                <select id="priority" name="priority">
                     @foreach(\App\Enums\TaskPriority::cases() as $priority)
                         <option value="{{ $priority->value }}" @selected(old('priority', $task?->priority->value ?? 'medium') === $priority->value)>
                             {{ \App\Support\UiLabels::text($priority) }}
@@ -101,13 +102,17 @@
                 </div>
             </div>
 
+            {{-- Cột 2: Ngày bắt đầu --}}
             <div data-edit-field class="field" style="margin: 0;">
-                <x-input name="started_at" :label="'Ngày bắt đầu — '.$workspace->timezone" type="datetime-local" :value="$task?->started_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? ''" />
-                <span class="muted" style="font-size: 0.75rem;">Thời điểm bắt đầu triển khai</span>
+                <label for="started_at">Ngày bắt đầu — {{ $workspace->timezone }}</label>
+                <input id="started_at" name="started_at" type="datetime-local" value="{{ old('started_at', $task?->started_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? '') }}">
+                <span class="muted" style="font-size: 0.75rem; display: block; margin-top: 4px;">Thời điểm bắt đầu triển khai</span>
             </div>
 
+            {{-- Cột 3: Hạn hoàn thành --}}
             <div data-edit-field class="field" style="margin: 0;">
-                <x-input name="deadline_at" :label="'Hạn hoàn thành (Deadline) — '.$workspace->timezone" type="datetime-local" :value="$task?->deadline_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? ''" />
+                <label for="deadline_at">Hạn hoàn thành (Deadline) — {{ $workspace->timezone }}</label>
+                <input id="deadline_at" name="deadline_at" type="datetime-local" value="{{ old('deadline_at', $task?->deadline_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? '') }}">
                 @include('tasks._deadline-presets')
             </div>
         </div>

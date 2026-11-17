@@ -2390,3 +2390,184 @@ button.btn-toggle-group[data-collapsed="true"] {
   border-color: var(--border, #cbd5e1) !important;
 }
 
+/* ==========================================================================
+   DATE-UI & FORM CONTROLS HARMONIZATION
+   ========================================================================== */
+.date-ui {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+.date-ui .date-ui-text {
+  width: 100% !important;
+  padding-right: 2.75rem !important;
+  box-sizing: border-box !important;
+}
+
+.date-ui .date-ui-button,
+button.date-ui-button {
+  position: absolute !important;
+  right: 6px !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+  width: 28px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  max-height: 28px !important;
+  min-width: 28px !important;
+  max-width: 28px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--text-muted, #64748b) !important;
+  box-shadow: none !important;
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  transition: background 0.15s ease, color 0.15s ease !important;
+  z-index: 2 !important;
+}
+
+.date-ui .date-ui-button:hover,
+button.date-ui-button:hover {
+  background: var(--bg-subtle, #f1f5f9) !important;
+  color: var(--primary, #4f46e5) !important;
+  box-shadow: none !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Priority Selector & Segmented Buttons */
+.priority-selector {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0.35rem !important;
+  margin-top: 0.5rem !important;
+}
+
+button.priority-btn,
+.priority-selector button.priority-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.25rem !important;
+  padding: 0.35rem 0.4rem !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  height: 32px !important;
+  font-size: 0.8rem !important;
+  font-weight: 650 !important;
+  line-height: 1 !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--border, #cbd5e1) !important;
+  background: var(--surface, #ffffff) !important;
+  color: var(--text-muted, #64748b) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: all 0.15s ease !important;
+}
+
+button.priority-btn:hover,
+.priority-selector button.priority-btn:hover {
+  border-color: var(--primary, #4f46e5) !important;
+  background: var(--bg-subtle, #f8fafc) !important;
+  color: var(--text, #1e293b) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+button.priority-btn[data-priority="low"].selected,
+.priority-selector button.priority-btn[data-priority="low"].selected {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 1.5px #10b981 !important;
+}
+
+button.priority-btn[data-priority="medium"].selected,
+.priority-selector button.priority-btn[data-priority="medium"].selected {
+  background: #fffbeb !important;
+  color: #d97706 !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 1.5px #f59e0b !important;
+}
+
+button.priority-btn[data-priority="high"].selected,
+.priority-selector button.priority-btn[data-priority="high"].selected {
+  background: #fff7ed !important;
+  color: #ea580c !important;
+  border-color: #f97316 !important;
+  box-shadow: 0 0 0 1.5px #f97316 !important;
+}
+
+button.priority-btn[data-priority="urgent"].selected,
+.priority-selector button.priority-btn[data-priority="urgent"].selected {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1.5px #ef4444 !important;
+}
+
+/* Preset Chips (Deadline & Estimate presets) */
+.field-presets,
+.deadline-presets,
+.estimate-presets {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.35rem !important;
+  margin-top: 0.5rem !important;
+  align-items: center !important;
+}
+
+button.preset-chip,
+.field-presets button.preset-chip,
+.deadline-presets button.preset-chip,
+.estimate-presets button.preset-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.25rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  padding: 4px 10px !important;
+  min-height: 26px !important;
+  max-height: 28px !important;
+  height: 28px !important;
+  border-radius: 999px !important;
+  background: var(--bg-subtle, #f1f5f9) !important;
+  border: 1px solid var(--border, #cbd5e1) !important;
+  color: var(--text-muted, #64748b) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: all 0.15s ease !important;
+}
+
+button.preset-chip:hover,
+.field-presets button.preset-chip:hover {
+  background: var(--primary-light, #e0e7ff) !important;
+  color: var(--primary, #4f46e5) !important;
+  border-color: var(--primary, #4f46e5) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+button.preset-chip:active,
+.field-presets button.preset-chip:active {
+  background: var(--primary, #4f46e5) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+

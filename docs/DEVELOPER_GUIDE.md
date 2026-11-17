@@ -62,3 +62,8 @@ Các form đang nằm trong bảng hoặc thẻ (thành viên, lời mời, mẫ
 Đợt này giảm 18 class ròng so với trước refactor (17 lớp được hợp nhất, 1 provider không dùng được bỏ), không thêm service bọc. Các lớp lớn còn lại có phạm vi nghiệp vụ rõ; thuật toán cây, xếp lịch, preview, nguồn danh sách dùng chung và adapter bên ngoài vẫn tách vì có trách nhiệm riêng. Điểm đánh đổi: controller/service cùng module dài hơn, và mỗi bản nhập đang giữ mở chiếm một frame trong bộ nhớ. Không khẳng định đã loại hết mọi đoạn viết gọn hay đã kiểm mọi tổ hợp quyền/trình duyệt.
 
 Bằng chứng backend: 250 yêu cầu HTTP và 141 kiểm tra dữ liệu; 166 hợp đồng route không đổi. Giao diện: kiểm tra Chrome trên desktop và viewport 390×844, cộng 8 lần đọc lại DB cho workspace/task/plan/calendar/comment/conflict và khóa ngoại. Bước xác nhận lưu bulk trong trình duyệt bị dừng bởi công cụ không xác định chắc URL trên Windows; không ghi nhận bước đó là đạt. Backend bulk/revision/scope đã được kiểm bằng HTTP thật trước đó. Không thử cạnh tranh trên DB production, email ngoài hệ thống hoặc nhà cung cấp AI thật; không deploy.
+
+
+## Cập nhật ngày 17/11/2026
+
+Xem [công việc, mẫu lặp và lịch](UPDATE_2026-11-17.md) để đọc quy tắc hiện tại: chọn GROUP làm mẫu tự lấy cây con; lịch có dải ngày task không chiếm giờ bận; danh sách công việc có cây, bộ lọc cấp và mã ngắn. Báo cáo kèm hướng dẫn thao tác, nguồn dữ liệu, liên kết Sheet đã đồng bộ và giới hạn kiểm tra riêng của đợt này.

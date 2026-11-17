@@ -127,6 +127,15 @@
     </div>
 
     @if(count($recentTasks) > 0)
+        @php
+            $membersList = collect($people ?? [])->map(fn($p) => [
+                'id' => $p->user_id,
+                'name' => $p->user->name,
+                'email' => $p->user->email ?? '',
+            ])->values();
+        @endphp
+        <script id="workspace-members-data" type="application/json">{!! json_encode($membersList) !!}</script>
+        <script id="deadline-presets-data" type="application/json">{!! json_encode($deadlinePresets ?? []) !!}</script>
         <div class="table-wrap mobile-data-table">
             <table>
                 <thead>
@@ -142,6 +151,7 @@
                     @foreach($recentTasks as $task)
                         @php($deadlineFormatted = $task->deadline_at ? $task->deadline_at->setTimezone($workspace->timezone)->format('d/m/Y H:i') : null)
                         @php($deadlineLocal = $task->deadline_at ? $task->deadline_at->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') : '')
+                        @php($isOverdue = $task->deadline_at?->isPast() && !in_array($task->status->value, ['DONE', 'CANCELLED']))
                         <tr data-task-id="{{ $task->id }}"
                             data-code="{{ $task->code }}"
                             data-title="{{ $task->title }}"
@@ -153,35 +163,82 @@
                             data-estimate="{{ $task->estimate_minutes }}"
                             data-revision="{{ $task->revision }}"
                             data-update-url="{{ route('workspaces.projects.tasks.update', [$workspace, $project, $task]) }}"
-                            data-status-url="{{ route('workspaces.projects.tasks.status.update', [$workspace, $project, $task]) }}">
+                            data-status-url="{{ route('workspaces.projects.tasks.status.update', [$workspace, $project, $task]) }}"
+                            data-can-update="{{ auth()->user()->can('update', $task) ? '1' : '0' }}"
+                            data-can-status="{{ (auth()->user()->can('execute', $task) || auth()->user()->can('review', $task)) ? '1' : '0' }}"
+                            data-can-assign="{{ (auth()->user()->can('update', $task) && ($canAssign ?? true)) ? '1' : '0' }}">
                             <td>
                                 <a data-task-panel href="{{ route('workspaces.projects.tasks.show',[$workspace,$project,$task]) }}" style="text-decoration: none; font-weight: 700;">
                                     <span class="task-row-code" style="color: var(--primary); font-family: var(--font-mono); margin-right: 0.35rem;">{{ $task->code }}</span>
                                     <span class="task-row-title">{{ $task->title }}</span>
                                 </a>
-                            </td>
-                            <td>
-                                <span class="status-pill status-{{ strtolower(str_replace('_','-',$task->status->value)) }}">
-                                    {{ \App\Support\UiLabels::text($task->status->value) }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="task-row-assignee">
-                                    @if($task->assignee)
-                                        <span>{{ $task->assignee->name }}</span>
+                                <div style="margin-top: 3px;">
+                                    @can('update', $task)
+                                        <button type="button" class="inline-edit-trigger inline-priority-trigger" data-inline-field="priority" title="Nhấp để đổi nhanh độ ưu tiên">
+                                            <span class="inline-priority-indicator priority-{{ strtolower($task->priority->value) }}">●</span>
+                                            <span style="font-size: 11px;">Ưu tiên: <strong class="inline-priority-text">{{ \App\Support\UiLabels::text($task->priority) }}</strong></span>
+                                            <span class="inline-caret" aria-hidden="true">▾</span>
+                                        </button>
                                     @else
-                                        <span class="muted" style="font-style: italic; font-size: 0.8rem;">Chưa phân công</span>
-                                    @endif
+                                        <span class="muted" style="font-size: 11px;">Ưu tiên: {{ \App\Support\UiLabels::text($task->priority) }}</span>
+                                    @endcan
                                 </div>
                             </td>
-                            <td>
-                                <div class="task-row-deadline">
-                                    @if($task->deadline_at)
-                                        <span style="font-family: var(--font-mono); font-size: 0.8rem;">{{ $deadlineFormatted }}</span>
-                                    @else
-                                        <span class="muted" style="font-size: 0.8rem;">Chưa có</span>
-                                    @endif
-                                </div>
+                            <td class="task-status-cell">
+                                @if(auth()->user()->can('execute', $task) || auth()->user()->can('review', $task))
+                                    <button type="button" class="inline-edit-trigger inline-status-trigger" data-inline-field="status" aria-label="Đổi nhanh trạng thái: {{ $task->title }}" title="Nhấp để đổi nhanh trạng thái">
+                                        <span class="status-pill status-{{ strtolower(str_replace('_','-',$task->status->value)) }}">
+                                            {{ \App\Support\UiLabels::text($task->status->value) }}
+                                        </span>
+                                        <span class="inline-caret" aria-hidden="true">▾</span>
+                                    </button>
+                                @else
+                                    <span class="status-pill status-{{ strtolower(str_replace('_','-',$task->status->value)) }}">
+                                        {{ \App\Support\UiLabels::text($task->status->value) }}
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="task-assignee-cell">
+                                @if(auth()->user()->can('update', $task) && ($canAssign ?? true))
+                                    <button type="button" class="inline-edit-trigger inline-assignee-trigger" data-inline-field="assignee" title="Nhấp để phân công người thực hiện">
+                                        <span class="inline-assignee-avatar" aria-hidden="true">
+                                            @if($task->assignee)
+                                                <span class="assignee-initials">{{ mb_strtoupper(mb_substr($task->assignee->name, 0, 1)) }}</span>
+                                            @else
+                                                <span class="assignee-empty-icon">👤</span>
+                                            @endif
+                                        </span>
+                                        <span class="inline-assignee-name">{{ $task->assignee?->name ?? 'Chưa phân công' }}</span>
+                                        <span class="inline-caret" aria-hidden="true">▾</span>
+                                    </button>
+                                @else
+                                    <div class="task-row-assignee">
+                                        @if($task->assignee)
+                                            <span>{{ $task->assignee->name }}</span>
+                                        @else
+                                            <span class="muted" style="font-style: italic; font-size: 0.8rem;">Chưa phân công</span>
+                                        @endif
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="task-deadline-cell">
+                                @if(auth()->user()->can('update', $task))
+                                    <button type="button" class="inline-edit-trigger inline-deadline-trigger" data-inline-field="deadline" title="Nhấp để đổi hạn hoàn thành">
+                                        <span class="inline-deadline-icon" aria-hidden="true">📅</span>
+                                        <span @class(['inline-deadline-text', 'task-overdue' => $isOverdue]) style="font-family: var(--font-mono); font-size: 0.8rem;">
+                                            {{ $deadlineFormatted ?? 'Chưa có' }}
+                                        </span>
+                                        <span class="inline-caret" aria-hidden="true">▾</span>
+                                    </button>
+                                @else
+                                    <div class="task-row-deadline">
+                                        @if($task->deadline_at)
+                                            <span @class(['task-overdue' => $isOverdue]) style="font-family: var(--font-mono); font-size: 0.8rem;">{{ $deadlineFormatted }}</span>
+                                        @else
+                                            <span class="muted" style="font-size: 0.8rem;">Chưa có</span>
+                                        @endif
+                                    </div>
+                                @endif
                             </td>
                             <td style="text-align: right;">
                                 @can('update', $task)

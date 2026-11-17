@@ -5,6 +5,18 @@
     $hasSubtasks = !empty($hasSubtasks);
 @endphp
 <tr data-task-id="{{ $task->id }}"
+    data-code="{{ $task->code }}"
+    data-title="{{ $task->title }}"
+    data-revision="{{ $task->revision }}"
+    data-status="{{ $task->status->value }}"
+    data-priority="{{ $task->priority->value }}"
+    data-assignee-id="{{ $task->assignee_id ?? '' }}"
+    data-deadline="{{ $task->deadline_at ? $task->deadline_at->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') : '' }}"
+    data-status-url="{{ route($itemRoutePrefix.'.status.update', [...$itemRouteParams, $task]) }}"
+    data-update-url="{{ route($itemRoutePrefix.'.update', [...$itemRouteParams, $task]) }}"
+    data-can-update="{{ auth()->user()->can('update', $task) ? '1' : '0' }}"
+    data-can-status="{{ ($task->task_type->value !== 'GROUP' && (auth()->user()->can('execute', $task) || auth()->user()->can('review', $task))) ? '1' : '0' }}"
+    data-can-assign="{{ (auth()->user()->can('update', $task) && ($canAssign ?? true)) ? '1' : '0' }}"
     @if(!empty($groupOwnerId)) data-group-owner="{{ $groupOwnerId }}" @endif
     @if(!empty($subtaskOwnerId)) data-subtask-owner="{{ $subtaskOwnerId }}" @endif
     @class(['jira-subtask-row' => $isSubtask])
@@ -34,7 +46,11 @@
                     <span class="badge" style="font-size: 10px;">{{ $isSubtask ? 'SUB-TASK (CẤP 3)' : 'TASK (CẤP 2)' }}</span>
                     @include('tasks._source', ['sourceTask' => $task])
                     @can('update', $task)
-                        <a data-task-panel data-panel-field="priority" href="{{ route($itemRoutePrefix.'.edit', [...$itemRouteParams, $task]) }}" class="priority-link">Ưu tiên: {{ \App\Support\UiLabels::text($task->priority) }}</a>
+                        <button type="button" class="inline-edit-trigger inline-priority-trigger" data-inline-field="priority" title="Nhấp để đổi nhanh độ ưu tiên">
+                            <span class="inline-priority-indicator priority-{{ strtolower($task->priority->value) }}">●</span>
+                            <span>Ưu tiên: <strong class="inline-priority-text">{{ \App\Support\UiLabels::text($task->priority) }}</strong></span>
+                            <span class="inline-caret" aria-hidden="true">▾</span>
+                        </button>
                     @else
                         <x-status :value="$task->priority"/>
                     @endcan
@@ -81,15 +97,51 @@
             @endif
         @endif
     </td>
-    <td data-label="Trạng thái">
+    <td data-label="Trạng thái" class="task-status-cell">
         @if($task->task_type->value !== 'GROUP' && (auth()->user()->can('execute', $task) || auth()->user()->can('review', $task)))
-            <a data-task-panel class="task-status-link" href="{{ route($itemRoutePrefix.'.status.edit', [...$itemRouteParams, $task]) }}" aria-label="Đổi trạng thái {{ $task->title }}"><x-status :value="$task->status"/> ▾</a>
+            <button type="button" class="inline-edit-trigger inline-status-trigger" data-inline-field="status" aria-label="Đổi nhanh trạng thái: {{ $task->title }}" title="Nhấp để đổi nhanh trạng thái">
+                <x-status :value="$task->status"/>
+                <span class="inline-caret" aria-hidden="true">▾</span>
+            </button>
         @else
             <x-status :value="$task->status"/>
         @endif
     </td>
-    <td data-label="Người thực hiện">{{ $task->assignee?->name ?? 'Chưa phân công' }}</td>
-    <td data-label="Hạn hoàn thành"><span @class(['task-overdue' => $task->deadline_at?->isPast() && !in_array($task->status->value, ['DONE', 'CANCELLED'])])>{{ $task->deadline_at?->setTimezone($workspace->timezone)->format('d/m/Y H:i') ?? 'Chưa đặt hạn' }}</span></td>
+    <td data-label="Người thực hiện" class="task-assignee-cell">
+        @if(auth()->user()->can('update', $task) && ($canAssign ?? true))
+            <button type="button" class="inline-edit-trigger inline-assignee-trigger" data-inline-field="assignee" title="Nhấp để phân công người thực hiện">
+                <span class="inline-assignee-avatar" aria-hidden="true">
+                    @if($task->assignee)
+                        <span class="assignee-initials">{{ mb_strtoupper(mb_substr($task->assignee->name, 0, 1)) }}</span>
+                    @else
+                        <span class="assignee-empty-icon">👤</span>
+                    @endif
+                </span>
+                <span class="inline-assignee-name">{{ $task->assignee?->name ?? 'Chưa phân công' }}</span>
+                <span class="inline-caret" aria-hidden="true">▾</span>
+            </button>
+        @else
+            <span class="inline-assignee-static">
+                {{ $task->assignee?->name ?? 'Chưa phân công' }}
+            </span>
+        @endif
+    </td>
+    @php($isOverdue = $task->deadline_at?->isPast() && !in_array($task->status->value, ['DONE', 'CANCELLED']))
+    <td data-label="Hạn hoàn thành" class="task-deadline-cell">
+        @if(auth()->user()->can('update', $task))
+            <button type="button" class="inline-edit-trigger inline-deadline-trigger" data-inline-field="deadline" title="Nhấp để đổi hạn hoàn thành">
+                <span class="inline-deadline-icon" aria-hidden="true">📅</span>
+                <span @class(['inline-deadline-text', 'task-overdue' => $isOverdue])>
+                    {{ $task->deadline_at?->setTimezone($workspace->timezone)->format('d/m/Y H:i') ?? 'Chưa đặt hạn' }}
+                </span>
+                <span class="inline-caret" aria-hidden="true">▾</span>
+            </button>
+        @else
+            <span @class(['inline-deadline-text', 'task-overdue' => $isOverdue])>
+                {{ $task->deadline_at?->setTimezone($workspace->timezone)->format('d/m/Y H:i') ?? 'Chưa đặt hạn' }}
+            </span>
+        @endif
+    </td>
     <td data-label="Thao tác" class="task-row-actions-cell">
         <div class="task-row-actions">
             @if(!$isSubtask)

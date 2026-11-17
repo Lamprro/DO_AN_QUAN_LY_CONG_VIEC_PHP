@@ -23,7 +23,15 @@ class TaskRequest extends FormRequest
 
     public function rules(): array
     {
-        return self::fieldRules($this->route('workspace'), $this->route('task')) + ['edit_surface' => 'sometimes|in:quick,full'];
+        $rules = self::fieldRules($this->route('workspace'), $this->route('task')) + ['edit_surface' => 'sometimes|in:quick,full,inline'];
+
+        if ($this->input('edit_surface') === 'inline') {
+            $rules['title'] = ['sometimes', 'string', 'max:200'];
+            $rules['priority'] = ['sometimes', Rule::enum(TaskPriority::class)];
+            $rules['expected_revision'] = ['sometimes', 'integer', 'min:1'];
+        }
+
+        return $rules;
     }
 
     public static function fieldRules(Workspace $workspace, ?Task $task): array

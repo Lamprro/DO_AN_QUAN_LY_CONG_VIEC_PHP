@@ -351,4 +351,552 @@
     }
   });
 
+  // 11. Global Inline Quick Edit System for Task Tables (Status, Priority, Assignee, Deadline)
+  let popoverEl = document.getElementById('inline-quick-popover');
+  if (!popoverEl) {
+    popoverEl = document.createElement('div');
+    popoverEl.id = 'inline-quick-popover';
+    popoverEl.hidden = true;
+    document.body.appendChild(popoverEl);
+  }
+
+  const closeQuickPopover = () => {
+    if (popoverEl) {
+      popoverEl.hidden = true;
+      popoverEl.innerHTML = '';
+      delete popoverEl.dataset.activeTaskId;
+      delete popoverEl.dataset.activeField;
+    }
+  };
+
+  const positionPopover = (trigger) => {
+    const rect = trigger.getBoundingClientRect();
+    const popoverWidth = 280;
+    let top = rect.bottom + window.scrollY + 6;
+    let left = rect.left + window.scrollX;
+
+    if (left + popoverWidth > window.innerWidth - 16) {
+      left = window.innerWidth - popoverWidth - 16;
+    }
+    if (left < 16) left = 16;
+
+    if (rect.bottom + 300 > window.innerHeight && rect.top > 300) {
+      top = rect.top + window.scrollY - 300;
+    }
+
+    popoverEl.style.top = `${top}px`;
+    popoverEl.style.left = `${left}px`;
+  };
+
+  const sendInlinePatch = async (url, data) => {
+    const token = document.querySelector('meta[name="csrf-token"]')?.content;
+    const res = await fetch(url, {
+      method: 'PATCH',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': token,
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: JSON.stringify(data),
+    });
+
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok || json.success === false) {
+      const errorMsg = Object.values(json.errors || {}).flat().join('; ') || json.message || 'Lỗi khi cập nhật dữ liệu.';
+      throw new Error(errorMsg);
+    }
+    return json;
+  };
+
+  const updateGroupProgress = (groupId) => {
+    if (!groupId) return;
+    const childRows = [...document.querySelectorAll(`tr[data-group-owner="${groupId}"]`)].filter(r => !r.classList.contains('jira-epic-cluster-header'));
+    if (!childRows.length) return;
+
+    const total = childRows.length;
+    const done = childRows.filter(r => r.dataset.status === 'DONE').length;
+    const percent = Math.round((done / total) * 100);
+
+    const wrapper = document.querySelector(`.group-progress-wrapper[data-group-progress="${groupId}"]`);
+    if (wrapper) {
+      const doneEl = wrapper.querySelector('.done-count');
+      const totalEl = wrapper.querySelector('.total-count');
+      const percentEl = wrapper.querySelector('.percent-val');
+      const barFill = wrapper.querySelector('.progress-bar-fill');
+      if (doneEl) doneEl.textContent = done;
+      if (totalEl) totalEl.textContent = total;
+      if (percentEl) percentEl.textContent = percent;
+      if (barFill) barFill.style.width = `${percent}%`;
+    }
+  };
+
+  const getWorkspaceMembers = () => {
+    const script = document.getElementById('workspace-members-data');
+    if (script && script.textContent.trim()) {
+      try {
+        return JSON.parse(script.textContent);
+      } catch (e) {
+        console.warn('Cannot parse workspace-members-data', e);
+      }
+    }
+    return [];
+  };
+
+  const getDeadlinePresets = () => {
+    const script = document.getElementById('deadline-presets-data');
+    if (script && script.textContent.trim()) {
+      try {
+        return JSON.parse(script.textContent);
+      } catch (e) {
+        console.warn('Cannot parse deadline-presets-data', e);
+      }
+    }
+    return [];
+  };
+
+  document.addEventListener('click', async e => {
+    const trigger = e.target.closest('.inline-edit-trigger');
+    if (!trigger) {
+      if (popoverEl && !popoverEl.hidden && !popoverEl.contains(e.target)) {
+        closeQuickPopover();
+      }
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const row = trigger.closest('tr[data-task-id]') || trigger.closest('[data-task-id]');
+    if (!row) return;
+
+    const taskId = row.dataset.taskId;
+    const field = trigger.dataset.inlineField;
+
+    // Toggle close if clicking the same trigger again
+    if (!popoverEl.hidden && popoverEl.dataset.activeTaskId === taskId && popoverEl.dataset.activeField === field) {
+      closeQuickPopover();
+      return;
+    }
+
+    popoverEl.dataset.activeTaskId = taskId;
+    popoverEl.dataset.activeField = field;
+    popoverEl.innerHTML = '';
+    popoverEl.hidden = false;
+    positionPopover(trigger);
+
+    const revision = row.dataset.revision || row.querySelector('input[name^="items["]')?.value || '1';
+    const currentStatus = row.dataset.status || 'TODO';
+    const currentPriority = row.dataset.priority || 'medium';
+    const currentAssigneeId = row.dataset.assigneeId || '';
+    const currentDeadline = row.dataset.deadline || '';
+    const statusUrl = row.dataset.statusUrl;
+    const updateUrl = row.dataset.updateUrl;
+
+    // Render Field UI
+    if (field === 'priority') {
+      const options = [
+        { key: 'low', label: 'Thấp', dot: 'priority-low' },
+        { key: 'medium', label: 'Vừa', dot: 'priority-medium' },
+        { key: 'high', label: 'Cao', dot: 'priority-high' },
+        { key: 'urgent', label: 'Khẩn', dot: 'priority-urgent' }
+      ];
+
+      popoverEl.innerHTML = `
+        <div class="inline-popover-header">
+          <span class="inline-popover-title">Đổi độ ưu tiên</span>
+          <button type="button" class="inline-popover-close" title="Đóng">✕</button>
+        </div>
+        <div class="inline-popover-list">
+          ${options.map(opt => `
+            <button type="button" class="inline-popover-option ${opt.key === currentPriority ? 'is-active' : ''}" data-priority-val="${opt.key}">
+              <span>
+                <span class="inline-priority-indicator ${opt.dot}">●</span>
+                ${opt.label}
+              </span>
+              ${opt.key === currentPriority ? '<span>✓</span>' : ''}
+            </button>
+          `).join('')}
+        </div>
+      `;
+
+      popoverEl.querySelector('.inline-popover-close')?.addEventListener('click', closeQuickPopover);
+
+      popoverEl.querySelectorAll('[data-priority-val]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const newPriority = btn.dataset.priorityVal;
+          if (newPriority === currentPriority) {
+            closeQuickPopover();
+            return;
+          }
+
+          btn.disabled = true;
+          btn.style.opacity = '0.5';
+
+          try {
+            const res = await sendInlinePatch(updateUrl, {
+              edit_surface: 'inline',
+              expected_revision: revision,
+              priority: newPriority,
+            });
+
+            row.dataset.priority = res.task.priority;
+            row.dataset.revision = res.task.revision;
+            const cb = row.querySelector('input[name^="items["]');
+            if (cb) cb.value = res.task.revision;
+
+            const ind = trigger.querySelector('.inline-priority-indicator');
+            if (ind) {
+              ind.className = `inline-priority-indicator priority-${res.task.priority.toLowerCase()}`;
+            }
+            const txt = trigger.querySelector('.inline-priority-text');
+            if (txt) txt.textContent = res.task.priority_label;
+
+            closeQuickPopover();
+            if (window.showToast) window.showToast(`Đã đổi độ ưu tiên: ${res.task.priority_label}`, 'success');
+          } catch (err) {
+            btn.disabled = false;
+            btn.style.opacity = '';
+            if (window.showToast) window.showToast(err.message, 'error');
+          }
+        });
+      });
+    } else if (field === 'status') {
+      const statuses = [
+        { key: 'TODO', label: 'Chưa bắt đầu', slug: 'todo' },
+        { key: 'IN_PROGRESS', label: 'Đang thực hiện', slug: 'in-progress' },
+        { key: 'REVIEW', label: 'Chờ duyệt', slug: 'review' },
+        { key: 'DONE', label: 'Hoàn thành', slug: 'done' },
+        { key: 'CANCELLED', label: 'Đã hủy', slug: 'cancelled' }
+      ];
+
+      const workflowGraph = {
+        'TODO': ['IN_PROGRESS', 'CANCELLED'],
+        'IN_PROGRESS': ['REVIEW', 'CANCELLED'],
+        'REVIEW': ['DONE', 'IN_PROGRESS', 'CANCELLED'],
+        'DONE': ['TODO'],
+        'CANCELLED': ['TODO']
+      };
+
+      const validTransitions = workflowGraph[currentStatus] || [];
+
+      popoverEl.innerHTML = `
+        <div class="inline-popover-header">
+          <span class="inline-popover-title">Đổi trạng thái</span>
+          <button type="button" class="inline-popover-close" title="Đóng">✕</button>
+        </div>
+        <div class="inline-popover-list">
+          ${statuses.map(st => {
+            const isCurrent = st.key === currentStatus;
+            const isValid = validTransitions.includes(st.key);
+            let actionHint = '';
+            if (isCurrent) actionHint = '<span style="font-size: 11px; color: var(--primary);">✓ Hiện tại</span>';
+            else if (isValid) actionHint = '<span style="font-size: 11px; color: #10b981; font-weight: 600;">Khả dụng →</span>';
+            else actionHint = '<span style="font-size: 10px; color: var(--text-muted); opacity: 0.6;">(Khác)</span>';
+
+            return `
+              <button type="button" class="inline-popover-option ${isCurrent ? 'is-active' : ''}" data-status-val="${st.key}">
+                <span class="status-pill status-${st.slug}">${st.label}</span>
+                ${actionHint}
+              </button>
+            `;
+          }).join('')}
+        </div>
+        <div id="inline-status-reason-box" style="display: none; margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 8px;">
+          <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">
+            Lý do thay đổi (bắt buộc khi hủy, mở lại hoặc yêu cầu sửa):
+          </label>
+          <input type="text" class="inline-popover-reason" id="inline-reason-input" placeholder="Nhập lý do thay đổi..." />
+          <div style="display: flex; justify-content: flex-end; gap: 6px;">
+            <button type="button" class="button secondary compact" id="inline-status-cancel-btn" style="min-height: 28px; font-size: 11px;">Hủy</button>
+            <button type="button" class="button primary compact" id="inline-status-confirm-btn" style="min-height: 28px; font-size: 11px;">Xác nhận</button>
+          </div>
+        </div>
+      `;
+
+      popoverEl.querySelector('.inline-popover-close')?.addEventListener('click', closeQuickPopover);
+
+      let pendingTargetStatus = null;
+
+      const executeStatusChange = async (targetStatus, reason) => {
+        try {
+          const res = await sendInlinePatch(statusUrl, {
+            status: targetStatus,
+            expected_status: currentStatus,
+            reason: reason || undefined,
+          });
+
+          row.dataset.status = res.status;
+          if (res.task?.revision) {
+            row.dataset.revision = res.task.revision;
+            const cb = row.querySelector('input[name^="items["]');
+            if (cb) cb.value = res.task.revision;
+          }
+
+          const pill = trigger.querySelector('.status-pill');
+          if (pill) {
+            pill.className = `status-pill status-${res.status.toLowerCase().replace('_', '-')}`;
+            pill.textContent = res.status_label;
+          }
+
+          if (row.dataset.groupOwner) {
+            updateGroupProgress(row.dataset.groupOwner);
+          }
+
+          closeQuickPopover();
+          if (window.showToast) window.showToast(res.message || `Đã chuyển sang ${res.status_label}`, 'success');
+        } catch (err) {
+          if (window.showToast) window.showToast(err.message, 'error');
+        }
+      };
+
+      popoverEl.querySelectorAll('[data-status-val]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const targetStatus = btn.dataset.statusVal;
+          if (targetStatus === currentStatus) {
+            closeQuickPopover();
+            return;
+          }
+
+          const needsReason = ['CANCELLED', 'TODO'].includes(targetStatus) || (currentStatus === 'REVIEW' && targetStatus === 'IN_PROGRESS');
+
+          if (needsReason) {
+            pendingTargetStatus = targetStatus;
+            const reasonBox = popoverEl.querySelector('#inline-status-reason-box');
+            const reasonInput = popoverEl.querySelector('#inline-reason-input');
+            if (reasonBox) {
+              reasonBox.style.display = 'block';
+              reasonInput?.focus();
+            }
+            return;
+          }
+
+          btn.disabled = true;
+          btn.style.opacity = '0.5';
+          await executeStatusChange(targetStatus);
+        });
+      });
+
+      popoverEl.querySelector('#inline-status-cancel-btn')?.addEventListener('click', () => {
+        const reasonBox = popoverEl.querySelector('#inline-status-reason-box');
+        if (reasonBox) reasonBox.style.display = 'none';
+        pendingTargetStatus = null;
+      });
+
+      popoverEl.querySelector('#inline-status-confirm-btn')?.addEventListener('click', async () => {
+        if (!pendingTargetStatus) return;
+        const reasonInput = popoverEl.querySelector('#inline-reason-input');
+        const reason = reasonInput?.value?.trim() || '';
+        if (!reason) {
+          if (window.showToast) window.showToast('Vui lòng nhập lý do thay đổi trạng thái', 'warning');
+          reasonInput?.focus();
+          return;
+        }
+
+        const confirmBtn = popoverEl.querySelector('#inline-status-confirm-btn');
+        if (confirmBtn) {
+          confirmBtn.disabled = true;
+          confirmBtn.textContent = 'Đang lưu...';
+        }
+        await executeStatusChange(pendingTargetStatus, reason);
+      });
+
+    } else if (field === 'assignee') {
+      const members = getWorkspaceMembers();
+
+      popoverEl.innerHTML = `
+        <div class="inline-popover-header">
+          <span class="inline-popover-title">Phân công người thực hiện</span>
+          <button type="button" class="inline-popover-close" title="Đóng">✕</button>
+        </div>
+        <input type="search" class="inline-popover-search" id="inline-assignee-search" placeholder="Tìm tên hoặc email..." />
+        <div class="inline-popover-list" id="inline-assignee-list">
+          <button type="button" class="inline-popover-option ${!currentAssigneeId ? 'is-active' : ''}" data-assignee-val="">
+            <span style="display: inline-flex; align-items: center; gap: 8px;">
+              <span class="inline-assignee-avatar">👤</span>
+              <em>Chưa phân công</em>
+            </span>
+            ${!currentAssigneeId ? '<span>✓</span>' : ''}
+          </button>
+          ${members.map(m => {
+            const isCurrent = m.id === currentAssigneeId;
+            const initial = (m.name || '?').charAt(0).toUpperCase();
+            return `
+              <button type="button" class="inline-popover-option ${isCurrent ? 'is-active' : ''}" data-assignee-val="${m.id}" data-search-text="${(m.name + ' ' + m.email).toLowerCase()}">
+                <span style="display: inline-flex; align-items: center; gap: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                  <span class="inline-assignee-avatar">${initial}</span>
+                  <span>
+                    <strong style="display: block; font-size: 12.5px;">${m.name}</strong>
+                    <small style="color: var(--text-muted); font-size: 11px;">${m.email || ''}</small>
+                  </span>
+                </span>
+                ${isCurrent ? '<span>✓</span>' : ''}
+              </button>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      popoverEl.querySelector('.inline-popover-close')?.addEventListener('click', closeQuickPopover);
+
+      const searchInput = popoverEl.querySelector('#inline-assignee-search');
+      searchInput?.focus();
+      searchInput?.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        popoverEl.querySelectorAll('#inline-assignee-list [data-assignee-val]').forEach(btn => {
+          if (!btn.dataset.assigneeVal) {
+            btn.style.display = query ? 'none' : '';
+            return;
+          }
+          const text = btn.dataset.searchText || '';
+          btn.style.display = text.includes(query) ? '' : 'none';
+        });
+      });
+
+      popoverEl.querySelectorAll('[data-assignee-val]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const newAssigneeId = btn.dataset.assigneeVal || null;
+          if (newAssigneeId === currentAssigneeId) {
+            closeQuickPopover();
+            return;
+          }
+
+          btn.disabled = true;
+          btn.style.opacity = '0.5';
+
+          try {
+            const res = await sendInlinePatch(updateUrl, {
+              edit_surface: 'inline',
+              expected_revision: revision,
+              assignee_id: newAssigneeId,
+            });
+
+            row.dataset.assigneeId = res.task.assignee_id || '';
+            row.dataset.revision = res.task.revision;
+            const cb = row.querySelector('input[name^="items["]');
+            if (cb) cb.value = res.task.revision;
+
+            const nameEl = trigger.querySelector('.inline-assignee-name');
+            if (nameEl) nameEl.textContent = res.task.assignee_name;
+
+            const avEl = trigger.querySelector('.inline-assignee-avatar');
+            if (avEl) {
+              if (res.task.assignee_id) {
+                avEl.innerHTML = `<span class="assignee-initials">${(res.task.assignee_name || '?').charAt(0).toUpperCase()}</span>`;
+              } else {
+                avEl.innerHTML = `<span class="assignee-empty-icon">👤</span>`;
+              }
+            }
+
+            closeQuickPopover();
+            if (window.showToast) {
+              window.showToast(res.task.assignee_id ? `Đã phân công cho ${res.task.assignee_name}` : 'Đã bỏ phân công công việc', 'success');
+            }
+          } catch (err) {
+            btn.disabled = false;
+            btn.style.opacity = '';
+            if (window.showToast) window.showToast(err.message, 'error');
+          }
+        });
+      });
+
+    } else if (field === 'deadline') {
+      const presets = getDeadlinePresets();
+
+      popoverEl.innerHTML = `
+        <div class="inline-popover-header">
+          <span class="inline-popover-title">Hạn hoàn thành (Deadline)</span>
+          <button type="button" class="inline-popover-close" title="Đóng">✕</button>
+        </div>
+        <div class="inline-popover-chips">
+          ${presets.map(p => `
+            <button type="button" class="inline-popover-chip" data-preset-val="${p.value || ''}">
+              ${p.label}
+            </button>
+          `).join('')}
+          <button type="button" class="inline-popover-chip is-clear" data-preset-val="">✕ Bỏ hạn</button>
+        </div>
+        <div style="margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">Chọn ngày giờ cụ thể:</label>
+          <input type="datetime-local" class="inline-popover-date" id="inline-date-picker" value="${currentDeadline}" />
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">Lý do thay đổi hạn (ghi log):</label>
+          <input type="text" class="inline-popover-reason" id="inline-deadline-reason" value="Điều chỉnh kế hoạch" placeholder="Lý do đổi hạn..." />
+        </div>
+        <div class="inline-popover-actions">
+          <button type="button" class="button secondary compact" id="inline-deadline-cancel-btn" style="min-height: 28px; font-size: 12px;">Hủy</button>
+          <button type="button" class="button primary compact" id="inline-deadline-save-btn" style="min-height: 28px; font-size: 12px;">Lưu thay đổi</button>
+        </div>
+      `;
+
+      popoverEl.querySelector('.inline-popover-close')?.addEventListener('click', closeQuickPopover);
+      popoverEl.querySelector('#inline-deadline-cancel-btn')?.addEventListener('click', closeQuickPopover);
+
+      const datePicker = popoverEl.querySelector('#inline-date-picker');
+      const reasonInput = popoverEl.querySelector('#inline-deadline-reason');
+      const saveBtn = popoverEl.querySelector('#inline-deadline-save-btn');
+
+      popoverEl.querySelectorAll('[data-preset-val]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          if (datePicker) datePicker.value = chip.dataset.presetVal || '';
+        });
+      });
+
+      saveBtn?.addEventListener('click', async () => {
+        const newDeadline = datePicker?.value || null;
+        const reason = reasonInput?.value?.trim() || 'Điều chỉnh kế hoạch';
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Đang lưu...';
+
+        try {
+          const res = await sendInlinePatch(updateUrl, {
+            edit_surface: 'inline',
+            expected_revision: revision,
+            deadline_at: newDeadline,
+            deadline_reason: reason,
+          });
+
+          row.dataset.deadline = res.task.deadline_at || '';
+          row.dataset.revision = res.task.revision;
+          const cb = row.querySelector('input[name^="items["]');
+          if (cb) cb.value = res.task.revision;
+
+          const deadlineTextEl = trigger.querySelector('.inline-deadline-text');
+          if (deadlineTextEl) {
+            deadlineTextEl.textContent = res.task.deadline_formatted || 'Chưa đặt hạn';
+            // Check overdue
+            if (res.task.deadline_at && !['DONE', 'CANCELLED'].includes(currentStatus)) {
+              const d = new Date(res.task.deadline_at);
+              if (d < new Date()) {
+                deadlineTextEl.classList.add('task-overdue');
+              } else {
+                deadlineTextEl.classList.remove('task-overdue');
+              }
+            } else {
+              deadlineTextEl.classList.remove('task-overdue');
+            }
+          }
+
+          closeQuickPopover();
+          if (window.showToast) {
+            window.showToast(res.task.deadline_formatted ? `Đã cập nhật hạn: ${res.task.deadline_formatted}` : 'Đã bỏ hạn hoàn thành', 'success');
+          }
+        } catch (err) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Lưu thay đổi';
+          if (window.showToast) window.showToast(err.message, 'error');
+        }
+      });
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && popoverEl && !popoverEl.hidden) {
+      closeQuickPopover();
+    }
+  });
+
 })();

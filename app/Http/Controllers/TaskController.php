@@ -95,7 +95,13 @@ class TaskController extends Controller
     {
         $this->assertTaskInScope($workspace, $project, $task);
 
-        return $this->saveEdit($request, $workspace, $project, $task, $request->validated(), $request->input('edit_surface') === 'quick' ? 'quick' : 'full');
+        $surface = match ($request->input('edit_surface')) {
+            'inline' => 'inline',
+            'quick' => 'quick',
+            default => 'full',
+        };
+
+        return $this->saveEdit($request, $workspace, $project, $task, $request->validated(), $surface);
     }
 
     /** Resolve a stale-revision conflict by picking "mine" or "server" per field, then save. */

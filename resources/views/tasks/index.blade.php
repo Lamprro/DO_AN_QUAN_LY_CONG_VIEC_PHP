@@ -37,6 +37,16 @@
 
 @include('tasks._bulk-bar')
 
+@php
+    $membersList = collect($people ?? [])->map(fn($p) => [
+        'id' => $p->user_id,
+        'name' => $p->user->name,
+        'email' => $p->user->email ?? '',
+    ])->values();
+@endphp
+<script id="workspace-members-data" type="application/json">{!! json_encode($membersList) !!}</script>
+<script id="deadline-presets-data" type="application/json">{!! json_encode($deadlinePresets ?? []) !!}</script>
+
 <section class="card table-wrap mobile-data-table task-list" data-page="tasks-index">
     <table>
         <thead>
@@ -73,7 +83,7 @@
                             $groupTasks = ($nodes ?? collect())->get($group->id, collect());
                             $p = ($groupsProgress ?? [])[$group->id] ?? ['done' => 0, 'total' => 0, 'percent' => 0];
                         @endphp
-                        <tr class="jira-epic-cluster-header" style="background: rgba(99, 102, 241, 0.08); border-top: 2px solid var(--primary); border-bottom: 2px solid rgba(99, 102, 241, 0.2);">
+                        <tr class="jira-epic-cluster-header" data-epic-id="{{ $group->id }}" style="background: rgba(99, 102, 241, 0.08); border-top: 2px solid var(--primary); border-bottom: 2px solid rgba(99, 102, 241, 0.2);">
                             <td data-label="Chọn" style="padding: 12px 16px;">
                                 @if(auth()->user()->can('update', $group) || auth()->user()->can('archive', $group))
                                     <input type="checkbox" form="bulk-tasks" name="items[{{ $group->id }}]" value="{{ $group->revision }}" aria-label="Chọn {{ $group->title }}">
@@ -94,10 +104,10 @@
                                         <x-status :value="$group->status" />
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                                        <div style="font-size: 0.8125rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 8px;">
-                                            <span>Tiến độ: <strong>{{ $p['done'] }}/{{ $p['total'] }}</strong> việc ({{ $p['percent'] }}%)</span>
+                                        <div class="group-progress-wrapper" data-group-progress="{{ $group->id }}" style="font-size: 0.8125rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 8px;">
+                                            <span>Tiến độ: <strong class="done-count">{{ $p['done'] }}</strong>/<span class="total-count">{{ $p['total'] }}</span> việc (<span class="percent-val">{{ $p['percent'] }}</span>%)</span>
                                             <div style="width: 80px; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; display: inline-block;">
-                                                <div style="height: 100%; width: {{ $p['percent'] }}%; background: #10b981;"></div>
+                                                <div class="progress-bar-fill" style="height: 100%; width: {{ $p['percent'] }}%; background: #10b981; transition: width 0.3s ease;"></div>
                                             </div>
                                         </div>
                                         @can('addChild', $group)

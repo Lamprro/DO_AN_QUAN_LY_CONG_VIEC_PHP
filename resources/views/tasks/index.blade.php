@@ -84,7 +84,7 @@
                             <td colspan="6" style="padding: 12px 16px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                        <button type="button" class="btn-toggle-group" data-toggle-group="{{ $group->id }}" style="background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; cursor: pointer; font-size: 11px; font-weight: 700; color: var(--text);" title="Mở rộng / Thu gọn nhóm">▼</button>
+                                        <button type="button" class="btn-toggle-group" data-toggle-group="{{ $group->id }}" aria-expanded="true" data-collapsed="false" title="Mở rộng / Thu gọn nhóm">▼</button>
                                         <span style="font-size: 1.25rem;">📁</span>
                                         <a href="{{ route($groupRoutePrefix.'.show', [...$groupRouteParams, $group]) }}" style="font-size: 1.05rem; font-weight: 750; color: var(--text); text-decoration: none;">
                                             <span class="jira-issue-code" style="background: var(--primary); color: #fff;">{{ $group->code }}</span>
@@ -198,62 +198,4 @@
 </section>
 
 <div class="task-pagination">{{ $tasks->links() }}</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Thu gọn / Mở rộng nhóm Group
-    document.querySelectorAll('.btn-toggle-group').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var gId = this.getAttribute('data-toggle-group');
-            var rows = document.querySelectorAll('tr[data-group-owner="' + gId + '"]');
-            var isHidden = this.textContent.trim() === '▶';
-            this.textContent = isHidden ? '▼' : '▶';
-            rows.forEach(function (r) {
-                r.style.display = isHidden ? '' : 'none';
-            });
-        });
-    });
-
-    // Thu gọn / Mở rộng subtasks của Task
-    document.querySelectorAll('.btn-toggle-subtasks').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var tId = this.getAttribute('data-toggle-task');
-            var rows = document.querySelectorAll('tr[data-subtask-owner="' + tId + '"]');
-            var isHidden = this.textContent.trim() === '▶';
-            this.textContent = isHidden ? '▼' : '▶';
-            rows.forEach(function (r) {
-                r.style.display = isHidden ? '' : 'none';
-            });
-        });
-    });
-
-    // Nút mở rộng hết
-    var btnExpandAll = document.getElementById('btn-expand-all');
-    if (btnExpandAll) {
-        btnExpandAll.addEventListener('click', function () {
-            document.querySelectorAll('tr[data-group-owner], tr[data-subtask-owner]').forEach(function (r) {
-                r.style.display = '';
-            });
-            document.querySelectorAll('.btn-toggle-group, .btn-toggle-subtasks').forEach(function (btn) {
-                btn.textContent = '▼';
-            });
-        });
-    }
-
-    // Nút thu gọn hết
-    var btnCollapseAll = document.getElementById('btn-collapse-all');
-    if (btnCollapseAll) {
-        btnCollapseAll.addEventListener('click', function () {
-            document.querySelectorAll('tr[data-group-owner], tr[data-subtask-owner]').forEach(function (r) {
-                r.style.display = 'none';
-            });
-            document.querySelectorAll('.btn-toggle-group, .btn-toggle-subtasks').forEach(function (btn) {
-                btn.textContent = '▶';
-            });
-        });
-    }
-});
-</script>
 </x-layout>

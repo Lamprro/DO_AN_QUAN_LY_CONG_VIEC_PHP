@@ -263,4 +263,92 @@
     if (msg) setTimeout(() => window.showToast(msg, typ), 200);
   }
 
+  // 10. Jira Task Hierarchy Toggle (Groups & Subtasks)
+  document.addEventListener('click', e => {
+    // 10a. Toggle Subtasks of a Task
+    const subtaskBtn = e.target.closest('.btn-toggle-subtasks');
+    if (subtaskBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const taskId = subtaskBtn.getAttribute('data-toggle-task');
+      if (!taskId) return;
+      const isCurrentlyCollapsed = subtaskBtn.getAttribute('data-collapsed') === 'true' || subtaskBtn.getAttribute('aria-expanded') === 'false';
+      const rows = document.querySelectorAll('tr[data-subtask-owner="' + taskId + '"]');
+
+      if (isCurrentlyCollapsed) {
+        subtaskBtn.setAttribute('data-collapsed', 'false');
+        subtaskBtn.setAttribute('aria-expanded', 'true');
+        subtaskBtn.textContent = '▼';
+        rows.forEach(r => r.style.display = '');
+      } else {
+        subtaskBtn.setAttribute('data-collapsed', 'true');
+        subtaskBtn.setAttribute('aria-expanded', 'false');
+        subtaskBtn.textContent = '▶';
+        rows.forEach(r => r.style.display = 'none');
+      }
+      return;
+    }
+
+    // 10b. Toggle Group (Epic)
+    const groupBtn = e.target.closest('.btn-toggle-group');
+    if (groupBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const groupId = groupBtn.getAttribute('data-toggle-group');
+      if (!groupId) return;
+      const isGroupCollapsed = groupBtn.getAttribute('data-collapsed') === 'true' || groupBtn.getAttribute('aria-expanded') === 'false';
+      const groupRows = document.querySelectorAll('tr[data-group-owner="' + groupId + '"]');
+
+      if (isGroupCollapsed) {
+        groupBtn.setAttribute('data-collapsed', 'false');
+        groupBtn.setAttribute('aria-expanded', 'true');
+        groupBtn.textContent = '▼';
+        groupRows.forEach(r => {
+          const subtaskOwner = r.getAttribute('data-subtask-owner');
+          if (!subtaskOwner) {
+            r.style.display = '';
+          } else {
+            const parentBtn = document.querySelector('.btn-toggle-subtasks[data-toggle-task="' + subtaskOwner + '"]');
+            if (!parentBtn || parentBtn.getAttribute('data-collapsed') !== 'true') {
+              r.style.display = '';
+            } else {
+              r.style.display = 'none';
+            }
+          }
+        });
+      } else {
+        groupBtn.setAttribute('data-collapsed', 'true');
+        groupBtn.setAttribute('aria-expanded', 'false');
+        groupBtn.textContent = '▶';
+        groupRows.forEach(r => r.style.display = 'none');
+      }
+      return;
+    }
+
+    // 10c. Expand All / Collapse All
+    const expandAll = e.target.closest('#btn-expand-all');
+    if (expandAll) {
+      e.preventDefault();
+      document.querySelectorAll('tr[data-group-owner], tr[data-subtask-owner]').forEach(r => r.style.display = '');
+      document.querySelectorAll('.btn-toggle-group, .btn-toggle-subtasks').forEach(b => {
+        b.setAttribute('data-collapsed', 'false');
+        b.setAttribute('aria-expanded', 'true');
+        b.textContent = '▼';
+      });
+      return;
+    }
+
+    const collapseAll = e.target.closest('#btn-collapse-all');
+    if (collapseAll) {
+      e.preventDefault();
+      document.querySelectorAll('tr[data-group-owner], tr[data-subtask-owner]').forEach(r => r.style.display = 'none');
+      document.querySelectorAll('.btn-toggle-group, .btn-toggle-subtasks').forEach(b => {
+        b.setAttribute('data-collapsed', 'true');
+        b.setAttribute('aria-expanded', 'false');
+        b.textContent = '▶';
+      });
+      return;
+    }
+  });
+
 })();

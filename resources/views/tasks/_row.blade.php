@@ -19,10 +19,9 @@
     <td data-label="Công việc">
         <div style="display: flex; align-items: flex-start; gap: 8px; @if($isSubtask) padding-left: 28px; @endif">
             @if($hasSubtasks)
-                <button type="button" class="btn-toggle-subtasks" data-toggle-task="{{ $task->id }}" style="background: none; border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; cursor: pointer; font-size: 10px; color: var(--text-muted); line-height: 1.2; margin-top: 2px;" title="Mở rộng / Thu gọn công việc con">▼</button>
-            @else
-                <span style="font-size: 1rem; line-height: 1.4; color: var(--text-muted);" aria-hidden="true">{{ $isSubtask ? '↳' : '📋' }}</span>
+                <button type="button" class="btn-toggle-subtasks" data-toggle-task="{{ $task->id }}" aria-expanded="true" data-collapsed="false" title="Mở rộng / Thu gọn công việc con">▼</button>
             @endif
+            <span style="font-size: 1rem; line-height: 1.4; color: var(--text-muted); flex-shrink: 0;" aria-hidden="true">{{ $isSubtask ? '↳' : '📋' }}</span>
             <div style="min-width: 0; flex: 1;">
                 @include('tasks._alerts', ['task' => $task])
                 <div>

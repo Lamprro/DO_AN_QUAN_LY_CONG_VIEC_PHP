@@ -2340,3 +2340,53 @@ button.sidebar-collapse-toggle:hover,
   font-size: 1.25rem !important;
   margin: 0 !important;
 }
+
+/* Jira Task Hierarchy Toggle Buttons (Groups & Subtasks) */
+table td button.btn-toggle-subtasks,
+table td button.btn-toggle-group,
+button.btn-toggle-subtasks,
+button.btn-toggle-group {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  min-height: 22px !important;
+  max-height: 22px !important;
+  padding: 0 !important;
+  margin: 2px 4px 0 0 !important;
+  border: 1px solid var(--border, #cbd5e1) !important;
+  background: var(--surface, #ffffff) !important;
+  color: var(--text-muted, #64748b) !important;
+  border-radius: 4px !important;
+  font-size: 10px !important;
+  font-weight: 750 !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.15s ease !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+}
+
+table td button.btn-toggle-subtasks:hover,
+table td button.btn-toggle-group:hover,
+button.btn-toggle-subtasks:hover,
+button.btn-toggle-group:hover {
+  background: var(--primary-light, #e0e7ff) !important;
+  color: var(--primary, #4f46e5) !important;
+  border-color: var(--primary, #4f46e5) !important;
+  transform: none !important;
+}
+
+table td button.btn-toggle-subtasks[data-collapsed="true"],
+table td button.btn-toggle-group[data-collapsed="true"],
+button.btn-toggle-subtasks[data-collapsed="true"],
+button.btn-toggle-group[data-collapsed="true"] {
+  background: var(--bg-subtle, #f8fafc) !important;
+  color: var(--text-muted, #94a3b8) !important;
+  border-color: var(--border, #cbd5e1) !important;
+}
+

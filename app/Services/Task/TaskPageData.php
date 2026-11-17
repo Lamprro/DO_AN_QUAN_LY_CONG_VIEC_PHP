@@ -172,6 +172,7 @@ class TaskPageData
             'workflowUi' => $this->workflow->availability($actor, $task),
             'subtasks' => $task->children()->orderBy('sort_order')->orderBy('id')->get(),
             'recentComments' => $task->activities()->where('type', 'COMMENT')->with('actor')->latest()->limit(5)->get(),
+            'taskAttachments' => $task->activities()->where('type', 'ATTACHMENT')->with('actor')->latest()->limit(5)->get(),
         ];
     }
 
@@ -206,6 +207,7 @@ class TaskPageData
         return $this->context($actor, $workspace, $project) + [
             'task' => $task,
             'activities' => $activities,
+            'taskAttachments' => $task->activities()->where('type', 'ATTACHMENT')->with('actor')->latest('created_at')->get(),
             'activityHuman' => $activityHuman,
             'dependencies' => $task->incomingDependencies()->with('predecessor')->get(),
             'blockers' => $task->blockers()->with('reporter', 'resolver')->orderByDesc('created_at')->get(),

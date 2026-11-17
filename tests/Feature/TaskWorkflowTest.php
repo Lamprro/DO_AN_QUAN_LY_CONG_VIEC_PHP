@@ -163,4 +163,33 @@ class TaskWorkflowTest extends TestCase
             'content' => 'single.png',
         ]);
     }
+
+    public function test_task_show_renders_attachments_list_and_dropzone(): void
+    {
+        Storage::fake('task_files');
+        $user = User::where('email', 'demo1@example.test')->first();
+        $task = Task::first();
+        $workspace = $task->workspace;
+        $project = $task->project;
+
+        $url = $project
+            ? "/workspaces/{$workspace->id}/projects/{$project->id}/tasks/{$task->id}"
+            : "/workspaces/{$workspace->id}/tasks/{$task->id}";
+
+        $uploadUrl = $project
+            ? "/workspaces/{$workspace->id}/projects/{$project->id}/tasks/{$task->id}/attachments"
+            : "/workspaces/{$workspace->id}/tasks/{$task->id}/attachments";
+
+        $pngBytes = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+        $file = UploadedFile::fake()->createWithContent('preview_test.png', $pngBytes);
+        $this->actingAs($user)->post($uploadUrl, ['files' => [$file]]);
+
+        $response = $this->actingAs($user)->get($url);
+        $response->assertStatus(200);
+        $response->assertSee('Tệp & hình ảnh đính kèm', false);
+        $response->assertSee('preview_test.png', false);
+        $response->assertSee('file-dropzone', false);
+        $response->assertSee('selected-files-queue', false);
+        $response->assertSee('btn-clear-selected-files', false);
+    }
 }

@@ -241,6 +241,35 @@
             @endif
         </div>
 
+        <div class="panel-attachments-section" style="margin-top: 18px; border-top: 1px solid var(--border); padding-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700;">Tệp & hình ảnh ({{ count($taskAttachments ?? []) }})</h3>
+                <a href="{{ route($routePrefix.'.show', $taskParams) }}#task-discussion" style="font-size: 0.75rem; color: var(--primary); text-decoration: none;">+ Tải thêm tệp</a>
+            </div>
+            @if(count($taskAttachments ?? []) > 0)
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    @foreach($taskAttachments as $attachment)
+                        @php
+                            $attData = $attachment->data ?? [];
+                            $isImg = str_starts_with($attData['mime'] ?? '', 'image/');
+                            $downloadUrl = route($routePrefix.'.attachments.download', [...$routeParams, $task, $attachment->id]);
+                            $fileSizeKb = isset($attData['size']) ? round($attData['size'] / 1024, 1) : null;
+                        @endphp
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.85rem;">
+                            <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                                <span>{{ $isImg ? '🖼️' : '📄' }}</span>
+                                <span style="font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px;" title="{{ $attachment->content }}">{{ $attachment->content }}</span>
+                                @if($fileSizeKb)<small class="muted">({{ $fileSizeKb }}KB)</small>@endif
+                            </div>
+                            <a href="{{ $downloadUrl }}" class="button secondary compact" style="min-height: 24px; font-size: 11px; padding: 2px 8px;">⬇ Tải</a>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="muted" style="font-size: 0.85rem; margin: 0;">Chưa có tệp đính kèm.</p>
+            @endif
+        </div>
+
         <div class="panel-comments-section">
             <h3>Trao đổi gần đây</h3>
             @forelse($recentComments as $comment)

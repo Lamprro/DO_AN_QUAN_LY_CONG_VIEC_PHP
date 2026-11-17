@@ -31,7 +31,7 @@
  const zone=root.querySelector('#timezone'),zoneSearch=root.querySelector('#timezone-search'),zoneExample=root.querySelector('#timezone-example');
  const zoneTime=()=>{if(!zone||!zoneExample)return;try{zoneExample.textContent='Giờ hiện tại: '+new Intl.DateTimeFormat('vi-VN',{timeZone:zone.value,dateStyle:'medium',timeStyle:'short'}).format(new Date());}catch{zoneExample.textContent='Múi giờ: '+zone.value;}};
  zone?.addEventListener('change',zoneTime);zoneTime();zoneSearch?.addEventListener('input',()=>{const q=zoneSearch.value.toLowerCase();[...zone.options].forEach(o=>o.hidden=!o.text.toLowerCase().includes(q)&&!o.selected);});
- root.querySelectorAll('input[type=file]').forEach(input=>{const text=document.createElement('p');text.className='muted';text.setAttribute('aria-live','polite');input.after(text);input.addEventListener('change',()=>{const file=input.files[0];text.textContent=file?file.name+' · '+(file.size/1024).toFixed(1)+' KB':'';});});
+ root.querySelectorAll('input[type=file]:not(.task-file-input)').forEach(input=>{const text=document.createElement('p');text.className='muted';text.setAttribute('aria-live','polite');input.after(text);input.addEventListener('change',()=>{const file=input.files[0];text.textContent=file?file.name+' · '+(file.size/1024).toFixed(1)+' KB':'';});});
  root.querySelectorAll('form[data-form="task-status"] button[name=status]').forEach(b=>b.addEventListener('click',()=>{const reason=b.form.querySelector('[name=reason]');if(reason)reason.required=['CANCELLED','TODO'].includes(b.value)||b.dataset.reason==='1';}));
  const type=root.querySelector('select[name=task_type]');if(type){const sync=()=>{const work=type.value==='WORK',group=type.value==='GROUP';for(const name of ['estimate_minutes','assignee_id','reviewer_id']){const input=type.form.querySelector(`[name="${name}"]`);if(!input)continue;const off=name==='estimate_minutes'?!work:group;input.closest('.field')?.classList.toggle('unsupported-field',off);input.disabled=off;}};type.addEventListener('change',sync);sync();}
  root.querySelectorAll('form[data-form="task-search"],form[data-form="project-search"]').forEach(f=>{
@@ -898,5 +898,194 @@
       closeQuickPopover();
     }
   });
+
+  // 12. Interactive Task File Attachments Dropzone & Staging Queue
+  const initAttachmentDropzones = (root = document) => {
+    root.querySelectorAll('form[data-form="attachment-create"]').forEach(form => {
+      const fileInput = form.querySelector('.task-file-input');
+      const dropzone = form.querySelector('.file-dropzone');
+      const queue = form.querySelector('.selected-files-queue');
+      const queueList = form.querySelector('#queue-list');
+      const queueCount = form.querySelector('.queue-count');
+      const queueSubmitCount = form.querySelector('.queue-submit-count');
+      const queueTotalSize = form.querySelector('#queue-total-size');
+      const clearBtn = form.querySelector('#btn-clear-selected-files');
+      const submitBtn = form.querySelector('#btn-submit-upload');
+
+      if (!fileInput || !queue || !queueList) return;
+
+      let selectedFiles = [];
+
+      const formatBytes = (bytes) => {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+      };
+
+      const syncInputFiles = () => {
+        try {
+          const dt = new DataTransfer();
+          selectedFiles.forEach(file => dt.items.add(file));
+          fileInput.files = dt.files;
+        } catch (e) {
+          console.warn('DataTransfer not fully supported', e);
+        }
+      };
+
+      const renderQueue = () => {
+        if (selectedFiles.length === 0) {
+          queue.style.display = 'none';
+          fileInput.value = '';
+          return;
+        }
+
+        queue.style.display = 'block';
+        queueList.innerHTML = '';
+
+        let totalBytes = 0;
+        const maxFileBytes = 10 * 1024 * 1024; // 10MB limit
+
+        selectedFiles.forEach((file, index) => {
+          totalBytes += file.size;
+          const isImage = file.type.startsWith('image/');
+          const ext = (file.name.split('.').pop() || '').toLowerCase();
+          const isOverSize = file.size > maxFileBytes;
+
+          const item = document.createElement('div');
+          item.className = `queue-item ${isOverSize ? 'is-invalid' : ''}`;
+
+          const left = document.createElement('div');
+          left.className = 'queue-item-left';
+
+          const thumb = document.createElement('div');
+          thumb.className = 'queue-item-thumb';
+
+          if (isImage) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.alt = file.name;
+            thumb.appendChild(img);
+          } else {
+            let icon = '📁';
+            if (ext === 'pdf') icon = '📕';
+            else if (['doc', 'docx'].includes(ext)) icon = '📘';
+            else if (['xls', 'xlsx', 'csv'].includes(ext)) icon = '📗';
+            else if (ext === 'txt') icon = '📄';
+            thumb.innerHTML = `<span style="font-size: 20px;">${icon}</span>`;
+          }
+
+          const meta = document.createElement('div');
+          meta.className = 'queue-item-meta';
+
+          const nameEl = document.createElement('div');
+          nameEl.className = 'queue-item-name';
+          nameEl.textContent = file.name;
+          nameEl.title = file.name;
+
+          const sub = document.createElement('div');
+          sub.className = 'queue-item-sub';
+          sub.innerHTML = `
+            <span>${formatBytes(file.size)}</span>
+            ${isOverSize ? '<span style="color: var(--danger); font-weight: 700;">(Quá 10MB)</span>' : '<span style="color: #10b981;">✓ Sẵn sàng</span>'}
+          `;
+
+          meta.append(nameEl, sub);
+          left.append(thumb, meta);
+
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.className = 'queue-item-remove';
+          removeBtn.innerHTML = '✕ Xóa bỏ';
+          removeBtn.title = `Bỏ "${file.name}" khỏi danh sách tải lên`;
+          removeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            selectedFiles.splice(index, 1);
+            syncInputFiles();
+            renderQueue();
+          });
+
+          item.append(left, removeBtn);
+          queueList.appendChild(item);
+        });
+
+        if (queueCount) queueCount.textContent = selectedFiles.length;
+        if (queueSubmitCount) queueSubmitCount.textContent = selectedFiles.length;
+        if (queueTotalSize) queueTotalSize.textContent = formatBytes(totalBytes);
+        if (submitBtn) submitBtn.disabled = selectedFiles.length === 0;
+      };
+
+      const addFiles = (newFiles) => {
+        const incoming = Array.from(newFiles);
+        if (!incoming.length) return;
+
+        incoming.forEach(f => {
+          const exists = selectedFiles.some(existing => existing.name === f.name && existing.size === f.size);
+          if (!exists) {
+            if (selectedFiles.length < 10) {
+              selectedFiles.push(f);
+            } else {
+              if (window.showToast) window.showToast('Chỉ có thể tải lên tối đa 10 tệp cùng lúc.', 'warning');
+            }
+          }
+        });
+
+        syncInputFiles();
+        renderQueue();
+      };
+
+      fileInput.addEventListener('change', () => {
+        addFiles(fileInput.files);
+      });
+
+      clearBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        selectedFiles = [];
+        syncInputFiles();
+        renderQueue();
+      });
+
+      if (dropzone) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+          dropzone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.add('is-dragover');
+          });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+          dropzone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.remove('is-dragover');
+          });
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+          const dt = e.dataTransfer;
+          if (dt && dt.files && dt.files.length) {
+            addFiles(dt.files);
+          }
+        });
+      }
+
+      form.addEventListener('submit', (e) => {
+        if (selectedFiles.length === 0) {
+          e.preventDefault();
+          if (window.showToast) window.showToast('Vui lòng chọn ít nhất 1 tệp để tải lên.', 'warning');
+          return;
+        }
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `⏳ Đang tải lên ${selectedFiles.length} tệp...`;
+        }
+      });
+    });
+  };
+
+  initAttachmentDropzones();
 
 })();

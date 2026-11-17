@@ -38,6 +38,17 @@
         <div id="jira-advanced-filters" data-advanced-filters data-has-filters="{{ collect($filters)->except('view')->isNotEmpty() ? 'true' : 'false' }}">
             @include('tasks._filters')
         </div>
+        @if(isset($groups) && $groups->isNotEmpty())
+            <div class="jira-epic-bar" data-epic-bar role="group" aria-label="Lọc theo Nhóm (Epic)">
+                <span class="jira-epic-label">Nhóm (Epic):</span>
+                <a href="{{ route($routePrefix.'.index', array_merge($routeParams, collect($filters)->except('group_id')->all(), ['view' => 'board'])) }}" class="jira-epic-chip {{ empty($filters['group_id']) ? 'active' : '' }}">Tất cả nhóm</a>
+                @foreach($groups as $g)
+                    <a href="{{ route($routePrefix.'.index', array_merge($routeParams, $filters, ['view' => 'board', 'group_id' => $g->id])) }}" class="jira-epic-chip {{ ($filters['group_id'] ?? '') === $g->id ? 'active' : '' }}">
+                        📁 {{ $g->code }}: {{ $g->title }}
+                    </a>
+                @endforeach
+            </div>
+        @endif
         <div class="jira-board-summary">
             <p class="result-summary" role="status" data-board-summary><strong>{{ collect($board)->sum(fn ($column) => $column->total()) }}</strong> công việc và cột mốc</p>
             <p id="jira-filter-help" class="muted">Lọc nhanh áp dụng trên thẻ đã tải (10 thẻ/cột mỗi trang). Dùng Bộ lọc nâng cao để tìm kiếm toàn bộ.</p>
@@ -72,6 +83,14 @@
                                     data-priority="{{ $priority }}" data-is-overdue="{{ $overdue ? 'true' : 'false' }}"
                                     data-deadline="{{ $task->deadline_at?->toIso8601String() }}"
                                     data-status-url="{{ route($itemRoutePrefix.'.status.update', [...$itemRouteParams, $task]) }}">
+                                    @if($task->parent)
+                                        <div class="jira-card-epic" title="Thuộc nhóm: {{ $task->parent->title }}">
+                                            <span class="jira-epic-pill">
+                                                <span aria-hidden="true">{{ $task->parent->task_type->value === 'GROUP' ? '📁' : '↳' }}</span>
+                                                <span>{{ $task->parent->code }} · {{ \Illuminate\Support\Str::limit($task->parent->title, 20) }}</span>
+                                            </span>
+                                        </div>
+                                    @endif
                                     <div class="jira-card-top">
                                         <span class="jira-type" title="{{ \App\Support\UiLabels::text($task->task_type) }}" aria-label="{{ \App\Support\UiLabels::text($task->task_type) }}">{{ $task->task_type->value === 'MILESTONE' ? '🚩' : '📋' }}</span>
                                         <strong class="jira-code">{{ $task->code }}</strong>
@@ -80,6 +99,7 @@
                                             <span class="sr-only">Ưu tiên {{ \App\Support\UiLabels::text($task->priority) }}</span>
                                         </span>
                                     </div>
+                                    @include('tasks._alerts', ['task' => $task])
                                     <h3><a class="jira-title" data-task-panel draggable="false" href="{{ route($itemRoutePrefix.'.show', [...$itemRouteParams, $task]) }}" title="{{ $task->title }}">{{ $task->title }}</a></h3>
                                     @include('tasks._source', ['sourceTask' => $task])
                                     <div class="jira-card-bottom">

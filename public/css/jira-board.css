@@ -52,6 +52,14 @@
 .jira-card .jira-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; color: var(--text); text-decoration: none; }
 .jira-card .jira-title:hover { color: var(--primary); }
 .jira-card-bottom { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; min-height: 29px; }
+.jira-card-epic { margin-bottom: 8px; }
+.jira-epic-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jira-subtask-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border); }
+.jira-epic-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.jira-epic-label { font-size: 11px; font-weight: 750; text-transform: uppercase; color: var(--text-muted); letter-spacing: .04em; }
+.jira-epic-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-subtle); color: var(--text); text-decoration: none; transition: all .15s ease; }
+.jira-epic-chip:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+.jira-epic-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 .jira-deadline, .jira-subtasks { display: inline-flex; align-items: center; gap: 4px; color: var(--text-muted); background: var(--bg-subtle); border-radius: 5px; padding: 3px 6px; font-size: 10px; font-weight: 650; }
 .jira-deadline.is-overdue { color: #b91c1c; background: #fee2e2; }
 .jira-deadline.is-due-soon { color: #854d0e; background: #fef9c3; }

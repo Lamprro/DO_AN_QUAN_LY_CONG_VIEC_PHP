@@ -23,6 +23,9 @@ class TaskFilters
             'direction' => 'nullable|in:asc,desc',
             'per_page' => 'nullable|in:10,50,100,500',
             'preset' => 'nullable|in:all,mine,review,blocked,overdue',
+            'layout' => 'nullable|in:hierarchy,flat',
+            'group_id' => 'nullable|uuid',
+            'tier' => 'nullable|in:all,groups,tasks,subtasks',
         ];
     }
 

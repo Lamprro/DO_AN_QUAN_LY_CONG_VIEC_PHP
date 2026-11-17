@@ -43,6 +43,7 @@ class TaskService
                     'description',
                     'priority',
                     'estimate_minutes',
+                    'started_at',
                     'deadline_at',
                     'assignee_id',
                     'reviewer_id',
@@ -52,10 +53,13 @@ class TaskService
                     'sort_order',
                 ]));
                 if (empty($values['code'])) {
-                    $values['code'] = $task?->code ?? 'T-'.Str::ulid();
+                    $values['code'] = $task?->code ?? $this->generateNextCode($workspace, $project, $values['task_type'] ?? 'WORK');
                 }
                 if ($workspace->tasks()->where('code', $values['code'])->when($task, fn ($q) => $q->whereKeyNot($task->id))->exists()) {
                     throw ValidationException::withMessages(['code' => 'Mã task đã có trong workspace.']);
+                }
+                if (array_key_exists('started_at', $values) && $values['started_at']) {
+                    $values['started_at'] = CarbonImmutable::createFromFormat('!Y-m-d\TH:i', $values['started_at'], $workspace->timezone)->utc();
                 }
                 if (array_key_exists('deadline_at', $values) && $values['deadline_at']) {
                     $values['deadline_at'] = CarbonImmutable::createFromFormat('!Y-m-d\TH:i', $values['deadline_at'], $workspace->timezone)->utc();
@@ -297,5 +301,36 @@ class TaskService
     {
         abort_if($project && $project->workspace_id !== $workspace->id, 404);
         abort_unless($this->tasks->scope($actor, $workspace, $project, 'task.view'), 403);
+    }
+
+    /** Generate clean, short, human-friendly sequential code (e.g. TASK-1, GRP-1, PRJ-1). */
+    private function generateNextCode(Workspace $workspace, ?Project $project, string $taskType): string
+    {
+        if ($project) {
+            $cleanName = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', Str::ascii($project->name)));
+            $prefix = mb_substr($cleanName, 0, 4);
+            if (strlen($prefix) < 2) {
+                $prefix = 'PRJ';
+            }
+        } elseif ($taskType === 'GROUP') {
+            $prefix = 'GRP';
+        } elseif ($taskType === 'MILESTONE') {
+            $prefix = 'MLS';
+        } else {
+            $prefix = 'TASK';
+        }
+
+        $count = $workspace->tasks()
+            ->when($project, fn ($q) => $q->where('project_id', $project->id), fn ($q) => $q->whereNull('project_id'))
+            ->count();
+
+        $num = $count + 1;
+        $candidate = "{$prefix}-{$num}";
+        while ($workspace->tasks()->where('code', $candidate)->exists()) {
+            $num++;
+            $candidate = "{$prefix}-{$num}";
+        }
+
+        return $candidate;
     }
 }

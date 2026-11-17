@@ -127,7 +127,7 @@ class CalendarPageData
             ->where('starts_at', '<', $range['end']->utc())
             ->where('ends_at', '>', $range['start']->utc())
             ->when(! $range['includeCancelled'], fn ($q) => $q->where('status', '!=', 'cancelled'))
-            ->with(['user', 'workspace', 'project', 'task'])
+            ->with(['user', 'workspace', 'project', 'task.parent.parent'])
             ->orderBy('starts_at')
             ->orderBy('id')
             ->limit(1001)
@@ -158,6 +158,48 @@ class CalendarPageData
                 'is_busy' => $event->is_busy,
                 'task' => $canView ? $event->task : null,
                 'private' => ! $canView,
+            ];
+        }
+
+        // Nạp các Task có thời gian (started_at / deadline_at) để hiển thị thanh công việc dài ngang trên lịch
+        $taskQuery = $workspace->tasks()
+            ->when($project, fn ($q) => $q->where('project_id', $project->id), fn ($q) => $q->where(fn ($q) => $q->whereIn('project_id', $projectIds)->when($workspaceCalendar, fn ($q) => $q->orWhereNull('project_id'))))
+            ->whereNotNull('deadline_at')
+            ->where('task_type', '!=', 'GROUP')
+            ->whereNull('archived_at')
+            ->when(! $range['includeCancelled'], fn ($q) => $q->where('status', '!=', 'CANCELLED'))
+            ->where('deadline_at', '>=', $range['start']->utc())
+            ->where(function ($q) use ($range) {
+                $q->whereNull('started_at')->orWhere('started_at', '<=', $range['end']->utc());
+            })
+            ->with(['assignee', 'project', 'parent'])
+            ->limit(100)
+            ->get();
+
+        foreach ($taskQuery as $t) {
+            if (! Gate::forUser($actor)->allows('view', $t)) {
+                continue;
+            }
+            $taskDeadline = $t->deadline_at->setTimezone($range['timezone']);
+            $taskStart = $t->started_at ? $t->started_at->setTimezone($range['timezone']) : $taskDeadline->subHours(2);
+            if ($taskStart->gte($taskDeadline)) {
+                $taskStart = $taskDeadline->subHours(2);
+            }
+
+            $rows[] = [
+                'id' => null,
+                'title' => $t->code.': '.$t->title,
+                'description' => $t->description,
+                'owner' => $t->assignee?->name,
+                'type' => 'TASK_BLOCK',
+                'status' => $t->status->value,
+                'starts_at' => $taskStart,
+                'ends_at' => $taskDeadline,
+                'all_day' => false,
+                'is_busy' => false,
+                'task' => $t,
+                'private' => false,
+                'is_task_span' => true,
             ];
         }
 

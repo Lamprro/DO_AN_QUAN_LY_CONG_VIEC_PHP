@@ -25,7 +25,10 @@ class CalendarController extends Controller
         $rows = $this->views->rows($request->user(), $workspace, $range, $project);
         $navigation = $this->views->presentation($request->url(), $request->all(), $range);
 
-        return view('calendar.index', compact('workspace', 'project', 'range', 'rows', 'navigation') + [
+        $eligibleMembers = $workspace->members()->where('status', 'active')->with('user')->get()->map(fn ($m) => $m->user)->filter();
+        $pendingProposals = CalendarEvent::proposals()->where('workspace_id', $workspace->id)->where('user_id', $request->user()->id)->where('status', 'proposed')->with('proposer')->latest()->get();
+
+        return view('calendar.index', compact('workspace', 'project', 'range', 'rows', 'navigation', 'eligibleMembers', 'pendingProposals') + [
             'canCreate' => $this->views->canCreate($request->user(), $workspace, $project),
             'schedule' => config('work_schedule'),
         ]);

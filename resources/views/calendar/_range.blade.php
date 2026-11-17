@@ -24,8 +24,10 @@
     {{-- Right: View Switcher (Tuần mặc định, Tháng, Ngày, Danh sách) --}}
     <div class="calendar-view-tabs" style="display: inline-flex; border-radius: var(--radius-md, 8px); border: 1px solid var(--border); overflow: hidden; background: var(--surface);">
         @foreach(['week' => '📅 Theo Tuần', 'month' => '🗓️ Theo Tháng', 'day' => '☀️ Theo Ngày', 'list' => '📋 Danh sách'] as $key => $label)
+            @php($isActive = $range['mode'] === $key && !filled(request('from')))
             <a href="{{ request()->fullUrlWithQuery(['view' => $key, 'from' => null, 'to' => null]) }}"
-               style="padding: 0.5rem 0.85rem; font-size: 0.825rem; font-weight: 650; text-decoration: none; border-right: 1px solid var(--border); transition: all 0.15s; {{ $range['mode'] === $key && !filled(request('from')) ? 'background: var(--primary); color: #fff;' : 'background: transparent; color: var(--text);' }}">
+               class="{{ $isActive ? 'active' : '' }}"
+               style="padding: 0.5rem 0.85rem; font-size: 0.825rem; font-weight: 650; text-decoration: none; border-right: 1px solid var(--border); transition: all 0.15s; {{ $isActive ? 'background: var(--primary) !important; color: #ffffff !important;' : 'background: transparent; color: var(--text) !important;' }}">
                 {{ $label }}
             </a>
         @endforeach

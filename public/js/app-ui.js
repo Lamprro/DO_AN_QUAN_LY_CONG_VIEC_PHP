@@ -370,23 +370,42 @@
   };
 
   const positionPopover = (trigger) => {
+    if (!popoverEl || popoverEl.hidden) return;
     const rect = trigger.getBoundingClientRect();
-    const popoverWidth = 280;
+    const popoverWidth = Math.min(320, window.innerWidth - 32);
+    popoverEl.style.width = `${popoverWidth}px`;
+
+    const popoverHeight = popoverEl.offsetHeight || 260;
+
     let top = rect.bottom + window.scrollY + 6;
     let left = rect.left + window.scrollX;
 
-    if (left + popoverWidth > window.innerWidth - 16) {
-      left = window.innerWidth - popoverWidth - 16;
+    if (rect.left + popoverWidth > window.innerWidth - 16) {
+      left = window.innerWidth - popoverWidth - 16 + window.scrollX;
     }
-    if (left < 16) left = 16;
+    if (left < window.scrollX + 16) {
+      left = window.scrollX + 16;
+    }
 
-    if (rect.bottom + 300 > window.innerHeight && rect.top > 300) {
-      top = rect.top + window.scrollY - 300;
+    if (rect.bottom + popoverHeight + 10 > window.innerHeight && rect.top > popoverHeight + 10) {
+      top = rect.top + window.scrollY - popoverHeight - 6;
     }
 
     popoverEl.style.top = `${top}px`;
     popoverEl.style.left = `${left}px`;
   };
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && popoverEl && !popoverEl.hidden) {
+      closeQuickPopover();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (popoverEl && !popoverEl.hidden) {
+      closeQuickPopover();
+    }
+  });
 
   const sendInlinePatch = async (url, data) => {
     const token = document.querySelector('meta[name="csrf-token"]')?.content;
@@ -484,7 +503,6 @@
     popoverEl.dataset.activeField = field;
     popoverEl.innerHTML = '';
     popoverEl.hidden = false;
-    positionPopover(trigger);
 
     const revision = row.dataset.revision || row.querySelector('input[name^="items["]')?.value || '1';
     const currentStatus = row.dataset.status || 'TODO';
@@ -521,6 +539,7 @@
         </div>
       `;
 
+      positionPopover(trigger);
       popoverEl.querySelector('.inline-popover-close')?.addEventListener('click', closeQuickPopover);
 
       popoverEl.querySelectorAll('[data-priority-val]').forEach(btn => {
@@ -591,12 +610,21 @@
             const isCurrent = st.key === currentStatus;
             const isValid = validTransitions.includes(st.key);
             let actionHint = '';
-            if (isCurrent) actionHint = '<span style="font-size: 11px; color: var(--primary);">✓ Hiện tại</span>';
-            else if (isValid) actionHint = '<span style="font-size: 11px; color: #10b981; font-weight: 600;">Khả dụng →</span>';
-            else actionHint = '<span style="font-size: 10px; color: var(--text-muted); opacity: 0.6;">(Khác)</span>';
+            let disabledAttr = '';
+            let optionTitle = '';
+
+            if (isCurrent) {
+              actionHint = '<span style="font-size: 11px; color: var(--primary); font-weight: 700;">✓ Hiện tại</span>';
+            } else if (isValid) {
+              actionHint = '<span style="font-size: 11px; color: #10b981; font-weight: 600;">Khả dụng →</span>';
+            } else {
+              actionHint = '<span style="font-size: 10px; color: var(--text-muted); opacity: 0.65;">(Khác luồng)</span>';
+              disabledAttr = 'disabled';
+              optionTitle = 'Cần thực hiện tuần tự theo luồng công việc';
+            }
 
             return `
-              <button type="button" class="inline-popover-option ${isCurrent ? 'is-active' : ''}" data-status-val="${st.key}">
+              <button type="button" class="inline-popover-option ${isCurrent ? 'is-active' : ''}" data-status-val="${st.key}" ${disabledAttr} title="${optionTitle}">
                 <span class="status-pill status-${st.slug}">${st.label}</span>
                 ${actionHint}
               </button>
@@ -615,6 +643,7 @@
         </div>
       `;
 
+      positionPopover(trigger);
       popoverEl.querySelector('.inline-popover-close')?.addEventListener('click', closeQuickPopover);
 
       let pendingTargetStatus = null;
@@ -651,7 +680,7 @@
         }
       };
 
-      popoverEl.querySelectorAll('[data-status-val]').forEach(btn => {
+      popoverEl.querySelectorAll('[data-status-val]:not(:disabled)').forEach(btn => {
         btn.addEventListener('click', async () => {
           const targetStatus = btn.dataset.statusVal;
           if (targetStatus === currentStatus) {
@@ -667,6 +696,7 @@
             const reasonInput = popoverEl.querySelector('#inline-reason-input');
             if (reasonBox) {
               reasonBox.style.display = 'block';
+              positionPopover(trigger);
               reasonInput?.focus();
             }
             return;
@@ -681,6 +711,7 @@
       popoverEl.querySelector('#inline-status-cancel-btn')?.addEventListener('click', () => {
         const reasonBox = popoverEl.querySelector('#inline-status-reason-box');
         if (reasonBox) reasonBox.style.display = 'none';
+        positionPopover(trigger);
         pendingTargetStatus = null;
       });
 
@@ -714,7 +745,7 @@
         <div class="inline-popover-list" id="inline-assignee-list">
           <button type="button" class="inline-popover-option ${!currentAssigneeId ? 'is-active' : ''}" data-assignee-val="">
             <span style="display: inline-flex; align-items: center; gap: 8px;">
-              <span class="inline-assignee-avatar">👤</span>
+              <span class="inline-assignee-avatar is-empty">👤</span>
               <em>Chưa phân công</em>
             </span>
             ${!currentAssigneeId ? '<span>✓</span>' : ''}
@@ -738,6 +769,7 @@
         </div>
       `;
 
+      positionPopover(trigger);
       popoverEl.querySelector('.inline-popover-close')?.addEventListener('click', closeQuickPopover);
 
       const searchInput = popoverEl.querySelector('#inline-assignee-search');
@@ -752,6 +784,7 @@
           const text = btn.dataset.searchText || '';
           btn.style.display = text.includes(query) ? '' : 'none';
         });
+        positionPopover(trigger);
       });
 
       popoverEl.querySelectorAll('[data-assignee-val]').forEach(btn => {
@@ -783,8 +816,10 @@
             const avEl = trigger.querySelector('.inline-assignee-avatar');
             if (avEl) {
               if (res.task.assignee_id) {
+                avEl.classList.remove('is-empty');
                 avEl.innerHTML = `<span class="assignee-initials">${(res.task.assignee_name || '?').charAt(0).toUpperCase()}</span>`;
               } else {
+                avEl.classList.add('is-empty');
                 avEl.innerHTML = `<span class="assignee-empty-icon">👤</span>`;
               }
             }
@@ -830,6 +865,8 @@
           <button type="button" class="button primary compact" id="inline-deadline-save-btn" style="min-height: 28px; font-size: 12px;">Lưu thay đổi</button>
         </div>
       `;
+
+      positionPopover(trigger);
 
       popoverEl.querySelector('.inline-popover-close')?.addEventListener('click', closeQuickPopover);
       popoverEl.querySelector('#inline-deadline-cancel-btn')?.addEventListener('click', closeQuickPopover);

@@ -110,7 +110,7 @@
     <td data-label="Người thực hiện" class="task-assignee-cell">
         @if(auth()->user()->can('update', $task) && ($canAssign ?? true))
             <button type="button" class="inline-edit-trigger inline-assignee-trigger" data-inline-field="assignee" title="Nhấp để phân công người thực hiện">
-                <span class="inline-assignee-avatar" aria-hidden="true">
+                <span class="inline-assignee-avatar {{ !$task->assignee ? 'is-empty' : '' }}" aria-hidden="true">
                     @if($task->assignee)
                         <span class="assignee-initials">{{ mb_strtoupper(mb_substr($task->assignee->name, 0, 1)) }}</span>
                     @else

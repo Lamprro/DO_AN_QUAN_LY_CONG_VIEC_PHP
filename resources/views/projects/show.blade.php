@@ -185,7 +185,7 @@
                                 </div>
                             </td>
                             <td class="task-status-cell">
-                                @if(auth()->user()->can('execute', $task) || auth()->user()->can('review', $task))
+                                @if($task->task_type->value !== 'GROUP' && (auth()->user()->can('execute', $task) || auth()->user()->can('review', $task)))
                                     <button type="button" class="inline-edit-trigger inline-status-trigger" data-inline-field="status" aria-label="Đổi nhanh trạng thái: {{ $task->title }}" title="Nhấp để đổi nhanh trạng thái">
                                         <span class="status-pill status-{{ strtolower(str_replace('_','-',$task->status->value)) }}">
                                             {{ \App\Support\UiLabels::text($task->status->value) }}
@@ -201,7 +201,7 @@
                             <td class="task-assignee-cell">
                                 @if(auth()->user()->can('update', $task) && ($canAssign ?? true))
                                     <button type="button" class="inline-edit-trigger inline-assignee-trigger" data-inline-field="assignee" title="Nhấp để phân công người thực hiện">
-                                        <span class="inline-assignee-avatar" aria-hidden="true">
+                                        <span class="inline-assignee-avatar {{ !$task->assignee ? 'is-empty' : '' }}" aria-hidden="true">
                                             @if($task->assignee)
                                                 <span class="assignee-initials">{{ mb_strtoupper(mb_substr($task->assignee->name, 0, 1)) }}</span>
                                             @else

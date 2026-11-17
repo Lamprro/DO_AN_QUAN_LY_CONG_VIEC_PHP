@@ -169,4 +169,21 @@ class TaskInlineQuickEditTest extends TestCase
         ]);
         $this->assertEquals('IN_PROGRESS', $task->fresh()->status->value);
     }
+
+    public function test_inline_quick_edit_triggers_rendered_in_project_overview(): void
+    {
+        $user = User::where('email', 'demo1@example.test')->first();
+        $task = Task::whereNotNull('project_id')->first();
+        $this->assertNotNull($task);
+
+        $workspace = $task->workspace;
+        $url = "/workspaces/{$workspace->id}/projects/{$task->project_id}";
+
+        $response = $this->actingAs($user)->get($url);
+
+        $response->assertStatus(200);
+        $response->assertSee('inline-edit-trigger', false);
+        $response->assertSee('workspace-members-data', false);
+        $response->assertSee('deadline-presets-data', false);
+    }
 }

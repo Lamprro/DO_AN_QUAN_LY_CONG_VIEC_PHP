@@ -117,9 +117,9 @@ class TaskPageData
             $board[$status->value] = (clone $baseQuery)
                 ->where('task_type', '!=', 'GROUP')
                 ->where('status', $status->value)
-                ->orderBy('id')
-                ->paginate(10, ['*'], 'page_'.strtolower($status->value))
-                ->withQueryString();
+                ->orderByDesc('created_at')
+                ->orderByDesc('id')
+                ->get();
         }
 
         $groups = $workspace->tasks()

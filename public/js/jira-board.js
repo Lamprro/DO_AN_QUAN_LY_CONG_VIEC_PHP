@@ -50,11 +50,42 @@
     if (label) label.textContent = overdue ? 'Quá hạn • ' : soon ? 'Sắp đến hạn • ' : '';
   }
 
+  const BATCH_SIZE = 10;
+
+  function loadMoreCards(column, count = BATCH_SIZE) {
+    const dropZone = column.querySelector('[data-drop-zone]');
+    if (!dropZone) return 0;
+
+    const lazyCards = [...dropZone.querySelectorAll('.jira-card[data-lazy-card="true"]')];
+    if (!lazyCards.length) {
+      const loader = column.querySelector('[data-column-loader]');
+      if (loader) loader.hidden = true;
+      return 0;
+    }
+
+    const loader = column.querySelector('[data-column-loader]');
+    if (loader) loader.hidden = false;
+
+    const toReveal = lazyCards.slice(0, count);
+    toReveal.forEach(card => {
+      delete card.dataset.lazyCard;
+      card.style.display = '';
+    });
+
+    if (loader) {
+      setTimeout(() => {
+        loader.hidden = true;
+      }, 150);
+    }
+
+    applyFilters(column.closest('[data-jira-board]'));
+    return toReveal.length;
+  }
+
   function applyFilters(board) {
     const search = normalize(state.search);
     const filtered = state.filter !== 'all' || search !== '';
     let visible = 0;
-    let loaded = 0;
     let total = 0;
     board.querySelectorAll('.jira-chip').forEach(chip => chip.setAttribute('aria-pressed', String(chip.dataset.quickFilter === state.filter)));
     board.querySelectorAll('.jira-column').forEach(column => {
@@ -70,22 +101,48 @@
           overdue: data.isOverdue === 'true',
           unassigned: !data.assigneeId,
         };
-        card.hidden = !(matches[state.filter] && normalize(`${data.code} ${data.title}`).includes(search));
-        if (!card.hidden) count++;
+        const filterMatch = matches[state.filter] && normalize(`${data.code} ${data.title}`).includes(search);
+
+        if (filtered) {
+          card.hidden = !filterMatch;
+          if (filterMatch) {
+            card.style.display = '';
+            count++;
+          } else {
+            card.style.display = 'none';
+          }
+        } else {
+          if (card.dataset.lazyCard === 'true') {
+            card.hidden = true;
+            card.style.display = 'none';
+          } else {
+            card.hidden = false;
+            card.style.display = '';
+            count++;
+          }
+        }
       });
-      const columnTotal = Number(column.dataset.total);
+      const columnTotal = cards.length;
+      column.dataset.total = String(columnTotal);
       const badge = column.querySelector('[data-column-count]');
-      badge.textContent = filtered ? `${count}/${columnTotal}` : String(columnTotal);
-      badge.title = `${count} thẻ đang hiển thị / ${columnTotal} công việc trong cột`;
+      if (badge) {
+        badge.textContent = filtered ? `${count}/${columnTotal}` : (count < columnTotal ? `${count}/${columnTotal}` : String(columnTotal));
+        badge.title = `${count} thẻ đang hiển thị / ${columnTotal} công việc trong cột`;
+      }
       const empty = column.querySelector('[data-column-empty]');
-      empty.hidden = count > 0;
-      empty.textContent = filtered ? 'Không có thẻ phù hợp trên trang này' : columnTotal > 0 ? 'Không còn thẻ trên trang này' : 'Chưa có công việc';
+      if (empty) {
+        empty.hidden = count > 0;
+        empty.textContent = filtered ? 'Không có thẻ phù hợp với bộ lọc' : 'Chưa có công việc trong cột này';
+      }
+      const loader = column.querySelector('[data-column-loader]');
+      if (loader && !filtered && !column.querySelector('.jira-card[data-lazy-card="true"]')) {
+        loader.hidden = true;
+      }
       visible += count;
-      loaded += cards.length;
       total += columnTotal;
     });
     const summary = board.querySelector('[data-board-summary]');
-    if (summary) summary.textContent = `${visible}/${loaded} thẻ hiển thị • ${total} tổng công việc`;
+    if (summary) summary.innerHTML = `<strong>${visible}</strong> / ${total} công việc hiển thị · Kéo xuống từng cột để tải thêm`;
   }
 
   function clearDrag(board) {
@@ -208,6 +265,37 @@
       toggle.setAttribute('aria-expanded', String(state.advanced));
     }
     applyFilters(board);
+
+    // Setup infinite scroll for each column dropzone
+    board.querySelectorAll('.jira-column').forEach(column => {
+      const dropZone = column.querySelector('[data-drop-zone]');
+      if (!dropZone) return;
+
+      dropZone.addEventListener('scroll', () => {
+        if (dropZone.scrollTop + dropZone.clientHeight >= dropZone.scrollHeight - 160) {
+          loadMoreCards(column);
+        }
+      }, { passive: true });
+
+      if ('IntersectionObserver' in window) {
+        const sentinel = dropZone.querySelector('[data-sentinel]');
+        if (sentinel) {
+          const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                loadMoreCards(column);
+              }
+            });
+          }, {
+            root: dropZone,
+            rootMargin: '120px',
+            threshold: 0.05,
+          });
+          observer.observe(sentinel);
+        }
+      }
+    });
+
     board.addEventListener('click', event => {
       const chip = event.target.closest('[data-quick-filter]');
       if (chip) { state.filter = chip.dataset.quickFilter; applyFilters(board); }

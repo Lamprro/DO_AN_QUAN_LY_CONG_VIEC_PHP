@@ -35,6 +35,9 @@ class JiraBoardTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('data-jira-board', false);
         $response->assertSee('jira-columns', false);
+        $response->assertDontSee('jira-pagination', false);
+        $response->assertDontSee('Bản ghi / trang:', false);
+        $response->assertSee('data-sentinel', false);
     }
 
     public function test_status_update_via_ajax_returns_json(): void

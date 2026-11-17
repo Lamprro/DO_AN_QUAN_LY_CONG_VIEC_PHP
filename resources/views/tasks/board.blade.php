@@ -50,20 +50,20 @@
             </div>
         @endif
         <div class="jira-board-summary">
-            <p class="result-summary" role="status" data-board-summary><strong>{{ collect($board)->sum(fn ($column) => $column->total()) }}</strong> công việc và cột mốc</p>
-            <p id="jira-filter-help" class="muted">Lọc nhanh áp dụng trên thẻ đã tải (10 thẻ/cột mỗi trang). Dùng Bộ lọc nâng cao để tìm kiếm toàn bộ.</p>
+            <p class="result-summary" role="status" data-board-summary><strong>{{ collect($board)->sum(fn ($column) => $column->count()) }}</strong> công việc và cột mốc</p>
+            <p id="jira-filter-help" class="muted">Hiển thị 10 việc mới nhất mỗi cột. Kéo xuống đáy cột để tự động tải thêm việc cũ hơn.</p>
         </div>
         <noscript><p class="notice">Bật JavaScript để kéo thả và lọc tức thì. Bạn vẫn có thể dùng bộ lọc nâng cao và nút đổi trạng thái.</p></noscript>
         <div class="board-scroll jira-scroll" tabindex="0" role="region" aria-label="Các cột công việc; cuộn ngang để xem">
             <div class="jira-columns" data-page="task-board">
                 @foreach($board as $status => $column)
-                    <section class="jira-column" data-status="{{ $status }}" data-total="{{ $column->total() }}" aria-labelledby="jira-heading-{{ $status }}">
+                    <section class="jira-column" data-status="{{ $status }}" data-total="{{ $column->count() }}" aria-labelledby="jira-heading-{{ $status }}">
                         <header class="jira-column-header">
                             <h2 id="jira-heading-{{ $status }}">{{ \App\Support\UiLabels::text($status) }}</h2>
-                            <span class="jira-count" data-column-count title="Tổng công việc trong cột">{{ $column->total() }}</span>
+                            <span class="jira-count" data-column-count title="Tổng công việc trong cột">{{ $column->count() }}</span>
                         </header>
                         <div class="jira-drop-zone" data-drop-zone>
-                            @foreach($column as $task)
+                            @foreach($column as $index => $task)
 @php
     $itemRoutePrefix = $task->project_id ? 'workspaces.projects.tasks' : 'workspaces.tasks';
     $itemRouteParams = $task->project_id ? [$task->workspace_id, $task->project_id] : [$task->workspace_id];
@@ -82,7 +82,8 @@
                                     data-current-status="{{ $task->status->value }}" data-assignee-id="{{ $task->assignee_id }}"
                                     data-priority="{{ $priority }}" data-is-overdue="{{ $overdue ? 'true' : 'false' }}"
                                     data-deadline="{{ $task->deadline_at?->toIso8601String() }}"
-                                    data-status-url="{{ route($itemRoutePrefix.'.status.update', [...$itemRouteParams, $task]) }}">
+                                    data-status-url="{{ route($itemRoutePrefix.'.status.update', [...$itemRouteParams, $task]) }}"
+                                    @if($index >= 10) data-lazy-card="true" style="display: none;" @endif>
                                     @if($task->parent)
                                         <div class="jira-card-epic" title="Thuộc nhóm: {{ $task->parent->title }}">
                                             <span class="jira-epic-pill">
@@ -125,8 +126,14 @@
                                 </article>
                             @endforeach
                             <p class="jira-empty" data-column-empty @if($column->count()) hidden @endif>Chưa có công việc</p>
+                            <div class="jira-scroll-sentinel" data-sentinel style="height: 1px; width: 100%; pointer-events: none;"></div>
+                            @if($column->count() > 10)
+                                <div class="jira-column-loader" data-column-loader hidden>
+                                    <span class="inline-spinner" style="display: inline-block; width: 13px; height: 13px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: jiraSpin 0.6s linear infinite; vertical-align: middle; margin-right: 5px;"></span>
+                                    Đang tải thêm...
+                                </div>
+                            @endif
                         </div>
-                        <div class="jira-pagination">{{ $column->links() }}</div>
                     </section>
                 @endforeach
             </div>

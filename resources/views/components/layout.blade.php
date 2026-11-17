@@ -1,6 +1,68 @@
 @props(['title'=>'Quản lý công việc'])
 <?php $versionedAsset = fn (string $path) => asset($path).'?v='.(is_file(public_path($path)) ? filemtime(public_path($path)) : 'missing'); ?>
 <!doctype html><html lang="{{ $preferences['language']??'vi' }}" data-theme="{{ $preferences['theme']??'system' }}" data-theme-preference="{{ $preferences['theme']??'system' }}" data-theme-owner="{{ auth()->id()??'guest' }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="csrf-token" content="{{ csrf_token() }}"><title>{{ $title }} · Work Management</title><link rel="stylesheet" href="{{ $versionedAsset('css/app-shell.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p0-ui.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/p1-observation.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/modern-theme.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/review-polish.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/workflow-experience.css') }}"><link rel="stylesheet" href="{{ $versionedAsset('css/page-editor.css') }}">@stack('styles')
+<style>
+/* ===== CẢI TIẾN CỬA SỔ THÔNG BÁO (TASK I-002) ===== */
+/* 1. Nút Xem thêm: Tối giản, dạng chữ thuần màu xám nhạt, giữ icon tam giác */
+.notification-popover .btn-toggle-expand {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 2px 0 !important;
+    margin-top: 4px;
+    color: var(--text-muted, #94a3b8) !important;
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: color 0.2s ease, opacity 0.2s ease;
+    opacity: 0.85;
+}
+.notification-popover .btn-toggle-expand:hover {
+    color: var(--text, #64748b) !important;
+    opacity: 1;
+    background: transparent !important;
+    transform: none !important;
+}
+
+/* 2. Nút Đánh dấu: Bổ sung padding trái & phải để chữ không sát viền */
+.notification-popover .btn-mark-all-read {
+    padding: 6px 16px !important;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+.notification-popover .btn-toggle-read {
+    padding: 4px 12px !important;
+    border-radius: 6px;
+}
+
+/* 3. Nút Xem tất cả: Hiệu ứng nâng nhẹ (subtle lift) khi hover, giữ nguyên màu chữ */
+.notification-popover-footer .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: var(--primary, #4f46e5) !important;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.notification-popover-footer .view-all-link:hover {
+    color: var(--primary, #4f46e5) !important;
+    background-color: var(--bg-subtle, #f1f5f9) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+</style>
 <script src="{{ $versionedAsset('js/theme.js') }}"></script><script src="{{ $versionedAsset('js/app-ui.js') }}" defer></script><script src="{{ $versionedAsset('js/page-editor.js') }}" defer></script><script src="{{ $versionedAsset('js/date-inputs.js') }}" defer></script></head>
 <body><a href="#main-content" class="skip-link">Tới nội dung chính</a><header class="app-header"><a href="{{ route('home') }}" class="brand">Work Management</a>
 @auth

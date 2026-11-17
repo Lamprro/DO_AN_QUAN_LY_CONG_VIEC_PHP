@@ -59,41 +59,32 @@
             </div>
         </div>
     </td>
-    <td data-label="Thuộc Nhóm / Cha">
+    <td data-label="Thuộc Nhóm / Cha" class="task-parent-cell">
         @if($isSubtask)
             @if($task->parent)
-                <div>
-                    <a href="{{ route($itemRoutePrefix.'.show', [...$itemRouteParams, $task->parent]) }}" style="font-size: 12px; font-weight: 650; color: var(--text); text-decoration: none;" title="{{ $task->parent->title }}">
-                        📋 {{ \Illuminate\Support\Str::limit($task->parent->title, 22) }}
+                <div class="parent-lozenge-wrap" title="Thuộc công việc cha: {{ $task->parent->title }} ({{ $task->parent->code }})">
+                    <a href="{{ route($itemRoutePrefix.'.show', [...$itemRouteParams, $task->parent]) }}" class="parent-lozenge parent-task-lozenge">
+                        <span class="parent-icon">📋</span>
+                        <span class="parent-code">{{ strlen($task->parent->code) > 12 ? \Illuminate\Support\Str::limit($task->parent->code, 10) : $task->parent->code }}</span>
+                        <span class="parent-title">{{ \Illuminate\Support\Str::limit($task->parent->title, 16) }}</span>
                     </a>
-                    <div style="margin-top: 2px; display: flex; align-items: center; gap: 4px;">
-                        <span class="badge" style="font-size: 10px; font-family: var(--font-mono); font-weight: 700; background: var(--bg-subtle); color: var(--text-muted);">
-                            {{ strlen($task->parent->code) > 15 ? \Illuminate\Support\Str::limit($task->parent->code, 10) : $task->parent->code }}
-                        </span>
-                        @if($task->parent->parent)
-                            <span style="font-size: 10px; color: var(--text-muted);">· {{ \Illuminate\Support\Str::limit($task->parent->parent->title, 14) }}</span>
-                        @endif
-                    </div>
                 </div>
             @else
                 <span class="muted" style="font-size: 11px;">—</span>
             @endif
         @else
             @if($task->parent)
-                <div>
-                    <a href="{{ route($itemRoutePrefix.'.show', [...$itemRouteParams, $task->parent]) }}" style="font-size: 12px; font-weight: 700; color: var(--text); text-decoration: none;" title="{{ $task->parent->title }}">
-                        📁 {{ \Illuminate\Support\Str::limit($task->parent->title, 22) }}
+                <div class="parent-lozenge-wrap" title="Thuộc nhóm: {{ $task->parent->title }} ({{ $task->parent->code }})">
+                    <a href="{{ route($itemRoutePrefix.'.show', [...$itemRouteParams, $task->parent]) }}" class="parent-lozenge parent-group-lozenge">
+                        <span class="parent-icon">📁</span>
+                        <span class="parent-code">{{ strlen($task->parent->code) > 12 ? \Illuminate\Support\Str::limit($task->parent->code, 10) : $task->parent->code }}</span>
+                        <span class="parent-title">{{ \Illuminate\Support\Str::limit($task->parent->title, 16) }}</span>
                     </a>
-                    <div style="margin-top: 2px;">
-                        <span class="badge" style="font-size: 10px; font-family: var(--font-mono); font-weight: 700; background: rgba(99, 102, 241, 0.1); color: var(--primary);">
-                            {{ strlen($task->parent->code) > 15 ? \Illuminate\Support\Str::limit($task->parent->code, 10) : $task->parent->code }}
-                        </span>
-                    </div>
                 </div>
             @elseif($task->task_type->value === 'GROUP')
-                <span class="badge" style="font-size: 10px; background: rgba(99, 102, 241, 0.15); color: var(--primary);">📁 Nhóm gốc</span>
+                <span class="badge" style="font-size: 10.5px; background: rgba(99, 102, 241, 0.12); color: var(--primary); white-space: nowrap;">📁 Nhóm gốc</span>
             @else
-                <span class="muted" style="font-size: 11px;">Độc lập (Gốc)</span>
+                <span class="parent-independent-badge">Độc lập (Gốc)</span>
             @endif
         @endif
     </td>

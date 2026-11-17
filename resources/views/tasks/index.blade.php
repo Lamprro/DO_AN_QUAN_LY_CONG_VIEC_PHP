@@ -51,13 +51,13 @@
     <table>
         <thead>
             <tr>
-                <th>Chọn</th>
-                <th>Công việc</th>
-                <th>Thuộc Nhóm / Cha</th>
-                <th>Trạng thái</th>
-                <th>Người thực hiện</th>
-                <th>Hạn hoàn thành</th>
-                <th style="text-align: right; min-width: 175px;">Thao tác</th>
+                <th style="width: 44px; text-align: center; padding: 0.85rem 0.5rem !important;">Chọn</th>
+                <th style="min-width: 220px;">Công việc</th>
+                <th style="min-width: 150px; white-space: nowrap;">Thuộc Nhóm / Cha</th>
+                <th style="min-width: 125px; white-space: nowrap;">Trạng thái</th>
+                <th style="min-width: 145px; white-space: nowrap;">Người thực hiện</th>
+                <th style="min-width: 130px; white-space: nowrap;">Hạn hoàn thành</th>
+                <th style="text-align: right; min-width: 165px; white-space: nowrap;">Thao tác</th>
             </tr>
         </thead>
         <tbody>

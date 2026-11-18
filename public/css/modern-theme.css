@@ -443,28 +443,58 @@ h3 { font-size: 1.15rem !important; line-height: 1.4; margin-bottom: 0.35rem; }
 
 .notification-popover-tabs {
   display: flex !important;
-  gap: 4px !important;
-  padding: 6px 14px !important;
+  gap: 6px !important;
+  padding: 8px 12px !important;
   border-bottom: 1px solid var(--border-light, #f1f5f9) !important;
   background: var(--bg-subtle, #f8fafc) !important;
 }
 
 .notification-popover-tabs .notif-tab {
-  background: none !important;
-  border: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
   padding: 4px 10px !important;
   font-size: 0.75rem !important;
-  font-weight: 650 !important;
-  color: var(--text-muted) !important;
-  border-radius: 4px !important;
+  font-weight: 600 !important;
+  color: var(--text-muted, #64748b) !important;
+  border-radius: 6px !important;
   cursor: pointer !important;
-  transition: var(--transition) !important;
+  transition: all 0.15s ease !important;
+}
+
+.notification-popover-tabs .notif-tab:hover {
+  background: var(--surface, #ffffff) !important;
+  color: var(--text-heading, #1e293b) !important;
 }
 
 .notification-popover-tabs .notif-tab.active {
-  background: var(--surface) !important;
-  color: var(--primary) !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+  background: var(--surface, #ffffff) !important;
+  color: var(--primary, #4f46e5) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  font-weight: 700 !important;
+}
+
+.notif-tab-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  padding: 0 5px !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+  background: rgba(100, 116, 139, 0.14) !important;
+  color: var(--text-muted, #64748b) !important;
+  line-height: 1 !important;
+}
+
+.notification-popover-tabs .notif-tab.active .notif-tab-badge {
+  background: var(--primary, #4f46e5) !important;
+  color: #ffffff !important;
 }
 
 .notification-popover-list {

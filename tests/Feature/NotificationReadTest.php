@@ -92,4 +92,22 @@ class NotificationReadTest extends TestCase
             ->assertSee('js/notification-inbox.js', false)
             ->assertSee('data-read-toggle', false);
     }
+
+    public function test_popover_renders_filter_tabs_with_badges_and_empty_state(): void
+    {
+        $user = User::factory()->create();
+        $this->notificationFor($user, ['type' => 'task.created', 'read_at' => null]);
+        $this->notificationFor($user, ['type' => 'calendar.proposed', 'read_at' => now()]);
+
+        $this->actingAs($user)
+            ->get(route('workspaces.index'))
+            ->assertOk()
+            ->assertSee('data-tab="all"', false)
+            ->assertSee('data-tab="unread"', false)
+            ->assertSee('data-tab="task"', false)
+            ->assertSee('data-badge-for="all"', false)
+            ->assertSee('data-badge-for="unread"', false)
+            ->assertSee('data-badge-for="task"', false)
+            ->assertSee('popover-notif-filter-empty', false);
+    }
 }

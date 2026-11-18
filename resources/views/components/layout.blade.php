@@ -102,15 +102,35 @@
             </button>
         </div>
 
+        @php
+            $rawRecent = $recentNotifications ?? [];
+            $recentItems = method_exists($rawRecent, 'items') ? $rawRecent->items() : $rawRecent;
+            $recentCollection = collect($recentItems);
+            $totalNotifCount = $recentCollection->count();
+            $unreadNotifCount = $recentCollection->filter(fn($n) => is_object($n) && !$n->read_at)->count();
+            $taskNotifCount = $recentCollection->filter(fn($n) => is_object($n) && str_starts_with($n->type ?? '', 'task.'))->count();
+        @endphp
+
         {{-- Tabs phân loại --}}
-        <div class="notification-popover-tabs">
-            <button type="button" class="notif-tab active" data-tab="all" onclick="filterPopoverNotifs(this, 'all')">Tất cả</button>
-            <button type="button" class="notif-tab" data-tab="unread" onclick="filterPopoverNotifs(this, 'unread')">Chưa đọc</button>
-            <button type="button" class="notif-tab" data-tab="task" onclick="filterPopoverNotifs(this, 'task')">Công việc</button>
+        <div class="notification-popover-tabs" role="tablist">
+            <button type="button" class="notif-tab active" data-tab="all" onclick="filterPopoverNotifs(this, 'all')">
+                Tất cả <span class="notif-tab-badge" data-badge-for="all">{{ $totalNotifCount }}</span>
+            </button>
+            <button type="button" class="notif-tab" data-tab="unread" onclick="filterPopoverNotifs(this, 'unread')">
+                Chưa đọc <span class="notif-tab-badge" data-badge-for="unread">{{ $unreadNotifCount }}</span>
+            </button>
+            <button type="button" class="notif-tab" data-tab="task" onclick="filterPopoverNotifs(this, 'task')">
+                Công việc <span class="notif-tab-badge" data-badge-for="task">{{ $taskNotifCount }}</span>
+            </button>
         </div>
 
         {{-- Danh sách thông báo có cuộn --}}
         <div class="notification-popover-list" id="notification-popover-list">
+            <div class="popover-notif-filter-empty" id="popover-notif-filter-empty" style="display: none; padding: 2.25rem 1rem; text-align: center; color: var(--text-muted);">
+                <div style="font-size: 1.6rem; margin-bottom: 6px;">✨</div>
+                <p class="filter-empty-msg" style="margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--text-heading, #1e293b);"></p>
+                <p style="margin: 4px 0 0; font-size: 0.75rem; color: var(--text-muted);">Bạn có thể xem lại toàn bộ thông báo trong trang Quản lý thông báo</p>
+            </div>
             @forelse($recentNotifications ?? [] as $n)
                 @php
                     $isUnread = !$n->read_at;
@@ -385,15 +405,94 @@ function filterPopoverNotifs(tabBtn, filter) {
     tabBtn.classList.add('active');
 
     var items = popover.querySelectorAll('.popover-notif-item');
+    var visibleCount = 0;
     items.forEach(function(item) {
+        var show = false;
         if (filter === 'all') {
-            item.style.display = 'flex';
+            show = true;
         } else if (filter === 'unread') {
-            item.style.display = item.dataset.isUnread === '1' ? 'flex' : 'none';
+            show = item.dataset.isUnread === '1';
         } else if (filter === 'task') {
-            item.style.display = item.dataset.isTask === '1' ? 'flex' : 'none';
+            show = item.dataset.isTask === '1';
         }
+        item.style.display = show ? 'flex' : 'none';
+        if (show) visibleCount++;
     });
+
+    var filterEmpty = popover.querySelector('#popover-notif-filter-empty');
+    if (filterEmpty) {
+        if (items.length > 0 && visibleCount === 0) {
+            var msgEl = filterEmpty.querySelector('.filter-empty-msg');
+            if (msgEl) {
+                if (filter === 'unread') {
+                    msgEl.textContent = 'Tuyệt vời! Bạn không còn thông báo chưa đọc nào.';
+                } else if (filter === 'task') {
+                    msgEl.textContent = 'Không có thông báo nào thuộc loại Công việc.';
+                } else {
+                    msgEl.textContent = 'Không có thông báo nào phù hợp bộ lọc.';
+                }
+            }
+            filterEmpty.style.display = 'block';
+        } else {
+            filterEmpty.style.display = 'none';
+        }
+    }
+}
+
+function updatePopoverTabCounts(popover) {
+    if (!popover) popover = document.querySelector('.notification-popover');
+    if (!popover) return;
+    var items = popover.querySelectorAll('.popover-notif-item');
+    var total = items.length;
+    var unread = 0;
+    var task = 0;
+    items.forEach(function(it) {
+        if (it.dataset.isUnread === '1') unread++;
+        if (it.dataset.isTask === '1') task++;
+    });
+    var bAll = popover.querySelector('[data-badge-for="all"]');
+    var bUnread = popover.querySelector('[data-badge-for="unread"]');
+    var bTask = popover.querySelector('[data-badge-for="task"]');
+    if (bAll) bAll.textContent = String(total);
+    if (bUnread) bUnread.textContent = String(unread);
+    if (bTask) bTask.textContent = String(task);
+
+    var activeTab = popover.querySelector('.notif-tab.active');
+    if (activeTab) {
+        var filter = activeTab.dataset.tab || 'all';
+        var visibleCount = 0;
+        items.forEach(function(item) {
+            var show = false;
+            if (filter === 'all') {
+                show = true;
+            } else if (filter === 'unread') {
+                show = item.dataset.isUnread === '1';
+            } else if (filter === 'task') {
+                show = item.dataset.isTask === '1';
+            }
+            item.style.display = show ? 'flex' : 'none';
+            if (show) visibleCount++;
+        });
+
+        var filterEmpty = popover.querySelector('#popover-notif-filter-empty');
+        if (filterEmpty) {
+            if (items.length > 0 && visibleCount === 0) {
+                var msgEl = filterEmpty.querySelector('.filter-empty-msg');
+                if (msgEl) {
+                    if (filter === 'unread') {
+                        msgEl.textContent = 'Tuyệt vời! Bạn không còn thông báo chưa đọc nào.';
+                    } else if (filter === 'task') {
+                        msgEl.textContent = 'Không có thông báo nào thuộc loại Công việc.';
+                    } else {
+                        msgEl.textContent = 'Không có thông báo nào phù hợp bộ lọc.';
+                    }
+                }
+                filterEmpty.style.display = 'block';
+            } else {
+                filterEmpty.style.display = 'none';
+            }
+        }
+    }
 }
 
 async function markAllNotificationsRead(event) {
@@ -420,6 +519,7 @@ async function markAllNotificationsRead(event) {
                 var readBtn = item.querySelector('.btn-toggle-read');
                 if (readBtn) readBtn.textContent = 'Đánh dấu chưa đọc';
             });
+            updatePopoverTabCounts(document.querySelector('.notification-popover'));
             if (window.showToast) window.showToast('Đã đánh dấu tất cả thông báo là đã đọc.', 'success');
         }
     } catch (e) {
@@ -458,6 +558,7 @@ async function toggleSingleNotifRead(id, btn, event) {
             document.querySelectorAll('[data-unread-badge]').forEach(function(el) {
                 el.style.display = count > 0 ? '' : 'none';
             });
+            updatePopoverTabCounts(document.querySelector('.notification-popover'));
         }
     } catch (e) {
         console.error(e);

@@ -242,7 +242,7 @@
   });
 
   // 9. Modern Toast Notification System
-  window.showToast = (message, type = 'success') => {
+  window.showToast = (message, type = 'success', duration = null) => {
     let container = document.querySelector('#toast-container');
     if (!container) {
       container = document.createElement('div');
@@ -273,23 +273,80 @@
     toast.append(iconEl, messageEl, closeBtn);
     container.appendChild(toast);
     requestAnimationFrame(() => toast.classList.add('show'));
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 350);
-    }, 4500);
+
+    // Error toasts persist until user dismisses them manually (duration = 0); success/warning/info toasts auto-dismiss
+    const effectiveDuration = duration !== null ? duration : (type === 'error' ? 0 : 4500);
+    if (effectiveDuration > 0) {
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 350);
+      }, effectiveDuration);
+    }
   };
 
+  // Inspect validation errors and distinguish inline field errors from unmapped business errors
+  const unmappedEntries = document.querySelectorAll('#unmapped-errors-carrier .unmapped-error-entry');
+  const unmappedErrors = [];
+  const safeCssEscape = (str) => (window.CSS && CSS.escape ? CSS.escape(str) : str.replace(/["\\]/g, '\\$&'));
+
+  unmappedEntries.forEach(entry => {
+    const field = entry.dataset.field;
+    const msg = entry.dataset.message;
+    if (!field || !msg) return;
+
+    let hasControl = false;
+    try {
+      hasControl = !!document.querySelector(
+        `[name="${field}"], [name="${field}[]"], [name^="${field}["], #${safeCssEscape(field)}, [data-error-for="${safeCssEscape(field)}"], .field [data-field="${safeCssEscape(field)}"]`
+      );
+    } catch (e) {
+      hasControl = false;
+    }
+
+    if (!hasControl) {
+      if (!unmappedErrors.includes(msg)) {
+        unmappedErrors.push(msg);
+      }
+    }
+  });
+
+  // Display unmapped business errors in dedicated visual banner and via verbatim error toasts
+  if (unmappedErrors.length > 0) {
+    const banner = document.getElementById('unmapped-errors-banner');
+    const list = document.getElementById('unmapped-errors-list');
+    if (banner && list) {
+      list.innerHTML = '';
+      unmappedErrors.forEach(err => {
+        const li = document.createElement('li');
+        li.textContent = err;
+        list.appendChild(li);
+      });
+      banner.style.display = 'block';
+    }
+
+    unmappedErrors.forEach((errMsg, idx) => {
+      setTimeout(() => {
+        if (window.showToast) window.showToast(errMsg, 'error', 0);
+      }, 150 + idx * 250);
+    });
+  }
+
   // Trigger flash messages & validation error summaries as toasts on load
-  const flashItems = document.querySelectorAll('[data-flash-message]');
+  const flashItems = document.querySelectorAll('.flash-messages-carrier .flash-toast-item');
   if (flashItems.length > 0) {
     flashItems.forEach((el, index) => {
       const msg = el.dataset.flashMessage;
       const typ = el.dataset.flashType || 'success';
-      if (msg) {
-        setTimeout(() => {
-          if (window.showToast) window.showToast(msg, typ);
-        }, 150 + index * 200);
+      if (!msg) return;
+
+      // If unmapped errors exist and this is the generic fallback message, suppress it in favor of the verbatim error toasts
+      if (unmappedErrors.length > 0 && msg.includes('Dữ liệu nhập chưa hợp lệ')) {
+        return;
       }
+
+      setTimeout(() => {
+        if (window.showToast) window.showToast(msg, typ);
+      }, 150 + (unmappedErrors.length + index) * 200);
     });
 
     // Auto-focus first invalid input for convenient correction

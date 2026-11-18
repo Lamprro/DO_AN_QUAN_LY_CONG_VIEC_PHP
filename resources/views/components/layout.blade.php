@@ -306,12 +306,22 @@ $icon = match(true) {
     if ($isRegisterPage) {
         $errorToastMsg = 'Đăng ký không thành công. Vui lòng kiểm tra lại các trường thông tin bên dưới.';
     } elseif ($isLoginPage) {
-        $errorToastMsg = 'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin tài khoản.';
+        $firstErr = $errors->first();
+        $errorToastMsg = $firstErr ? ('Đăng nhập không thành công: ' . $firstErr) : 'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin tài khoản.';
     } else {
         $errorToastMsg = 'Dữ liệu nhập chưa hợp lệ. Vui lòng kiểm tra lại các trường có báo lỗi.';
     }
 @endphp
 <span class="flash-toast-item" data-flash-type="error" data-flash-message="{{ $errorToastMsg }}"></span>
+
+{{-- Carrier containing all validation errors for frontend to distinguish mapped vs unmapped errors --}}
+<div id="unmapped-errors-carrier" hidden style="display: none;">
+@foreach($errors->getMessages() as $field => $messages)
+@foreach($messages as $msg)
+    <span class="unmapped-error-entry" data-field="{{ $field }}" data-message="{{ $msg }}"></span>
+@endforeach
+@endforeach
+</div>
 @endif
 </div>
 
@@ -327,6 +337,17 @@ $icon = match(true) {
 @endforeach
 </ul>
 </section>
+
+{{-- Visual alert box dedicated exclusively to unmapped business errors (archive, timer, invariant plan, conflict, etc.) --}}
+<div id="unmapped-errors-banner" class="notice errors unmapped-errors-banner" role="alert" style="display: none; margin: 15px 0 20px;">
+    <div style="display: flex; align-items: flex-start; gap: 10px;">
+        <span style="font-size: 1.25rem; line-height: 1.3;" aria-hidden="true">⚠️</span>
+        <div style="flex: 1;">
+            <strong style="display: block; font-size: 0.95rem; margin-bottom: 4px;">Không thể hoàn tất thao tác:</strong>
+            <ul id="unmapped-errors-list" style="margin: 4px 0 0 1.2rem; padding: 0;"></ul>
+        </div>
+    </div>
+</div>
 @endif
 
 {{-- No-script fallback for users without JavaScript --}}
@@ -339,7 +360,12 @@ $icon = match(true) {
 @if(isset($errors) && $errors->any())
 <section class="notice errors" role="alert">
 <h2>Vui lòng kiểm tra lại</h2>
-<p>Vui lòng xem lỗi tại từng trường bên dưới.</p>
+<p>Vui lòng xem chi tiết các lỗi cần khắc phục bên dưới.</p>
+<ul>
+@foreach($errors->all() as $error)
+<li>{{ $error }}</li>
+@endforeach
+</ul>
 </section>
 @endif
 </noscript>

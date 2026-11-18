@@ -92,6 +92,24 @@ class RegistrationTest extends TestCase
         $follow->assertStatus(200);
         $follow->assertSee('data-flash-type="error"', false);
         $follow->assertSee('Đăng nhập không thành công', false);
+        $follow->assertSee('Email, mật khẩu không đúng hoặc tài khoản không hoạt động.', false);
         $follow->assertSee('class="error"', false);
+    }
+
+    public function test_unmapped_business_error_renders_carrier_and_dedicated_banner(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->withSession(['errors' => (new \Illuminate\Support\ViewErrorBag)->put('default', new \Illuminate\Support\MessageBag([
+                'task' => ['Hãy lưu trữ task con trước khi lưu trữ GROUP.'],
+            ]))])
+            ->get('/workspaces');
+
+        $response->assertStatus(200);
+        $response->assertSee('unmapped-errors-carrier', false);
+        $response->assertSee('unmapped-errors-banner', false);
+        $response->assertSee('data-field="task"', false);
+        $response->assertSee('Hãy lưu trữ task con trước khi lưu trữ GROUP.', false);
     }
 }

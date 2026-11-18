@@ -57,4 +57,41 @@ class RegistrationTest extends TestCase
 
         $response->assertRedirect(route('verification.notice'));
     }
+
+    public function test_registration_failure_shows_inline_field_errors_and_toast_carrier(): void
+    {
+        $response = $this->from('/register')->post('/register', [
+            'name' => '',
+            'email' => 'invalid-email',
+            'password' => 'short',
+            'password_confirmation' => 'mismatch',
+            'timezone' => '',
+        ]);
+
+        $response->assertSessionHasErrors(['name', 'email', 'password', 'timezone']);
+
+        $follow = $this->get('/register');
+        $follow->assertStatus(200);
+        $follow->assertSee('data-flash-type="error"', false);
+        $follow->assertSee('Đăng ký không thành công', false);
+        $follow->assertSee('class="error"', false);
+        $follow->assertSee('aria-invalid="true"', false);
+        $follow->assertSee('sr-only', false);
+    }
+
+    public function test_login_failure_shows_inline_error_and_toast_carrier(): void
+    {
+        $response = $this->from('/login')->post('/login', [
+            'email' => 'nonexistent@example.test',
+            'password' => 'WrongPassword123@',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+
+        $follow = $this->get('/login');
+        $follow->assertStatus(200);
+        $follow->assertSee('data-flash-type="error"', false);
+        $follow->assertSee('Đăng nhập không thành công', false);
+        $follow->assertSee('class="error"', false);
+    }
 }

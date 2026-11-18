@@ -264,16 +264,65 @@ $icon = match(true) {
 @endif
 @endforeach</nav>
 @endif
-@foreach(['success','warning'] as $flash)
-@if(session($flash))<div class="notice {{ $flash }}" role="status" data-flash-type="{{ $flash }}" data-flash-message="{{ session($flash) }}">{{ session($flash) }}</div>
+{{-- Modern Toast Notifications Carrier for Flash messages & Validation summaries --}}
+<div class="flash-messages-carrier" hidden style="display: none;">
+@foreach(['success', 'warning', 'error', 'info', 'status'] as $flash)
+@if(session($flash))
+@php
+    $normalizedType = match($flash) {
+        'error' => 'error',
+        'warning' => 'warning',
+        'info' => 'info',
+        default => 'success',
+    };
+@endphp
+<span class="flash-toast-item" data-flash-type="{{ $normalizedType }}" data-flash-message="{{ session($flash) }}"></span>
 @endif
 @endforeach
-@if(isset($errors)&&$errors->any())<section class="notice errors" role="alert" tabindex="-1" id="error-summary"><h2>Vui lòng kiểm tra lại</h2><p>Dữ liệu nhập được giữ lại. Chọn một lỗi để đến trường cần sửa.</p><ul>
+@if(isset($errors) && $errors->any())
+@php
+    $isRegisterPage = request()->routeIs('register*') || request()->is('register*');
+    $isLoginPage = request()->routeIs('login*') || request()->is('login*');
+    if ($isRegisterPage) {
+        $errorToastMsg = 'Đăng ký không thành công. Vui lòng kiểm tra lại các trường thông tin bên dưới.';
+    } elseif ($isLoginPage) {
+        $errorToastMsg = 'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin tài khoản.';
+    } else {
+        $errorToastMsg = 'Dữ liệu nhập chưa hợp lệ. Vui lòng kiểm tra lại các trường có báo lỗi.';
+    }
+@endphp
+<span class="flash-toast-item" data-flash-type="error" data-flash-message="{{ $errorToastMsg }}"></span>
+@endif
+</div>
+
+{{-- Screen-reader accessible error summary without rendering a disruptive visual card --}}
+@if(isset($errors) && $errors->any())
+<section class="sr-only" role="alert" tabindex="-1" id="error-summary">
+<h2>Vui lòng kiểm tra lại</h2>
+<p>Dữ liệu nhập được giữ lại. Chọn một lỗi để đến trường cần sửa.</p>
+<ul>
 @foreach($errors->getMessages() as $field=>$messages)
 @foreach($messages as $message)<li><a href="#main-content" data-error-key="{{ $field }}">{{ $message }}</a></li>
 @endforeach
-@endforeach</ul></section>
+@endforeach
+</ul>
+</section>
 @endif
+
+{{-- No-script fallback for users without JavaScript --}}
+<noscript>
+@foreach(['success', 'warning', 'error', 'info', 'status'] as $flash)
+@if(session($flash))
+<div class="notice {{ in_array($flash, ['error', 'warning', 'info', 'success']) ? $flash : 'success' }}">{{ session($flash) }}</div>
+@endif
+@endforeach
+@if(isset($errors) && $errors->any())
+<section class="notice errors" role="alert">
+<h2>Vui lòng kiểm tra lại</h2>
+<p>Vui lòng xem lỗi tại từng trường bên dưới.</p>
+</section>
+@endif
+</noscript>
 {{ $slot }}<div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div><footer>Quản lý công việc cá nhân và nhóm.</footer></main></div>@auth
 <dialog id="page-editor" class="page-editor" aria-labelledby="page-editor-title">
     <header class="editor-toolbar">

@@ -241,26 +241,60 @@
 
   // 9. Modern Toast Notification System
   window.showToast = (message, type = 'success') => {
-    const container = document.querySelector('#toast-container');
-    if (!container) return;
+    let container = document.querySelector('#toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toast-container';
+      container.className = 'toast-container';
+      container.setAttribute('aria-live', 'polite');
+      container.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(container);
+    }
     const toast = document.createElement('div');
     toast.className = `app-toast toast-${type}`;
-    const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
-    const iconEl=document.createElement('span');iconEl.className='toast-icon';iconEl.textContent=icon;const messageEl=document.createElement('span');messageEl.className='toast-message';messageEl.textContent=String(message);toast.append(iconEl,messageEl);
+    const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : (type === 'warning' ? '⚠️' : 'ℹ️'));
+    const iconEl = document.createElement('span');
+    iconEl.className = 'toast-icon';
+    iconEl.textContent = icon;
+    const messageEl = document.createElement('span');
+    messageEl.className = 'toast-message';
+    messageEl.textContent = String(message);
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'toast-close';
+    closeBtn.setAttribute('aria-label', 'Đóng thông báo');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.onclick = () => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 250);
+    };
+    toast.append(iconEl, messageEl, closeBtn);
     container.appendChild(toast);
     requestAnimationFrame(() => toast.classList.add('show'));
     setTimeout(() => {
       toast.classList.remove('show');
       setTimeout(() => toast.remove(), 350);
-    }, 4000);
+    }, 4500);
   };
 
-  // Trigger flash message as toast on load if present
-  const flashEl = document.querySelector('[data-flash-message]');
-  if (flashEl) {
-    const msg = flashEl.dataset.flashMessage;
-    const typ = flashEl.dataset.flashType || 'success';
-    if (msg) setTimeout(() => window.showToast(msg, typ), 200);
+  // Trigger flash messages & validation error summaries as toasts on load
+  const flashItems = document.querySelectorAll('[data-flash-message]');
+  if (flashItems.length > 0) {
+    flashItems.forEach((el, index) => {
+      const msg = el.dataset.flashMessage;
+      const typ = el.dataset.flashType || 'success';
+      if (msg) {
+        setTimeout(() => {
+          if (window.showToast) window.showToast(msg, typ);
+        }, 150 + index * 200);
+      }
+    });
+
+    // Auto-focus first invalid input for convenient correction
+    setTimeout(() => {
+      const firstInvalid = document.querySelector('input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"]');
+      if (firstInvalid) firstInvalid.focus();
+    }, 300);
   }
 
   // 10. Jira Task Hierarchy Toggle (Groups & Subtasks)

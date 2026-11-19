@@ -20,6 +20,18 @@
       if (event.target.closest('a[data-editor-cancel]')) {
         event.preventDefault();
         notify('close');
+        return;
+      }
+      const link = event.target.closest('a[href]');
+      if (link && !link.target && !link.hasAttribute('download')) {
+        const target = new URL(link.href, location.href);
+        if (target.origin === location.origin) {
+          const editorPath = /\/(create|edit)$/.test(target.pathname) || /^\/(profile|settings|work-hours)$/.test(target.pathname) || /\/timers\/[^/]+\/adjust$/.test(target.pathname);
+          if (editorPath) {
+            event.preventDefault();
+            window.parent.postMessage({ workEditor: 'navigate', url: target.href }, location.origin);
+          }
+        }
       }
     });
     for (const type of ['input', 'change']) {
@@ -171,7 +183,7 @@
     }
   }
 
-  async function refreshPage() {
+  async function refreshPage(savedSession = null) {
     if (window.WorkUI?.hasDraft()) throw new Error('background-draft');
     const main = document.querySelector('#main-content');
     const scroll = { x: scrollX, y: scrollY };
@@ -196,7 +208,9 @@
       const updated = parsed.querySelector(selector);
       if (current && updated) current.replaceChildren(...[...updated.childNodes].map(node => document.importNode(node, true)));
     }
-    window.WorkTheme?.set(parsed.documentElement.dataset.themePreference || 'system');
+    if (savedSession?.selection?.name === 'settings-update' || savedSession?.key?.includes('/settings')) {
+      window.WorkTheme?.set(parsed.documentElement.dataset.themePreference || 'system');
+    }
     window.scrollTo(scroll.x, scroll.y);
   }
 
@@ -209,7 +223,7 @@
         if (active === session) close();
         session.frame.remove();
         try {
-          await refreshPage();
+          await refreshPage(session);
           window.showToast?.(message);
         } catch {
           window.showToast?.('Đã lưu. Hãy tải lại trang để xem dữ liệu mới; bản nhập trên trang chính vẫn được giữ.', 'info');
@@ -231,7 +245,16 @@
     trigger = source;
     for (const session of sessions.values()) session.frame.hidden = true;
     active = sessions.get(key);
-    if (!active) {
+    if (active) {
+      try {
+        const frameLoc = active.frame.contentWindow?.location;
+        if (frameLoc && frameLoc.pathname !== target.pathname) {
+          active.frame.src = target.href;
+        }
+      } catch {
+        active.frame.src = target.href;
+      }
+    } else {
       const frame = document.createElement('iframe');
       frame.setAttribute('data-editor-frame', '');
       frame.title = selection?.title || 'Biểu mẫu chỉnh sửa';
@@ -293,6 +316,10 @@
   });
   window.addEventListener('message', event => {
     if (event.origin !== location.origin) return;
+    if (event.data?.workEditor === 'navigate' && event.data?.url) {
+      open(event.data.url, trigger);
+      return;
+    }
     const session = [...sessions.values()].find(item => item.frame.contentWindow === event.source);
     if (!session) return;
     if (event.data?.workEditor === 'close' && active === session) close();

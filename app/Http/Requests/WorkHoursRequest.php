@@ -11,8 +11,25 @@ class WorkHoursRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Empty rows of the windows table are ignored, not rejected.
-        $windows = array_filter((array) $this->input('windows', []), fn ($window) => is_array($window) && (filled($window['start'] ?? null) || filled($window['end'] ?? null)));
-        $this->merge(['windows' => array_values($windows)]);
+        $windows = array_filter(
+            (array) $this->input('windows', []),
+            fn ($window) => is_array($window) && (filled($window['start'] ?? null) || filled($window['end'] ?? null))
+        );
+
+        $normalized = [];
+        foreach ($windows as $window) {
+            $start = $window['start'] ?? null;
+            $end = $window['end'] ?? null;
+            if (is_string($start) && preg_match('/^(\d{1,2}):(\d{2})$/', trim($start), $m)) {
+                $start = sprintf('%02d:%s', (int) $m[1], $m[2]);
+            }
+            if (is_string($end) && preg_match('/^(\d{1,2}):(\d{2})$/', trim($end), $m)) {
+                $end = sprintf('%02d:%s', (int) $m[1], $m[2]);
+            }
+            $normalized[] = ['start' => $start, 'end' => $end];
+        }
+
+        $this->merge(['windows' => array_values($normalized)]);
     }
 
     public function rules(): array

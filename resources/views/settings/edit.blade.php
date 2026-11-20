@@ -50,13 +50,16 @@
     </section>
 
     <section class="card" style="margin: 0; border-top: 4px solid #0284c7;">
-        <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem;">🕒 Khung giờ làm việc mặc định</h2>
+        <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem;">🕒 Khung giờ mặc định toàn hệ thống</h2>
+        <p class="muted" style="font-size: 0.85rem; margin-bottom: 0.5rem;">
+            Chuẩn chung của hệ thống áp dụng cho các thành viên chưa thiết lập lịch làm việc riêng.
+        </p>
         <p class="muted" style="font-size: 0.85rem; margin-bottom: 1rem;">
-            Múi giờ hệ thống: <strong>{{ $schedule['timezone'] }}</strong> · Slot: <strong>{{ $schedule['slot_minutes'] }} phút</strong>
+            Múi giờ hệ thống: <strong>{{ $schedule['timezone'] }}</strong> · Khung slot: <strong>{{ $schedule['slot_minutes'] }} phút</strong>
         </p>
 
         <div style="background: var(--bg-subtle); padding: 1rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1rem;">
-            <p style="margin: 0 0 0.5rem 0; font-weight: 650; font-size: 0.85rem;">Các ngày làm việc trong tuần:</p>
+            <p style="margin: 0 0 0.5rem 0; font-weight: 650; font-size: 0.85rem;">Các ngày làm việc tiêu chuẩn:</p>
             <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
                 @foreach([1=>'Thứ 2', 2=>'Thứ 3', 3=>'Thứ 4', 4=>'Thứ 5', 5=>'Thứ 6', 6=>'Thứ 7', 7=>'Chủ nhật'] as $iso=>$label)
                     <span class="badge" style="{{ in_array($iso, $schedule['weekdays']) ? 'background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; font-weight: 700;' : 'opacity: 0.5;' }}">
@@ -65,7 +68,7 @@
                 @endforeach
             </div>
 
-            <p style="margin: 0.85rem 0 0.4rem 0; font-weight: 650; font-size: 0.85rem;">Khung giờ hoạt động (Windows):</p>
+            <p style="margin: 0.85rem 0 0.4rem 0; font-weight: 650; font-size: 0.85rem;">Khung giờ hoạt động tiêu chuẩn:</p>
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                 @foreach($schedule['windows'] as $window)
                     <span class="badge" style="font-family: var(--font-mono); font-weight: 700;">
@@ -75,13 +78,14 @@
             </div>
         </div>
 
-        <p class="muted" style="font-size: 0.8rem; margin: 0 0 1rem 0;">
-            Khung giờ làm việc này do hệ thống cấp nhằm tự động xếp lịch và chống trùng lặp.
-        </p>
-
-        <a href="{{ route('profile.edit') }}" class="button secondary" style="font-size: 0.85rem;">
-            Đổi múi giờ cá nhân trong Hồ sơ ›
-        </a>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="{{ route('work-hours.edit') }}" class="button secondary" style="font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; text-decoration: none;">
+                ⏱️ Tùy chỉnh giờ làm việc cá nhân của bạn ›
+            </a>
+            <a href="{{ route('profile.edit') }}" class="button secondary" style="font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                Đổi múi giờ cá nhân trong Hồ sơ ›
+            </a>
+        </div>
     </section>
 </div>
 </x-layout>

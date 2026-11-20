@@ -2364,6 +2364,190 @@ html[data-theme='dark'] .sticky-form-bar {
 }
 
 /* ==========================================================================
+   TIMEZONE COMBOBOX / AUTOCOMPLETE DROPDOWN
+   ========================================================================== */
+.timezone-combobox {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.timezone-picker-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.timezone-search-input {
+  width: 100% !important;
+  padding: 0.65rem 2.4rem 0.65rem 0.85rem !important;
+  border-radius: var(--radius-sm, 6px) !important;
+  border: 1px solid var(--border, #cbd5e1) !important;
+  background: var(--surface, #ffffff) !important;
+  color: var(--text, #0f172a) !important;
+  font-family: inherit !important;
+  font-size: 0.925rem !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+  box-sizing: border-box !important;
+}
+
+.timezone-search-input:focus {
+  outline: none !important;
+  border-color: var(--border-focus, #6366f1) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+}
+
+.timezone-toggle-btn {
+  position: absolute !important;
+  right: 0.6rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  min-height: unset !important;
+  box-shadow: none !important;
+  color: var(--text-muted, #64748b) !important;
+  cursor: pointer !important;
+  transition: color 0.15s ease, background 0.15s ease !important;
+  user-select: none !important;
+}
+
+.timezone-toggle-btn:hover {
+  background: var(--bg-subtle, #f1f5f9) !important;
+  color: var(--primary, #4f46e5) !important;
+}
+
+.timezone-toggle-btn svg {
+  display: block;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+.timezone-picker-wrap[data-expanded="true"] .timezone-toggle-btn svg {
+  transform: rotate(180deg);
+}
+
+.timezone-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #cbd5e1);
+  border-radius: var(--radius-sm, 6px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+  list-style: none;
+  padding: 0.35rem 0;
+  margin: 0;
+}
+
+.timezone-results[hidden] {
+  display: none !important;
+}
+
+.timezone-item {
+  padding: 0.5rem 0.85rem;
+  font-size: 0.875rem;
+  color: var(--text, #0f172a);
+  cursor: pointer;
+  transition: background 0.1s ease, color 0.1s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.timezone-item mark {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--primary, #4f46e5);
+  font-weight: 700;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+.timezone-item:hover,
+.timezone-item.active {
+  background: var(--bg-subtle, #f1f5f9);
+  color: var(--primary, #4f46e5);
+}
+
+.timezone-item.selected {
+  font-weight: 600;
+  background: var(--primary-light, #eef2ff);
+  color: var(--primary, #4f46e5);
+}
+
+.timezone-item.selected::after {
+  content: "✓";
+  font-weight: bold;
+  color: var(--primary, #4f46e5);
+  margin-left: 0.5rem;
+}
+
+.timezone-empty,
+.timezone-more {
+  padding: 0.65rem 0.85rem;
+  font-size: 0.825rem;
+  color: var(--text-muted, #64748b);
+  font-style: italic;
+  text-align: center;
+}
+
+.timezone-native-select {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.timezone-live-clock {
+  display: block;
+  font-size: 0.825rem;
+  color: var(--text-muted, #64748b);
+  margin-top: 0.35rem;
+}
+
+/* Dark mode overrides */
+html[data-theme="dark"] .timezone-results {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+html[data-theme="dark"] .timezone-item {
+  color: #f1f5f9;
+}
+html[data-theme="dark"] .timezone-item:hover,
+html[data-theme="dark"] .timezone-item.active {
+  background: #334155;
+  color: #818cf8;
+}
+html[data-theme="dark"] .timezone-item.selected {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+}
+html[data-theme="dark"] .timezone-toggle-btn:hover {
+  background: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* ==========================================================================
    SIDEBAR WORKSPACE HEADER & COLLAPSE / EXPAND (REFINED SAAS DESIGN)
    ========================================================================== */
 .sidebar-header-box {
@@ -3637,7 +3821,3 @@ a.jira-epic-chip.active:hover,
   font-size: 12.5px;
   color: var(--text-muted, #64748b);
 }
-
-
-
-

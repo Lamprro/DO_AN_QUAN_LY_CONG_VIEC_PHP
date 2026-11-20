@@ -165,13 +165,16 @@ class TimeTrackingService
     /** @param array $data validated by WorkHoursRequest */
     public function saveWorkHours(User $user, array $data): void
     {
-        usort($data['windows'], fn ($a, $b) => strcmp($a['start'], $b['start']));
-        $end = '00:00';
+        $toMinutes = fn (string $t): int => ((int) explode(':', $t)[0]) * 60 + ((int) (explode(':', $t)[1] ?? 0));
+        usort($data['windows'], fn ($a, $b) => $toMinutes($a['start']) <=> $toMinutes($b['start']));
+        $end = 0;
         foreach ($data['windows'] as $window) {
-            if ($window['start'] < $end || $window['end'] <= $window['start']) {
+            $start = $toMinutes($window['start']);
+            $windowEnd = $toMinutes($window['end']);
+            if ($start < $end || $windowEnd <= $start) {
                 throw ValidationException::withMessages(['windows' => 'Các ca làm phải kết thúc sau bắt đầu, cùng ngày và không chồng lấn.']);
             }
-            $end = $window['end'];
+            $end = $windowEnd;
         }
         DB::transaction(function () use ($user, $data) {
             User::lockForUpdate()->findOrFail($user->id);

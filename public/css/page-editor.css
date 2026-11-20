@@ -21,6 +21,7 @@ body.page-editor-open { overflow: hidden; }
 .editor-document .app-header, .editor-document #app-sidebar, .editor-document .nav-backdrop,
 .editor-document .global-timer, .editor-document .skip-link, .editor-document .breadcrumbs,
 .editor-document #main-content > footer, .editor-document #page-editor { display: none !important; }
+.editor-document form[data-form="settings-update"] button[type="submit"] { display: none !important; }
 .editor-document .app-frame { display: block; margin: 0; padding: 0; min-height: 100dvh; }
 .editor-document #main-content { margin: 0; padding: clamp(16px, 3vw, 40px); width: 100%; max-width: none; min-width: 0; }
 .editor-document #main-content > *, .editor-document .card.narrow,

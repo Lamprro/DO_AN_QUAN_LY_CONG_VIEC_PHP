@@ -29,9 +29,195 @@
   window.addEventListener('pageshow', () => { document.querySelectorAll('form[data-submitting]').forEach(f => { delete f.dataset.submitting; f.removeAttribute('aria-busy'); f.querySelectorAll('[data-submitter-copy]').forEach(i => i.remove()); f.querySelectorAll('button[data-label]').forEach(b => { b.disabled = b.dataset.wasDisabled === 'true'; delete b.dataset.wasDisabled; b.textContent = b.dataset.label; delete b.dataset.label; }); }); });
 
   function mountWorkPage(root = document) {
-    const zone = root.querySelector('#timezone'), zoneSearch = root.querySelector('#timezone-search'), zoneExample = root.querySelector('#timezone-example');
-    const zoneTime = () => { if (!zone || !zoneExample) return; try { zoneExample.textContent = 'Giờ hiện tại: ' + new Intl.DateTimeFormat('vi-VN', { timeZone: zone.value, dateStyle: 'medium', timeStyle: 'short' }).format(new Date()); } catch { zoneExample.textContent = 'Múi giờ: ' + zone.value; } };
-    zone?.addEventListener('change', zoneTime); zoneTime(); zoneSearch?.addEventListener('input', () => { const q = zoneSearch.value.toLowerCase();[...zone.options].forEach(o => o.hidden = !o.text.toLowerCase().includes(q) && !o.selected); });
+    const escapeTzHtml = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+    // Modern Combobox / Autocomplete for Timezone Pickers
+    root.querySelectorAll('[data-timezone-picker]').forEach(picker => {
+      if (picker.dataset.tzMounted) return;
+      picker.dataset.tzMounted = '1';
+
+      const zone = picker.querySelector('select[name="timezone"]');
+      const zoneSearch = picker.querySelector('.timezone-search-input');
+      const zoneExample = picker.querySelector('.timezone-live-clock');
+      const results = picker.querySelector('.timezone-results');
+      const toggleBtn = picker.querySelector('.timezone-toggle-btn');
+      const pickerWrap = picker.querySelector('.timezone-picker-wrap');
+      if (!zone || !zoneSearch || !results) return;
+
+      const setExpanded = (open) => {
+        results.hidden = !open;
+        zoneSearch.setAttribute('aria-expanded', String(open));
+        pickerWrap?.setAttribute('data-expanded', String(open));
+      };
+
+      const allZones = [...zone.options].map(o => o.value);
+
+      const updateClock = () => {
+        if (!zone || !zoneExample) return;
+        try {
+          zoneExample.textContent = 'Giờ hiện tại: ' + new Intl.DateTimeFormat('vi-VN', {
+            timeZone: zone.value,
+            dateStyle: 'medium',
+            timeStyle: 'short'
+          }).format(new Date());
+        } catch {
+          zoneExample.textContent = 'Múi giờ: ' + zone.value;
+        }
+      };
+      zone.addEventListener('change', updateClock);
+      updateClock();
+
+      let activeIndex = -1;
+
+      const renderList = (query = '') => {
+        const q = query.trim().toLowerCase();
+        const matches = q ? allZones.filter(z => z.toLowerCase().includes(q)) : allZones;
+        results.innerHTML = '';
+        activeIndex = -1;
+
+        if (matches.length === 0) {
+          const emptyLi = document.createElement('li');
+          emptyLi.className = 'timezone-empty';
+          emptyLi.textContent = 'Không tìm thấy múi giờ phù hợp';
+          results.appendChild(emptyLi);
+          setExpanded(true);
+          return;
+        }
+
+        const maxItems = 60;
+        const count = Math.min(matches.length, maxItems);
+        for (let i = 0; i < count; i++) {
+          const tz = matches[i];
+          const li = document.createElement('li');
+          li.className = 'timezone-item' + (tz === zone.value ? ' selected' : '');
+          li.setAttribute('role', 'option');
+          li.dataset.value = tz;
+
+          if (q) {
+            const idx = tz.toLowerCase().indexOf(q);
+            if (idx !== -1) {
+              const before = tz.substring(0, idx);
+              const matched = tz.substring(idx, idx + q.length);
+              const after = tz.substring(idx + q.length);
+              li.innerHTML = escapeTzHtml(before) + '<mark>' + escapeTzHtml(matched) + '</mark>' + escapeTzHtml(after);
+            } else {
+              li.textContent = tz;
+            }
+          } else {
+            li.textContent = tz;
+          }
+
+          li.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            selectZone(tz);
+          });
+          results.appendChild(li);
+        }
+
+        if (matches.length > maxItems) {
+          const moreLi = document.createElement('li');
+          moreLi.className = 'timezone-more';
+          moreLi.textContent = `...và còn ${matches.length - maxItems} múi giờ khác (gõ thêm để thu hẹp)`;
+          results.appendChild(moreLi);
+        }
+
+        setExpanded(true);
+
+        if (!q) {
+          const sel = results.querySelector('.timezone-item.selected');
+          if (sel) sel.scrollIntoView({ block: 'nearest' });
+        }
+      };
+
+      const selectZone = (val) => {
+        zone.value = val;
+        zoneSearch.value = val;
+        setExpanded(false);
+        zone.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+
+      zoneSearch.addEventListener('input', () => {
+        renderList(zoneSearch.value);
+      });
+
+      zoneSearch.addEventListener('focus', () => {
+        zoneSearch.select();
+        renderList('');
+      });
+
+      zoneSearch.addEventListener('keydown', (e) => {
+        const items = results.querySelectorAll('.timezone-item');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (results.hidden) { renderList(''); return; }
+          activeIndex = Math.min(activeIndex + 1, items.length - 1);
+          updateActive(items);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (results.hidden) return;
+          activeIndex = Math.max(activeIndex - 1, 0);
+          updateActive(items);
+        } else if (e.key === 'Enter') {
+          if (!results.hidden && activeIndex >= 0 && items[activeIndex]) {
+            e.preventDefault();
+            selectZone(items[activeIndex].dataset.value);
+          }
+        } else if (e.key === 'Escape') {
+          setExpanded(false);
+        }
+      });
+
+      const updateActive = (items) => {
+        items.forEach((item, idx) => {
+          item.classList.toggle('active', idx === activeIndex);
+          if (idx === activeIndex) item.scrollIntoView({ block: 'nearest' });
+        });
+      };
+
+      zoneSearch.addEventListener('blur', () => {
+        setTimeout(() => {
+          setExpanded(false);
+          if (!allZones.includes(zoneSearch.value)) {
+            zoneSearch.value = zone.value;
+          }
+        }, 200);
+      });
+
+      toggleBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (results.hidden) {
+          zoneSearch.focus();
+          renderList('');
+        } else {
+          setExpanded(false);
+        }
+      });
+      toggleBtn?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleBtn.click();
+        }
+      });
+    });
+
+    // Legacy fallback for plain selects
+    const legacyZone = root.querySelector('#timezone:not(.timezone-native-select)');
+    const legacyExample = root.querySelector('#timezone-example:not(.timezone-live-clock)');
+    if (legacyZone && legacyExample) {
+      const legacyClock = () => {
+        try {
+          legacyExample.textContent = 'Giờ hiện tại: ' + new Intl.DateTimeFormat('vi-VN', {
+            timeZone: legacyZone.value,
+            dateStyle: 'medium',
+            timeStyle: 'short'
+          }).format(new Date());
+        } catch {
+          legacyExample.textContent = 'Múi giờ: ' + legacyZone.value;
+        }
+      };
+      legacyZone.addEventListener('change', legacyClock);
+      legacyClock();
+    }
     root.querySelectorAll('input[type=file]:not(.task-file-input)').forEach(input => { const text = document.createElement('p'); text.className = 'muted'; text.setAttribute('aria-live', 'polite'); input.after(text); input.addEventListener('change', () => { const file = input.files[0]; text.textContent = file ? file.name + ' · ' + (file.size / 1024).toFixed(1) + ' KB' : ''; }); });
     root.querySelectorAll('form[data-form="task-status"] button[name=status]').forEach(b => b.addEventListener('click', () => { const reason = b.form.querySelector('[name=reason]'); if (reason) reason.required = ['CANCELLED', 'TODO'].includes(b.value) || b.dataset.reason === '1'; }));
     const type = root.querySelector('select[name=task_type]'); if (type) { const sync = () => { const work = type.value === 'WORK', group = type.value === 'GROUP'; for (const name of ['estimate_minutes', 'assignee_id', 'reviewer_id']) { const input = type.form.querySelector(`[name="${name}"]`); if (!input) continue; const off = name === 'estimate_minutes' ? !work : group; input.closest('.field')?.classList.toggle('unsupported-field', off); input.disabled = off; } }; type.addEventListener('change', sync); sync(); }

@@ -1,0 +1,18 @@
+{
+    "checks": [
+        "Readable unique codes",
+        "Started input converted to UTC",
+        "Group selection expands all three levels",
+        "Instantiation creates three tasks",
+        "Cloned hierarchy preserved",
+        "Standalone child is detached in template",
+        "Hierarchy groups three nodes",
+        "Subtask filter selects level three",
+        "Board group filter hides group and keeps descendants",
+        "Calendar projects a task date span",
+        "Task date span does not book busy time",
+        "All Blade templates compile"
+    ],
+    "passed": 12,
+    "mode": "Actual services\/Eloquent\/Blade; isolated SQLite transaction rolled back; no Laravel test suite or mocks"
+}

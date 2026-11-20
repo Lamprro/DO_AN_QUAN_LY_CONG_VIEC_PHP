@@ -92,3 +92,8 @@ Xem [minh chứng cuối](final/README.md) cho Plan/version/apply, scheduler loc
 ## Rà soát trước production
 
 [production-readiness-2026-10-23](production-readiness-2026-10-23/README.md): flow thực toàn module, recovery/verification, vận hành, backup/restore và kiểm tra sự cố. Chỉ chứng nhận các kết quả ghi trong báo cáo; chưa có kết luận GO cho máy chủ thật.
+
+
+## Cập nhật ngày 17/11/2026
+
+[Thông tin và giới hạn](../UPDATE_2026-11-17.md): 12 tình huống service/DB/Blade; 16 HTTP và 14 kiểm tra HTML; đối chiếu Sheet sau ghi, bảo toàn công thức và định dạng vùng cũ. Minh chứng tại update-2026-11-17/.

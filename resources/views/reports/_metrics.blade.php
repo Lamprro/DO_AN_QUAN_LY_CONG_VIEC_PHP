@@ -9,7 +9,7 @@
                 Hiện trạng tại {{ \Carbon\CarbonImmutable::parse($metrics['generated_at'])->setTimezone($metrics['timezone'])->format('d/m/Y H:i:s') }}
             </h2>
             <p class="muted" style="margin: 0; font-size: 0.85rem;">
-                Phạm vi: <strong>{{ $metrics['workspace_name'] }}</strong> · {{ $metrics['filters']['project_name']??'Các project được phép xem' }} · Múi giờ: <strong>{{ $metrics['timezone'] }}</strong>
+                Phạm vi: <strong>{{ $metrics['workspace_name'] }}</strong> · {{ $metrics['filters']['project_name'] ?? (($metrics['filters']['personal_overview'] ?? false) ? 'Việc riêng và việc project được giao cho bạn' : 'Các project được phép xem') }} · Múi giờ: <strong>{{ $metrics['timezone'] }}</strong>
             </p>
         </div>
     </div>
@@ -78,7 +78,7 @@
 <!-- Period Metrics & Planned vs Actual -->
 <section class="card" style="border-top: 4px solid #0284c7;">
     <h2 style="font-size: 1.25rem; margin-bottom: 0.25rem;">
-        Kết quả trong khoảng {{ $metrics['period']['from'] }} → {{ $metrics['period']['to'] }}
+        Kết quả trong khoảng {{ \App\Support\UiDate::day($metrics['period']['from']) }} → {{ \App\Support\UiDate::day($metrics['period']['to']) }}
     </h2>
     <p class="muted" style="margin: 0 0 1rem 0; font-size: 0.85rem;">
         (Không gồm ngày cuối) · WORK hoàn thành trong kỳ: <strong style="color: var(--success); font-size: 1rem;">{{ $period['completed_work'] }}</strong>. Không dùng trạng thái hiện tại để suy ngược lịch sử.

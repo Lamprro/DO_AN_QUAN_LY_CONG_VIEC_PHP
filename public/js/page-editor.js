@@ -81,9 +81,8 @@
     'dependency-create': 'Thêm quan hệ phụ thuộc',
     'attachment-create': 'Thêm tệp đính kèm',
     'watcher-add': 'Thêm người theo dõi',
-    'task-status': 'Cập nhật trạng thái',
-    'filter-save': 'Lưu bộ lọc hiện tại',
-    'task-bulk': 'Cập nhật các việc đã chọn'
+    'task-status': 'Cập nhật trạng thái'
+    // filter-save and task-bulk stay inline on the task list (saved-filter chips, bulk bar).
   };
 
   function mountLaunchers(root = document) {

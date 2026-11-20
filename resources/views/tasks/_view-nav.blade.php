@@ -10,4 +10,3 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 5px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Cây phân rã (WBS)
     </a>
 </nav>
-<p class="view-help muted">Danh sách và Kanban giữ bộ lọc khi chuyển cách xem. Cây hiển thị toàn bộ cấu trúc phân rã công việc.</p>

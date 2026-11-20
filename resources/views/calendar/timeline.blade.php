@@ -53,12 +53,23 @@
             </div>
 
             @forelse($groups as $group)
-                <div class="timeline-group">
+                @php
+                    $t = $group->first()['task'] ?? null;
+                    $isSubtask = $t && $t->parent && $t->parent->parent;
+                    $hasParent = $t && $t->parent;
+                @endphp
+                <div class="timeline-group" @if($isSubtask) style="padding-left: 28px; background: rgba(99, 102, 241, 0.02); border-left: 2px solid rgba(99, 102, 241, 0.2);" @elseif($hasParent) style="padding-left: 14px;" @endif>
                     <h2>
+                        @if($isSubtask)
+                            <span style="color: var(--text-muted); font-size: 1rem; margin-right: 4px;" aria-hidden="true">↳</span>
+                        @endif
                         <span class="badge" style="background: rgba(99, 102, 241, 0.12); color: var(--color-primary); font-family: var(--font-mono); font-size: 0.75rem; padding: 0.125rem 0.5rem; border-radius: var(--radius-sm);">
-                            {{ $group->first()['task']?->code ?? 'TASK' }}
+                            {{ $t?->code ?? 'TASK' }}
                         </span>
-                        <span>{{ $group->first()['task']?->title ?? 'Khung lịch được phép xem' }}</span>
+                        <span>{{ $t?->title ?? 'Khung lịch được phép xem' }}</span>
+                        @if($t?->parent)
+                            <span class="badge" style="font-size: 10px; background: rgba(99, 102, 241, 0.1); color: var(--color-primary);">Thuộc: {{ $t->parent->code }}</span>
+                        @endif
                     </h2>
                     <div class="timeline-lanes">
                         @foreach($group as $row)

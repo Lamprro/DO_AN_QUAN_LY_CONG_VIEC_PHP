@@ -21,8 +21,11 @@ class TaskFilters
             'archived' => ['nullable', Rule::in(['active', 'archived', 'all'])],
             'sort' => ['nullable', Rule::in(['code', 'title', 'priority', 'deadline_at', 'created_at'])],
             'direction' => 'nullable|in:asc,desc',
-            'per_page' => 'nullable|in:10,25,50',
+            'per_page' => 'nullable|in:10,50,100,500',
             'preset' => 'nullable|in:all,mine,review,blocked,overdue',
+            'layout' => 'nullable|in:hierarchy,flat',
+            'group_id' => 'nullable|uuid',
+            'tier' => 'nullable|in:all,groups,tasks,subtasks',
         ];
     }
 

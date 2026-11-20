@@ -1,4 +1,10 @@
-<div style="display: flex; flex-direction: column; gap: 1.5rem;">
+<div style="display: flex; flex-direction: column; gap: 1.5rem; padding-bottom: 3.5rem;">
+    @if(!empty($selectedParent) && !$task)
+        <div class="notice" style="background: rgba(99, 102, 241, 0.1); border-left: 4px solid var(--color-primary); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.875rem;">
+            Đang tạo công việc con cho: <strong style="color: var(--color-primary);">{{ $selectedParent->code }} — {{ $selectedParent->title }}</strong>
+            <span class="badge" style="margin-left: 8px;">{{ $selectedParent->task_type->value === 'GROUP' ? 'Cấp 2 (Task)' : 'Cấp 3 (Sub-task)' }}</span>
+        </div>
+    @endif
     @if($task)
         <input type="hidden" name="edit_surface" value="full">
         <input type="hidden" name="expected_revision" value="{{ old('expected_revision', $task->revision) }}">
@@ -28,12 +34,15 @@
             </div>
 
             <div class="field" style="margin: 0;">
-                <label for="parent_task_id" style="display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.375rem; color: var(--color-text);">Thuộc nhóm cha</label>
+                <label for="parent_task_id" style="display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.375rem; color: var(--color-text);">Thuộc công việc cha</label>
                 <select id="parent_task_id" name="parent_task_id" style="width: 100%; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text);">
-                    <option value="">(Cấp cao nhất / Không có nhóm cha)</option>
+                    <option value="">(Cấp cao nhất / Không có việc cha)</option>
+                    @if($task?->parent_task_id && ! $parents->contains('id', $task->parent_task_id))
+                        <option value="{{ $task->parent_task_id }}" @selected(old('parent_task_id', $task->parent_task_id) === $task->parent_task_id)>{{ $task->parent?->code }} — {{ $task->parent?->title }} (cha hiện tại)</option>
+                    @endif
                     @foreach($parents as $parent)
                         @if($parent->id !== $task?->id)
-                            <option value="{{ $parent->id }}" @selected(old('parent_task_id', $task?->parent_task_id) === $parent->id)>
+                            <option value="{{ $parent->id }}" @selected(old('parent_task_id', $task?->parent_task_id ?? (($selectedParent ?? null)?->id ?? request('parent_task_id'))) === $parent->id)>
                                 {{ $parent->code }} — {{ $parent->title }}
                             </option>
                         @endif
@@ -74,10 +83,11 @@
             Ưu tiên & Kế hoạch thời gian
         </h3>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 1rem; margin-bottom: 1rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; align-items: start; margin-bottom: 1rem;">
+            {{-- Cột 1: Độ ưu tiên --}}
             <div class="field" style="margin: 0;">
-                <label for="priority" style="display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.375rem; color: var(--color-text);">Độ ưu tiên</label>
-                <select id="priority" name="priority" style="width: 100%; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text);">
+                <label for="priority">Độ ưu tiên</label>
+                <select id="priority" name="priority">
                     @foreach(\App\Enums\TaskPriority::cases() as $priority)
                         <option value="{{ $priority->value }}" @selected(old('priority', $task?->priority->value ?? 'medium') === $priority->value)>
                             {{ \App\Support\UiLabels::text($priority) }}
@@ -92,27 +102,36 @@
                 </div>
             </div>
 
-            @if(!$task || $task->task_type->value === 'WORK')
-                <div data-edit-field class="field" style="margin: 0;">
-                    <x-input name="estimate_minutes" label="Thời lượng ước lượng (phút)" type="number" :value="$task?->estimate_minutes ?? ''" min="0" max="10000000" placeholder="Ví dụ: 120" />
-                    <div class="field-presets estimate-presets">
-                        <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-right: 0.2rem;">Đặt nhanh:</span>
-                        <button type="button" class="preset-chip" data-set="30">30p</button>
-                        <button type="button" class="preset-chip" data-set="60">1h</button>
-                        <button type="button" class="preset-chip" data-set="120">2h</button>
-                        <button type="button" class="preset-chip" data-set="240">4h</button>
-                        <button type="button" class="preset-chip" data-set="480">8h (tham khảo)</button>
-                        <button type="button" class="preset-chip" data-add="30">+30p</button>
-                        <button type="button" class="preset-chip" data-clear="1" style="color: var(--danger);">✕ Xóa</button>
-                    </div>
-                </div>
-            @endif
-
+            {{-- Cột 2: Ngày bắt đầu --}}
             <div data-edit-field class="field" style="margin: 0;">
-                <x-input name="deadline_at" :label="'Hạn chót — '.$workspace->timezone" type="datetime-local" :value="$task?->deadline_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? ''" />
+                <label for="started_at">Ngày bắt đầu — {{ $workspace->timezone }}</label>
+                <input id="started_at" name="started_at" type="datetime-local" value="{{ old('started_at', $task?->started_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? '') }}">
+                <span class="muted" style="font-size: 0.75rem; display: block; margin-top: 4px;">Thời điểm bắt đầu triển khai</span>
+            </div>
+
+            {{-- Cột 3: Hạn hoàn thành --}}
+            <div data-edit-field class="field" style="margin: 0;">
+                <label for="deadline_at">Hạn hoàn thành (Deadline) — {{ $workspace->timezone }}</label>
+                <input id="deadline_at" name="deadline_at" type="datetime-local" value="{{ old('deadline_at', $task?->deadline_at?->setTimezone($workspace->timezone)->format('Y-m-d\TH:i') ?? '') }}">
                 @include('tasks._deadline-presets')
             </div>
         </div>
+
+        @if(!$task || $task->task_type->value === 'WORK')
+            <div data-edit-field class="field" style="margin-top: 0.5rem; max-width: 450px;">
+                <x-input name="estimate_minutes" label="Thời lượng ước lượng (phút - tùy chọn bổ trợ)" type="number" :value="$task?->estimate_minutes ?? ''" min="0" max="10000000" placeholder="Ví dụ: 120" />
+                <div class="field-presets estimate-presets">
+                    <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-right: 0.2rem;">Đặt nhanh:</span>
+                    <button type="button" class="preset-chip" data-set="30">30p</button>
+                    <button type="button" class="preset-chip" data-set="60">1h</button>
+                    <button type="button" class="preset-chip" data-set="120">2h</button>
+                    <button type="button" class="preset-chip" data-set="240">4h</button>
+                    <button type="button" class="preset-chip" data-set="480">8h</button>
+                    <button type="button" class="preset-chip" data-add="30">+30p</button>
+                    <button type="button" class="preset-chip" data-clear="1" style="color: var(--danger);">✕ Xóa</button>
+                </div>
+            </div>
+        @endif
 
         @if($task)
             <div style="margin-top: 0.75rem;">

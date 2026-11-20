@@ -36,6 +36,15 @@ class TaskController extends Controller
     public function create(Request $request, Workspace $workspace, ?Project $project = null)
     {
         $data = $this->pages->createForm($request->user(), $workspace, $project);
+        $parentId = $request->query('parent_task_id') ?? $request->input('parent_task_id');
+        $selectedParent = null;
+        if (! empty($parentId)) {
+            $selectedParent = $workspace->tasks()->where('project_id', $project?->id)->find($parentId);
+            if ($selectedParent) {
+                $this->authorize('addChild', $selectedParent);
+            }
+        }
+        $data['selectedParent'] = $selectedParent;
 
         return view($request->boolean('panel') ? 'tasks.panel' : 'tasks.create', $data + ['task' => null, 'panelMode' => 'create']);
     }
@@ -86,7 +95,13 @@ class TaskController extends Controller
     {
         $this->assertTaskInScope($workspace, $project, $task);
 
-        return $this->saveEdit($request, $workspace, $project, $task, $request->validated(), $request->input('edit_surface') === 'quick' ? 'quick' : 'full');
+        $surface = match ($request->input('edit_surface')) {
+            'inline' => 'inline',
+            'quick' => 'quick',
+            default => 'full',
+        };
+
+        return $this->saveEdit($request, $workspace, $project, $task, $request->validated(), $surface);
     }
 
     /** Resolve a stale-revision conflict by picking "mine" or "server" per field, then save. */

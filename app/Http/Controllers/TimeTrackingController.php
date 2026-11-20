@@ -8,6 +8,7 @@ use App\Models\TimeEntry;
 use App\Models\Workspace;
 use App\Services\TimeTracking\TimeTrackingService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TimeTrackingController extends Controller
 {
@@ -15,7 +16,12 @@ class TimeTrackingController extends Controller
 
     public function index(Request $request)
     {
-        return view('timers.index', ['entries' => $this->service->entries($request->user())]);
+        $validated = $request->validate([
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
+        ]);
+        $perPage = (int) ($validated['per_page'] ?? 10);
+
+        return view('timers.index', ['entries' => $this->service->entries($request->user(), $perPage)]);
     }
 
     public function start(Request $request, Workspace $workspace, Task $task)

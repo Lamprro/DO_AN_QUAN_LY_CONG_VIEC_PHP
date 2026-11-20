@@ -11,6 +11,7 @@ use App\Services\Calendar\CalendarPageData;
 use App\Services\Calendar\CalendarService;
 use App\Services\Calendar\TeamCalendarService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CalendarController extends Controller
 {
@@ -24,7 +25,10 @@ class CalendarController extends Controller
         $rows = $this->views->rows($request->user(), $workspace, $range, $project);
         $navigation = $this->views->presentation($request->url(), $request->all(), $range);
 
-        return view('calendar.index', compact('workspace', 'project', 'range', 'rows', 'navigation') + [
+        $eligibleMembers = $workspace->members()->where('status', 'active')->with('user')->get()->map(fn ($m) => $m->user)->filter();
+        $pendingProposals = CalendarEvent::proposals()->where('workspace_id', $workspace->id)->where('user_id', $request->user()->id)->where('status', 'proposed')->with('proposer')->latest()->get();
+
+        return view('calendar.index', compact('workspace', 'project', 'range', 'rows', 'navigation', 'eligibleMembers', 'pendingProposals') + [
             'canCreate' => $this->views->canCreate($request->user(), $workspace, $project),
             'schedule' => config('work_schedule'),
         ]);
@@ -124,10 +128,15 @@ class CalendarController extends Controller
 
     public function team(Request $request, Workspace $workspace)
     {
-        $data = $request->validate(['project_id' => 'nullable|uuid', 'focus' => 'nullable|uuid']);
+        $data = $request->validate([
+            'project_id' => 'nullable|uuid',
+            'focus' => 'nullable|uuid',
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
+        ]);
         $project = empty($data['project_id']) ? null : $workspace->projects()->findOrFail($data['project_id']);
+        $perPage = (int) ($data['per_page'] ?? 10);
 
-        return view('calendar.team', $this->views->team($request->user(), $workspace, $project, $data['focus'] ?? null));
+        return view('calendar.team', $this->views->team($request->user(), $workspace, $project, $data['focus'] ?? null, $perPage));
     }
 
     public function propose(CalendarProposalRequest $request, Workspace $workspace)

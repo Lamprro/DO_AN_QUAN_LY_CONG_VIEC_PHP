@@ -98,17 +98,14 @@ class AppShell
                 $prefix = $project ? 'workspaces.projects.tasks' : 'workspaces.tasks';
                 if ($this->tasks->scope($actor, $workspace, $project, 'task.view')) {
                     $add('Công việc', $prefix.'.index', $params);
-                    $add('Cây công việc', $prefix.'.tree', $params);
                     $add('Mẫu / công việc lặp', 'workspaces.templates.index', [$workspace, 'project_id' => $project?->id]);
                 }
                 $scope = [$workspace, 'project_id' => $project?->id];
                 if ($this->plans->allows($actor, $workspace, $project)) {
                     $add('Kế hoạch', 'workspaces.plans.index', $scope);
-                    $add('Ảnh hưởng công việc', 'workspaces.plans.impact', $scope);
                 }
                 if ($this->calendars->scope($actor, $workspace, $project, 'calendar.view')) {
                     $add('Lịch', 'workspaces.calendar.index', $scope);
-                    $add('Lịch nhóm / lời mời', 'workspaces.calendar.team', $scope);
                     if ($project) {
                         $add('Timeline', 'workspaces.projects.timeline', [$workspace, $project]);
                     }

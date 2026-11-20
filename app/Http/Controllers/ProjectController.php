@@ -26,6 +26,7 @@ class ProjectController extends Controller
             'archived' => ['nullable', Rule::in(['active', 'archived', 'all'])],
             'sort' => ['nullable', Rule::in(['name', 'created_at', 'deadline'])],
             'direction' => ['nullable', Rule::in(['asc', 'desc'])],
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
         ]);
 
         return view('projects.index', $this->service->index($request->user(), $workspace, $filters));

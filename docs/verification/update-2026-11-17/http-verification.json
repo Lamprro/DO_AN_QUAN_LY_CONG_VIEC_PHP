@@ -1,0 +1,173 @@
+{
+  "requests": [
+    {
+      "label": "Login form",
+      "method": "GET",
+      "path": "/login",
+      "status": 200
+    },
+    {
+      "label": "Login",
+      "method": "POST",
+      "path": "/login",
+      "status": 302
+    },
+    {
+      "label": "Hierarchy list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks",
+      "status": 200
+    },
+    {
+      "label": "Flat list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?layout=flat",
+      "status": 200
+    },
+    {
+      "label": "Subtask filter",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?tier=subtasks",
+      "status": 200
+    },
+    {
+      "label": "Kanban",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks?view=board",
+      "status": 200
+    },
+    {
+      "label": "Create task",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/create",
+      "status": 200
+    },
+    {
+      "label": "Task detail",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/tasks/01a1cb8e-9099-70b2-b3fa-8aedb46c7ce5",
+      "status": 200
+    },
+    {
+      "label": "Calendar week",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/calendar",
+      "status": 200
+    },
+    {
+      "label": "Calendar month",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/calendar?view=month",
+      "status": 200
+    },
+    {
+      "label": "Calendar list",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/calendar?view=list",
+      "status": 200
+    },
+    {
+      "label": "Calendar create",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/calendar/create",
+      "status": 200
+    },
+    {
+      "label": "Templates personal",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8e0f-7240-b740-abea1dc6b52d/task-templates",
+      "status": 200
+    },
+    {
+      "label": "Templates project",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/task-templates?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Project calendar",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/calendar?project_id=01a1cb8e-9075-709a-a252-2f339ebebc6c",
+      "status": 200
+    },
+    {
+      "label": "Timeline",
+      "method": "GET",
+      "path": "/workspaces/01a1cb8e-8fe9-712a-9d3d-1fa47a36c069/projects/01a1cb8e-9075-709a-a252-2f339ebebc6c/timeline",
+      "status": 200
+    }
+  ],
+  "checks": [
+    {
+      "check": "Hierarchy list renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Flat list renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Subtask filter renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Kanban renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Create task renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Task detail renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Calendar week renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Calendar month renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Calendar list renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Calendar create renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Templates personal renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Templates project renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Project calendar renders actual HTML",
+      "passed": true,
+      "evidence": null
+    },
+    {
+      "check": "Timeline renders actual HTML",
+      "passed": true,
+      "evidence": null
+    }
+  ],
+  "limits": "Read-only HTTP screens after login; no browser interaction or concurrency test"
+}

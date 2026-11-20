@@ -7,6 +7,7 @@ use App\Authorization\PlanAccess;
 use App\Authorization\ProjectAccess;
 use App\Authorization\TaskAccess;
 use App\Enums\TaskStatus;
+use App\Enums\TaskType;
 use App\Models\Project;
 use App\Models\SavedTaskFilter;
 use App\Models\Task;
@@ -39,7 +40,8 @@ class TaskPageData
             'routePrefix' => $project ? 'workspaces.projects.tasks' : 'workspaces.tasks',
             'routeParams' => $project ? [$workspace, $project] : [$workspace],
             'canCreate' => $this->canCreate($actor, $workspace, $project),
-            'parents' => $workspace->tasks()->where('project_id', $project?->id)->where('task_type', 'GROUP')->whereNull('archived_at')->orderBy('sort_order')->get(),
+            'parents' => $workspace->tasks()->where('project_id', $project?->id)->whereNull('archived_at')->orderBy('sort_order')->get()->filter(fn ($parent) => \Illuminate\Support\Facades\Gate::forUser($actor)->allows('addChild', $parent)),
+            'groups' => $workspace->tasks()->where('project_id', $project?->id)->where('task_type', TaskType::GROUP)->whereNull('archived_at')->orderBy('sort_order')->orderBy('id')->get(),
             'people' => $this->projects->eligibleMembers($workspace, $project),
             'reviewers' => $this->projects->eligibleMembers($workspace, $project, 'task.review'),
             'canAssign' => $this->tasks->scope($actor, $workspace, $project, 'task.assign'),
@@ -53,26 +55,82 @@ class TaskPageData
 
     public function list(User $actor, Workspace $workspace, ?Project $project, array $filters): array
     {
-        $tasks = $this->filtered($actor, $workspace, $project, $filters)->orderBy('id')->paginate((int) ($filters['per_page'] ?? 10))->withQueryString();
-        $savedFilters = SavedTaskFilter::where('user_id', $actor->id)->where('workspace_id', $workspace->id)->where('project_id', $project?->id)->orderBy('name')->get();
+        $displayMode = $filters['layout'] ?? 'hierarchy';
+        $tasks = $this->filtered($actor, $workspace, $project, $filters)
+            ->with(['parent', 'assignee', 'reviewer', 'blockers' => fn ($b) => $b->where('status', 'open'), 'incomingDependencies.predecessor'])
+            ->withCount(['children', 'children as completed_children_count' => fn ($c) => $c->where('status', 'DONE')])
+            ->orderBy('id')
+            ->paginate((int) ($filters['per_page'] ?? 10))
+            ->withQueryString();
 
-        return $this->context($actor, $workspace, $project) + compact('tasks', 'filters', 'savedFilters') + ['isPersonalOverview' => $this->listing->isPersonalOverview($actor, $workspace, $project)];
+        $savedFilters = SavedTaskFilter::where('user_id', $actor->id)
+            ->where('workspace_id', $workspace->id)
+            ->where('project_id', $project?->id)
+            ->orderBy('name')
+            ->get();
+
+        $scopeTasks = $this->filtered($actor, $workspace, $project, collect($filters)->except(['page', 'per_page', 'layout'])->all())
+            ->with(['parent', 'assignee', 'reviewer', 'blockers' => fn ($b) => $b->where('status', 'open'), 'incomingDependencies.predecessor'])
+            ->withCount(['children', 'children as completed_children_count' => fn ($c) => $c->where('status', 'DONE')])
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        $visibleIds = $scopeTasks->modelKeys();
+        $nodes = $scopeTasks->groupBy(fn ($task) => $task->parent_task_id && in_array($task->parent_task_id, $visibleIds, true) ? $task->parent_task_id : 'root');
+
+        $groups = $scopeTasks->where('task_type', TaskType::GROUP);
+        $groupsProgress = [];
+        foreach ($groups as $group) {
+            $descendants = $this->tree->descendants($group, $scopeTasks);
+            $groupsProgress[$group->id] = $this->tree->progress($descendants);
+        }
+
+        return $this->context($actor, $workspace, $project) + compact(
+            'tasks',
+            'scopeTasks',
+            'nodes',
+            'groups',
+            'groupsProgress',
+            'filters',
+            'displayMode',
+            'savedFilters'
+        ) + ['isPersonalOverview' => $this->listing->isPersonalOverview($actor, $workspace, $project)];
     }
 
     public function board(User $actor, Workspace $workspace, ?Project $project, array $filters): array
     {
-        $query = $this->filtered($actor, $workspace, $project, $filters)->withCount(['children', 'children as completed_children_count' => fn ($children) => $children->where('status', 'DONE')]);
-        $board = [];
-        foreach (TaskStatus::cases() as $status) {
-            $board[$status->value] = (clone $query)
-                ->where('task_type', '!=', 'GROUP')
-                ->where('status', $status->value)
-                ->orderBy('id')
-                ->paginate(10, ['*'], 'page_'.strtolower($status->value))
-                ->withQueryString();
+        $baseQuery = $this->filtered($actor, $workspace, $project, $filters)
+            ->with(['parent', 'assignee', 'reviewer', 'blockers' => fn ($b) => $b->where('status', 'open'), 'incomingDependencies.predecessor'])
+            ->withCount(['children', 'children as completed_children_count' => fn ($children) => $children->where('status', 'DONE')]);
+
+        if (! empty($filters['group_id'])) {
+            $groupId = $filters['group_id'];
+            $baseQuery->where(function ($q) use ($groupId) {
+                $q->where('parent_task_id', $groupId)
+                    ->orWhereHas('parent', fn ($p) => $p->where('parent_task_id', $groupId));
+            });
         }
 
-        return $this->context($actor, $workspace, $project) + compact('board', 'filters') + ['isPersonalOverview' => $this->listing->isPersonalOverview($actor, $workspace, $project)];
+        $board = [];
+        foreach (TaskStatus::cases() as $status) {
+            $board[$status->value] = (clone $baseQuery)
+                ->where('task_type', '!=', 'GROUP')
+                ->where('status', $status->value)
+                ->orderByDesc('created_at')
+                ->orderByDesc('id')
+                ->get();
+        }
+
+        $groups = $workspace->tasks()
+            ->where('project_id', $project?->id)
+            ->where('task_type', TaskType::GROUP)
+            ->whereNull('archived_at')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get();
+
+        return $this->context($actor, $workspace, $project) + compact('board', 'filters', 'groups') + ['isPersonalOverview' => $this->listing->isPersonalOverview($actor, $workspace, $project)];
     }
 
     public function createForm(User $actor, Workspace $workspace, ?Project $project): array
@@ -106,16 +164,21 @@ class TaskPageData
 
     public function panel(User $actor, Workspace $workspace, ?Project $project, Task $task): array
     {
+        $task->loadMissing('parent', 'children');
+
         return $this->context($actor, $workspace, $project) + [
             'task' => $task,
             'panelMode' => 'view',
             'workflowUi' => $this->workflow->availability($actor, $task),
+            'subtasks' => $task->children()->orderBy('sort_order')->orderBy('id')->get(),
             'recentComments' => $task->activities()->where('type', 'COMMENT')->with('actor')->latest()->limit(5)->get(),
+            'taskAttachments' => $task->activities()->where('type', 'ATTACHMENT')->with('actor')->latest()->limit(5)->get(),
         ];
     }
 
     public function show(User $actor, Workspace $workspace, ?Project $project, Task $task, ?string $activityType): array
     {
+        $task->loadMissing('parent.parent');
         $all = $workspace->tasks()->where('project_id', $project?->id)->get();
         $activities = $task
             ->activities()
@@ -144,6 +207,7 @@ class TaskPageData
         return $this->context($actor, $workspace, $project) + [
             'task' => $task,
             'activities' => $activities,
+            'taskAttachments' => $task->activities()->where('type', 'ATTACHMENT')->with('actor')->latest('created_at')->get(),
             'activityHuman' => $activityHuman,
             'dependencies' => $task->incomingDependencies()->with('predecessor')->get(),
             'blockers' => $task->blockers()->with('reporter', 'resolver')->orderByDesc('created_at')->get(),
@@ -180,6 +244,25 @@ class TaskPageData
         $query->when(isset($filters['q']) && $filters['q'] !== '', fn ($q) => $q->where(fn ($s) => $s->whereRaw("title LIKE ? ESCAPE '!'", [SearchTerm::contains($filters['q'])])->orWhereRaw("code LIKE ? ESCAPE '!'", [SearchTerm::contains($filters['q'])])));
         foreach (['status', 'priority', 'assignee_id'] as $field) {
             $query->when($filters[$field] ?? null, fn ($q, $v) => $q->where($field, $v));
+        }
+        if (! empty($filters['group_id'])) {
+            $groupId = $filters['group_id'];
+            $query->where(function ($q) use ($groupId) {
+                $q->where('id', $groupId)
+                    ->orWhere('parent_task_id', $groupId)
+                    ->orWhereHas('parent', fn ($p) => $p->where('parent_task_id', $groupId));
+            });
+        }
+        if (! empty($filters['tier'])) {
+            match ($filters['tier']) {
+                'groups' => $query->where('task_type', TaskType::GROUP),
+                'tasks' => $query->where('task_type', '!=', 'GROUP')->where(function ($q) {
+                    $q->whereNull('parent_task_id')
+                        ->orWhereHas('parent', fn ($p) => $p->where('task_type', 'GROUP'));
+                }),
+                'subtasks' => $query->where('task_type', '!=', 'GROUP')->whereHas('parent', fn ($p) => $p->where('task_type', '!=', 'GROUP')),
+                default => null,
+            };
         }
         $this->applyPreset($query, $filters['preset'] ?? 'all', $actor, $workspace, $project);
         $direction = $filters['direction'] ?? 'desc';

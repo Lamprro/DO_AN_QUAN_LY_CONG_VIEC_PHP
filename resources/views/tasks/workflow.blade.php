@@ -193,20 +193,125 @@
     </section>
 
     <!-- Attachments Box -->
-    <section class="card" style="margin: 0;">
-        <h2 style="font-size: 1.15rem; margin-bottom: 0.5rem;">📎 Tệp đính kèm</h2>
-        @can('attach',$task)
-            <form method="POST" action="{{ route($routePrefix.'.attachments.store',[...$routeParams,$task]) }}" enctype="multipart/form-data" data-form="attachment-create">
-                @csrf
-                <div class="field">
-                    <label for="task-file">Chọn tệp từ máy tính</label>
-                    <input type="file" name="file" id="task-file" accept=".pdf,.png,.jpg,.jpeg,.txt,.csv,.docx,.xlsx" required>
-                    <p class="muted" style="font-size: 0.8rem; margin-top: 0.35rem;">
-                        Định dạng: PDF, PNG, JPG, TXT, CSV, DOCX, XLSX (tối đa {{ config('tasks.attachment_max_kb') }} KB).
-                    </p>
+    <section class="card task-attachments-card" style="margin: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 8px;">
+            <h2 style="font-size: 1.15rem; margin: 0; display: flex; align-items: center; gap: 6px;">
+                <span>📎</span> Tệp & hình ảnh đính kèm
+                <span class="badge attachment-count-badge" style="font-size: 0.75rem; font-weight: 700; background: rgba(99, 102, 241, 0.15); color: var(--primary);">{{ count($taskAttachments ?? []) }}</span>
+            </h2>
+        </div>
+
+        {{-- 1. Danh sách tệp đã tải lên hiện tại --}}
+        <div class="existing-attachments-wrapper" style="margin-bottom: 1.25rem;">
+            @if(count($taskAttachments ?? []) > 0)
+                <div class="attachments-grid">
+                    @foreach($taskAttachments as $attachment)
+                        @php
+                            $attData = $attachment->data ?? [];
+                            $isImg = str_starts_with($attData['mime'] ?? '', 'image/');
+                            $fileExt = strtolower(pathinfo($attachment->content, PATHINFO_EXTENSION));
+                            $downloadUrl = route($routePrefix.'.attachments.download', [...$routeParams, $task, $attachment->id]);
+                            $previewUrl = $downloadUrl . '?inline=1';
+                            $fileSizeKb = isset($attData['size']) ? round($attData['size'] / 1024, 1) : null;
+                            $canDelete = ($attachment->actor_id === auth()->id() || ($canAssign ?? false));
+                        @endphp
+                        <div class="attachment-item-card" data-attachment-id="{{ $attachment->id }}">
+                            <div class="attachment-thumb-wrap">
+                                @if($isImg)
+                                    <a href="{{ $previewUrl }}" target="_blank" title="Xem ảnh gốc phóng to: {{ $attachment->content }}" class="attachment-img-preview">
+                                        <img src="{{ $previewUrl }}" alt="{{ $attachment->content }}" loading="lazy" />
+                                    </a>
+                                @else
+                                    <div class="attachment-file-icon ext-{{ $fileExt }}">
+                                        @if($fileExt === 'pdf') 📕
+                                        @elseif(in_array($fileExt, ['doc', 'docx'])) 📘
+                                        @elseif(in_array($fileExt, ['xls', 'xlsx', 'csv'])) 📗
+                                        @elseif(in_array($fileExt, ['txt'])) 📄
+                                        @else 📁
+                                        @endif
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="attachment-info">
+                                <a href="{{ $downloadUrl }}" class="attachment-filename" title="{{ $attachment->content }}">
+                                    {{ $attachment->content }}
+                                </a>
+                                <div class="attachment-meta">
+                                    @if($fileSizeKb)
+                                        <span class="file-size-badge">{{ $fileSizeKb > 1024 ? round($fileSizeKb / 1024, 2) . ' MB' : $fileSizeKb . ' KB' }}</span> ·
+                                    @endif
+                                    <span>{{ $attachment->actor?->name ?? 'Người dùng' }}</span>
+                                    <time class="muted">· {{ $attachment->created_at?->setTimezone($workspace->timezone)->format('d/m/Y H:i') }}</time>
+                                </div>
+                            </div>
+                            <div class="attachment-actions">
+                                <a href="{{ $downloadUrl }}" class="button secondary compact attachment-action-btn" title="Tải xuống tệp này">
+                                    ⬇ Tải
+                                </a>
+                                @can('attach', $task)
+                                    @if($canDelete)
+                                        <form method="POST" action="{{ route($routePrefix.'.attachments.destroy', [...$routeParams, $task, $attachment->id]) }}" data-form="attachment-delete" style="margin: 0; display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="button danger compact attachment-action-btn" title="Xóa bỏ tệp khỏi công việc" onclick="return confirm('Bạn có chắc muốn xóa tệp này khỏi công việc?');">
+                                                🗑️ Xóa
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endcan
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <button type="submit">Tải tệp lên</button>
-            </form>
+            @else
+                <div class="empty-attachments-notice">
+                    <span style="font-size: 1.25rem;">📂</span>
+                    <span>Chưa có tệp hoặc hình ảnh nào được đính kèm.</span>
+                </div>
+            @endif
+        </div>
+
+        {{-- 2. Khu vực tải lên tệp mới với Drag & Drop và Queue xem trước/chọn lọc file --}}
+        @can('attach', $task)
+            <div class="upload-zone-wrapper">
+                <form method="POST" action="{{ route($routePrefix.'.attachments.store', [...$routeParams, $task]) }}" enctype="multipart/form-data" data-form="attachment-create" class="attachment-upload-form">
+                    @csrf
+                    
+                    {{-- Dropzone Area --}}
+                    <div class="file-dropzone" id="file-dropzone">
+                        <input type="file" name="files[]" id="task-files" class="task-file-input" accept=".pdf,.png,.jpg,.jpeg,.txt,.csv,.docx,.xlsx" multiple required>
+                        <div class="dropzone-content">
+                            <span class="dropzone-icon" aria-hidden="true">☁️</span>
+                            <div class="dropzone-text">
+                                <strong>Kéo & thả tệp / ảnh vào đây</strong>, hoặc <span class="dropzone-browse-link">Chọn từ máy tính</span>
+                            </div>
+                            <p class="dropzone-hint muted">
+                                Định dạng: PNG, JPG, JPEG, PDF, TXT, CSV, DOCX, XLSX (tối đa 10 tệp cùng lúc, {{ config('tasks.attachment_max_kb', 10240) }} KB/tệp)
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Staging Queue: Hiển thị ĐẦY ĐỦ các file đã chọn với thumbnail, dung lượng và nút xóa bỏ file thừa --}}
+                    <div class="selected-files-queue" id="selected-files-queue" style="display: none;">
+                        <div class="queue-header">
+                            <span class="queue-title">
+                                <strong>📁 Danh sách tệp đã chọn (<span class="queue-count">0</span>)</strong>
+                                <small class="muted" style="margin-left: 6px;">Kiểm tra hoặc bấm ✕ để bỏ các file thừa trước khi tải lên</small>
+                            </span>
+                            <button type="button" class="queue-clear-btn" id="btn-clear-selected-files">✕ Bỏ chọn tất cả</button>
+                        </div>
+                        
+                        <div class="queue-list" id="queue-list"></div>
+
+                        <div class="queue-summary-bar">
+                            <span class="queue-size-info">Tổng dung lượng: <strong id="queue-total-size">0 KB</strong></span>
+                            <button type="submit" class="button primary" id="btn-submit-upload">
+                                🚀 Tải tệp lên (<span class="queue-submit-count">0</span>)
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         @else
             <p class="muted">Bạn không có quyền đính kèm tệp trên công việc này.</p>
         @endcan
@@ -279,9 +384,15 @@
                 @endcan
             @elseif($activity->type->value==='ATTACHMENT')
                 <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light); margin: 0.5rem 0;">
-                    <span style="font-weight: 600;">{{ $activity->content }}</span>
+                    <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                        <span>{{ str_starts_with($activity->data['mime'] ?? '', 'image/') ? '🖼️' : '📄' }}</span>
+                        <span style="font-weight: 600; overflow-wrap: anywhere;">{{ $activity->content }}</span>
+                        @if(isset($activity->data['size']))
+                            <small class="muted">({{ round($activity->data['size'] / 1024, 1) }} KB)</small>
+                        @endif
+                    </div>
                     @if(($activity->data['disk']??null)==='task_files')
-                        <a href="{{ route($routePrefix.'.attachments.download',[...$routeParams,$task,$activity->id]) }}" class="button" style="min-height: 30px; font-size: 0.75rem; padding: 0.25rem 0.65rem;">
+                        <a href="{{ route($routePrefix.'.attachments.download',[...$routeParams,$task,$activity->id]) }}" class="button" style="min-height: 30px; font-size: 0.75rem; padding: 0.25rem 0.65rem; flex-shrink: 0;">
                             ⬇ Tải xuống
                         </a>
                     @endif

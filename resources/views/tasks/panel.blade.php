@@ -8,9 +8,20 @@
     </h2>
 
     @if(in_array($panelMode, ['create', 'edit']))
+        @if(!empty($selectedParent))
+            <div class="notice" style="background: rgba(99, 102, 241, 0.1); border-left: 4px solid var(--primary); padding: 10px 14px; margin-bottom: 14px; border-radius: 6px;">
+                <p style="margin: 0; font-size: 0.85rem; color: var(--text);">
+                    Đang tạo công việc con cho: <strong style="color: var(--primary);">{{ $selectedParent->code }} — {{ $selectedParent->title }}</strong>
+                    <span class="badge" style="margin-left: 6px;">{{ $selectedParent->task_type->value === 'GROUP' ? 'Cấp 2 (Task)' : 'Cấp 3 (Sub-task)' }}</span>
+                </p>
+            </div>
+        @endif
         <p class="muted">Lưu ngay tại đây. Danh sách và bảng sẽ cập nhật tức thì.</p>
         <form method="post" action="{{ route($routePrefix.($task ? '.update' : '.store'), $taskParams) }}" data-panel-form data-form="task-panel-edit">
             @csrf
+            @if(!empty($selectedParent) && !$task)
+                <input type="hidden" name="parent_task_id" value="{{ $selectedParent->id }}">
+            @endif
             @if($task)
                 @method('PATCH')
                 <input type="hidden" name="expected_revision" value="{{ $task->revision }}">
@@ -87,14 +98,14 @@
             @endif
 
             @if(!$task)
-                <details class="panel-options">
+                <details class="panel-options" {{ !empty($selectedParent) ? 'open' : '' }}>
                     <summary>Tùy chọn nâng cao: Loại việc, nhóm cha và mã</summary>
                     <div class="quick-edit-grid">
                         <div class="field">
                             <label for="panel-type">Loại công việc</label>
                             <select id="panel-type" name="task_type">
-                                <option value="WORK">Công việc chuẩn (Task)</option>
-                                <option value="GROUP">Nhóm công việc (Group/Epic)</option>
+                                <option value="WORK" @selected(empty($selectedParent) || $selectedParent->task_type->value !== 'GROUP')>Công việc chuẩn (Task)</option>
+                                <option value="GROUP" @selected(empty($selectedParent) && old('task_type') === 'GROUP')>Nhóm công việc (Group/Epic)</option>
                                 <option value="MILESTONE">Cột mốc (Milestone)</option>
                             </select>
                         </div>
@@ -103,7 +114,9 @@
                             <select id="panel-parent" name="parent_task_id">
                                 <option value="">Không có (Cấp cao nhất)</option>
                                 @foreach($parents as $p)
-                                    <option value="{{ $p->id }}">{{ $p->title }}</option>
+                                    <option value="{{ $p->id }}" @selected(old('parent_task_id', $selectedParent?->id ?? request('parent_task_id')) === $p->id)>
+                                        {{ $p->code }} — {{ $p->title }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -156,6 +169,19 @@
         </form>
 
     @else
+        @if($task->parent)
+            <div style="font-size: 0.85rem; padding: 8px 12px; background: rgba(99, 102, 241, 0.08); border-radius: 6px; border: 1px solid rgba(99, 102, 241, 0.2); margin-bottom: 14px;">
+                <span class="muted">Thuộc việc cha:</span>
+                <a href="{{ route($routePrefix.'.show', [...$routeParams, $task->parent]) }}" data-task-panel style="font-weight: 600; color: var(--primary); margin-left: 4px; text-decoration: none;">
+                    {{ $task->parent->code }} — {{ $task->parent->title }}
+                </a>
+            </div>
+        @endif
+
+        <div style="margin-bottom: 12px;">
+            @include('tasks._alerts', ['task' => $task])
+        </div>
+
         <div class="panel-meta">
             <x-status :value="$task->status"/>
             <x-status :value="$task->priority"/>
@@ -181,12 +207,66 @@
             </div>
         </dl>
 
-        <div class="actions panel-actions">
+        <div class="panel-subtasks-section" style="margin-top: 18px; border-top: 1px solid var(--border); padding-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700;">Công việc con ({{ count($subtasks ?? []) }})</h3>
+                @can('addChild', $task)
+                    <a class="button secondary compact" data-task-panel href="{{ route($routePrefix.'.create', [...$routeParams, 'parent_task_id' => $task->id]) }}" style="font-size: 0.75rem; padding: 4px 8px; min-height: 28px;">
+                        + Thêm việc con
+                    </a>
+                @endcan
+            </div>
+            @if(count($subtasks ?? []) > 0)
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+                    @foreach($subtasks as $child)
+                        <li style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.85rem;">
+                            <a href="{{ route($routePrefix.'.show', [...$routeParams, $child]) }}" data-task-panel style="font-weight: 600; text-decoration: none; color: var(--text);">
+                                <span style="font-family: var(--font-mono); color: var(--primary);">{{ $child->code }}</span> {{ $child->title }}
+                            </a>
+                            <x-status :value="$child->status" />
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p class="muted" style="font-size: 0.85rem; margin: 0;">Chưa có công việc con.</p>
+            @endif
+        </div>
+
+        <div class="actions panel-actions" style="margin-top: 16px;">
             @can('update', $task)
                 <a class="button primary" data-task-panel href="{{ route($routePrefix.'.edit', $taskParams) }}">Chỉnh sửa</a>
             @endcan
             @if(count($workflowUi['actions']))
                 <a class="button secondary" data-task-panel href="{{ route($routePrefix.'.status.edit', $taskParams) }}">Đổi trạng thái</a>
+            @endif
+        </div>
+
+        <div class="panel-attachments-section" style="margin-top: 18px; border-top: 1px solid var(--border); padding-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700;">Tệp & hình ảnh ({{ count($taskAttachments ?? []) }})</h3>
+                <a href="{{ route($routePrefix.'.show', $taskParams) }}#task-discussion" style="font-size: 0.75rem; color: var(--primary); text-decoration: none;">+ Tải thêm tệp</a>
+            </div>
+            @if(count($taskAttachments ?? []) > 0)
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    @foreach($taskAttachments as $attachment)
+                        @php
+                            $attData = $attachment->data ?? [];
+                            $isImg = str_starts_with($attData['mime'] ?? '', 'image/');
+                            $downloadUrl = route($routePrefix.'.attachments.download', [...$routeParams, $task, $attachment->id]);
+                            $fileSizeKb = isset($attData['size']) ? round($attData['size'] / 1024, 1) : null;
+                        @endphp
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border-light); font-size: 0.85rem;">
+                            <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                                <span>{{ $isImg ? '🖼️' : '📄' }}</span>
+                                <span style="font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px;" title="{{ $attachment->content }}">{{ $attachment->content }}</span>
+                                @if($fileSizeKb)<small class="muted">({{ $fileSizeKb }}KB)</small>@endif
+                            </div>
+                            <a href="{{ $downloadUrl }}" class="button secondary compact" style="min-height: 24px; font-size: 11px; padding: 2px 8px;">⬇ Tải</a>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="muted" style="font-size: 0.85rem; margin: 0;">Chưa có tệp đính kèm.</p>
             @endif
         </div>
 

@@ -20,7 +20,7 @@ use Illuminate\Validation\ValidationException;
 
 class TaskService
 {
-    public function __construct(private ProjectAccess $access, private TaskAccess $tasks, private TaskTreeService $tree, private TaskHistory $history) {}
+    public function __construct(private ProjectAccess $access, private TaskAccess $tasks, private TaskTreeService $tree, private TaskHistory $history, private TaskListingQuery $listing) {}
 
     public function save(User $actor, Workspace $workspace, ?Project $project, array $data, ?Task $task = null): Task
     {
@@ -43,6 +43,7 @@ class TaskService
                     'description',
                     'priority',
                     'estimate_minutes',
+                    'started_at',
                     'deadline_at',
                     'assignee_id',
                     'reviewer_id',
@@ -52,10 +53,13 @@ class TaskService
                     'sort_order',
                 ]));
                 if (empty($values['code'])) {
-                    $values['code'] = $task?->code ?? 'T-'.Str::ulid();
+                    $values['code'] = $task?->code ?? $this->generateNextCode($workspace, $project, $values['task_type'] ?? 'WORK');
                 }
                 if ($workspace->tasks()->where('code', $values['code'])->when($task, fn ($q) => $q->whereKeyNot($task->id))->exists()) {
                     throw ValidationException::withMessages(['code' => 'Mã task đã có trong workspace.']);
+                }
+                if (array_key_exists('started_at', $values) && $values['started_at']) {
+                    $values['started_at'] = CarbonImmutable::createFromFormat('!Y-m-d\TH:i', $values['started_at'], $workspace->timezone)->utc();
                 }
                 if (array_key_exists('deadline_at', $values) && $values['deadline_at']) {
                     $values['deadline_at'] = CarbonImmutable::createFromFormat('!Y-m-d\TH:i', $values['deadline_at'], $workspace->timezone)->utc();
@@ -72,6 +76,10 @@ class TaskService
                     }
                 }
                 $probe = $task ?? new Task(['workspace_id' => $workspace->id, 'project_id' => $project?->id]);
+                if (! empty($values['parent_task_id']) && (! $task || $task->parent_task_id !== $values['parent_task_id'])) {
+                    $parent = $workspace->tasks()->where('project_id', $project?->id)->lockForUpdate()->findOrFail($values['parent_task_id']);
+                    Gate::forUser($actor)->authorize('addChild', $parent);
+                }
                 $this->tree->validate($probe, $values);
                 if ($task) {
                     $before = $task->getRawOriginal();
@@ -253,26 +261,26 @@ class TaskService
     public function bulk(User $actor, Workspace $workspace, ?Project $project, array $data): int
     {
         return DB::transaction(function () use ($actor, $workspace, $project, $data) {
-            Workspace::lockForUpdate()->findOrFail($workspace->id);
             $this->assertScope($actor, $workspace, $project);
             $items = $data['items'];
-            if ($data['action'] === 'assign') {
-                abort_unless($this->tasks->scope($actor, $workspace, $project, 'task.assign'), 403);
-            }
-            $tasks = Task::where('workspace_id', $workspace->id)
-                ->where('project_id', $project?->id)
-                ->whereIn('id', array_keys($items))
-                ->orderBy('id')
-                ->lockForUpdate()
-                ->get();
-            abort_unless($tasks->count() === count($items), 404);
+            // Only rows the list itself shows can be selected. In a project or team list that is
+            // the one scope; in the personal overview it also covers project tasks assigned to
+            // the actor. Every task is then checked and written in its own source scope.
+            $ids = $this->listing->query($actor, $workspace, $project)->whereIn('id', array_keys($items))->pluck('id');
+            abort_unless($ids->count() === count($items), 404);
+            $sources = Task::whereIn('id', $ids)->distinct()->pluck('workspace_id')->sort()->values();
+            Workspace::whereIn('id', $sources)->orderBy('id')->lockForUpdate()->get();
+            $tasks = Task::whereIn('id', $ids)->with('workspace', 'project')->orderBy('id')->lockForUpdate()->get();
             foreach ($tasks as $task) {
+                if ($data['action'] === 'assign') {
+                    abort_unless($this->tasks->scope($actor, $task->workspace, $task->project, 'task.assign'), 403);
+                }
                 Gate::forUser($actor)->authorize($data['action'] === 'archive' ? 'archive' : 'update', $task);
                 EditRevision::check($task, ['expected_revision' => $items[$task->id]]);
             }
             foreach ($tasks as $task) {
                 if ($data['action'] === 'archive') {
-                    $this->archive($actor, $workspace, $project, $task);
+                    $this->archive($actor, $task->workspace, $task->project, $task);
                 } else {
                     if ($data['action'] === 'assign') {
                         $changes = ['assignee_id' => $data['assignee_id'] ?? null];
@@ -280,7 +288,7 @@ class TaskService
                         $changes = ['priority' => $data['priority']];
                     }
                     $changes['expected_revision'] = $items[$task->id];
-                    $this->save($actor, $workspace, $project, $changes, $task);
+                    $this->save($actor, $task->workspace, $task->project, $changes, $task);
                 }
             }
 
@@ -293,5 +301,36 @@ class TaskService
     {
         abort_if($project && $project->workspace_id !== $workspace->id, 404);
         abort_unless($this->tasks->scope($actor, $workspace, $project, 'task.view'), 403);
+    }
+
+    /** Generate clean, short, human-friendly sequential code (e.g. TASK-1, GRP-1, PRJ-1). */
+    private function generateNextCode(Workspace $workspace, ?Project $project, string $taskType): string
+    {
+        if ($project) {
+            $cleanName = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', Str::ascii($project->name)));
+            $prefix = mb_substr($cleanName, 0, 4);
+            if (strlen($prefix) < 2) {
+                $prefix = 'PRJ';
+            }
+        } elseif ($taskType === 'GROUP') {
+            $prefix = 'GRP';
+        } elseif ($taskType === 'MILESTONE') {
+            $prefix = 'MLS';
+        } else {
+            $prefix = 'TASK';
+        }
+
+        $count = $workspace->tasks()
+            ->when($project, fn ($q) => $q->where('project_id', $project->id), fn ($q) => $q->whereNull('project_id'))
+            ->count();
+
+        $num = $count + 1;
+        $candidate = "{$prefix}-{$num}";
+        while ($workspace->tasks()->where('code', $candidate)->exists()) {
+            $num++;
+            $candidate = "{$prefix}-{$num}";
+        }
+
+        return $candidate;
     }
 }

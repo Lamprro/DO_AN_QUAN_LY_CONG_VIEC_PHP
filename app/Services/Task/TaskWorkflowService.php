@@ -339,6 +339,14 @@ class TaskWorkflowService
         abort_unless(($data['disk'] ?? null) === 'task_files' && str_starts_with($data['path'] ?? '', $task->id.'/') && ! str_contains($data['path'], '..'), 404);
         abort_unless(Storage::disk('task_files')->exists($data['path']), 404);
 
+        if (request()->boolean('inline')) {
+            return Storage::disk('task_files')->response($data['path'], $data['original_name'], [
+                'Content-Type' => $data['mime'] ?? 'application/octet-stream',
+                'X-Content-Type-Options' => 'nosniff',
+                'Cache-Control' => 'private, max-age=3600',
+            ]);
+        }
+
         return Storage::disk('task_files')->download($data['path'], $data['original_name'], ['X-Content-Type-Options' => 'nosniff', 'Cache-Control' => 'private, no-store']);
     }
 

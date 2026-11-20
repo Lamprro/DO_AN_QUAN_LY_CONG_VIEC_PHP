@@ -13,11 +13,23 @@
 </div>
 
 <form action="{{ route('workspaces.index') }}" method="GET" class="card" data-form="workspace-search" style="margin-bottom: 1.5rem; padding: 1.25rem;">
-    <label for="q">Tìm kiếm theo tên workspace</label>
-    <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-        <input id="q" name="q" value="{{ is_string(request('q')) ? request('q') : '' }}" maxlength="160" placeholder="Nhập tên workspace..." style="flex: 1; min-width: 200px;">
-        <button type="submit">Tìm kiếm</button>
-        <a href="{{ route('workspaces.index') }}" class="button secondary">Bỏ lọc</a>
+    <div style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 200px;">
+            <label for="q">Tìm kiếm theo tên workspace</label>
+            <input id="q" name="q" value="{{ is_string(request('q')) ? request('q') : '' }}" maxlength="160" placeholder="Nhập tên workspace..." style="width: 100%;">
+        </div>
+        <div>
+            <label for="workspace-per-page">Số workspace / trang</label>
+            <select id="workspace-per-page" name="per_page">
+                @foreach([10, 50, 100, 500] as $n)
+                    <option value="{{ $n }}" @selected((int)(request('per_page', 10))===$n)>{{ $n }} / trang</option>
+                @endforeach
+            </select>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <button type="submit">Tìm kiếm</button>
+            <a href="{{ route('workspaces.index') }}" class="button secondary">Bỏ lọc</a>
+        </div>
     </div>
 </form>
 

@@ -5,7 +5,7 @@
     $itemRouteParams = $node->project_id ? [$node->workspace_id, $node->project_id] : [$node->workspace_id];
 @endphp
         @if(!in_array($node->id, $visited, true))
-            <li data-tree-task-id="{{ $node->id }}" style="margin: 0.5rem 0; position: relative;">
+            <li data-tree-task-id="{{ $node->id }}" data-task-id="{{ $node->id }}" data-revision="{{ $node->revision }}" data-status="{{ $node->status->value }}" data-status-url="{{ route($itemRoutePrefix.'.status.update', [...$itemRouteParams, $node]) }}" style="margin: 0.5rem 0; position: relative;">
                 @include('tasks._source', ['sourceTask' => $node])
                 @if($node->task_type->value === 'GROUP')
                     <details open style="border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); padding: 0.625rem 0.875rem;">
@@ -45,7 +45,14 @@
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.375rem; flex-shrink: 0;">
                             <x-status :value="$node->task_type" />
-                            <x-status :value="$node->status" />
+                            @if(auth()->user()->can('execute', $node) || auth()->user()->can('review', $node))
+                                <button type="button" class="inline-edit-trigger inline-status-trigger" data-inline-field="status" aria-label="Đổi nhanh trạng thái: {{ $node->title }}" title="Nhấp để đổi nhanh trạng thái">
+                                    <x-status :value="$node->status"/>
+                                    <span class="inline-caret" aria-hidden="true">▾</span>
+                                </button>
+                            @else
+                                <x-status :value="$node->status"/>
+                            @endif
                         </div>
                     </div>
                     @if($nodes->has($node->id))

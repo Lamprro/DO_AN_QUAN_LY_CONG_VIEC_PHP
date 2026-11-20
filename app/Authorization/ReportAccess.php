@@ -5,6 +5,7 @@ namespace App\Authorization;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Workspace;
+use Illuminate\Support\Collection;
 
 class ReportAccess
 {
@@ -24,6 +25,21 @@ class ReportAccess
         return $this->projects->visible($actor, $workspace)->get()->filter(fn ($project) => $this->scope($actor, $workspace, $project))->values();
     }
 
+    /**
+     * Personal workspace owner only: projects (in any workspace) whose tasks assigned to the
+     * owner appear in "Công việc cá nhân". The personal report counts the same tasks.
+     */
+    public function assignedProjects(User $actor, Workspace $workspace): Collection
+    {
+        if ($workspace->kind->value !== 'personal' || $workspace->owner_id !== $actor->id) {
+            return collect();
+        }
+
+        return $this->workspaces->visible($actor)
+            ->flatMap(fn (Workspace $source) => $this->projects->visible($actor, $source)->get()->filter(fn (Project $project) => $this->projects->allows($actor, $project, 'task.view')))
+            ->values();
+    }
+
     public function manifest(User $actor, Workspace $workspace, array $metrics, string $permission = 'report.view'): bool
     {
         if (($metrics['schema_version'] ?? null) !== 1 || ($metrics['workspace_id'] ?? null) !== $workspace->id) {
@@ -36,7 +52,8 @@ class ReportAccess
         if (! $this->scope($actor, $workspace, $project, $permission)) {
             return false;
         }
-        $allowed = $this->projects($actor, $workspace)->pluck('id')->all();
+        $assigned = $this->assignedProjects($actor, $workspace);
+        $allowed = $this->projects($actor, $workspace)->pluck('id')->merge($assigned->pluck('id'))->all();
         if (array_diff($metrics['access']['project_ids'] ?? [], $allowed)) {
             return false;
         }
@@ -44,8 +61,8 @@ class ReportAccess
             return false;
         }
         foreach ($metrics['access']['calendar_project_ids'] ?? [] as $id) {
-            $calendarProject = $id ? $workspace->projects()->find($id) : null;
-            if ($id && ! $calendarProject || ! $this->calendars->scope($actor, $workspace, $calendarProject, 'calendar.view')) {
+            $calendarProject = $id ? ($workspace->projects()->find($id) ?? $assigned->firstWhere('id', $id)) : null;
+            if ($id && ! $calendarProject || ! $this->calendars->scope($actor, $calendarProject?->workspace ?? $workspace, $calendarProject, 'calendar.view')) {
                 return false;
             }
         }

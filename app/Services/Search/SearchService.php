@@ -38,6 +38,7 @@ class SearchService
         $term = trim($filters['q'] ?? '');
         $pattern = SearchTerm::contains($term);
         $type = $filters['type'] ?? 'all';
+        $perPage = (int) ($filters['per_page'] ?? 10);
         $tasks = Task::query()
             ->whereIn('workspace_id', $scope->pluck('id'))
             ->where(fn ($q) => $q->whereIn('project_id', $taskProjectIds)->orWhere(fn ($q) => $q->whereNull('project_id')->whereIn('workspace_id', $personal)))
@@ -47,7 +48,7 @@ class SearchService
             ->with('workspace', 'project', 'assignee')
             ->latest()
             ->orderBy('id')
-            ->paginate(10, ['*'], 'tasks_page')
+            ->paginate($perPage, ['*'], 'tasks_page')
             ->withQueryString();
         $projects = Project::query()
             ->whereIn('workspace_id', $scope->pluck('id'))
@@ -58,7 +59,7 @@ class SearchService
             ->with('workspace')
             ->latest()
             ->orderBy('id')
-            ->paginate(10, ['*'], 'projects_page')
+            ->paginate($perPage, ['*'], 'projects_page')
             ->withQueryString();
 
         return compact('filters', 'workspaces', 'tasks', 'projects', 'term');

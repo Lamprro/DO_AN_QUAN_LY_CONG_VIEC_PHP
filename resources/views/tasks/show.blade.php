@@ -6,8 +6,8 @@
         .jira-issue-main, .jira-issue-sidebar { min-width: 0; overflow-wrap: anywhere; }
         .jira-issue-main > .card, .jira-issue-main .jira-section > .card { margin: 0; }
         .jira-issue-code-bar { flex-wrap: wrap; }
-        .jira-issue-code { background: #e9f2ff; color: #0c66e4; }
-        .jira-issue-title { font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 750; }
+        .jira-issue-code { background: var(--primary-light, #e9f2ff); color: var(--primary, #0c66e4); }
+        .jira-issue-title { font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 750; color: var(--text) !important; }
         .jira-issue-main .breadcrumbs { margin: 0; flex-wrap: wrap; }
         .jira-action-toolbar { padding: 0; }
         .jira-action-toolbar form { margin: 0; }
@@ -22,7 +22,7 @@
         .jira-detail-label { flex: 0 0 43%; }
         .jira-detail-value { min-width: 0; text-align: right; justify-content: flex-end; flex-wrap: wrap; }
         .jira-person { flex-wrap: nowrap; }
-        .jira-person-avatar { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex: 0 0 28px; border-radius: 50%; background: #e9f2ff; color: #0c66e4; font-size: 0.7rem; font-weight: 700; }
+        .jira-person-avatar { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex: 0 0 28px; border-radius: 50%; background: var(--primary-light, #e9f2ff); color: var(--primary, #0c66e4); font-size: 0.7rem; font-weight: 700; }
         .jira-sidebar-section + .jira-sidebar-section { border-top: 1px solid var(--border); padding-top: 16px; }
         .jira-sidebar-section h2 { margin: 0 0 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
         .jira-sidebar-section details + details { margin-top: 16px; }
@@ -59,16 +59,35 @@
             @else
                 <a href="{{ route($routePrefix.'.index', $routeParams) }}">Công việc cá nhân</a>
             @endif
+            @if($task->parent)
+                <span aria-hidden="true">›</span>
+                @if($task->parent->parent)
+                    <a href="{{ route($routePrefix.'.show', [...$routeParams, $task->parent->parent]) }}">{{ $task->parent->parent->code }}</a>
+                    <span aria-hidden="true">›</span>
+                @endif
+                <a href="{{ route($routePrefix.'.show', [...$routeParams, $task->parent]) }}">{{ $task->parent->code }}</a>
+            @endif
             <span aria-hidden="true">›</span><span aria-current="page">{{ $task->code }}</span>
         </nav>
 
-        <header class="jira-issue-header">
+        <header class="jira-issue-header" style="background: transparent;">
+            @if($task->parent)
+                <div class="jira-parent-lozenge" style="margin-bottom: 8px; font-size: 0.85rem;">
+                    <span class="muted">Thuộc {{ $task->parent->task_type->value === 'GROUP' ? 'nhóm (Epic)' : 'công việc cha' }}:</span>
+                    <a href="{{ route($routePrefix.'.show', [...$routeParams, $task->parent]) }}" style="font-weight: 600; color: var(--primary); text-decoration: none;">
+                        {{ $task->parent->task_type->value === 'GROUP' ? '📁' : '↳' }} {{ $task->parent->code }} — {{ $task->parent->title }}
+                    </a>
+                </div>
+            @endif
             <div class="jira-issue-code-bar">
                 <span class="jira-issue-code">{{ $task->code }}</span>
-                <span class="badge">{{ \App\Support\UiLabels::text($task->task_type->value) }}</span>
+                <span class="badge">{{ $task->task_type->value === 'GROUP' ? 'NHÓM (EPIC)' : ($task->parent ? ($task->parent->parent ? 'SUB-TASK (CẤP 3)' : 'TASK (CẤP 2)') : 'CÔNG VIỆC CHUẨN') }}</span>
                 <span class="status-pill status-{{ strtolower(str_replace('_', '-', $task->status->value)) }}">{{ \App\Support\UiLabels::text($task->status->value) }}</span>
                 <span class="badge">Mức ưu tiên: {{ \App\Support\UiLabels::text($task->priority->value) }}</span>
                 @if($task->archived_at)<span class="badge">Đã lưu trữ</span>@endif
+            </div>
+            <div style="margin-top: 8px;">
+                @include('tasks._alerts', ['task' => $task])
             </div>
             <h1 class="jira-issue-title">{{ $task->title }}</h1>
         </header>
@@ -99,15 +118,43 @@
 
         <section class="jira-section" aria-labelledby="task-subtasks-heading">
             <div class="jira-desc-card">
-                <h2 id="task-subtasks-heading" class="jira-activity-heading">Công việc con &amp; Tiến độ <span class="badge">{{ $subtasks->count() }}</span></h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                    <h2 id="task-subtasks-heading" class="jira-activity-heading" style="margin: 0;">
+                        {{ $task->task_type->value === 'GROUP' ? 'Danh sách công việc thuộc nhóm' : 'Công việc con (Sub-tasks) & Tiến độ' }}
+                        <span class="badge">{{ $subtasks->count() }}</span>
+                    </h2>
+                    @can('addChild', $task)
+                        <a class="button secondary" data-task-panel href="{{ route($routePrefix.'.create', [...$routeParams, 'parent_task_id' => $task->id]) }}">
+                            + {{ $task->task_type->value === 'GROUP' ? 'Thêm công việc (Task)' : 'Thêm việc con (Sub-task)' }}
+                        </a>
+                    @else
+                        @if($task->parent && $task->parent->parent)
+                            <span class="muted" style="font-size: 0.8rem;">Đã đạt cấp sâu nhất (Sub-task cấp 3)</span>
+                        @endif
+                    @endcan
+                </div>
+                @if($task->status->value === 'DONE')
+                    <p class="muted">Công việc đã hoàn thành: khóa chỉnh sửa và thêm việc con.</p>
+                @endif
                 <ul class="jira-subtask-list">
                     @forelse($subtasks as $subtask)
                         <li>
-                            <a href="{{ route($routePrefix.'.show', [...$routeParams, $subtask]) }}"><span class="jira-issue-code">{{ $subtask->code }}</span> {{ $subtask->title }}</a>
+                            <div style="display: flex; align-items: center; gap: 8px; min-width: 0; flex-wrap: wrap;">
+                                <a href="{{ route($routePrefix.'.show', [...$routeParams, $subtask]) }}">
+                                    <span class="jira-issue-code">{{ $subtask->code }}</span>
+                                    <strong>{{ $subtask->title }}</strong>
+                                </a>
+                                @if($subtask->assignee)
+                                    <span class="muted text-xs">👤 {{ $subtask->assignee->name }}</span>
+                                @endif
+                                @if($subtask->estimate_minutes)
+                                    <span class="muted text-xs">⏱ {{ $subtask->estimate_minutes }}p</span>
+                                @endif
+                            </div>
                             <span class="status-pill status-{{ strtolower(str_replace('_', '-', $subtask->status->value)) }}">{{ \App\Support\UiLabels::text($subtask->status->value) }}</span>
                         </li>
                     @empty
-                        <li class="muted">Chưa có công việc con.</li>
+                        <li class="muted">Chưa có công việc con nào. Nhấn nút thêm phía trên để tạo.</li>
                     @endforelse
                 </ul>
             </div>
@@ -143,7 +190,17 @@
 
     <aside class="jira-issue-sidebar" aria-label="Thông tin công việc">
         <section class="jira-sidebar-section" aria-labelledby="task-assignment-heading">
-            <h2 id="task-assignment-heading">Chi tiết phân công</h2>
+            <h2 id="task-assignment-heading">Chi tiết phân công & Cấu trúc</h2>
+            @if($task->parent)
+                <div class="jira-detail-row">
+                    <span class="jira-detail-label">Thuộc nhóm / Cha</span>
+                    <span class="jira-detail-value">
+                        <a href="{{ route($routePrefix.'.show', [...$routeParams, $task->parent]) }}" style="font-weight: 600; color: var(--primary); text-decoration: none;">
+                            {{ $task->parent->code }}
+                        </a>
+                    </span>
+                </div>
+            @endif
             @foreach(['Người thực hiện' => $task->assignee, 'Người kiểm duyệt' => $task->reviewer, 'Người tạo' => $task->creator] as $label => $person)
                 <div class="jira-detail-row">
                     <span class="jira-detail-label">{{ $label }}</span>

@@ -7,6 +7,7 @@ use App\Models\Workspace;
 use App\Services\Task\TaskTemplateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class TaskTemplateController extends Controller
 {
@@ -14,10 +15,14 @@ class TaskTemplateController extends Controller
 
     public function index(Request $request, Workspace $workspace)
     {
-        $validated = $request->validate(['project_id' => 'nullable|uuid']);
+        $validated = $request->validate([
+            'project_id' => 'nullable|uuid',
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
+        ]);
         $project = empty($validated['project_id']) ? null : $workspace->projects()->findOrFail($validated['project_id']);
+        $perPage = (int) ($validated['per_page'] ?? 10);
 
-        return view('templates.index', $this->service->index($request->user(), $workspace, $project));
+        return view('templates.index', $this->service->index($request->user(), $workspace, $project, $perPage));
     }
 
     public function store(TaskTemplateRequest $request, Workspace $workspace)

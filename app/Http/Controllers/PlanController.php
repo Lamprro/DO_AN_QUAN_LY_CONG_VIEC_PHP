@@ -10,6 +10,7 @@ use App\Services\Planning\PlanReviewService;
 use App\Services\Planning\PlanScheduleService;
 use App\Services\Planning\PlanService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class PlanController extends Controller
@@ -18,7 +19,12 @@ class PlanController extends Controller
 
     public function index(Request $request, Workspace $workspace)
     {
-        return view('plans.index', $this->pages->index($request->user(), $workspace, $this->project($request, $workspace)));
+        $validated = $request->validate([
+            'per_page' => ['nullable', Rule::in([10, 50, 100, 500])],
+        ]);
+        $perPage = (int) ($validated['per_page'] ?? 10);
+
+        return view('plans.index', $this->pages->index($request->user(), $workspace, $this->project($request, $workspace), $perPage));
     }
 
     public function create(Request $request, Workspace $workspace)

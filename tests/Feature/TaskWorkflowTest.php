@@ -6,6 +6,8 @@ use App\Models\Task;
 use App\Models\User;
 use Database\Seeders\DemoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class TaskWorkflowTest extends TestCase
@@ -82,5 +84,112 @@ class TaskWorkflowTest extends TestCase
         ]);
 
         $this->assertContains($response->status(), [409, 422, 302, 200]);
+    }
+
+    public function test_user_can_upload_multiple_attachments_at_once(): void
+    {
+        Storage::fake('task_files');
+
+        $user = User::where('email', 'demo1@example.test')->first();
+        $task = Task::first();
+
+        $workspace = $task->workspace;
+        $project = $task->project;
+
+        $url = $project
+            ? "/workspaces/{$workspace->id}/projects/{$project->id}/tasks/{$task->id}/attachments"
+            : "/workspaces/{$workspace->id}/tasks/{$task->id}/attachments";
+
+        $pngBytes = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+        $file1 = UploadedFile::fake()->createWithContent('screenshot1.png', $pngBytes);
+        $file2 = UploadedFile::fake()->createWithContent('notes.txt', 'Day la ghi chu cong viec');
+        $file3 = UploadedFile::fake()->createWithContent('data.csv', "col1,col2\nval1,val2");
+
+        $response = $this->actingAs($user)->post($url, [
+            'files' => [$file1, $file2, $file3],
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', 'Đã tải lên 3 tệp đính kèm.');
+
+        $this->assertDatabaseHas('task_activities', [
+            'task_id' => $task->id,
+            'actor_id' => $user->id,
+            'type' => 'ATTACHMENT',
+            'content' => 'screenshot1.png',
+        ]);
+        $this->assertDatabaseHas('task_activities', [
+            'task_id' => $task->id,
+            'actor_id' => $user->id,
+            'type' => 'ATTACHMENT',
+            'content' => 'notes.txt',
+        ]);
+        $this->assertDatabaseHas('task_activities', [
+            'task_id' => $task->id,
+            'actor_id' => $user->id,
+            'type' => 'ATTACHMENT',
+            'content' => 'data.csv',
+        ]);
+    }
+
+    public function test_user_can_upload_single_attachment_via_file_field(): void
+    {
+        Storage::fake('task_files');
+
+        $user = User::where('email', 'demo1@example.test')->first();
+        $task = Task::first();
+
+        $workspace = $task->workspace;
+        $project = $task->project;
+
+        $url = $project
+            ? "/workspaces/{$workspace->id}/projects/{$project->id}/tasks/{$task->id}/attachments"
+            : "/workspaces/{$workspace->id}/tasks/{$task->id}/attachments";
+
+        $pngBytes = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+        $file = UploadedFile::fake()->createWithContent('single.png', $pngBytes);
+
+        $response = $this->actingAs($user)->post($url, [
+            'file' => $file,
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', 'Đã tải tệp lên.');
+
+        $this->assertDatabaseHas('task_activities', [
+            'task_id' => $task->id,
+            'actor_id' => $user->id,
+            'type' => 'ATTACHMENT',
+            'content' => 'single.png',
+        ]);
+    }
+
+    public function test_task_show_renders_attachments_list_and_dropzone(): void
+    {
+        Storage::fake('task_files');
+        $user = User::where('email', 'demo1@example.test')->first();
+        $task = Task::first();
+        $workspace = $task->workspace;
+        $project = $task->project;
+
+        $url = $project
+            ? "/workspaces/{$workspace->id}/projects/{$project->id}/tasks/{$task->id}"
+            : "/workspaces/{$workspace->id}/tasks/{$task->id}";
+
+        $uploadUrl = $project
+            ? "/workspaces/{$workspace->id}/projects/{$project->id}/tasks/{$task->id}/attachments"
+            : "/workspaces/{$workspace->id}/tasks/{$task->id}/attachments";
+
+        $pngBytes = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+        $file = UploadedFile::fake()->createWithContent('preview_test.png', $pngBytes);
+        $this->actingAs($user)->post($uploadUrl, ['files' => [$file]]);
+
+        $response = $this->actingAs($user)->get($url);
+        $response->assertStatus(200);
+        $response->assertSee('Tệp & hình ảnh đính kèm', false);
+        $response->assertSee('preview_test.png', false);
+        $response->assertSee('file-dropzone', false);
+        $response->assertSee('selected-files-queue', false);
+        $response->assertSee('btn-clear-selected-files', false);
     }
 }

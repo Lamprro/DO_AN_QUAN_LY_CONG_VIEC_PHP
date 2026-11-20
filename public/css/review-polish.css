@@ -3,7 +3,8 @@
 main, .card, .grid, .field, form, .page-heading > * { min-width:0; }
 main { overflow-wrap:anywhere; }
 input,select,textarea { max-width:100%; }
-button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid var(--border-focus);outline-offset:3px; }
+button:focus-visible,a:focus-visible,summary:focus-visible,input:not([type=checkbox]):not([type=radio]):focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid var(--border-focus);outline-offset:3px; }
+input[type=checkbox]:focus-visible,input[type=radio]:focus-visible { outline:2px solid var(--primary)!important;outline-offset:2px!important;border-radius:3px!important; }
 .field[hidden], [hidden] { display:none!important; }
 .app-header .global-search { margin:0;display:flex;gap:.4rem;min-width:0;flex:1;max-width:22rem; }
 .global-search input { min-width:0; }

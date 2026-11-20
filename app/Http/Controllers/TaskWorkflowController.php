@@ -15,6 +15,7 @@ use App\Services\Task\TaskPageData;
 use App\Services\Task\TaskWorkflowService;
 use App\Support\UiLabels;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
 /** Status transitions, dependencies, blockers, comments and attachments. Every write is authorized in the service. */
 class TaskWorkflowController extends Controller
@@ -101,9 +102,29 @@ class TaskWorkflowController extends Controller
     public function upload(TaskAttachmentRequest $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)
     {
         $this->assertTaskInScope($workspace, $project, $task);
-        $this->workflow->storeAttachment($request->user(), $task, $request->file('file'));
 
-        return back()->with('success', 'Đã tải tệp lên.');
+        $uploaded = [];
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            if (is_array($files)) {
+                $uploaded = $files;
+            }
+        } elseif ($request->hasFile('file')) {
+            $file = $request->file('file');
+            if ($file instanceof UploadedFile) {
+                $uploaded = [$file];
+            }
+        }
+
+        $count = 0;
+        foreach ($uploaded as $file) {
+            if ($file instanceof UploadedFile) {
+                $this->workflow->storeAttachment($request->user(), $task, $file);
+                $count++;
+            }
+        }
+
+        return back()->with('success', $count > 1 ? "Đã tải lên {$count} tệp đính kèm." : 'Đã tải tệp lên.');
     }
 
     public function download(Request $request, Workspace $workspace, ?Project $project = null, ?Task $task = null)

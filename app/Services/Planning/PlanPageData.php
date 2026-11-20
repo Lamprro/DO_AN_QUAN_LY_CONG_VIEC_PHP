@@ -29,7 +29,7 @@ class PlanPageData
         abort_unless(($plan->data['schema_version'] ?? null) === 1 && $this->plans->allows($actor, $workspace, $plan->project), 403);
     }
 
-    public function index(User $actor, Workspace $workspace, ?Project $project): array
+    public function index(User $actor, Workspace $workspace, ?Project $project, int $perPage = 10): array
     {
         $this->assertScope($actor, $workspace, $project);
 
@@ -40,7 +40,7 @@ class PlanPageData
                 ->where('project_id', $project?->id)
                 ->where('data->schema_version', 1)
                 ->latest()
-                ->paginate(20)
+                ->paginate($perPage)
                 ->withQueryString(),
             'canCreatePlan' => $this->plans->allows($actor, $workspace, $project, 'plan.create'),
         ];

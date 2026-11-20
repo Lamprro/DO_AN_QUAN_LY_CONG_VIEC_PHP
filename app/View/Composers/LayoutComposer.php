@@ -23,6 +23,7 @@ class LayoutComposer
         $user = $this->request->user();
         $view->with('shell', $this->shell->build($this->request));
         $view->with('preferences', $user ? $this->settings->values($user) : config('work_management.settings_defaults'));
-        $view->with('unreadNotifications', $user ? $this->notifications->visible($user)->whereNull('read_at')->count() : 0);
+        $view->with('unreadNotifications', $user ? $this->notifications->unreadCount($user) : 0);
+        $view->with('recentNotifications', $user ? $this->notifications->inbox($user, ['filter' => 'all', 'per_page' => 10]) : collect());
     }
 }

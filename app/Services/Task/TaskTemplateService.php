@@ -52,22 +52,47 @@ class TaskTemplateService
         return DB::transaction(function () use ($actor, $workspace, $project, $settings, $ids) {
             Workspace::lockForUpdate()->findOrFail($workspace->id);
             abort_unless($this->tasks->templates($actor, $workspace, $project, true), 403);
-            $tasks = $workspace->tasks()->where('project_id', $project?->id)->whereIn('id', $ids)->whereNull('archived_at')->lockForUpdate()->get();
-            if ($tasks->count() !== count($ids)) {
+
+            // 1. Nếu người dùng chọn một GROUP, tự động mở rộng bao gồm tất cả các task con (Cấp 2) và sub-task (Cấp 3)
+            $initialTasks = $workspace->tasks()->where('project_id', $project?->id)->whereIn('id', $ids)->whereNull('archived_at')->lockForUpdate()->get();
+            if ($initialTasks->count() !== count($ids)) {
                 throw ValidationException::withMessages(['task_ids' => 'Chọn task còn hoạt động trong cùng phạm vi.']);
             }
+
+            $expandedIds = collect($ids);
+            foreach ($initialTasks as $it) {
+                if ($it->task_type === \App\Enums\TaskType::GROUP) {
+                    $children = $workspace->tasks()->where('project_id', $project?->id)->where('parent_task_id', $it->id)->whereNull('archived_at')->get();
+                    foreach ($children as $child) {
+                        $expandedIds->push($child->id);
+                        $subtasks = $workspace->tasks()->where('project_id', $project?->id)->where('parent_task_id', $child->id)->whereNull('archived_at')->get();
+                        foreach ($subtasks as $sub) {
+                            $expandedIds->push($sub->id);
+                        }
+                    }
+                }
+            }
+            $finalIds = $expandedIds->unique()->values()->all();
+
+            $tasks = $workspace->tasks()->where('project_id', $project?->id)->whereIn('id', $finalIds)->whereNull('archived_at')->lockForUpdate()->get();
+
             $definition = [
                 'schema_version' => 1,
                 'tasks' => [],
                 'dependencies' => [],
             ];
             foreach ($tasks as $t) {
-                if ($t->parent_task_id && ! in_array($t->parent_task_id, $ids, true)) {
-                    throw ValidationException::withMessages(['task_ids' => 'Chọn cả GROUP cha để giữ cấu trúc cây.']);
-                }
+                // Xác định parent_ref:
+                // Nếu parent_task_id nằm trong tập finalIds thì giữ quan hệ cha-con.
+                // Nếu người dùng chọn riêng lẻ Task hoặc Sub-task (không chọn Group/Task cha),
+                // thì tạo độc lập (parent_ref = null) mà không ép buộc phải có Group.
+                $parentRef = ($t->parent_task_id && in_array($t->parent_task_id, $finalIds, true))
+                    ? $t->parent_task_id
+                    : null;
+
                 $definition['tasks'][] = [
                     'ref' => $t->id,
-                    'parent_ref' => $t->parent_task_id,
+                    'parent_ref' => $parentRef,
                     'title' => $t->title,
                     'description' => $t->description,
                     'task_type' => $t->task_type->value,
@@ -79,15 +104,15 @@ class TaskTemplateService
                     'group_label' => $t->group_label,
                 ];
             }
-            foreach (TaskDependency::whereIn('successor_task_id', $ids)->get() as $edge) {
-                if (! in_array($edge->predecessor_task_id, $ids, true)) {
-                    throw ValidationException::withMessages(['task_ids' => 'Chọn cả task tiền nhiệm; không bỏ dependency ngoài tập chọn.']);
+            // Chỉ giữ các dependency có cả 2 đầu trong tập chọn
+            foreach (TaskDependency::whereIn('successor_task_id', $finalIds)->get() as $edge) {
+                if (in_array($edge->predecessor_task_id, $finalIds, true)) {
+                    $definition['dependencies'][] = [
+                        'predecessor' => $edge->predecessor_task_id,
+                        'successor' => $edge->successor_task_id,
+                        'lag_minutes' => $edge->lag_minutes,
+                    ];
                 }
-                $definition['dependencies'][] = [
-                    'predecessor' => $edge->predecessor_task_id,
-                    'successor' => $edge->successor_task_id,
-                    'lag_minutes' => $edge->lag_minutes,
-                ];
             }
 
             return TaskTemplate::create($settings + [
@@ -311,14 +336,14 @@ class TaskTemplateService
         return TaskTemplate::where('workspace_id', $workspace->id)->findOrFail($id);
     }
 
-    public function index(User $actor, Workspace $workspace, ?Project $project): array
+    public function index(User $actor, Workspace $workspace, ?Project $project, int $perPage = 10): array
     {
         abort_unless($this->tasks->templates($actor, $workspace, $project), 403);
 
         return [
             'workspace' => $workspace,
             'project' => $project,
-            'templates' => TaskTemplate::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->latest()->paginate(15)->withQueryString(),
+            'templates' => TaskTemplate::where('workspace_id', $workspace->id)->where('project_id', $project?->id)->latest()->paginate($perPage)->withQueryString(),
             'sources' => $workspace->tasks()->where('project_id', $project?->id)->whereNull('archived_at')->orderBy('sort_order')->get(),
             'canManage' => $this->tasks->templates($actor, $workspace, $project, true),
         ];

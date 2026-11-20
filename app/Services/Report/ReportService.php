@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Workspace;
 use App\Services\Task\TaskTreeService;
 use App\Services\Workspace\WorkspaceService;
+use App\Support\UiDate;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -81,11 +82,20 @@ class ReportService
             $start = $filters['start'];
             $end = $filters['end'];
             $asOf = CarbonImmutable::now('UTC');
+            // Personal workspace (owner, no project filter): the same WORK as "Công việc cá nhân",
+            // i.e. every own personal task (assigned or not) plus project tasks assigned to the owner.
+            $personalOverview = ! $project && $workspace->kind->value === 'personal' && $workspace->owner_id === $actor->id;
             $projectIds = $project ? [$project->id] : $this->access->projects($actor, $workspace)->pluck('id')->all();
-            $tasks = Task::where('workspace_id', $workspace->id)
+            $assignedProjectIds = $personalOverview ? $this->access->assignedProjects($actor, $workspace)->pluck('id')->all() : [];
+            $tasks = Task::query()
                 ->where('task_type', 'WORK')
-                ->where(fn ($q) => $q->whereIn('project_id', $projectIds)->when($workspace->kind->value === 'personal' && $workspace->owner_id === $actor->id, fn ($q) => $q->orWhereNull('project_id')))
-                ->when($filters['subject'], fn ($q) => $q->where('assignee_id', $filters['subject']))
+                ->when($personalOverview, fn ($q) => $q->where(fn ($scope) => $scope
+                    ->where(fn ($own) => $own->where('workspace_id', $workspace->id)->whereNull('project_id'))
+                    ->orWhere(fn ($assigned) => $assigned->whereIn('project_id', $assignedProjectIds)->where('assignee_id', $actor->id))))
+                ->when(! $personalOverview, fn ($q) => $q
+                    ->where('workspace_id', $workspace->id)
+                    ->where(fn ($q) => $q->whereIn('project_id', $projectIds)->when($workspace->kind->value === 'personal' && $workspace->owner_id === $actor->id, fn ($q) => $q->orWhereNull('project_id')))
+                    ->when($filters['subject'], fn ($q) => $q->where('assignee_id', $filters['subject'])))
                 ->when(! $filters['include_archived'], fn ($q) => $q->whereNull('archived_at'))
                 ->with('assignee:id,name')
                 ->orderBy('id')
@@ -190,6 +200,7 @@ class ReportService
                     'project_name' => $project?->name,
                     'subject_user_id' => $filters['subject'],
                     'include_archived' => $filters['include_archived'],
+                    'personal_overview' => $personalOverview,
                 ],
                 'access' => [
                     'project_ids' => $tasks->pluck('project_id')->filter()->unique()->values()->all(),
@@ -304,7 +315,7 @@ class ReportService
     {
         $rows = [
             ['Workspace', $m['workspace_name']],
-            ['Kỳ [from,to)', $m['period']['from'], $m['period']['to'], $m['timezone']],
+            ['Kỳ [từ ngày, đến ngày)', UiDate::day($m['period']['from']), UiDate::day($m['period']['to']), $m['timezone']],
             ['Lúc tạo', $m['generated_at']],
         ];
         foreach ($m['inventory']['status_counts'] as $status => $number) {
@@ -352,7 +363,8 @@ class ReportService
         }
         $visible = $rows->filter(fn ($row) => Gate::forUser($actor)->allows('view', $row))->values();
         $page = (int) ($filters['page'] ?? 1);
+        $perPage = (int) ($filters['per_page'] ?? 10);
 
-        return new LengthAwarePaginator($visible->forPage($page, 20)->values(), $visible->count(), 20, $page, ['path' => $path, 'query' => $query]);
+        return new LengthAwarePaginator($visible->forPage($page, $perPage)->values(), $visible->count(), $perPage, $page, ['path' => $path, 'query' => $query]);
     }
 }

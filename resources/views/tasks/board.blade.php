@@ -19,6 +19,9 @@
     @include('tasks._view-nav')
 @include('tasks._overview-note')
 
+@php
+    $hasActiveFilters = collect($filters)->only(['q', 'status', 'priority', 'assignee_id', 'group_id', 'tier'])->filter(fn ($v) => !empty($v))->isNotEmpty();
+@endphp
     <section class="jira-board" data-jira-board data-user-id="{{ auth()->id() }}" aria-label="Bảng Kanban">
         <div class="jira-toolbar">
             <div class="jira-chips" role="group" aria-label="Lọc nhanh các thẻ đã tải">
@@ -32,27 +35,34 @@
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
                     <input type="search" data-quick-search placeholder="Tìm kiếm nhanh trong bảng..." autocomplete="off" maxlength="200" aria-describedby="jira-filter-help">
                 </label>
-                <button type="button" class="jira-filter-toggle" data-advanced-toggle aria-controls="jira-advanced-filters" aria-expanded="true">Bộ lọc nâng cao</button>
+                <button type="button" class="jira-filter-toggle {{ $hasActiveFilters ? 'has-active' : '' }}" data-advanced-toggle aria-controls="jira-advanced-filters" aria-expanded="{{ $hasActiveFilters ? 'true' : 'false' }}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    Bộ lọc nâng cao
+                    @if($hasActiveFilters)
+                        <span class="jira-filter-dot" title="Đang có bộ lọc nâng cao">●</span>
+                    @endif
+                </button>
             </div>
         </div>
-        <div id="jira-advanced-filters" data-advanced-filters data-has-filters="{{ collect($filters)->except('view')->isNotEmpty() ? 'true' : 'false' }}">
+        <div id="jira-advanced-filters" data-advanced-filters data-has-filters="{{ $hasActiveFilters ? 'true' : 'false' }}" @if(!$hasActiveFilters) hidden @endif>
             @include('tasks._filters')
         </div>
+        @include('tasks._epic-bar', ['currentView' => 'board'])
         <div class="jira-board-summary">
-            <p class="result-summary" role="status" data-board-summary><strong>{{ collect($board)->sum(fn ($column) => $column->total()) }}</strong> công việc và cột mốc</p>
-            <p id="jira-filter-help" class="muted">Lọc nhanh áp dụng trên thẻ đã tải (10 thẻ/cột mỗi trang). Dùng Bộ lọc nâng cao để tìm kiếm toàn bộ.</p>
+            <p class="result-summary" role="status" data-board-summary><strong>{{ collect($board)->sum(fn ($column) => $column->count()) }}</strong> công việc và cột mốc</p>
+            <p id="jira-filter-help" class="muted">Hiển thị 10 việc mới nhất mỗi cột. Kéo xuống đáy cột để tự động tải thêm việc cũ hơn.</p>
         </div>
         <noscript><p class="notice">Bật JavaScript để kéo thả và lọc tức thì. Bạn vẫn có thể dùng bộ lọc nâng cao và nút đổi trạng thái.</p></noscript>
         <div class="board-scroll jira-scroll" tabindex="0" role="region" aria-label="Các cột công việc; cuộn ngang để xem">
             <div class="jira-columns" data-page="task-board">
                 @foreach($board as $status => $column)
-                    <section class="jira-column" data-status="{{ $status }}" data-total="{{ $column->total() }}" aria-labelledby="jira-heading-{{ $status }}">
+                    <section class="jira-column" data-status="{{ $status }}" data-total="{{ $column->count() }}" aria-labelledby="jira-heading-{{ $status }}">
                         <header class="jira-column-header">
                             <h2 id="jira-heading-{{ $status }}">{{ \App\Support\UiLabels::text($status) }}</h2>
-                            <span class="jira-count" data-column-count title="Tổng công việc trong cột">{{ $column->total() }}</span>
+                            <span class="jira-count" data-column-count title="Tổng công việc trong cột">{{ $column->count() }}</span>
                         </header>
                         <div class="jira-drop-zone" data-drop-zone>
-                            @foreach($column as $task)
+                            @foreach($column as $index => $task)
 @php
     $itemRoutePrefix = $task->project_id ? 'workspaces.projects.tasks' : 'workspaces.tasks';
     $itemRouteParams = $task->project_id ? [$task->workspace_id, $task->project_id] : [$task->workspace_id];
@@ -71,7 +81,16 @@
                                     data-current-status="{{ $task->status->value }}" data-assignee-id="{{ $task->assignee_id }}"
                                     data-priority="{{ $priority }}" data-is-overdue="{{ $overdue ? 'true' : 'false' }}"
                                     data-deadline="{{ $task->deadline_at?->toIso8601String() }}"
-                                    data-status-url="{{ route($itemRoutePrefix.'.status.update', [...$itemRouteParams, $task]) }}">
+                                    data-status-url="{{ route($itemRoutePrefix.'.status.update', [...$itemRouteParams, $task]) }}"
+                                    @if($index >= 10) data-lazy-card="true" style="display: none;" @endif>
+                                    @if($task->parent)
+                                        <div class="jira-card-epic" title="Thuộc nhóm: {{ $task->parent->title }}">
+                                            <span class="jira-epic-pill">
+                                                <span aria-hidden="true">{{ $task->parent->task_type->value === 'GROUP' ? '📁' : '↳' }}</span>
+                                                <span>{{ $task->parent->code }} · {{ \Illuminate\Support\Str::limit($task->parent->title, 20) }}</span>
+                                            </span>
+                                        </div>
+                                    @endif
                                     <div class="jira-card-top">
                                         <span class="jira-type" title="{{ \App\Support\UiLabels::text($task->task_type) }}" aria-label="{{ \App\Support\UiLabels::text($task->task_type) }}">{{ $task->task_type->value === 'MILESTONE' ? '🚩' : '📋' }}</span>
                                         <strong class="jira-code">{{ $task->code }}</strong>
@@ -80,6 +99,7 @@
                                             <span class="sr-only">Ưu tiên {{ \App\Support\UiLabels::text($task->priority) }}</span>
                                         </span>
                                     </div>
+                                    @include('tasks._alerts', ['task' => $task])
                                     <h3><a class="jira-title" data-task-panel draggable="false" href="{{ route($itemRoutePrefix.'.show', [...$itemRouteParams, $task]) }}" title="{{ $task->title }}">{{ $task->title }}</a></h3>
                                     @include('tasks._source', ['sourceTask' => $task])
                                     <div class="jira-card-bottom">
@@ -105,8 +125,14 @@
                                 </article>
                             @endforeach
                             <p class="jira-empty" data-column-empty @if($column->count()) hidden @endif>Chưa có công việc</p>
+                            <div class="jira-scroll-sentinel" data-sentinel style="height: 1px; width: 100%; pointer-events: none;"></div>
+                            @if($column->count() > 10)
+                                <div class="jira-column-loader" data-column-loader hidden>
+                                    <span class="inline-spinner" style="display: inline-block; width: 13px; height: 13px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: jiraSpin 0.6s linear infinite; vertical-align: middle; margin-right: 5px;"></span>
+                                    Đang tải thêm...
+                                </div>
+                            @endif
                         </div>
-                        <div class="jira-pagination">{{ $column->links() }}</div>
                     </section>
                 @endforeach
             </div>
